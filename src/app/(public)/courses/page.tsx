@@ -12,6 +12,8 @@ export const metadata: Metadata = {
   description: "Jelajahi ratusan kelas online berkualitas tinggi dari instruktur berpengalaman",
 };
 
+export const revalidate = 60;
+
 interface CoursesPageProps {
   searchParams: Promise<{
     q?: string;

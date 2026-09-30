@@ -18,6 +18,8 @@ import {
   FileCode2,
   MessageSquare,
   Award,
+  Video,
+  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/input";
@@ -27,6 +29,8 @@ import { AssignmentManager } from "./assignment-manager";
 import { DiscussionManager } from "./discussion-manager";
 import { CertificateManager } from "./certificate-manager";
 import { useTranslations } from "next-intl";
+import { resolveThumbnailUrl } from "@/lib/youtube";
+import { CourseMediaPicker } from "@/components/admin/course-media-picker";
 
 interface Category {
   id: string;
@@ -104,7 +108,7 @@ export default function EditCoursePage() {
       setPrice(String(course.price));
       setDiscountPrice(course.discountPrice ? String(course.discountPrice) : "");
       setDuration(course.duration ? String(course.duration) : "0");
-      setThumbnail(course.thumbnail ?? "");
+      setThumbnail(course.thumbnail ? resolveThumbnailUrl(course.thumbnail) : "");
       setPublished(course.published);
       setFeatured(course.featured);
       setCategoryId(course.categoryId);
@@ -491,36 +495,12 @@ export default function EditCoursePage() {
             </div>
           </div>
 
-          {/* Thumbnail */}
-          <div className="bg-white rounded-2xl border border-stone-200 p-6 shadow-warm space-y-5">
-            <h2 className="font-semibold text-stone-900 text-base border-b border-stone-100 pb-3">
-              Thumbnail Banner
-            </h2>
-
-            <Input
-              label="URL Gambar Thumbnail"
-              placeholder="https://images.unsplash.com/..."
-              value={thumbnail}
-              onChange={(e) => setThumbnail(e.target.value)}
-            />
-            {thumbnail && (
-              <div className="mt-2">
-                <p className="text-xs font-medium text-stone-500 mb-1.5">Pratinjau:</p>
-                <div className="w-full sm:w-80 h-44 rounded-xl overflow-hidden border border-stone-200 bg-stone-100">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={thumbnail}
-                    alt="Preview"
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src =
-                        "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&q=80";
-                    }}
-                  />
-                </div>
-              </div>
-            )}
-          </div>
+          {/* Thumbnail & Media Picker */}
+          <CourseMediaPicker
+            value={thumbnail}
+            onChange={setThumbnail}
+            label="Thumbnail & Media Banner Kelas"
+          />
 
           {/* Visibility */}
           <div className="bg-white rounded-2xl border border-stone-200 p-6 shadow-warm">

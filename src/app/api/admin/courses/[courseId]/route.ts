@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
+import { resolveThumbnailUrl } from "@/lib/youtube";
 
 const courseUpdateSchema = z.object({
   title: z.string().min(5).max(200).optional(),
@@ -65,9 +66,16 @@ export async function PATCH(
     const body = await req.json();
     const data = courseUpdateSchema.parse(body);
 
+    const updateData = {
+      ...data,
+      ...(data.thumbnail !== undefined && {
+        thumbnail: data.thumbnail ? resolveThumbnailUrl(data.thumbnail) : null,
+      }),
+    };
+
     const course = await prisma.course.update({
       where: { id: courseId },
-      data,
+      data: updateData,
     });
 
     return NextResponse.json({ course });

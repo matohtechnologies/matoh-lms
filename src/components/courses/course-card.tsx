@@ -8,6 +8,7 @@ import { Badge, LevelBadge } from "@/components/ui/badge";
 import { StarRating } from "@/components/ui/star-rating";
 import { formatCurrency, formatDuration } from "@/lib/utils";
 import { useAppLocale } from "@/components/providers/locale-provider";
+import { resolveThumbnailUrl, isVideoUrl } from "@/lib/youtube";
 
 interface CourseCardProps {
   id: string;
@@ -59,20 +60,35 @@ export function CourseCard({
   const finalPrice = discountPrice ?? price;
   const hasDiscount = discountPrice != null && discountPrice < price;
   const targetHref = isEnrolled ? `/learn/${id || slug}` : `/courses/${slug}`;
+  const safeThumbnail = resolveThumbnailUrl(thumbnail);
 
   return (
     <Link href={targetHref}>
       <Card hover className="group flex flex-col h-full">
         {/* Thumbnail */}
         <div className="relative aspect-video w-full overflow-hidden bg-stone-100 rounded-t-2xl">
-          {thumbnail ? (
-            <Image
-              src={thumbnail}
-              alt={title}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            />
+          {safeThumbnail ? (
+            isVideoUrl(safeThumbnail) ? (
+              <video
+                src={safeThumbnail}
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                muted
+                playsInline
+                preload="metadata"
+              />
+            ) : (
+              <Image
+                src={safeThumbnail}
+                alt={title}
+                fill
+                unoptimized={
+                  safeThumbnail.includes("youtube.com") ||
+                  safeThumbnail.includes("ytimg.com")
+                }
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              />
+            )
           ) : (
             <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-orange-100 to-amber-100">
               <BookOpen size={40} className="text-orange-300" />

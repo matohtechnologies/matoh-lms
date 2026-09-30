@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,14 +9,18 @@ import { StarRating } from "@/components/ui/star-rating";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { formatCurrency, formatDuration } from "@/lib/utils";
+import { resolveThumbnailUrl } from "@/lib/youtube";
+import { CourseHeroMedia } from "@/components/courses/course-hero-media";
 import { getTranslations, getLocale } from "next-intl/server";
 import type { Metadata } from "next";
+
+export const revalidate = 60;
 
 interface CourseDetailPageProps {
   params: Promise<{ slug: string }>;
 }
 
-async function getCourse(slug: string) {
+const getCourse = cache(async (slug: string) => {
   try {
     return await prisma.course.findUnique({
       where: { slug, published: true },
@@ -42,7 +47,7 @@ async function getCourse(slug: string) {
   } catch {
     return null;
   }
-}
+});
 
 export async function generateMetadata({ params }: CourseDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
@@ -185,26 +190,16 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
               />
             </div>
 
-            {/* Thumbnail */}
-            <div className="relative aspect-video rounded-2xl overflow-hidden bg-stone-100">
-              {displayCourse.thumbnail ? (
-                <Image
-                  src={displayCourse.thumbnail}
-                  alt={displayCourse.title}
-                  fill
-                  className="object-cover"
-                />
-              ) : (
-                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-orange-100 to-amber-100">
-                  <BookOpen size={60} className="text-orange-300" />
-                </div>
-              )}
-              <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                <div className="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center cursor-pointer hover:scale-105 transition-transform shadow-lg">
-                  <Play size={24} className="text-orange-600 ml-1" fill="currentColor" />
-                </div>
-              </div>
-            </div>
+            {/* Playable Course Hero Media */}
+            <CourseHeroMedia
+              title={displayCourse.title}
+              thumbnail={displayCourse.thumbnail}
+              fallbackLessonVideoUrl={
+                displayCourse.sections
+                  ?.flatMap((s) => s.lessons)
+                  ?.find((l) => l.videoUrl)?.videoUrl
+              }
+            />
 
             {/* What You'll Learn */}
             <div className="bg-orange-50 border border-orange-200 rounded-2xl p-6">

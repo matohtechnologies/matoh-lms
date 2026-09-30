@@ -8,10 +8,22 @@ function generateCertificateCode(): string {
   return `EA-${timestamp}-${randomPart}`;
 }
 
+import { checkRateLimit } from "@/lib/rate-limit";
+
 export async function POST(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ courseId: string }> }
 ) {
+  // Rate limit: 10 claims per minute per user/IP
+  const rateLimit = checkRateLimit(req, {
+    identifier: "certificate_claim",
+    limit: 10,
+    windowMs: 60 * 1000,
+  });
+  if (!rateLimit.isAllowed && rateLimit.response) {
+    return rateLimit.response;
+  }
+
   try {
     const session = await auth();
     if (!session?.user?.id) {

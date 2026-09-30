@@ -7,6 +7,7 @@ import Link from "next/link";
 import { ArrowLeft, CreditCard, Shield, Clock, BookOpen, Award, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
+import { resolveThumbnailUrl } from "@/lib/youtube";
 import { useTranslations } from "next-intl";
 import { useAppLocale } from "@/components/providers/locale-provider";
 
@@ -241,7 +242,17 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
               <div className="flex gap-4">
                 <div className="w-24 h-16 rounded-xl bg-stone-100 overflow-hidden shrink-0">
                   {course.thumbnail ? (
-                    <Image src={course.thumbnail} alt={course.title} width={96} height={64} className="object-cover w-full h-full" />
+                    <Image
+                      src={resolveThumbnailUrl(course.thumbnail)}
+                      alt={course.title}
+                      width={96}
+                      height={64}
+                      unoptimized={
+                        course.thumbnail.includes("youtube.com") ||
+                        course.thumbnail.includes("ytimg.com")
+                      }
+                      className="object-cover w-full h-full"
+                    />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-100 to-amber-100">
                       <BookOpen size={24} className="text-orange-300" />

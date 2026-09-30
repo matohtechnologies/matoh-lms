@@ -6,6 +6,8 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { getTranslations, getLocale } from "next-intl/server";
 
+export const revalidate = 60;
+
 async function getFeaturedCourses() {
   try {
     const featured = await prisma.course.findMany({

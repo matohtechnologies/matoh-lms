@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
+import { resolveThumbnailUrl } from "@/lib/youtube";
 
 const courseSchema = z.object({
   title: z.string().min(5, "Judul minimal 5 karakter").max(200),
@@ -12,7 +13,7 @@ const courseSchema = z.object({
   price: z.number().min(0),
   discountPrice: z.number().min(0).nullable().optional(),
   duration: z.number().min(0).optional(),
-  thumbnail: z.string().url().optional().or(z.literal("")),
+  thumbnail: z.string().optional().nullable(),
   published: z.boolean(),
 });
 
@@ -80,7 +81,7 @@ export async function POST(req: NextRequest) {
         price: data.price,
         discountPrice: data.discountPrice,
         duration: data.duration ?? 0,
-        thumbnail: data.thumbnail || null,
+        thumbnail: data.thumbnail ? resolveThumbnailUrl(data.thumbnail) : null,
         published: data.published,
         categoryId: categoryId!,
         instructorId,

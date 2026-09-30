@@ -5,11 +5,23 @@ import { createMidtransTransaction } from "@/lib/midtrans";
 import { z } from "zod";
 import { nanoid } from "nanoid";
 
+import { checkRateLimit } from "@/lib/rate-limit";
+
 const createPaymentSchema = z.object({
   courseId: z.string(),
 });
 
 export async function POST(req: NextRequest) {
+  // Rate limit: 15 order creation attempts per minute
+  const rateLimit = checkRateLimit(req, {
+    identifier: "payment_create",
+    limit: 15,
+    windowMs: 60 * 1000,
+  });
+  if (!rateLimit.isAllowed && rateLimit.response) {
+    return rateLimit.response;
+  }
+
   try {
     const session = await auth();
     if (!session?.user?.id) {

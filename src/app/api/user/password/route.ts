@@ -3,13 +3,24 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 const passwordSchema = z.object({
   oldPassword: z.string().min(1, "Password lama diperlukan"),
-  newPassword: z.string().min(6, "Password baru minimal 6 karakter"),
+  newPassword: z.string().min(8, "Password baru minimal 8 karakter"),
 });
 
 export async function POST(req: NextRequest) {
+  // Rate limit: 5 password change attempts per 15 minutes
+  const rateLimit = checkRateLimit(req, {
+    identifier: "user_password_change",
+    limit: 5,
+    windowMs: 15 * 60 * 1000,
+  });
+  if (!rateLimit.isAllowed && rateLimit.response) {
+    return rateLimit.response;
+  }
+
   try {
     const session = await auth();
     if (!session?.user?.id) {

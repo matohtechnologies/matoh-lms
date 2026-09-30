@@ -146,6 +146,10 @@ model Course {
   assignments        Assignment[]
   discussions        Discussion[]
 
+  @@index([categoryId])
+  @@index([instructorId])
+  @@index([published, featured])
+  @@index([createdAt])
   @@map("courses")
 }
 
@@ -192,6 +196,8 @@ model Enrollment {
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@unique([userId, courseId])
+  @@index([courseId])
+  @@index([userId])
   @@map("enrollments")
 }
 
@@ -205,6 +211,8 @@ model Progress {
   lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 
   @@unique([userId, lessonId])
+  @@index([lessonId])
+  @@index([userId])
   @@map("progress")
 }
 
@@ -224,6 +232,10 @@ model Order {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
+  @@index([userId])
+  @@index([courseId])
+  @@index([status])
+  @@index([createdAt])
   @@map("orders")
 }
 
@@ -239,6 +251,8 @@ model Review {
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@unique([userId, courseId])
+  @@index([courseId])
+  @@index([rating])
   @@map("reviews")
 }
 
@@ -264,6 +278,8 @@ model Certificate {
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@unique([userId, courseId])
+  @@index([courseId])
+  @@index([issuedAt])
   @@map("certificates")
 }
 
