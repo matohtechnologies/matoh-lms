@@ -12,6 +12,8 @@ const certificateSettingSchema = z.object({
   signatoryRole1: z.string().optional().nullable(),
   signatoryName2: z.string().optional().nullable(),
   signatoryRole2: z.string().optional().nullable(),
+  templateUrl: z.string().optional().nullable(),
+  templateConfig: z.any().optional().nullable(),
   minProgress: z.number().min(0).max(100).default(100),
   requireQuizPassed: z.boolean().default(true),
   requireAssignmentApproved: z.boolean().default(true),
@@ -60,6 +62,8 @@ export async function GET(
       signatoryRole1: "Lead Instructor",
       signatoryName2: "Dr. Santoso W.",
       signatoryRole2: "Head of Curriculum",
+      templateUrl: null,
+      templateConfig: null,
       minProgress: 100,
       requireQuizPassed: true,
       requireAssignmentApproved: true,
@@ -126,6 +130,8 @@ export async function PUT(
         signatoryRole1: data.signatoryRole1 ?? "Lead Instructor",
         signatoryName2: data.signatoryName2 ?? null,
         signatoryRole2: data.signatoryRole2 ?? "Head of Curriculum",
+        templateUrl: data.templateUrl ?? null,
+        templateConfig: data.templateConfig ? (data.templateConfig as any) : undefined,
         minProgress: data.minProgress,
         requireQuizPassed: data.requireQuizPassed,
         requireAssignmentApproved: data.requireAssignmentApproved,
@@ -139,11 +145,13 @@ export async function PUT(
         signatoryRole1: data.signatoryRole1 ?? "Lead Instructor",
         signatoryName2: data.signatoryName2 ?? null,
         signatoryRole2: data.signatoryRole2 ?? "Head of Curriculum",
+        templateUrl: data.templateUrl ?? null,
+        templateConfig: data.templateConfig !== undefined ? (data.templateConfig as any) : undefined,
         minProgress: data.minProgress,
         requireQuizPassed: data.requireQuizPassed,
         requireAssignmentApproved: data.requireAssignmentApproved,
       },
-    });
+    } as any);
 
     return NextResponse.json({
       success: true,

@@ -89,6 +89,8 @@ export default async function CertificateViewPage({ params, searchParams }: Cert
         signatoryRole2={
           certificate.signatoryRole2 || setting?.signatoryRole2 || "Head of Curriculum"
         }
+        templateUrl={certificate.templateUrl || setting?.templateUrl || undefined}
+        templateConfig={(certificate as any).templateConfig || (setting as any)?.templateConfig || null}
       />
     );
   }

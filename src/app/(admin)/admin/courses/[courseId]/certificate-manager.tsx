@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   Award,
   CheckCircle2,
@@ -17,9 +17,17 @@ import {
   Printer,
   Copy,
   Check,
+  UploadCloud,
+  Trash2,
+  Image as ImageIcon,
+  Palette,
 } from "lucide-react";
 import { format } from "date-fns";
 import { id as idLocale } from "date-fns/locale";
+import { cn } from "@/lib/utils";
+import { CertificateDesigner } from "@/components/certificates/certificate-designer";
+import { CertificateCanvasRenderer } from "@/components/certificates/certificate-canvas-renderer";
+import { CertificateDesignConfig, CertificateDataValues } from "@/lib/certificate-templates";
 
 interface CertificateSetting {
   isEnabled: boolean;
@@ -30,6 +38,8 @@ interface CertificateSetting {
   signatoryRole1: string;
   signatoryName2: string;
   signatoryRole2: string;
+  templateUrl?: string | null;
+  templateConfig?: CertificateDesignConfig | null;
   minProgress: number;
   requireQuizPassed: boolean;
   requireAssignmentApproved: boolean;
@@ -52,6 +62,7 @@ interface CertificateManagerProps {
 }
 
 export function CertificateManager({ courseId }: CertificateManagerProps) {
+  const [activeView, setActiveView] = useState<"studio" | "settings" | "recipients">("studio");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
@@ -75,12 +86,57 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
     signatoryRole1: "Lead Instructor",
     signatoryName2: "Dr. Santoso W.",
     signatoryRole2: "Head of Curriculum",
+    templateUrl: null,
+    templateConfig: null,
     minProgress: 100,
     requireQuizPassed: true,
     requireAssignmentApproved: true,
   });
 
+  const [uploadingTemplate, setUploadingTemplate] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [recipients, setRecipients] = useState<Recipient[]>([]);
+
+  const handleUploadTemplate = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      setErrorMsg("Ukuran file template maksimal 5MB");
+      return;
+    }
+
+    setUploadingTemplate(true);
+    setErrorMsg("");
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folder", "certificates");
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Gagal mengunggah template");
+
+      setForm((prev) => ({ ...prev, templateUrl: data.url }));
+      setSuccessMsg("Template sertifikat berhasil diunggah! Klik 'Simpan Pengaturan' untuk menerapkan.");
+      setTimeout(() => setSuccessMsg(""), 4000);
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : "Gagal mengunggah template");
+    } finally {
+      setUploadingTemplate(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const handleRemoveTemplate = () => {
+    setForm((prev) => ({ ...prev, templateUrl: null }));
+    setSuccessMsg("Template kustom dihapus. Sertifikat akan menggunakan desain standar bawaan.");
+    setTimeout(() => setSuccessMsg(""), 3000);
+  };
 
   const loadData = useCallback(async () => {
     try {
@@ -103,6 +159,8 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
           signatoryRole1: data.setting.signatoryRole1 || "Lead Instructor",
           signatoryName2: data.setting.signatoryName2 || "Dr. Santoso W.",
           signatoryRole2: data.setting.signatoryRole2 || "Head of Curriculum",
+          templateUrl: data.setting.templateUrl || null,
+          templateConfig: data.setting.templateConfig || null,
           minProgress: data.setting.minProgress ?? 100,
           requireQuizPassed: data.setting.requireQuizPassed ?? true,
           requireAssignmentApproved: data.setting.requireAssignmentApproved ?? true,
@@ -140,6 +198,38 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
       setTimeout(() => setSuccessMsg(""), 4000);
     } catch (err: unknown) {
       setErrorMsg(err instanceof Error ? err.message : "Gagal menyimpan perubahan");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleSaveDesigner = async (newConfig: CertificateDesignConfig, bgUrl?: string | null) => {
+    setSaving(true);
+    setSuccessMsg("");
+    setErrorMsg("");
+
+    try {
+      const updatedForm = {
+        ...form,
+        templateConfig: newConfig,
+        templateUrl: bgUrl !== undefined ? bgUrl : form.templateUrl,
+      };
+
+      const res = await fetch(`/api/admin/courses/${courseId}/certificate`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedForm),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Gagal menyimpan desain sertifikat");
+
+      setForm(updatedForm);
+      setSuccessMsg("Desain sertifikat dinamis berhasil disimpan!");
+      setTimeout(() => setSuccessMsg(""), 4000);
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : "Gagal menyimpan desain sertifikat");
+      throw err;
     } finally {
       setSaving(false);
     }
@@ -207,8 +297,87 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
         </div>
       )}
 
-      {/* Forms Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      {/* View Tabs */}
+      <div className="flex flex-wrap items-center gap-2 border-b border-stone-200 pb-3">
+        <button
+          type="button"
+          onClick={() => setActiveView("studio")}
+          className={cn(
+            "flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all",
+            activeView === "studio"
+              ? "bg-orange-600 text-white shadow-sm"
+              : "bg-white hover:bg-stone-100 text-stone-700 border border-stone-200"
+          )}
+        >
+          <Palette size={15} />
+          Studio Desain Sertifikat (Visual Editor)
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveView("settings")}
+          className={cn(
+            "flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all",
+            activeView === "settings"
+              ? "bg-orange-600 text-white shadow-sm"
+              : "bg-white hover:bg-stone-100 text-stone-700 border border-stone-200"
+          )}
+        >
+          <Sliders size={15} />
+          Kriteria Kelulusan &amp; Pengaturan
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveView("recipients")}
+          className={cn(
+            "flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all",
+            activeView === "recipients"
+              ? "bg-orange-600 text-white shadow-sm"
+              : "bg-white hover:bg-stone-100 text-stone-700 border border-stone-200"
+          )}
+        >
+          <Users size={15} />
+          Daftar Penerima
+          <span
+            className={cn(
+              "px-1.5 py-0.5 rounded-full text-[10px] font-bold",
+              activeView === "recipients"
+                ? "bg-white/20 text-white"
+                : "bg-stone-100 text-stone-700"
+            )}
+          >
+            {recipients.length}
+          </span>
+        </button>
+      </div>
+
+      {/* Tab 1: Dynamic Visual Designer Studio */}
+      {activeView === "studio" && (
+        <CertificateDesigner
+          initialConfig={form.templateConfig}
+          initialTemplateUrl={form.templateUrl}
+          courseTitle={courseInfo?.title || "Judul Kursus"}
+          sampleData={{
+            student_name: "Muhammad Rizky Pratama",
+            course_title: courseInfo?.title || "Fullstack Web Development Mastery",
+            category_name: "Teknologi & Pemrograman",
+            issue_date: format(new Date(), "d MMMM yyyy", { locale: idLocale }),
+            certificate_code: "EA-2026-CERT-DEMO",
+            issuer_name: form.issuerName || "Earthy Academy",
+            signatory_name_1: form.signatoryName1 || courseInfo?.instructorName || "Ahmad Fadhil",
+            signatory_role_1: form.signatoryRole1 || "Lead Instructor",
+            signatory_name_2: form.signatoryName2 || "Dr. Santoso W.",
+            signatory_role_2: form.signatoryRole2 || "Head of Curriculum",
+            subtitle: form.subtitle,
+          }}
+          onSave={handleSaveDesigner}
+        />
+      )}
+
+      {/* Tab 2: Settings & Criteria */}
+      {activeView === "settings" && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Form: Settings & Criteria (7 cols) */}
         <div className="lg:col-span-7 space-y-6">
           {/* Card: Status Penerbitan */}
@@ -314,6 +483,117 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                 </label>
               </div>
             </div>
+          </div>
+
+          {/* Card: Template Desain Sertifikat (Background) */}
+          <div className="bg-white rounded-2xl border border-stone-200 p-6 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-stone-100">
+              <div className="flex items-center gap-2">
+                <UploadCloud size={18} className="text-orange-600" />
+                <h3 className="text-sm font-bold text-stone-900">
+                  Template Desain Sertifikat (Background)
+                </h3>
+              </div>
+              <span
+                className={cn(
+                  "text-[10px] font-semibold px-2.5 py-0.5 rounded-full border",
+                  form.templateUrl
+                    ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                    : "bg-stone-100 text-stone-600 border-stone-200"
+                )}
+              >
+                {form.templateUrl ? "Template Kustom Aktif" : "Desain Standar Sistem"}
+              </span>
+            </div>
+
+            <p className="text-xs text-stone-500 leading-relaxed">
+              Unggah file desain template sertifikat Anda sendiri (Canva, Photoshop, Figma). Data
+              siswa (nama, nama kelas, tanggal terbit, nomor kredensial, dan tanda tangan) akan
+              otomatis dicetak tepat di atas template tersebut.
+            </p>
+
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleUploadTemplate}
+              accept="image/png,image/jpeg,image/jpg,image/webp"
+              className="hidden"
+            />
+
+            {form.templateUrl ? (
+              <div className="p-4 rounded-xl bg-orange-50/50 border border-orange-200 space-y-3">
+                <div className="flex items-center gap-3.5">
+                  <div className="w-24 h-16 rounded-lg bg-stone-100 border border-stone-200 overflow-hidden shrink-0 relative shadow-xs">
+                    <img
+                      src={form.templateUrl}
+                      alt="Template Preview"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-stone-800 truncate">
+                      <CheckCircle2 size={13} className="text-green-600 shrink-0" />
+                      <span>Template Kustom Terpasang</span>
+                    </div>
+                    <p className="text-[11px] text-stone-500 truncate mt-0.5 font-mono">
+                      {form.templateUrl}
+                    </p>
+                    <a
+                      href={form.templateUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[11px] text-orange-600 hover:text-orange-700 font-semibold mt-1"
+                    >
+                      Buka Gambar Penuh <ExternalLink size={10} />
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 pt-2 border-t border-orange-200/60">
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploadingTemplate}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-stone-200 hover:bg-stone-50 text-stone-700 text-xs font-semibold transition-colors disabled:opacity-50"
+                  >
+                    {uploadingTemplate ? (
+                      <Loader2 size={12} className="animate-spin text-orange-600" />
+                    ) : (
+                      <UploadCloud size={12} className="text-orange-600" />
+                    )}
+                    Ganti Template
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleRemoveTemplate}
+                    disabled={uploadingTemplate}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-red-200 hover:bg-red-50 text-red-600 text-xs font-semibold transition-colors disabled:opacity-50"
+                  >
+                    <Trash2 size={12} />
+                    Hapus Template (Pakai Bawaan)
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                className="p-6 rounded-2xl border-2 border-dashed border-stone-200 hover:border-orange-400 bg-stone-50/60 hover:bg-orange-50/20 text-center cursor-pointer transition-all group"
+              >
+                <div className="w-12 h-12 rounded-xl bg-orange-100/80 text-orange-600 flex items-center justify-center mx-auto mb-2.5 group-hover:scale-105 transition-transform">
+                  {uploadingTemplate ? (
+                    <Loader2 size={20} className="animate-spin" />
+                  ) : (
+                    <UploadCloud size={20} />
+                  )}
+                </div>
+                <p className="text-xs font-bold text-stone-800">
+                  {uploadingTemplate ? "Mengunggah template..." : "Klik untuk Unggah Template Desain"}
+                </p>
+                <p className="text-[11px] text-stone-400 mt-1 max-w-sm mx-auto">
+                  Format: PNG, JPG, JPEG, atau WebP (Rasio landscape disarankan A4 / 16:9, maks 5MB)
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Card: Desain & Teks Sertifikat */}
@@ -430,89 +710,152 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
               <Eye size={14} className="text-orange-600" />
               Pratinjau Nyata Sertifikat
             </h3>
-            <span className="text-[10px] bg-amber-100 text-amber-800 font-semibold px-2 py-0.5 rounded-full border border-amber-200">
-              Live Preview
+            <span
+              className={cn(
+                "text-[10px] font-semibold px-2 py-0.5 rounded-full border",
+                form.templateUrl
+                  ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                  : "bg-amber-100 text-amber-800 border-amber-200"
+              )}
+            >
+              {form.templateUrl ? "Template Kustom" : "Desain Standar"}
             </span>
           </div>
 
-          {/* Certificate Miniature Parchment */}
-          <div className="w-full bg-white border-4 border-amber-900/10 rounded-2xl p-5 shadow-warm relative overflow-hidden text-center select-none">
-            <div className="absolute -right-12 -top-12 w-40 h-40 rounded-full bg-orange-100/30 pointer-events-none blur-2xl" />
-            <div className="absolute -left-12 -bottom-12 w-40 h-40 rounded-full bg-amber-100/30 pointer-events-none blur-2xl" />
+          {/* Certificate Miniature Preview */}
+          {form.templateConfig && form.templateConfig.elements?.length > 0 ? (
+            <div className="space-y-3">
+              <div className="w-full rounded-2xl shadow-warm overflow-hidden bg-white border border-stone-200">
+                <CertificateCanvasRenderer
+                  config={form.templateConfig}
+                  data={{
+                    student_name: "Nama Siswa Teladan",
+                    course_title: courseInfo?.title || "Judul Kursus",
+                    category_name: "Kategori Kursus",
+                    issue_date: format(new Date(), "d MMMM yyyy", { locale: idLocale }),
+                    certificate_code: "EA-SAMPLE-2026",
+                    issuer_name: form.issuerName || "Earthy Academy",
+                    signatory_name_1: form.signatoryName1 || "Ahmad Fadhil",
+                    signatory_role_1: form.signatoryRole1 || "Lead Instructor",
+                    signatory_name_2: form.signatoryName2 || "Dr. Santoso W.",
+                    signatory_role_2: form.signatoryRole2 || "Head of Curriculum",
+                    subtitle: form.subtitle,
+                  }}
+                  isInteractive={false}
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveView("studio")}
+                className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-orange-50 hover:bg-orange-100 text-orange-700 font-bold text-xs border border-orange-200 shadow-xs transition-colors"
+              >
+                <Palette size={14} />
+                Buka &amp; Edit di Studio Desain Visual
+              </button>
+            </div>
+          ) : (
+            <div
+              className={cn(
+                "w-full rounded-2xl p-5 shadow-warm relative overflow-hidden text-center select-none transition-all",
+                form.templateUrl
+                  ? "bg-stone-900 border-2 border-stone-700/60"
+                  : "bg-white border-4 border-amber-900/10"
+              )}
+            >
+              {form.templateUrl ? (
+                <img
+                  src={form.templateUrl}
+                  alt="Template Background"
+                  className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none"
+                />
+              ) : (
+                <>
+                  <div className="absolute -right-12 -top-12 w-40 h-40 rounded-full bg-orange-100/30 pointer-events-none blur-2xl" />
+                  <div className="absolute -left-12 -bottom-12 w-40 h-40 rounded-full bg-amber-100/30 pointer-events-none blur-2xl" />
+                </>
+              )}
 
-            <div className="border border-dashed border-amber-600/30 rounded-xl p-4 relative z-10">
-              {/* Header */}
-              <div className="flex flex-col items-center justify-center mb-3">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-xs mb-1">
-                  <Award size={16} className="text-white" />
+              <div
+                className={cn(
+                  "rounded-xl p-4 relative z-10 transition-all",
+                  form.templateUrl
+                    ? "bg-white/85 backdrop-blur-xs border border-white/60 shadow-xs"
+                    : "border border-dashed border-amber-600/30"
+                )}
+              >
+                {/* Header */}
+                <div className="flex flex-col items-center justify-center mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-xs mb-1">
+                    <Award size={16} className="text-white" />
+                  </div>
+                  <h4
+                    className="text-xs font-bold tracking-widest uppercase text-stone-800"
+                    style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                  >
+                    {form.issuerName || "Earthy Academy"}
+                  </h4>
+                  <p className="text-[8px] uppercase tracking-widest text-amber-700 font-semibold mt-0.5">
+                    {form.title || "Certificate of Completion"}
+                  </p>
                 </div>
-                <h4
-                  className="text-xs font-bold tracking-widest uppercase text-stone-800"
+
+                {/* Recipient */}
+                <p className="text-[8px] uppercase tracking-wider text-stone-400 font-medium">
+                  Diberikan kepada:
+                </p>
+                <h5
+                  className="text-base font-extrabold text-stone-900 mt-0.5 mb-1"
                   style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
                 >
-                  {form.issuerName || "Earthy Academy"}
-                </h4>
-                <p className="text-[8px] uppercase tracking-widest text-amber-700 font-semibold mt-0.5">
-                  {form.title || "Certificate of Completion"}
+                  Nama Siswa Teladan
+                </h5>
+                <div className="w-12 h-0.5 bg-gradient-to-r from-orange-500 to-amber-500 mx-auto mb-2 rounded-full" />
+
+                <p className="text-[9px] text-stone-500 line-clamp-2 max-w-xs mx-auto leading-relaxed mb-2.5">
+                  {form.subtitle}
                 </p>
-              </div>
 
-              {/* Recipient */}
-              <p className="text-[8px] uppercase tracking-wider text-stone-400 font-medium">
-                Diberikan kepada:
-              </p>
-              <h5
-                className="text-base font-extrabold text-stone-900 mt-0.5 mb-1"
-                style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
-              >
-                Nama Siswa Teladan
-              </h5>
-              <div className="w-12 h-0.5 bg-gradient-to-r from-orange-500 to-amber-500 mx-auto mb-2 rounded-full" />
-
-              <p className="text-[9px] text-stone-500 line-clamp-2 max-w-xs mx-auto leading-relaxed mb-2.5">
-                {form.subtitle}
-              </p>
-
-              <div className="bg-orange-50/80 border border-orange-200/80 rounded-lg py-1.5 px-3 inline-block max-w-full mb-3">
-                <p className="text-[10px] font-bold text-orange-950 truncate max-w-[200px]">
-                  {courseInfo?.title || "Judul Kursus"}
-                </p>
-              </div>
-
-              {/* Signatures */}
-              <div className="grid grid-cols-3 gap-2 pt-2 border-t border-stone-200/80 items-end text-[8px]">
-                <div className="text-left">
-                  <p className="font-serif italic text-stone-800 truncate">
-                    {form.signatoryName1 || "Ahmad Fadhil"}
+                <div className="bg-orange-50/80 border border-orange-200/80 rounded-lg py-1.5 px-3 inline-block max-w-full mb-3">
+                  <p className="text-[10px] font-bold text-orange-950 truncate max-w-[200px]">
+                    {courseInfo?.title || "Judul Kursus"}
                   </p>
-                  <div className="w-12 h-px bg-stone-300 mb-0.5" />
-                  <p className="font-medium text-stone-600 truncate">{form.signatoryRole1}</p>
                 </div>
 
-                <div className="flex flex-col items-center">
-                  <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 mb-0.5">
-                    <ShieldCheck size={12} />
+                {/* Signatures */}
+                <div className="grid grid-cols-3 gap-2 pt-2 border-t border-stone-200/80 items-end text-[8px]">
+                  <div className="text-left">
+                    <p className="font-serif italic text-stone-800 truncate">
+                      {form.signatoryName1 || "Ahmad Fadhil"}
+                    </p>
+                    <div className="w-12 h-px bg-stone-300 mb-0.5" />
+                    <p className="font-medium text-stone-600 truncate">{form.signatoryRole1}</p>
                   </div>
-                  <span className="text-[7px] font-bold text-amber-800 uppercase tracking-tighter">
-                    VERIFIED
-                  </span>
+
+                  <div className="flex flex-col items-center">
+                    <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 mb-0.5">
+                      <ShieldCheck size={12} />
+                    </div>
+                    <span className="text-[7px] font-bold text-amber-800 uppercase tracking-tighter">
+                      VERIFIED
+                    </span>
+                  </div>
+
+                  <div className="text-right">
+                    <p className="font-serif italic text-stone-800 truncate">
+                      {form.signatoryName2 || "Dr. Santoso W."}
+                    </p>
+                    <div className="w-12 h-px bg-stone-300 ml-auto mb-0.5" />
+                    <p className="font-medium text-stone-600 truncate">{form.signatoryRole2}</p>
+                  </div>
                 </div>
 
-                <div className="text-right">
-                  <p className="font-serif italic text-stone-800 truncate">
-                    {form.signatoryName2 || "Dr. Santoso W."}
-                  </p>
-                  <div className="w-12 h-px bg-stone-300 ml-auto mb-0.5" />
-                  <p className="font-medium text-stone-600 truncate">{form.signatoryRole2}</p>
+                <div className="mt-2 pt-1 border-t border-dashed border-stone-200 flex items-center justify-between text-[7px] text-stone-400">
+                  <span>ID: EA-SAMPLE-2026</span>
+                  <span className="text-green-600 font-semibold">Resmi &amp; Terverifikasi</span>
                 </div>
-              </div>
-
-              <div className="mt-2 pt-1 border-t border-dashed border-stone-200 flex items-center justify-between text-[7px] text-stone-400">
-                <span>ID: EA-SAMPLE-2026</span>
-                <span className="text-green-600 font-semibold">Resmi &amp; Terverifikasi</span>
               </div>
             </div>
-          </div>
+          )}
 
           <div className="p-3 bg-stone-50 rounded-xl border border-stone-200/80 text-[11px] text-stone-500 space-y-1">
             <p className="font-semibold text-stone-700 flex items-center gap-1.5">
@@ -527,9 +870,11 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
           </div>
         </div>
       </div>
+    )}
 
-      {/* Card: Daftar Siswa Penerima Sertifikat */}
-      <div className="bg-white rounded-2xl border border-stone-200 p-6 space-y-4">
+      {/* Tab 3: Recipients Table */}
+      {(activeView === "recipients" || activeView === "settings") && (
+        <div className="bg-white rounded-2xl border border-stone-200 p-6 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Users size={18} className="text-orange-600" />
@@ -613,6 +958,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
           </div>
         )}
       </div>
+      )}
     </div>
   );
 }

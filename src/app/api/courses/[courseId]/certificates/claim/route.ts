@@ -43,6 +43,8 @@ export async function POST(
       signatoryRole1: "Lead Instructor",
       signatoryName2: "Dr. Santoso W.",
       signatoryRole2: "Head of Curriculum",
+      templateUrl: null as string | null,
+      templateConfig: null as any,
       minProgress: 100,
       requireQuizPassed: true,
       requireAssignmentApproved: true,
@@ -179,7 +181,9 @@ export async function POST(
         signatoryRole1: setting.signatoryRole1 || "Lead Instructor",
         signatoryName2: setting.signatoryName2 || "Dr. Santoso W.",
         signatoryRole2: setting.signatoryRole2 || "Head of Curriculum",
-      },
+        templateUrl: setting.templateUrl ?? null,
+        templateConfig: (setting as any).templateConfig ?? undefined,
+      } as any,
     });
 
     // Mark enrollment as completed if not already marked

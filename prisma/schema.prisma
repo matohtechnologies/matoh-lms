@@ -257,6 +257,8 @@ model Certificate {
   signatoryRole1  String?
   signatoryName2  String?
   signatoryRole2  String?
+  templateUrl     String?
+  templateConfig  Json?
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
@@ -276,6 +278,8 @@ model CertificateSetting {
   signatoryRole1            String?  @default("Lead Instructor")
   signatoryName2            String?  @default("Dr. Santoso W.")
   signatoryRole2            String?  @default("Head of Curriculum")
+  templateUrl               String?  // Custom certificate background template image
+  templateConfig            Json?    // Visual designer canvas config & element placeholders
   minProgress               Int      @default(100) // % minimal materi selesai
   requireQuizPassed         Boolean  @default(true) // semua kuis wajib lulus
   requireAssignmentApproved Boolean  @default(true) // semua tugas wajib approved
