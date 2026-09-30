@@ -8,6 +8,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { Progress } from "@/components/ui/progress";
 import { formatCurrency } from "@/lib/utils";
+import { getLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "Dashboard — Earthy Academy" };
@@ -146,33 +147,37 @@ export default async function DashboardPage({
     }>;
   };
 
+  const locale = await getLocale();
+  const isEn = locale === "en";
+  const t = await getTranslations("dashboard");
+
   const completedCount = enrollments.filter((e) => e.completedAt).length;
   const inProgressCount = enrollments.filter((e) => !e.completedAt && e.progressPct > 0).length;
 
   const stats = [
     {
-      label: "Kelas Diikuti",
+      label: t("enrolled_courses"),
       value: enrollments.length,
       icon: BookOpen,
       color: "orange",
       href: "/dashboard/my-courses",
     },
     {
-      label: "Kelas Selesai",
+      label: t("completed_courses_stat"),
       value: completedCount,
       icon: CheckCircle2,
       color: "green",
       href: "/dashboard/certificates",
     },
     {
-      label: "Sertifikat",
+      label: t("certificates_stat"),
       value: certificates,
       icon: Award,
       color: "amber",
       href: "/dashboard/certificates",
     },
     {
-      label: "Pembelian",
+      label: t("orders_stat"),
       value: paidOrders,
       icon: ShoppingBag,
       color: "blue",
@@ -186,7 +191,21 @@ export default async function DashboardPage({
     ? enrollments.find((e) => e.course.title === lastCourse.title)
     : enrollments[0];
 
-  const firstName = session.user?.name?.split(" ")[0] ?? "Pengguna";
+  const firstName = session.user?.name?.split(" ")[0] ?? (isEn ? "Learner" : "Pengguna");
+
+  // Greeting based on time (use server-side hours — no client Date to avoid hydration issues)
+  const serverHour = new Date().getUTCHours() + 7; // WIB offset, approximate
+  const greeting = serverHour < 12
+    ? t("greeting_morning")
+    : serverHour < 17
+    ? t("greeting_afternoon")
+    : t("greeting_evening");
+
+  const headlineText = inProgressCount > 0
+    ? t("taking_courses", { count: inProgressCount })
+    : enrollments.length > 0
+    ? t("keep_learning")
+    : t("start_journey");
 
   return (
     <div className="space-y-6">
@@ -195,15 +214,19 @@ export default async function DashboardPage({
           <div className="flex items-center gap-3">
             <span className="text-xl">👑</span>
             <div>
-              <p className="text-sm font-semibold text-orange-400">Mode Pratinjau Siswa (Akun Admin)</p>
-              <p className="text-xs text-stone-400">Kamu sedang melihat tampilan dashboard siswa.</p>
+              <p className="text-sm font-semibold text-orange-400">
+                {t("admin_preview_mode")}
+              </p>
+              <p className="text-xs text-stone-400">
+                {t("admin_preview_desc")}
+              </p>
             </div>
           </div>
           <Link
             href="/admin"
             className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-orange-600 hover:bg-orange-500 text-white text-xs font-semibold transition-colors shadow-sm shrink-0"
           >
-            Kembali ke Panel Admin
+            {t("return_admin")}
           </Link>
         </div>
       )}
@@ -214,27 +237,20 @@ export default async function DashboardPage({
         <div className="absolute -right-4 -bottom-8 w-28 h-28 rounded-full bg-white/10 pointer-events-none" />
         <div className="relative z-10">
           <p className="text-orange-100 text-sm font-medium mb-1">
-            {new Date().getHours() < 12
-              ? "Selamat pagi"
-              : new Date().getHours() < 17
-              ? "Selamat siang"
-              : "Selamat malam"}
-            , {firstName}! 👋
+            {greeting}, {firstName}! 👋
           </p>
           <h1
             className="text-2xl font-bold mb-3"
             style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
           >
-            {inProgressCount > 0
-              ? `Kamu sedang belajar ${inProgressCount} kelas`
-              : enrollments.length > 0
-              ? "Terus semangat belajar!"
-              : "Mulai perjalanan belajarmu!"}
+            {headlineText}
           </h1>
           {lastEnrollment ? (
             <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="text-orange-100 text-xs mb-1">Lanjutkan belajar:</p>
+                <p className="text-orange-100 text-xs mb-1">
+                  {t("continue_label")}
+                </p>
                 <p className="text-white font-medium text-sm truncate max-w-xs">
                   {lastEnrollment.course.title}
                 </p>
@@ -255,7 +271,7 @@ export default async function DashboardPage({
                 className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white text-orange-600 text-sm font-semibold hover:bg-orange-50 transition-colors shrink-0 shadow-sm"
               >
                 <PlayCircle size={16} />
-                Lanjutkan
+                {t("continue_btn")}
               </Link>
             </div>
           ) : (
@@ -264,7 +280,7 @@ export default async function DashboardPage({
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white text-orange-600 text-sm font-semibold hover:bg-orange-50 transition-colors shadow-sm"
             >
               <GraduationCap size={16} />
-              Jelajahi Kelas
+              {t("explore_courses")}
             </Link>
           )}
         </div>
@@ -313,12 +329,12 @@ export default async function DashboardPage({
         <div className="lg:col-span-2">
           <div className="bg-white rounded-2xl border border-stone-200 overflow-hidden">
             <div className="flex items-center justify-between px-5 py-4 border-b border-stone-100">
-              <h2 className="font-semibold text-stone-900">Kelas yang Diikuti</h2>
+              <h2 className="font-semibold text-stone-900">{t("my_courses_section")}</h2>
               <Link
                 href="/dashboard/my-courses"
                 className="text-xs text-orange-600 hover:underline flex items-center gap-1"
               >
-                Lihat semua <ArrowRight size={12} />
+                {t("view_all")} <ArrowRight size={12} />
               </Link>
             </div>
 
@@ -362,10 +378,10 @@ export default async function DashboardPage({
                     >
                       <PlayCircle size={13} />
                       {enrollment.progressPct === 0
-                        ? "Mulai"
+                        ? t("start")
                         : enrollment.completedAt
-                        ? "Tonton"
-                        : "Lanjut"}
+                        ? t("watch")
+                        : t("continue_short")}
                     </Link>
                   </div>
                 ))}
@@ -375,16 +391,16 @@ export default async function DashboardPage({
                 <div className="w-16 h-16 rounded-2xl bg-orange-50 flex items-center justify-center mx-auto mb-4">
                   <BookOpen size={28} className="text-orange-300" />
                 </div>
-                <p className="text-stone-700 font-medium mb-1">Belum ada kelas</p>
+                <p className="text-stone-700 font-medium mb-1">{t("no_courses_title")}</p>
                 <p className="text-sm text-stone-400 mb-5">
-                  Mulai perjalanan belajarmu dengan mendaftar kelas
+                  {t("no_courses_desc")}
                 </p>
                 <Link
                   href="/courses"
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 text-white text-sm font-medium hover:bg-orange-700 transition-colors"
                 >
                   <Zap size={15} />
-                  Jelajahi Kelas
+                  {t("explore_courses")}
                 </Link>
               </div>
             )}
@@ -396,7 +412,7 @@ export default async function DashboardPage({
           {/* Recent Activity */}
           <div className="bg-white rounded-2xl border border-stone-200 overflow-hidden">
             <div className="px-5 py-4 border-b border-stone-100">
-              <h2 className="font-semibold text-stone-900">Aktivitas Terakhir</h2>
+              <h2 className="font-semibold text-stone-900">{t("recent_activity")}</h2>
             </div>
             {recentActivity.length > 0 ? (
               <div className="divide-y divide-stone-50">
@@ -407,18 +423,21 @@ export default async function DashboardPage({
                     </div>
                     <div className="min-w-0">
                       <p className="text-xs font-medium text-stone-700 leading-snug">
-                        Menyelesaikan pelajaran
+                        {t("lesson_completed")}
                       </p>
                       <p className="text-[11px] text-stone-500 truncate mt-0.5">
                         {activity.lesson.title}
                       </p>
                       <p className="text-[10px] text-stone-400 mt-0.5">
-                        {new Date(activity.completedAt).toLocaleDateString("id-ID", {
-                          day: "numeric",
-                          month: "short",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
+                        {new Date(activity.completedAt).toLocaleDateString(
+                          isEn ? "en-US" : "id-ID",
+                          {
+                            day: "numeric",
+                            month: "short",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          }
+                        )}
                       </p>
                     </div>
                   </div>
@@ -427,21 +446,21 @@ export default async function DashboardPage({
             ) : (
               <div className="text-center py-8">
                 <Clock size={28} className="text-stone-200 mx-auto mb-2" />
-                <p className="text-xs text-stone-400">Belum ada aktivitas belajar</p>
+                <p className="text-xs text-stone-400">{t("no_activity")}</p>
               </div>
             )}
           </div>
 
           {/* Quick Links */}
           <div className="bg-white rounded-2xl border border-stone-200 p-5">
-            <h2 className="font-semibold text-stone-900 mb-3">Menu Cepat</h2>
+            <h2 className="font-semibold text-stone-900 mb-3">{t("quick_menu")}</h2>
             <div className="space-y-2">
               {[
-                { href: "/courses", label: "Jelajahi Kelas Baru", icon: GraduationCap, color: "orange" },
-                { href: "/dashboard/certificates", label: "Lihat Sertifikat", icon: Award, color: "amber" },
-                { href: "/dashboard/orders", label: "Riwayat Pembelian", icon: ShoppingBag, color: "blue" },
-                { href: "/dashboard/profile", label: "Edit Profil", icon: TrendingUp, color: "green" },
-              ].map(({ href, label, icon: Icon, color }) => (
+                { href: "/courses", labelKey: "browse_new_courses" as const, icon: GraduationCap, color: "orange" },
+                { href: "/dashboard/certificates", labelKey: "view_certificates" as const, icon: Award, color: "amber" },
+                { href: "/dashboard/orders", labelKey: "order_history" as const, icon: ShoppingBag, color: "blue" },
+                { href: "/dashboard/profile", labelKey: "edit_profile" as const, icon: TrendingUp, color: "green" },
+              ].map(({ href, labelKey, icon: Icon, color }) => (
                 <Link
                   key={href}
                   href={href}
@@ -472,7 +491,7 @@ export default async function DashboardPage({
                     />
                   </div>
                   <span className="text-sm text-stone-700 group-hover:text-stone-900 transition-colors">
-                    {label}
+                    {t(labelKey)}
                   </span>
                   <ArrowRight
                     size={14}

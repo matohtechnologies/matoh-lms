@@ -7,6 +7,8 @@ import Link from "next/link";
 import { ArrowLeft, CreditCard, Shield, Clock, BookOpen, Award, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
+import { useTranslations } from "next-intl";
+import { useAppLocale } from "@/components/providers/locale-provider";
 
 interface CheckoutPageProps {
   params: Promise<{ courseId: string }>;
@@ -26,6 +28,9 @@ interface Course {
 
 export default function CheckoutPage({ params }: CheckoutPageProps) {
   const router = useRouter();
+  const { locale } = useAppLocale();
+  const isEn = locale === "en";
+  const t = useTranslations("checkout");
   const [course, setCourse] = useState<Course | null>(null);
   const [loading, setLoading] = useState(true);
   const [paying, setPaying] = useState(false);
@@ -144,7 +149,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
       <div className="min-h-screen bg-stone-50 pt-20 flex items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 border-2 border-orange-600 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-          <p className="text-stone-500 text-sm">Memuat...</p>
+          <p className="text-stone-500 text-sm">{isEn ? "Loading..." : "Memuat..."}</p>
         </div>
       </div>
     );
@@ -154,13 +159,17 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
     return (
       <div className="min-h-screen bg-stone-50 pt-20 flex items-center justify-center">
         <div className="text-center p-8 bg-white rounded-2xl border border-stone-200 shadow-sm max-w-sm">
-          <p className="text-stone-800 font-bold text-base mb-2">Kelas Tidak Ditemukan</p>
-          <p className="text-stone-500 text-xs mb-4">Kelas yang ingin kamu beli tidak terdaftar atau belum dipublikasikan.</p>
+          <p className="text-stone-800 font-bold text-base mb-2">
+            {isEn ? "Course Not Found" : "Kelas Tidak Ditemukan"}
+          </p>
+          <p className="text-stone-500 text-xs mb-4">
+            {isEn ? "The course you are looking for is not listed or has not been published." : "Kelas yang ingin kamu beli tidak terdaftar atau belum dipublikasikan."}
+          </p>
           <Link
             href="/courses"
             className="inline-block px-4 py-2 bg-orange-600 text-white text-xs font-semibold rounded-xl hover:bg-orange-700 transition-colors"
           >
-            Kembali ke Katalog
+            {isEn ? "Back to Catalog" : "Kembali ke Katalog"}
           </Link>
         </div>
       </div>
@@ -178,11 +187,14 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
             className="text-xl font-bold text-stone-900 mb-2"
             style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
           >
-            Kelas Sudah Anda Miliki
+            {t("already_owned_title")}
           </h2>
           <p className="text-xs text-stone-600 mb-6 leading-relaxed">
-            Anda sudah terdaftar dan memiliki akses penuh seumur hidup ke kelas{" "}
-            <strong>{course.title}</strong>. Anda tidak perlu membayar atau mendaftar ulang.
+            {isEn ? (
+              <>You already have full lifetime access to <strong>{course.title}</strong>. You do not need to make another purchase.</>
+            ) : (
+              <>Anda sudah terdaftar dan memiliki akses penuh seumur hidup ke kelas <strong>{course.title}</strong>. Anda tidak perlu membayar atau mendaftar ulang.</>
+            )}
           </p>
           <div className="space-y-3">
             <Link href={`/learn/${course.id || courseId}`} className="block w-full">
@@ -190,12 +202,12 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
                 className="w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm font-semibold"
                 size="lg"
               >
-                Masuk ke Ruang Belajar Sekarang
+                {t("enter_learning_room")}
               </Button>
             </Link>
             <Link href="/dashboard/my-courses" className="block w-full">
               <Button variant="outline" className="w-full">
-                Lihat Kelas Saya
+                {isEn ? "View My Courses" : "Lihat Kelas Saya"}
               </Button>
             </Link>
           </div>
@@ -213,11 +225,11 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
         {/* Back */}
         <Link href={`/courses/${courseId}`} className="inline-flex items-center gap-2 text-sm text-stone-500 hover:text-stone-900 mb-6 transition-colors">
           <ArrowLeft size={16} />
-          Kembali ke detail kelas
+          {t("back_to_course")}
         </Link>
 
         <h1 className="text-2xl font-bold text-stone-900 mb-6" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-          Checkout
+          {t("title")}
         </h1>
 
         <div className="grid lg:grid-cols-3 gap-6">
@@ -225,7 +237,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
           <div className="lg:col-span-2 space-y-4">
             {/* Course Card */}
             <div className="bg-white rounded-2xl border border-stone-200 p-5">
-              <h2 className="font-semibold text-stone-900 mb-4">Ringkasan Pesanan</h2>
+              <h2 className="font-semibold text-stone-900 mb-4">{t("order_summary")}</h2>
               <div className="flex gap-4">
                 <div className="w-24 h-16 rounded-xl bg-stone-100 overflow-hidden shrink-0">
                   {course.thumbnail ? (
@@ -240,9 +252,9 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
                   <p className="font-medium text-stone-900 text-sm leading-snug">{course.title}</p>
                   <p className="text-xs text-stone-500 mt-1">{course.instructor.name}</p>
                   <div className="flex items-center gap-3 mt-2 text-xs text-stone-500">
-                    {course.totalLessons && <span>{course.totalLessons} materi</span>}
-                    <span>Akses seumur hidup</span>
-                    <span>Sertifikat</span>
+                    {course.totalLessons && <span>{course.totalLessons} {isEn ? "lessons" : "materi"}</span>}
+                    <span>{isEn ? "Lifetime access" : "Akses seumur hidup"}</span>
+                    <span>{isEn ? "Certificate" : "Sertifikat"}</span>
                   </div>
                 </div>
               </div>
@@ -250,12 +262,17 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
 
             {/* Payment Info */}
             <div className="bg-white rounded-2xl border border-stone-200 p-5">
-              <h2 className="font-semibold text-stone-900 mb-4">Metode Pembayaran</h2>
+              <h2 className="font-semibold text-stone-900 mb-4">{t("payment_method")}</h2>
               <p className="text-sm text-stone-500">
-                Pembayaran diproses secara aman melalui Midtrans. Tersedia berbagai metode pembayaran:
+                {isEn
+                  ? "Payments are securely processed via Midtrans. Multiple methods available:"
+                  : "Pembayaran diproses secara aman melalui Midtrans. Tersedia berbagai metode pembayaran:"}
               </p>
               <div className="flex flex-wrap gap-2 mt-3">
-                {["Transfer Bank", "GoPay", "OVO", "DANA", "QRIS", "Kartu Kredit"].map((method) => (
+                {(isEn
+                  ? ["Bank Transfer", "GoPay", "OVO", "DANA", "QRIS", "Credit Card"]
+                  : ["Transfer Bank", "GoPay", "OVO", "DANA", "QRIS", "Kartu Kredit"]
+                ).map((method) => (
                   <span key={method} className="px-3 py-1.5 bg-stone-50 border border-stone-200 rounded-lg text-xs font-medium text-stone-700">
                     {method}
                   </span>
@@ -266,31 +283,35 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
             {/* Security */}
             <div className="flex items-center gap-3 text-sm text-stone-500">
               <Shield size={16} className="text-green-500 shrink-0" />
-              <span>Transaksi dilindungi enkripsi SSL 256-bit. Data kamu aman bersama kami.</span>
+              <span>
+                {isEn
+                  ? "Transaction protected by 256-bit SSL encryption. Your data is safe with us."
+                  : "Transaksi dilindungi enkripsi SSL 256-bit. Data kamu aman bersama kami."}
+              </span>
             </div>
           </div>
 
           {/* Price Summary */}
           <div>
             <div className="bg-white rounded-2xl border border-stone-200 p-5 shadow-warm sticky top-24">
-              <h2 className="font-semibold text-stone-900 mb-4">Total Pembayaran</h2>
+              <h2 className="font-semibold text-stone-900 mb-4">{t("total_payment")}</h2>
 
               <div className="space-y-3 border-b border-stone-100 pb-4">
                 <div className="flex justify-between text-sm">
-                  <span className="text-stone-500">Harga kelas</span>
+                  <span className="text-stone-500">{t("original_price")}</span>
                   <span className="text-stone-700">
                     {hasDiscount ? (
-                      <span className="line-through">{formatCurrency(course.price)}</span>
+                      <span className="line-through">{formatCurrency(course.price, locale)}</span>
                     ) : (
-                      formatCurrency(course.price)
+                      formatCurrency(course.price, locale)
                     )}
                   </span>
                 </div>
                 {hasDiscount && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-stone-500">Diskon</span>
+                    <span className="text-stone-500">{t("discount")}</span>
                     <span className="text-green-600">
-                      -{formatCurrency(course.price - finalPrice)}
+                      -{formatCurrency(course.price - finalPrice, locale)}
                     </span>
                   </div>
                 )}
@@ -299,7 +320,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
               <div className="flex justify-between items-center py-4">
                 <span className="font-bold text-stone-900">Total</span>
                 <span className="text-2xl font-extrabold text-orange-600">
-                  {formatCurrency(finalPrice)}
+                  {formatCurrency(finalPrice, locale)}
                 </span>
               </div>
 
@@ -311,14 +332,14 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
                 loading={paying}
                 leftIcon={<CreditCard size={18} />}
               >
-                Bayar Sekarang
+                {t("pay_now")}
               </Button>
 
               <div className="mt-4 space-y-2">
                 {[
-                  { icon: Clock, text: "Garansi uang kembali 30 hari" },
-                  { icon: Award, text: "Akses seumur hidup" },
-                  { icon: Shield, text: "Pembayaran aman & terenkripsi" },
+                  { icon: Clock, text: isEn ? "30-day money-back guarantee" : "Garansi uang kembali 30 hari" },
+                  { icon: Award, text: isEn ? "Full lifetime access" : "Akses seumur hidup" },
+                  { icon: Shield, text: t("secure_payment") },
                 ].map(({ icon: Icon, text }) => (
                   <div key={text} className="flex items-center gap-2 text-xs text-stone-500">
                     <Icon size={13} className="text-stone-400" />

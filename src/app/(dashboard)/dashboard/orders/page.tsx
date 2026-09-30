@@ -5,33 +5,11 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { formatCurrency } from "@/lib/utils";
 import { format } from "date-fns";
-import { id as idLocale } from "date-fns/locale";
+import { id as idLocale, enUS as enLocale } from "date-fns/locale";
+import { getLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Riwayat Pembelian — Earthy Academy" };
-
-const statusConfig = {
-  PAID: {
-    label: "Berhasil",
-    icon: CheckCircle,
-    color: "text-green-700 bg-green-50 border-green-200",
-  },
-  PENDING: {
-    label: "Menunggu",
-    icon: Clock,
-    color: "text-amber-700 bg-amber-50 border-amber-200",
-  },
-  FAILED: {
-    label: "Gagal",
-    icon: XCircle,
-    color: "text-red-700 bg-red-50 border-red-200",
-  },
-  REFUNDED: {
-    label: "Dikembalikan",
-    icon: AlertCircle,
-    color: "text-blue-700 bg-blue-50 border-blue-200",
-  },
-};
+export const metadata: Metadata = { title: "Orders — Earthy Academy" };
 
 interface OrderItem {
   id: string;
@@ -48,6 +26,34 @@ interface OrderItem {
 export default async function OrdersPage() {
   const session = await auth();
   if (!session?.user?.id) redirect("/login");
+
+  const locale = await getLocale();
+  const isEn = locale === "en";
+  const t = await getTranslations("dashboard");
+  const dateLocale = isEn ? enLocale : idLocale;
+
+  const statusConfig = {
+    PAID: {
+      label: t("status_paid"),
+      icon: CheckCircle,
+      color: "text-green-700 bg-green-50 border-green-200",
+    },
+    PENDING: {
+      label: t("status_pending"),
+      icon: Clock,
+      color: "text-amber-700 bg-amber-50 border-amber-200",
+    },
+    FAILED: {
+      label: t("status_failed"),
+      icon: XCircle,
+      color: "text-red-700 bg-red-50 border-red-200",
+    },
+    REFUNDED: {
+      label: t("status_refunded"),
+      icon: AlertCircle,
+      color: "text-blue-700 bg-blue-50 border-blue-200",
+    },
+  };
 
   let orders: OrderItem[] = [];
   try {
@@ -77,10 +83,10 @@ export default async function OrdersPage() {
           className="text-2xl font-bold text-stone-900"
           style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
         >
-          Riwayat Pembelian
+          {t("orders_title")}
         </h1>
         <p className="text-stone-500 text-sm mt-1">
-          {orders.length} transaksi
+          {t("transactions_count", { count: orders.length })}
         </p>
       </div>
 
@@ -89,22 +95,22 @@ export default async function OrdersPage() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {[
             {
-              label: "Total Dibayar",
-              value: formatCurrency(paidTotal),
+              label: t("total_paid"),
+              value: formatCurrency(paidTotal, locale),
               color: "green",
             },
             {
-              label: "Transaksi Berhasil",
+              label: t("successful_transactions"),
               value: `${orders.filter((o) => o.status === "PAID").length}×`,
               color: "green",
             },
             {
-              label: "Menunggu",
+              label: t("pending"),
               value: `${orders.filter((o) => o.status === "PENDING").length}×`,
               color: "amber",
             },
             {
-              label: "Gagal",
+              label: t("failed"),
               value: `${orders.filter((o) => o.status === "FAILED" || o.status === "REFUNDED").length}×`,
               color: "red",
             },
@@ -136,17 +142,17 @@ export default async function OrdersPage() {
             <ShoppingBag size={28} className="text-stone-400" />
           </div>
           <h3 className="text-lg font-semibold text-stone-900 mb-2">
-            Belum Ada Transaksi
+            {t("no_orders_title")}
           </h3>
           <p className="text-stone-500 text-sm mb-6">
-            Riwayat pembelian kelas akan muncul di sini
+            {t("no_orders_desc")}
           </p>
           <Link
             href="/courses"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 text-white text-sm font-medium hover:bg-orange-700 transition-colors"
           >
             <GraduationCap size={16} />
-            Jelajahi Kelas
+            {t("explore_courses")}
           </Link>
         </div>
       ) : (
@@ -177,11 +183,11 @@ export default async function OrdersPage() {
                   <div className="flex items-center justify-between text-xs text-stone-500">
                     <span>
                       {format(new Date(order.createdAt), "d MMM yyyy", {
-                        locale: idLocale,
+                        locale: dateLocale,
                       })}
                     </span>
                     <span className="font-semibold text-stone-900">
-                      {formatCurrency(order.amount)}
+                      {formatCurrency(order.amount, locale)}
                     </span>
                   </div>
                   {order.midtransOrderId && (
@@ -203,10 +209,10 @@ export default async function OrdersPage() {
                     Order ID
                   </th>
                   <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">
-                    Kelas
+                    {t("order_course_col")}
                   </th>
                   <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">
-                    Tanggal
+                    {t("order_date_col")}
                   </th>
                   <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">
                     Total
@@ -238,11 +244,11 @@ export default async function OrdersPage() {
                       </td>
                       <td className="px-5 py-4 text-sm text-stone-500">
                         {format(new Date(order.createdAt), "d MMM yyyy", {
-                          locale: idLocale,
+                          locale: dateLocale,
                         })}
                       </td>
                       <td className="px-5 py-4 text-sm font-semibold text-stone-900">
-                        {formatCurrency(order.amount)}
+                        {formatCurrency(order.amount, locale)}
                       </td>
                       <td className="px-5 py-4">
                         <span

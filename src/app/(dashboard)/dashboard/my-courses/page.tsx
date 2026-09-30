@@ -5,9 +5,10 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { getLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Kelas Saya — Earthy Academy" };
+export const metadata: Metadata = { title: "My Courses — Earthy Academy" };
 
 async function getMyCoursesData(userId: string) {
   try {
@@ -37,7 +38,6 @@ async function getMyCoursesData(userId: string) {
             category: { select: { name: true } },
             instructor: { select: { name: true } },
           },
-          // thumbnail, totalLessons are on Course directly
         },
       },
       orderBy: { enrolledAt: "desc" },
@@ -69,6 +69,7 @@ export default async function MyCoursesPage() {
   if (!session?.user?.id) redirect("/login");
 
   const enrollments = await getMyCoursesData(session.user.id);
+  const t = await getTranslations("dashboard");
 
   const completed = enrollments.filter((e) => e.completedAt).length;
   const inProgress = enrollments.filter((e) => !e.completedAt && e.progressPct > 0).length;
@@ -83,10 +84,10 @@ export default async function MyCoursesPage() {
             className="text-2xl font-bold text-stone-900"
             style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
           >
-            Kelas Saya
+            {t("my_courses_title")}
           </h1>
           <p className="text-stone-500 text-sm mt-1">
-            {enrollments.length} kelas diikuti
+            {t("courses_enrolled", { count: enrollments.length })}
           </p>
         </div>
         <Link
@@ -94,7 +95,7 @@ export default async function MyCoursesPage() {
           className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-stone-700 text-sm font-medium hover:bg-stone-50 transition-colors shadow-sm"
         >
           <GraduationCap size={16} className="text-orange-500" />
-          Cari Kelas Baru
+          {t("find_new_course")}
         </Link>
       </div>
 
@@ -102,10 +103,10 @@ export default async function MyCoursesPage() {
       {enrollments.length > 0 && (
         <div className="flex items-center gap-3 flex-wrap">
           {[
-            { label: "Semua", value: enrollments.length, color: "stone" },
-            { label: "Selesai", value: completed, color: "green" },
-            { label: "Sedang Belajar", value: inProgress, color: "orange" },
-            { label: "Belum Dimulai", value: notStarted, color: "stone" },
+            { label: t("all"), value: enrollments.length, color: "stone" },
+            { label: t("completed"), value: completed, color: "green" },
+            { label: t("in_progress"), value: inProgress, color: "orange" },
+            { label: t("not_started"), value: notStarted, color: "stone" },
           ].map(({ label, value, color }) => (
             <div key={label} className="flex items-center gap-2">
               <div
@@ -133,16 +134,16 @@ export default async function MyCoursesPage() {
             <BookOpen size={28} className="text-orange-300" />
           </div>
           <h3 className="text-lg font-semibold text-stone-900 mb-2">
-            Belum Ada Kelas
+            {t("no_courses_empty_title")}
           </h3>
           <p className="text-stone-500 text-sm mb-6">
-            Mulai perjalanan belajarmu dengan mendaftar kelas pertamamu
+            {t("no_courses_empty_desc")}
           </p>
           <Link
             href="/courses"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 text-white text-sm font-medium hover:bg-orange-700 transition-colors"
           >
-            Jelajahi Kelas
+            {t("explore_courses")}
           </Link>
         </div>
       ) : (
@@ -183,7 +184,7 @@ export default async function MyCoursesPage() {
                   <div className="absolute top-3 right-3">
                     <span className="flex items-center gap-1 px-2 py-1 rounded-full bg-green-500 text-white text-[11px] font-semibold">
                       <CheckCircle2 size={11} />
-                      Selesai
+                      {t("completed")}
                     </span>
                   </div>
                 )}
@@ -207,15 +208,17 @@ export default async function MyCoursesPage() {
                 <div className="flex items-center gap-2 text-xs text-stone-500">
                   <Clock size={12} />
                   <span>
-                    {enrollment.completedLessons}/
-                    {enrollment.course.totalLessons ?? "?"} materi selesai
+                    {t("lessons_done", {
+                      done: enrollment.completedLessons,
+                      total: enrollment.course.totalLessons ?? "?",
+                    })}
                   </span>
                   {enrollment.completedAt && (
                     <>
                       <span>·</span>
                       <Award size={12} className="text-amber-500" />
                       <span className="text-amber-600 font-medium">
-                        Sertifikat tersedia
+                        {t("cert_available")}
                       </span>
                     </>
                   )}
@@ -228,10 +231,10 @@ export default async function MyCoursesPage() {
                 >
                   <PlayCircle size={15} />
                   {enrollment.progressPct === 0
-                    ? "Mulai Belajar"
+                    ? t("start_learning")
                     : enrollment.completedAt
-                    ? "Tonton Ulang"
-                    : "Lanjutkan Belajar"}
+                    ? t("rewatch")
+                    : t("continue_learning_btn")}
                 </Link>
               </div>
             </div>

@@ -14,6 +14,10 @@ export function formatCurrency(amount: number, locale: string = "id"): string {
   }).format(amount);
 }
 
+export function formatNumber(num: number, locale: string = "id"): string {
+  return new Intl.NumberFormat(locale === "id" ? "id-ID" : "en-US").format(num);
+}
+
 export function formatDuration(minutes: number): string {
   const hours = Math.floor(minutes / 60);
   const mins = minutes % 60;

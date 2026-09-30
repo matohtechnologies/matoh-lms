@@ -10,6 +10,7 @@ import { BookOpen, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { signIn } from "next-auth/react";
+import { useTranslations } from "next-intl";
 
 const loginSchema = z.object({
   email: z.string().email("Email tidak valid"),
@@ -19,6 +20,7 @@ const loginSchema = z.object({
 type LoginForm = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
+  const t = useTranslations("auth");
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [showPassword, setShowPassword] = useState(false);
@@ -71,21 +73,25 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen gradient-hero flex items-center justify-center px-4 py-16">
       <div className="w-full max-w-md">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2.5 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-sm">
-              <BookOpen size={20} className="text-white" />
+        {/* Top bar */}
+        <div className="flex items-center mb-8">
+          <Link href="/" className="inline-flex items-center gap-2">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-sm">
+              <BookOpen size={18} className="text-white" />
             </div>
-            <span className="font-bold text-stone-900 text-xl" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
+            <span className="font-bold text-stone-900 text-lg" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
               Earthy<span className="text-orange-600">Academy</span>
             </span>
           </Link>
+        </div>
+
+        {/* Title */}
+        <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-stone-900" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-            Selamat Datang Kembali
+            {t("login_title")}
           </h1>
           <p className="text-stone-500 text-sm mt-1">
-            Masuk untuk melanjutkan perjalanan belajarmu
+            {t("login_subtitle")}
           </p>
         </div>
 
@@ -104,12 +110,12 @@ export default function LoginPage() {
               <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
               <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
             </svg>
-            Lanjutkan dengan Google
+            {t("continue_google")}
           </button>
 
           <div className="flex items-center gap-3 my-5">
             <div className="flex-1 h-px bg-stone-200" />
-            <span className="text-xs text-stone-400 font-medium">atau</span>
+            <span className="text-xs text-stone-400 font-medium">{t("or")}</span>
             <div className="flex-1 h-px bg-stone-200" />
           </div>
 
@@ -123,7 +129,7 @@ export default function LoginPage() {
           {/* Quick Account Selector */}
           <div className="mb-5 p-3 rounded-xl bg-orange-50/80 border border-orange-200/80">
             <p className="text-xs font-semibold text-orange-950 mb-2">
-              💡 Akses Cepat Akun Terdaftar (Database):
+              💡 Demo Accounts (Quick Fill):
             </p>
             <div className="grid grid-cols-2 gap-2">
               <button
@@ -134,7 +140,7 @@ export default function LoginPage() {
                 }}
                 className="text-xs py-1.5 px-2.5 rounded-lg bg-white border border-orange-200 text-stone-700 hover:bg-orange-100/60 transition-colors text-left flex flex-col shadow-xs"
               >
-                <span className="font-semibold text-orange-700">Akun Siswa</span>
+                <span className="font-semibold text-orange-700">Student</span>
                 <span className="text-[10px] text-stone-500">user@earthyacademy.com</span>
               </button>
               <button
@@ -145,7 +151,7 @@ export default function LoginPage() {
                 }}
                 className="text-xs py-1.5 px-2.5 rounded-lg bg-white border border-orange-200 text-stone-700 hover:bg-orange-100/60 transition-colors text-left flex flex-col shadow-xs"
               >
-                <span className="font-semibold text-orange-700">Akun Admin</span>
+                <span className="font-semibold text-orange-700">Admin</span>
                 <span className="text-[10px] text-stone-500">admin@earthyacademy.com</span>
               </button>
             </div>
@@ -154,14 +160,14 @@ export default function LoginPage() {
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <Input
-              label="Email"
+              label={t("email")}
               type="email"
               placeholder="email@kamu.com"
               error={errors.email?.message}
               {...register("email")}
             />
             <Input
-              label="Password"
+              label={t("password")}
               type={showPassword ? "text" : "password"}
               placeholder="••••••••"
               error={errors.password?.message}
@@ -177,13 +183,9 @@ export default function LoginPage() {
               {...register("password")}
             />
 
-            <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" className="w-4 h-4 rounded accent-orange-600" />
-                <span className="text-sm text-stone-600">Ingat saya</span>
-              </label>
+            <div className="flex items-center justify-end">
               <Link href="/forgot-password" className="text-sm text-orange-600 hover:underline">
-                Lupa password?
+                {t("forgot_password")}
               </Link>
             </div>
 
@@ -193,14 +195,14 @@ export default function LoginPage() {
               size="lg"
               loading={isPending}
             >
-              Masuk
+              {t("login")}
             </Button>
           </form>
 
           <p className="text-center text-sm text-stone-500 mt-5">
-            Belum punya akun?{" "}
+            {t("no_account")}{" "}
             <Link href="/register" className="text-orange-600 font-medium hover:underline">
-              Daftar gratis
+              {t("register")}
             </Link>
           </p>
         </div>

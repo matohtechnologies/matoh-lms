@@ -5,9 +5,10 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import type { Metadata } from "next";
 import { format } from "date-fns";
-import { id as idLocale } from "date-fns/locale";
+import { id as idLocale, enUS as enLocale } from "date-fns/locale";
+import { getLocale, getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = { title: "Sertifikat — Earthy Academy" };
+export const metadata: Metadata = { title: "Certificates — Earthy Academy" };
 
 interface CertItem {
   id: string;
@@ -24,6 +25,11 @@ interface CertItem {
 export default async function CertificatesPage() {
   const session = await auth();
   if (!session?.user?.id) redirect("/login");
+
+  const locale = await getLocale();
+  const isEn = locale === "en";
+  const t = await getTranslations("dashboard");
+  const dateLocale = isEn ? enLocale : idLocale;
 
   let certificates: CertItem[] = [];
   try {
@@ -52,10 +58,10 @@ export default async function CertificatesPage() {
           className="text-2xl font-bold text-stone-900"
           style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
         >
-          Sertifikat
+          {t("certs_title")}
         </h1>
         <p className="text-stone-500 text-sm mt-1">
-          {certificates.length} sertifikat diperoleh
+          {t("certs_count", { count: certificates.length })}
         </p>
       </div>
 
@@ -65,13 +71,13 @@ export default async function CertificatesPage() {
             <Award size={28} className="text-amber-400" />
           </div>
           <h3 className="text-lg font-semibold text-stone-900 mb-2">
-            Belum Ada Sertifikat
+            {t("no_certs_title")}
           </h3>
           <p className="text-stone-500 text-sm mb-2">
-            Selesaikan kelas yang kamu ikuti untuk mendapatkan sertifikat resmi
+            {t("no_certs_desc")}
           </p>
           <p className="text-xs text-stone-400 mb-6">
-            Sertifikat diterbitkan otomatis saat kamu menyelesaikan 100% materi
+            {t("no_certs_hint")}
           </p>
           <div className="flex items-center justify-center gap-3">
             <Link
@@ -79,14 +85,14 @@ export default async function CertificatesPage() {
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 text-white text-sm font-medium hover:bg-orange-700 transition-colors"
             >
               <BookOpen size={16} />
-              Lihat Kelas Saya
+              {t("view_my_courses")}
             </Link>
             <Link
               href="/courses"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-stone-200 bg-white text-stone-700 text-sm font-medium hover:bg-stone-50 transition-colors"
             >
               <GraduationCap size={16} />
-              Jelajahi Kelas
+              {t("explore_courses")}
             </Link>
           </div>
         </div>
@@ -131,12 +137,12 @@ export default async function CertificatesPage() {
                   {cert.course.title}
                 </h3>
                 <p className="text-xs text-stone-500 mb-1">
-                  Instruktur: {cert.course.instructor.name}
+                  {t("cert_instructor")}: {cert.course.instructor.name}
                 </p>
                 <p className="text-xs text-stone-400 mb-4">
-                  Diterbitkan:{" "}
+                  {t("cert_issued")}:{" "}
                   {format(new Date(cert.issuedAt), "d MMMM yyyy", {
-                    locale: idLocale,
+                    locale: dateLocale,
                   })}
                 </p>
 
@@ -146,7 +152,7 @@ export default async function CertificatesPage() {
                   className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-semibold hover:from-orange-600 hover:to-amber-600 transition-all shadow-sm"
                 >
                   <ExternalLink size={13} />
-                  Lihat &amp; Cetak Sertifikat
+                  {t("cert_view_print")}
                 </Link>
               </div>
             </div>

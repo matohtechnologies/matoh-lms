@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { CourseCard } from "@/components/courses/course-card";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, getLocale } from "next-intl/server";
 
 async function getFeaturedCourses() {
   try {
@@ -47,8 +47,12 @@ async function getStats() {
 }
 
 export default async function HomePage() {
+  const locale = await getLocale();
+  const isEn = locale === "en";
   const t = await getTranslations("hero");
   const tc = await getTranslations("courses");
+  const tHome = await getTranslations("home");
+
   const [featuredCourses, stats, session] = await Promise.all([
     getFeaturedCourses(),
     getStats(),
@@ -76,49 +80,76 @@ export default async function HomePage() {
   ];
 
   const features = [
-    { icon: "🎯", title: "Kurikulum Relevan", desc: "Materi dirancang bersama praktisi industri terkemuka" },
-    { icon: "⚡", title: "Belajar Fleksibel", desc: "Akses kelas kapan saja dan di mana saja sesuai ritmu belajarmu" },
-    { icon: "🏆", title: "Sertifikat Resmi", desc: "Dapatkan sertifikat yang diakui oleh ratusan perusahaan" },
-    { icon: "💬", title: "Komunitas Aktif", desc: "Bergabung dengan ribuan pelajar dan instruktur berpengalaman" },
+    { icon: "🎯", title: tHome("features.curriculum_title"), desc: tHome("features.curriculum_desc") },
+    { icon: "⚡", title: tHome("features.flexible_title"), desc: tHome("features.flexible_desc") },
+    { icon: "🏆", title: tHome("features.certificate_title"), desc: tHome("features.certificate_desc") },
+    { icon: "💬", title: tHome("features.community_title"), desc: tHome("features.community_desc") },
   ];
 
   const categories = [
-    { name: "Web Development", icon: "💻", count: 42 },
-    { name: "Data Science", icon: "📊", count: 28 },
-    { name: "UI/UX Design", icon: "🎨", count: 19 },
-    { name: "Mobile Dev", icon: "📱", count: 23 },
-    { name: "Cybersecurity", icon: "🔐", count: 15 },
-    { name: "Digital Marketing", icon: "📣", count: 31 },
-    { name: "Cloud Computing", icon: "☁️", count: 18 },
-    { name: "Bisnis & Startup", icon: "🚀", count: 24 },
+    { name: isEn ? "Web Development" : "Web Development", icon: "💻", count: 42 },
+    { name: isEn ? "Data Science" : "Data Science", icon: "📊", count: 28 },
+    { name: isEn ? "UI/UX Design" : "UI/UX Design", icon: "🎨", count: 19 },
+    { name: isEn ? "Mobile Dev" : "Mobile Dev", icon: "📱", count: 23 },
+    { name: isEn ? "Cybersecurity" : "Cybersecurity", icon: "🔐", count: 15 },
+    { name: isEn ? "Digital Marketing" : "Digital Marketing", icon: "📣", count: 31 },
+    { name: isEn ? "Cloud Computing" : "Cloud Computing", icon: "☁️", count: 18 },
+    { name: isEn ? "Business & Startup" : "Bisnis & Startup", icon: "🚀", count: 24 },
   ];
 
-  const testimonials = [
-    {
-      name: "Rizky Pratama",
-      role: "Frontend Developer at Tokopedia",
-      avatar: "R",
-      text: "Earthy Academy benar-benar mengubah karir saya. Dalam 6 bulan, saya berhasil pindah dari pekerjaan lama ke tech industry.",
-      rating: 5,
-      course: "React.js Modern Development",
-    },
-    {
-      name: "Sari Dewi",
-      role: "UI/UX Designer at Gojek",
-      avatar: "S",
-      text: "Materi yang sangat terstruktur dan instruktur yang sabar. Saya belajar dari nol dan sekarang sudah bekerja sebagai designer profesional.",
-      rating: 5,
-      course: "UI/UX Design Masterclass",
-    },
-    {
-      name: "Budi Santoso",
-      role: "Data Analyst at BCA",
-      avatar: "B",
-      text: "Investasi terbaik yang pernah saya lakukan. Worth every rupiah! Materi up-to-date dan relevan dengan kebutuhan industri.",
-      rating: 5,
-      course: "Python for Data Science",
-    },
-  ];
+  const testimonials = isEn
+    ? [
+        {
+          name: "Rizky Pratama",
+          role: "Frontend Developer at Tokopedia",
+          avatar: "R",
+          text: "Earthy Academy truly transformed my career. Within 6 months, I successfully transitioned from my old job into the tech industry.",
+          rating: 5,
+          course: "React.js Modern Development",
+        },
+        {
+          name: "Sari Dewi",
+          role: "UI/UX Designer at Gojek",
+          avatar: "S",
+          text: "Well-structured curriculum and supportive mentors. I started from zero and am now working as a professional product designer.",
+          rating: 5,
+          course: "UI/UX Design Masterclass",
+        },
+        {
+          name: "Budi Santoso",
+          role: "Data Analyst at BCA",
+          avatar: "B",
+          text: "The best investment I have ever made. Worth every penny! Up-to-date content that directly aligns with modern tech requirements.",
+          rating: 5,
+          course: "Python for Data Science",
+        },
+      ]
+    : [
+        {
+          name: "Rizky Pratama",
+          role: "Frontend Developer at Tokopedia",
+          avatar: "R",
+          text: "Earthy Academy benar-benar mengubah karir saya. Dalam 6 bulan, saya berhasil pindah dari pekerjaan lama ke tech industry.",
+          rating: 5,
+          course: "React.js Modern Development",
+        },
+        {
+          name: "Sari Dewi",
+          role: "UI/UX Designer at Gojek",
+          avatar: "S",
+          text: "Materi yang sangat terstruktur dan instruktur yang sabar. Saya belajar dari nol dan sekarang sudah bekerja sebagai designer profesional.",
+          rating: 5,
+          course: "UI/UX Design Masterclass",
+        },
+        {
+          name: "Budi Santoso",
+          role: "Data Analyst at BCA",
+          avatar: "B",
+          text: "Investasi terbaik yang pernah saya lakukan. Worth every rupiah! Materi up-to-date dan relevan dengan kebutuhan industri.",
+          rating: 5,
+          course: "Python for Data Science",
+        },
+      ];
 
   return (
     <>
@@ -192,7 +223,9 @@ export default async function HomePage() {
                     ))}
                     <span className="text-sm font-semibold text-stone-700 ml-1">4.9</span>
                   </div>
-                  <p className="text-xs text-stone-500">dari 10.000+ ulasan</p>
+                  <p className="text-xs text-stone-500">
+                    {isEn ? "from 10,000+ reviews" : "dari 10.000+ ulasan"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -220,8 +253,8 @@ export default async function HomePage() {
                   <TrendingUp size={20} className="text-green-600" />
                 </div>
                 <div>
-                  <p className="text-xs text-stone-500">Pelajar bulan ini</p>
-                  <p className="font-bold text-stone-900">+1,240 orang</p>
+                  <p className="text-xs text-stone-500">{t("floating_badge_label")}</p>
+                  <p className="font-bold text-stone-900">{t("floating_badge_count")}</p>
                 </div>
               </div>
             </div>
@@ -246,9 +279,9 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-10">
             <h2 className="text-3xl font-bold text-stone-900 mb-3" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-              Explore Kategori
+              {tHome("categories_title")}
             </h2>
-            <p className="text-stone-500">Temukan kelas yang sesuai dengan minat dan tujuan karirmu</p>
+            <p className="text-stone-500">{tHome("categories_subtitle")}</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
             {categories.map((cat) => (
@@ -261,7 +294,7 @@ export default async function HomePage() {
                 <span className="text-xs font-medium text-stone-700 group-hover:text-orange-700 leading-tight">
                   {cat.name}
                 </span>
-                <span className="text-[11px] text-stone-400">{cat.count} kelas</span>
+                <span className="text-[11px] text-stone-400">{cat.count} {tHome("courses_unit")}</span>
               </Link>
             ))}
           </div>
@@ -304,13 +337,14 @@ export default async function HomePage() {
                   duration={course.duration}
                   instructor={course.instructor}
                   category={course.category}
+                  locale={locale}
                   isEnrolled={enrolledCourseIds.has(course.id)}
                 />
               ))}
             </div>
           ) : (
             <div className="text-center py-12 bg-stone-50 rounded-2xl border border-stone-200">
-              <p className="text-stone-500 text-sm">Belum ada kelas yang dipublikasikan saat ini.</p>
+              <p className="text-stone-500 text-sm">{tHome("empty_courses")}</p>
             </div>
           )}
         </div>
@@ -321,10 +355,10 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-stone-900 mb-3" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-              Kenapa Earthy Academy?
+              {tHome("features_title")}
             </h2>
             <p className="text-stone-500 max-w-xl mx-auto">
-              Kami hadir untuk memberikan pengalaman belajar yang menyenangkan, efektif, dan relevan
+              {tHome("features_subtitle")}
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -349,9 +383,9 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-stone-900 mb-3" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-              Cerita Sukses Mereka
+              {tHome("testimonials_title")}
             </h2>
-            <p className="text-stone-500">Ribuan pelajar telah membuktikan transformasi karir mereka</p>
+            <p className="text-stone-500">{tHome("testimonials_subtitle")}</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {testimonials.map((t, i) => (
@@ -368,7 +402,10 @@ export default async function HomePage() {
                   &ldquo;{t.text}&rdquo;
                 </p>
                 <div className="pt-4 border-t border-stone-100">
-                  <p className="text-xs text-stone-400 mb-3">Kelas yang diambil: <span className="text-orange-600">{t.course}</span></p>
+                  <p className="text-xs text-stone-400 mb-3">
+                    {isEn ? "Course taken:" : "Kelas yang diambil:"}{" "}
+                    <span className="text-orange-600">{t.course}</span>
+                  </p>
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white font-bold text-sm">
                       {t.avatar}
@@ -391,10 +428,10 @@ export default async function HomePage() {
         <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-white opacity-5 translate-y-1/2 -translate-x-1/2" />
         <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-            Siap Mulai Perjalanan Belajarmu?
+            {tHome("cta_title")}
           </h2>
           <p className="text-orange-100 text-lg mb-8 max-w-xl mx-auto">
-            Bergabung dengan 12.000+ pelajar yang sudah mengubah karir mereka. Mulai belajar sekarang, gratis!
+            {tHome("cta_subtitle")}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/register">
@@ -403,7 +440,7 @@ export default async function HomePage() {
                 className="bg-white text-orange-600 hover:bg-orange-50 w-full sm:w-auto"
                 rightIcon={<ArrowRight size={18} />}
               >
-                Daftar Gratis Sekarang
+                {tHome("cta_btn_primary")}
               </Button>
             </Link>
             <Link href="/courses">
@@ -412,12 +449,15 @@ export default async function HomePage() {
                 variant="outline"
                 className="border-white text-white hover:bg-white/10 w-full sm:w-auto"
               >
-                Lihat Semua Kelas
+                {tHome("cta_btn_secondary")}
               </Button>
             </Link>
           </div>
           <div className="mt-8 flex items-center justify-center gap-6 text-sm text-orange-100">
-            {["Tanpa kartu kredit", "Akses seumur hidup", "Garansi uang kembali 30 hari"].map((item) => (
+            {(isEn
+              ? ["No credit card required", "Full lifetime access", "30-day money-back guarantee"]
+              : ["Tanpa kartu kredit", "Akses seumur hidup", "Garansi uang kembali 30 hari"]
+            ).map((item) => (
               <span key={item} className="flex items-center gap-2">
                 <CheckCircle size={16} />
                 {item}

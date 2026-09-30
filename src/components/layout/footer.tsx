@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { BookOpen } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 function TwitterIcon({ className }: { className?: string }) {
   return (
@@ -26,6 +29,7 @@ function YouTubeIcon({ className }: { className?: string }) {
 }
 
 export function Footer() {
+  const t = useTranslations("footer");
   const currentYear = new Date().getFullYear();
 
   return (
@@ -43,7 +47,7 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-sm leading-relaxed text-stone-400 mb-5">
-              Platform belajar online terpercaya untuk mengembangkan skill dan karir profesional Anda.
+              {t("tagline")}
             </p>
             <div className="flex items-center gap-3">
               {[
@@ -66,14 +70,14 @@ export function Footer() {
           {/* Quick Links */}
           <div>
             <h4 className="text-sm font-semibold text-white mb-4 tracking-wide uppercase">
-              Platform
+              {t("platform")}
             </h4>
             <ul className="space-y-2.5">
               {[
-                { href: "/courses", label: "Semua Kelas" },
-                { href: "/about", label: "Tentang Kami" },
-                { href: "/instructors", label: "Instruktur" },
-                { href: "/blog", label: "Blog" },
+                { href: "/courses", label: t("all_courses") },
+                { href: "/about", label: t("about_us") },
+                { href: "/instructors", label: t("instructors") },
+                { href: "/blog", label: t("blog") },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
@@ -90,14 +94,14 @@ export function Footer() {
           {/* Support */}
           <div>
             <h4 className="text-sm font-semibold text-white mb-4 tracking-wide uppercase">
-              Dukungan
+              {t("support")}
             </h4>
             <ul className="space-y-2.5">
               {[
-                { href: "/help", label: "Pusat Bantuan" },
-                { href: "/contact", label: "Hubungi Kami" },
-                { href: "/terms", label: "Syarat & Ketentuan" },
-                { href: "/privacy", label: "Kebijakan Privasi" },
+                { href: "/help", label: t("help_center") },
+                { href: "/contact", label: t("contact_us") },
+                { href: "/terms", label: t("terms") },
+                { href: "/privacy", label: t("privacy") },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
@@ -114,22 +118,22 @@ export function Footer() {
           {/* Newsletter */}
           <div>
             <h4 className="text-sm font-semibold text-white mb-4 tracking-wide uppercase">
-              Newsletter
+              {t("newsletter")}
             </h4>
             <p className="text-sm text-stone-400 mb-4">
-              Dapatkan info kelas terbaru dan tips belajar langsung di inbox kamu.
+              {t("newsletter_desc")}
             </p>
-            <form className="flex flex-col gap-2" action="#">
+            <form className="flex flex-col gap-2" onSubmit={(e) => e.preventDefault()}>
               <input
                 type="email"
-                placeholder="email@kamu.com"
+                placeholder={t("email_placeholder")}
                 className="h-10 px-3 rounded-xl bg-stone-800 border border-stone-700 text-sm text-white placeholder:text-stone-500 focus:outline-none focus:border-orange-500 transition-colors"
               />
               <button
                 type="submit"
                 className="h-10 px-4 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium transition-colors"
               >
-                Berlangganan
+                {t("subscribe")}
               </button>
             </form>
           </div>
@@ -137,12 +141,12 @@ export function Footer() {
 
         <div className="mt-12 pt-6 border-t border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-sm text-stone-500">
-            © {currentYear} Earthy Academy. Hak cipta dilindungi.
+            © {currentYear} Earthy Academy. {t("rights")}
           </p>
           <div className="flex items-center gap-1 text-sm text-stone-500">
-            <span>Dibuat dengan</span>
+            <span>{t("made_with")}</span>
             <span className="text-orange-500">♥</span>
-            <span>di Indonesia</span>
+            <span>{t("in_indonesia")}</span>
           </div>
         </div>
       </div>

@@ -10,22 +10,24 @@ import {
   User,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const mobileNavItems = [
-  { href: "/dashboard", label: "Beranda", icon: LayoutDashboard, exact: true },
-  { href: "/dashboard/my-courses", label: "Kelas", icon: BookOpen },
-  { href: "/dashboard/certificates", label: "Sertifikat", icon: Award },
-  { href: "/dashboard/orders", label: "Pembelian", icon: ShoppingBag },
-  { href: "/dashboard/profile", label: "Profil", icon: User },
-];
+import { useTranslations } from "next-intl";
 
 export default function MobileNav() {
   const pathname = usePathname();
+  const t = useTranslations("dashboard");
+
+  const mobileNavItems = [
+    { href: "/dashboard", labelKey: "mobile_home" as const, icon: LayoutDashboard, exact: true },
+    { href: "/dashboard/my-courses", labelKey: "mobile_courses" as const, icon: BookOpen },
+    { href: "/dashboard/certificates", labelKey: "mobile_certificates" as const, icon: Award },
+    { href: "/dashboard/orders", labelKey: "mobile_orders" as const, icon: ShoppingBag },
+    { href: "/dashboard/profile", labelKey: "mobile_profile" as const, icon: User },
+  ];
 
   return (
     <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-stone-200 safe-area-bottom">
       <div className="flex items-stretch h-16">
-        {mobileNavItems.map(({ href, label, icon: Icon, exact }) => {
+        {mobileNavItems.map(({ href, labelKey, icon: Icon, exact }) => {
           const isActive = exact ? pathname === href : pathname.startsWith(href);
           return (
             <Link
@@ -44,7 +46,7 @@ export default function MobileNav() {
               >
                 <Icon size={18} />
               </div>
-              {label}
+              {t(labelKey)}
             </Link>
           );
         })}

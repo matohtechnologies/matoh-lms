@@ -4,7 +4,7 @@ import { CourseCard, CourseCardSkeleton } from "@/components/courses/course-card
 import { CourseSortSelect } from "@/components/courses/course-sort-select";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, getLocale } from "next-intl/server";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -88,6 +88,8 @@ async function getCategories() {
 
 export default async function CoursesPage({ searchParams }: CoursesPageProps) {
   const params = await searchParams;
+  const locale = await getLocale();
+  const isEn = locale === "en";
   const t = await getTranslations("courses");
   const [session, { courses, total, pages }, categories] = await Promise.all([
     auth(),
@@ -117,17 +119,17 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
   const currentPage = params.page ? parseInt(params.page) : 1;
 
   const levelOptions = [
-    { value: "BEGINNER", label: "Pemula" },
-    { value: "INTERMEDIATE", label: "Menengah" },
-    { value: "ADVANCED", label: "Lanjutan" },
+    { value: "BEGINNER", label: t("level.BEGINNER") },
+    { value: "INTERMEDIATE", label: t("level.INTERMEDIATE") },
+    { value: "ADVANCED", label: t("level.ADVANCED") },
   ];
 
   const sortOptions = [
-    { value: "popular", label: "Terpopuler" },
-    { value: "newest", label: "Terbaru" },
-    { value: "rating", label: "Rating Tertinggi" },
-    { value: "price-asc", label: "Harga: Rendah ke Tinggi" },
-    { value: "price-desc", label: "Harga: Tinggi ke Rendah" },
+    { value: "popular", label: t("sort.popular") },
+    { value: "newest", label: t("sort.newest") },
+    { value: "rating", label: t("sort.rating") },
+    { value: "price-asc", label: t("sort.price_asc") },
+    { value: "price-desc", label: t("sort.price_desc") },
   ];
 
   return (
@@ -136,10 +138,10 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
       <div className="bg-gradient-to-br from-stone-50 to-orange-50 border-b border-stone-200 py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <h1 className="text-3xl font-bold text-stone-900 mb-2" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-            Semua Kelas
+            {t("catalog_title")}
           </h1>
           <p className="text-stone-500 mb-6">
-            {total} kelas tersedia untuk kamu
+            {isEn ? `${total} courses available for you` : `${total} kelas tersedia untuk kamu`}
           </p>
 
           {/* Search bar */}
@@ -149,7 +151,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
               <input
                 name="q"
                 defaultValue={params.q}
-                placeholder="Cari kelas, instruktur, atau topik..."
+                placeholder={t("search_placeholder")}
                 className="w-full h-11 pl-10 pr-4 rounded-xl border border-stone-300 bg-white text-sm text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all"
               />
             </div>
@@ -157,7 +159,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
               type="submit"
               className="h-11 px-5 rounded-xl bg-orange-600 text-white text-sm font-medium hover:bg-orange-700 transition-colors"
             >
-              Cari
+              {isEn ? "Search" : "Cari"}
             </button>
           </form>
         </div>
@@ -169,13 +171,13 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
           <aside className="lg:w-56 shrink-0">
             <div className="sticky top-24 space-y-6">
               <div>
-                <h3 className="text-sm font-semibold text-stone-900 mb-3">Kategori</h3>
+                <h3 className="text-sm font-semibold text-stone-900 mb-3">{t("filter.category")}</h3>
                 <div className="space-y-1">
                   <a
                     href="/courses"
                     className={`block px-3 py-2 rounded-lg text-sm transition-colors ${!params.category ? "bg-orange-50 text-orange-700 font-medium" : "text-stone-600 hover:bg-stone-50"}`}
                   >
-                    Semua Kategori
+                    {isEn ? "All Categories" : "Semua Kategori"}
                   </a>
                   {categories.map((cat) => (
                     <a
@@ -190,7 +192,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
               </div>
 
               <div>
-                <h3 className="text-sm font-semibold text-stone-900 mb-3">Level</h3>
+                <h3 className="text-sm font-semibold text-stone-900 mb-3">{t("filter.level")}</h3>
                 <div className="space-y-1">
                   {levelOptions.map((opt) => (
                     <a
@@ -211,10 +213,18 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
             {/* Sort bar */}
             <div className="flex items-center justify-between mb-6">
               <p className="text-sm text-stone-500">
-                Menampilkan <span className="font-medium text-stone-900">{courses.length}</span> dari <span className="font-medium text-stone-900">{total}</span> kelas
+                {isEn ? (
+                  <>
+                    Showing <span className="font-medium text-stone-900">{courses.length}</span> of <span className="font-medium text-stone-900">{total}</span> courses
+                  </>
+                ) : (
+                  <>
+                    Menampilkan <span className="font-medium text-stone-900">{courses.length}</span> dari <span className="font-medium text-stone-900">{total}</span> kelas
+                  </>
+                )}
               </p>
               <div className="flex items-center gap-2">
-                <label className="text-sm text-stone-500 hidden sm:block">Urutkan:</label>
+                <label className="text-sm text-stone-500 hidden sm:block">{t("sort_label")}</label>
                 <CourseSortSelect defaultValue={params.sort ?? "popular"} options={sortOptions} />
               </div>
             </div>
@@ -248,6 +258,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                       duration={course.duration}
                       instructor={(course as { instructor: { name?: string | null; image?: string | null } }).instructor}
                       category={course.category}
+                      locale={locale}
                       isEnrolled={enrolledCourseIds.has(course.id)}
                     />
                   ))}
@@ -255,10 +266,10 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
               ) : (
                 <div className="text-center py-16">
                   <div className="text-5xl mb-4">🔍</div>
-                  <h3 className="text-lg font-semibold text-stone-900 mb-2">Kelas tidak ditemukan</h3>
-                  <p className="text-stone-500">Coba ubah kata kunci atau filter pencarian</p>
+                  <h3 className="text-lg font-semibold text-stone-900 mb-2">{t("not_found_title")}</h3>
+                  <p className="text-stone-500">{t("not_found_desc")}</p>
                   <a href="/courses" className="mt-4 inline-block text-orange-600 hover:underline text-sm">
-                    Reset filter
+                    {t("reset_filter")}
                   </a>
                 </div>
               )}

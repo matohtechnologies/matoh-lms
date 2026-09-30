@@ -51,10 +51,14 @@ export default function LocaleProvider({
     document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
     document.cookie = `locale=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
 
-    // 3. Server-side cookie sync & Server Component revalidation
+    // 3. Server-side cookie sync & complete reload for all Server and Client components
     startTransition(async () => {
-      await setUserLocale(newLocale);
-      router.refresh();
+      try {
+        await setUserLocale(newLocale);
+      } catch (e) {
+        console.error("Failed to persist locale to server", e);
+      }
+      window.location.reload();
     });
   };
 

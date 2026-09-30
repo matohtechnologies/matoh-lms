@@ -2,17 +2,10 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { BookOpen, Shield } from "lucide-react";
 import { auth } from "@/lib/auth";
+import { getTranslations, getLocale } from "next-intl/server";
 import DashboardNavLink from "./nav-link";
 import SignOutButton from "@/components/auth/signout-button";
 import MobileNav from "./mobile-nav";
-
-const navItems = [
-  { href: "/dashboard", label: "Overview", exact: true },
-  { href: "/dashboard/my-courses", label: "Kelas Saya" },
-  { href: "/dashboard/certificates", label: "Sertifikat" },
-  { href: "/dashboard/orders", label: "Riwayat Beli" },
-  { href: "/dashboard/profile", label: "Profil" },
-];
 
 export default async function DashboardLayout({
   children,
@@ -22,7 +15,20 @@ export default async function DashboardLayout({
   const session = await auth();
   if (!session) redirect("/login");
 
-  const userName = session.user?.name ?? "Pengguna";
+  const locale = await getLocale();
+  const isEn = locale === "en";
+  const tDash = await getTranslations("dashboard");
+  const tNav = await getTranslations("nav");
+
+  const navItems = [
+    { href: "/dashboard", label: tDash("overview"), exact: true },
+    { href: "/dashboard/my-courses", label: tDash("my_courses") },
+    { href: "/dashboard/certificates", label: tDash("certificates") },
+    { href: "/dashboard/orders", label: tDash("orders") },
+    { href: "/dashboard/profile", label: tDash("profile") },
+  ];
+
+  const userName = session.user?.name ?? (isEn ? "User" : "Pengguna");
   const userEmail = session.user?.email ?? "";
   const userInitial = userName[0]?.toUpperCase() ?? "U";
   const isAdmin = session.user?.role === "ADMIN";
@@ -32,8 +38,8 @@ export default async function DashboardLayout({
       {/* ── Desktop Sidebar ─────────────────────────── */}
       <aside className="hidden lg:flex w-64 shrink-0 bg-white border-r border-stone-200 flex-col fixed top-0 left-0 h-screen z-30">
         {/* Logo */}
-        <div className="p-5 border-b border-stone-100">
-          <Link href="/" className="flex items-center gap-2.5">
+        <div className="p-4 border-b border-stone-100 flex items-center">
+          <Link href="/" className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-sm">
               <BookOpen size={16} className="text-white" />
             </div>
@@ -75,18 +81,20 @@ export default async function DashboardLayout({
                   <Shield size={13} /> Admin Console
                 </span>
               </div>
-              <p className="text-[11px] text-stone-400 mb-2.5">Kelola kelas, pengguna, & sistem</p>
+              <p className="text-[11px] text-stone-400 mb-2.5">
+                {tDash("admin_console_desc")}
+              </p>
               <Link
                 href="/admin"
                 className="flex items-center justify-center gap-2 w-full py-2 px-3 rounded-lg bg-orange-600 hover:bg-orange-500 text-white text-xs font-semibold transition-colors shadow-xs"
               >
-                Buka Panel Admin
+                {tDash("open_admin_panel")}
               </Link>
             </div>
           )}
 
           <p className="text-[10px] font-semibold text-stone-400 uppercase tracking-wider px-3 mb-2">
-            Menu Siswa
+            {tDash("learner_menu")}
           </p>
           <div className="space-y-0.5">
             {navItems.map((item) => (
@@ -96,14 +104,14 @@ export default async function DashboardLayout({
 
           <div className="mt-6 pt-4 border-t border-stone-100">
             <p className="text-[10px] font-semibold text-stone-400 uppercase tracking-wider px-3 mb-2">
-              Lainnya
+              {tDash("explore_section")}
             </p>
             <Link
               href="/courses"
               className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-stone-600 hover:bg-stone-50 hover:text-stone-900 transition-all"
             >
               <BookOpen size={16} className="text-stone-400" />
-              Jelajahi Kelas
+              {tDash("browse_courses")}
             </Link>
           </div>
         </nav>
@@ -129,9 +137,11 @@ export default async function DashboardLayout({
               Earthy<span className="text-orange-600">Academy</span>
             </span>
           </Link>
-          {/* User avatar mobile */}
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white font-bold text-sm">
-            {userInitial}
+          <div className="flex items-center">
+            {/* User avatar mobile */}
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white font-bold text-sm">
+              {userInitial}
+            </div>
           </div>
         </header>
 

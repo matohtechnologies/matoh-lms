@@ -8,6 +8,7 @@ import { StarRating } from "@/components/ui/star-rating";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { formatCurrency, formatDuration } from "@/lib/utils";
+import { getTranslations, getLocale } from "next-intl/server";
 import type { Metadata } from "next";
 
 interface CourseDetailPageProps {
@@ -55,6 +56,9 @@ export async function generateMetadata({ params }: CourseDetailPageProps): Promi
 
 export default async function CourseDetailPage({ params }: CourseDetailPageProps) {
   const { slug } = await params;
+  const locale = await getLocale();
+  const isEn = locale === "en";
+  const tDetail = await getTranslations("course_detail");
   const [course, session] = await Promise.all([
     getCourse(slug),
     auth(),
@@ -80,14 +84,23 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
   const isFree = displayCourse.price === 0;
   const finalPrice = displayCourse.discountPrice ?? displayCourse.price;
 
-  const whatYouLearn = [
-    "Memahami konsep dasar dan fundamental materi",
-    "Mengimplementasikan project nyata dari awal sampai production",
-    "Menguasai best practices yang digunakan industri",
-    "Membangun portfolio project yang impressive",
-    "Mendapatkan sertifikat yang diakui perusahaan",
-    "Bergabung dengan komunitas pelajar aktif",
-  ];
+  const whatYouLearn = isEn
+    ? [
+        "Master foundational concepts and comprehensive principles",
+        "Implement real-world practical projects from scratch to production",
+        "Adopt professional best practices used by leading tech companies",
+        "Build an impressive portfolio to showcase to recruiters",
+        "Earn an industry-recognized certificate of completion",
+        "Join an active community of learners and experienced mentors",
+      ]
+    : [
+        "Memahami konsep dasar dan fundamental materi",
+        "Mengimplementasikan project nyata dari awal sampai production",
+        "Menguasai best practices yang digunakan industri",
+        "Membangun portfolio project yang impressive",
+        "Mendapatkan sertifikat yang diakui perusahaan",
+        "Bergabung dengan komunitas pelajar aktif",
+      ];
 
   return (
     <div className="pt-20">
@@ -97,7 +110,9 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
           <div className="lg:col-span-2 space-y-8">
             {/* Breadcrumb */}
             <div className="flex items-center gap-2 text-sm text-stone-500">
-              <Link href="/courses" className="hover:text-orange-600 transition-colors">Kelas</Link>
+              <Link href="/courses" className="hover:text-orange-600 transition-colors">
+                {tDetail("breadcrumb_courses")}
+              </Link>
               <span>/</span>
               <span className="text-stone-700 truncate">{displayCourse.category.name}</span>
             </div>
@@ -106,11 +121,11 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <Badge variant="orange">{displayCourse.category.name}</Badge>
-                <LevelBadge level={displayCourse.level} />
+                <LevelBadge level={displayCourse.level} locale={locale} />
                 {isEnrolled && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-xs">
                     <CheckCircle size={13} className="text-emerald-600" />
-                    Kelas Sudah Diambil
+                    {tDetail("already_enrolled")}
                   </span>
                 )}
               </div>
@@ -125,12 +140,12 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                   <div className="flex items-center gap-1.5">
                     <StarRating rating={displayCourse.rating} size={15} />
                     <span className="font-semibold text-amber-600">{displayCourse.rating.toFixed(1)}</span>
-                    <span className="text-stone-400">({displayCourse.reviewCount} ulasan)</span>
+                    <span className="text-stone-400">({displayCourse.reviewCount} {isEn ? "reviews" : "ulasan"})</span>
                   </div>
                 )}
                 <span className="flex items-center gap-1.5">
                   <Users size={15} className="text-stone-400" />
-                  {(displayCourse.enrollCount ?? 0).toLocaleString()} pelajar
+                  {(displayCourse.enrollCount ?? 0).toLocaleString()} {isEn ? "students" : "pelajar"}
                 </span>
                 {displayCourse.duration && (
                   <span className="flex items-center gap-1.5">
@@ -141,7 +156,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                 {displayCourse.totalLessons && (
                   <span className="flex items-center gap-1.5">
                     <BookOpen size={15} className="text-stone-400" />
-                    {displayCourse.totalLessons} materi
+                    {displayCourse.totalLessons} {isEn ? "lessons" : "materi"}
                   </span>
                 )}
               </div>
@@ -152,7 +167,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                   {displayCourse.instructor.name?.[0]?.toUpperCase()}
                 </div>
                 <div>
-                  <p className="text-xs text-stone-500">Instruktur</p>
+                  <p className="text-xs text-stone-500">{tDetail("instructor")}</p>
                   <p className="text-sm font-semibold text-orange-600">{displayCourse.instructor.name}</p>
                 </div>
               </div>
@@ -166,6 +181,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                 finalPrice={finalPrice}
                 isEnrolled={isEnrolled}
                 userId={session?.user?.id}
+                locale={locale}
               />
             </div>
 
@@ -193,7 +209,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
             {/* What You'll Learn */}
             <div className="bg-orange-50 border border-orange-200 rounded-2xl p-6">
               <h2 className="text-lg font-bold text-stone-900 mb-4" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-                Yang Akan Kamu Pelajari
+                {tDetail("what_learn")}
               </h2>
               <div className="grid sm:grid-cols-2 gap-3">
                 {whatYouLearn.map((item, i) => (
@@ -208,7 +224,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
             {/* Curriculum */}
             <div>
               <h2 className="text-lg font-bold text-stone-900 mb-4" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-                Kurikulum
+                {tDetail("curriculum")}
               </h2>
               {displayCourse.sections && displayCourse.sections.length > 0 ? (
                 <div className="space-y-3">
@@ -217,7 +233,9 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                       <summary className="flex items-center justify-between p-4 bg-stone-50 cursor-pointer hover:bg-stone-100 transition-colors list-none">
                         <div>
                           <span className="font-semibold text-stone-900 text-sm">{section.title}</span>
-                          <span className="ml-2 text-xs text-stone-500">{section.lessons.length} materi</span>
+                          <span className="ml-2 text-xs text-stone-500">
+                            {section.lessons.length} {isEn ? "lessons" : "materi"}
+                          </span>
                         </div>
                         <ChevronDown size={16} className="text-stone-400 group-open:rotate-180 transition-transform" />
                       </summary>
@@ -233,7 +251,9 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                             </div>
                             <span className="text-sm text-stone-700 flex-1">{lesson.title}</span>
                             {lesson.isFree && (
-                              <span className="text-xs text-green-600 font-medium">Preview</span>
+                              <span className="text-xs text-green-600 font-medium">
+                                {tDetail("preview_lesson")}
+                              </span>
                             )}
                             {lesson.duration && (
                               <span className="text-xs text-stone-400">{lesson.duration}m</span>
@@ -246,7 +266,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                 </div>
               ) : (
                 <div className="p-4 rounded-xl bg-stone-50 border border-stone-200 text-stone-500 text-sm">
-                  Kurikulum kelas sedang dipersiapkan oleh instruktur.
+                  {isEn ? "Course curriculum is being prepared by the instructor." : "Kurikulum kelas sedang dipersiapkan oleh instruktur."}
                 </div>
               )}
             </div>
@@ -254,7 +274,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
             {/* Instructor */}
             <div className="bg-white rounded-2xl border border-stone-200 p-6">
               <h2 className="text-lg font-bold text-stone-900 mb-4" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-                Tentang Instruktur
+                {isEn ? "About the Instructor" : "Tentang Instruktur"}
               </h2>
               <div className="flex items-start gap-4">
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white text-2xl font-bold shrink-0">
@@ -262,10 +282,12 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                 </div>
                 <div>
                   <h3 className="font-bold text-stone-900">{displayCourse.instructor.name}</h3>
-                  <p className="text-sm text-orange-600 mb-2">Senior Instructor</p>
+                  <p className="text-sm text-orange-600 mb-2">{isEn ? "Senior Instructor" : "Instruktur Senior"}</p>
                   <p className="text-sm text-stone-600 leading-relaxed">
                     {displayCourse.instructor.bio ??
-                      "Instruktur berpengalaman dengan lebih dari 5 tahun di industri teknologi. Telah mengajar lebih dari 10.000 pelajar dan memiliki sertifikasi internasional di bidangnya."}
+                      (isEn
+                        ? "Experienced industry practitioner with over 5 years in technology. Mentored over 10,000 learners with recognized professional credentials."
+                        : "Instruktur berpengalaman dengan lebih dari 5 tahun di industri teknologi. Telah mengajar lebih dari 10.000 pelajar dan memiliki sertifikasi internasional di bidangnya.")}
                   </p>
                 </div>
               </div>
@@ -275,7 +297,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
             {displayCourse.reviews && displayCourse.reviews.length > 0 && (
               <div>
                 <h2 className="text-lg font-bold text-stone-900 mb-4" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-                  Ulasan Pelajar
+                  {tDetail("reviews")}
                 </h2>
                 <div className="space-y-4">
                   {displayCourse.reviews.map((review) => (
@@ -311,6 +333,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                   finalPrice={finalPrice}
                   isEnrolled={isEnrolled}
                   userId={session?.user?.id}
+                  locale={locale}
                 />
               </div>
             </div>
@@ -327,13 +350,16 @@ function PriceCard({
   finalPrice,
   isEnrolled,
   userId,
+  locale = "id",
 }: {
   course: { id: string; price: number; discountPrice?: number | null; title: string };
   isFree: boolean;
   finalPrice: number;
   isEnrolled: boolean;
   userId?: string;
+  locale?: string;
 }) {
+  const isEn = locale === "en";
   const hasDiscount = course.discountPrice != null && course.discountPrice < course.price;
 
   return (
@@ -344,26 +370,28 @@ function PriceCard({
           <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl space-y-1">
             <div className="flex items-center gap-2 text-emerald-800 font-bold text-sm">
               <CheckCircle size={18} className="text-emerald-600 shrink-0" />
-              <span>Kelas Sudah Anda Miliki</span>
+              <span>{isEn ? "You Already Own This Course" : "Kelas Sudah Anda Miliki"}</span>
             </div>
             <p className="text-xs text-emerald-700 leading-relaxed">
-              Anda sudah terdaftar dan memiliki akses penuh seumur hidup ke materi kelas ini.
+              {isEn
+                ? "You are already enrolled and have full lifetime access to this course."
+                : "Anda sudah terdaftar dan memiliki akses penuh seumur hidup ke materi kelas ini."}
             </p>
           </div>
         ) : isFree ? (
-          <p className="text-3xl font-bold text-green-600">Gratis</p>
+          <p className="text-3xl font-bold text-green-600">{isEn ? "Free" : "Gratis"}</p>
         ) : (
           <div>
             <p className="text-3xl font-extrabold text-stone-900">
-              {formatCurrency(finalPrice)}
+              {formatCurrency(finalPrice, locale)}
             </p>
             {hasDiscount && (
               <div className="flex items-center gap-2 mt-1">
                 <span className="text-stone-400 line-through text-sm">
-                  {formatCurrency(course.price)}
+                  {formatCurrency(course.price, locale)}
                 </span>
                 <span className="text-xs font-medium text-red-600 bg-red-50 px-2 py-0.5 rounded-full">
-                  Hemat {Math.round(((course.price - finalPrice) / course.price) * 100)}%
+                  {isEn ? "Save" : "Hemat"} {Math.round(((course.price - finalPrice) / course.price) * 100)}%
                 </span>
               </div>
             )}
@@ -379,7 +407,7 @@ function PriceCard({
             size="lg"
           >
             <Play size={16} />
-            Lanjutkan Belajar (Masuk Kelas)
+            {isEn ? "Continue Learning (Enter Course)" : "Lanjutkan Belajar (Masuk Kelas)"}
           </Button>
         </Link>
       ) : (
@@ -388,19 +416,19 @@ function PriceCard({
           className="block w-full"
         >
           <Button className="w-full" size="lg">
-            {isFree ? "Daftar Gratis" : "Beli Sekarang"}
+            {isFree ? (isEn ? "Enroll for Free" : "Daftar Gratis") : (isEn ? "Buy Now" : "Beli Sekarang")}
           </Button>
         </Link>
       )}
 
       {/* Includes */}
       <div className="space-y-2.5 pt-2 border-t border-stone-100">
-        <p className="text-sm font-semibold text-stone-700">Termasuk:</p>
+        <p className="text-sm font-semibold text-stone-700">{isEn ? "This course includes:" : "Termasuk:"}</p>
         {[
-          { icon: Clock, text: "Akses seumur hidup" },
-          { icon: BookOpen, text: `${(course as { totalLessons?: number | null }).totalLessons ?? 50}+ materi video` },
-          { icon: Award, text: "Sertifikat kelulusan" },
-          { icon: CheckCircle, text: "Garansi uang kembali 30 hari" },
+          { icon: Clock, text: isEn ? "Lifetime access" : "Akses seumur hidup" },
+          { icon: BookOpen, text: `${(course as { totalLessons?: number | null }).totalLessons ?? 50}+ ${isEn ? "video lessons" : "materi video"}` },
+          { icon: Award, text: isEn ? "Certificate of completion" : "Sertifikat kelulusan" },
+          { icon: CheckCircle, text: isEn ? "30-day money-back guarantee" : "Garansi uang kembali 30 hari" },
         ].map(({ icon: Icon, text }) => (
           <div key={text} className="flex items-center gap-2.5 text-sm text-stone-600">
             <Icon size={15} className="text-orange-500 shrink-0" />

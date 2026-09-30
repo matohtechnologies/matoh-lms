@@ -10,6 +10,8 @@ import { BookOpen, Eye, EyeOff, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { signIn } from "next-auth/react";
+import { useTranslations } from "next-intl";
+import { useAppLocale } from "@/components/providers/locale-provider";
 
 const registerSchema = z.object({
   name: z.string().min(2, "Nama minimal 2 karakter").max(50),
@@ -29,10 +31,12 @@ type RegisterForm = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { locale } = useAppLocale();
+  const isEn = locale === "en";
+  const t = useTranslations("auth");
   const [isPending, startTransition] = useTransition();
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
 
   const {
     register,
@@ -46,9 +50,9 @@ export default function RegisterPage() {
   const password = watch("password", "");
 
   const passwordStrength = [
-    { label: "Min. 8 karakter", valid: password.length >= 8 },
-    { label: "Huruf besar", valid: /[A-Z]/.test(password) },
-    { label: "Angka", valid: /[0-9]/.test(password) },
+    { label: isEn ? "Min. 8 chars" : "Min. 8 karakter", valid: password.length >= 8 },
+    { label: isEn ? "Uppercase" : "Huruf besar", valid: /[A-Z]/.test(password) },
+    { label: isEn ? "Number" : "Angka", valid: /[0-9]/.test(password) },
   ];
 
   const onSubmit = (data: RegisterForm) => {
@@ -63,7 +67,7 @@ export default function RegisterPage() {
       const json = await res.json();
 
       if (!res.ok) {
-        setError(json.error ?? "Terjadi kesalahan. Silakan coba lagi.");
+        setError(json.error ?? (isEn ? "An error occurred. Please try again." : "Terjadi kesalahan. Silakan coba lagi."));
         return;
       }
 
@@ -82,21 +86,25 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen gradient-hero flex items-center justify-center px-4 py-16">
       <div className="w-full max-w-md">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2.5 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-sm">
-              <BookOpen size={20} className="text-white" />
+        {/* Top bar */}
+        <div className="flex items-center mb-8">
+          <Link href="/" className="inline-flex items-center gap-2">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-sm">
+              <BookOpen size={18} className="text-white" />
             </div>
-            <span className="font-bold text-stone-900 text-xl" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
+            <span className="font-bold text-stone-900 text-lg" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
               Earthy<span className="text-orange-600">Academy</span>
             </span>
           </Link>
+        </div>
+
+        {/* Title */}
+        <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-stone-900" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-            Buat Akun Gratis
+            {t("register_title")}
           </h1>
           <p className="text-stone-500 text-sm mt-1">
-            Bergabung dengan 12.000+ pelajar aktif
+            {t("register_subtitle")}
           </p>
         </div>
 
@@ -114,12 +122,12 @@ export default function RegisterPage() {
               <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
               <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
             </svg>
-            Daftar dengan Google
+            {t("continue_google")}
           </button>
 
           <div className="flex items-center gap-3 my-5">
             <div className="flex-1 h-px bg-stone-200" />
-            <span className="text-xs text-stone-400 font-medium">atau</span>
+            <span className="text-xs text-stone-400 font-medium">{t("or")}</span>
             <div className="flex-1 h-px bg-stone-200" />
           </div>
 
@@ -133,13 +141,13 @@ export default function RegisterPage() {
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <Input
-              label="Nama Lengkap"
+              label={t("name")}
               placeholder="John Doe"
               error={errors.name?.message}
               {...register("name")}
             />
             <Input
-              label="Email"
+              label={t("email")}
               type="email"
               placeholder="email@kamu.com"
               error={errors.email?.message}
@@ -147,7 +155,7 @@ export default function RegisterPage() {
             />
             <div>
               <Input
-                label="Password"
+                label={t("password")}
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
                 error={errors.password?.message}
@@ -174,7 +182,7 @@ export default function RegisterPage() {
               )}
             </div>
             <Input
-              label="Konfirmasi Password"
+              label={t("confirm_password")}
               type={showPassword ? "text" : "password"}
               placeholder="••••••••"
               error={errors.confirmPassword?.message}
@@ -182,10 +190,10 @@ export default function RegisterPage() {
             />
 
             <p className="text-xs text-stone-500">
-              Dengan mendaftar, kamu setuju dengan{" "}
-              <Link href="/terms" className="text-orange-600 hover:underline">Syarat & Ketentuan</Link>
-              {" "}dan{" "}
-              <Link href="/privacy" className="text-orange-600 hover:underline">Kebijakan Privasi</Link>
+              {t("agree_terms")}{" "}
+              <Link href="/terms" className="text-orange-600 hover:underline">{t("terms")}</Link>
+              {" "}{t("and")}{" "}
+              <Link href="/privacy" className="text-orange-600 hover:underline">{t("privacy")}</Link>
             </p>
 
             <Button
@@ -194,14 +202,14 @@ export default function RegisterPage() {
               size="lg"
               loading={isPending}
             >
-              Buat Akun
+              {t("register")}
             </Button>
           </form>
 
           <p className="text-center text-sm text-stone-500 mt-5">
-            Sudah punya akun?{" "}
+            {t("have_account")}{" "}
             <Link href="/login" className="text-orange-600 font-medium hover:underline">
-              Masuk sekarang
+              {t("login")}
             </Link>
           </p>
         </div>

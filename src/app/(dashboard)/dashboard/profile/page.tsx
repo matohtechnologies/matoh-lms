@@ -8,28 +8,34 @@ import { Save, Camera, User, KeyRound, CheckCircle, AlertCircle } from "lucide-r
 import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/input";
 import { useSession } from "next-auth/react";
-
-const profileSchema = z.object({
-  name: z.string().min(2, "Nama minimal 2 karakter").max(50),
-  bio: z.string().max(300, "Bio maksimal 300 karakter").optional(),
-});
-
-const passwordSchema = z
-  .object({
-    oldPassword: z.string().min(1, "Password lama diperlukan"),
-    newPassword: z.string().min(6, "Password baru minimal 6 karakter"),
-    confirmPassword: z.string().min(1, "Konfirmasi password diperlukan"),
-  })
-  .refine((d) => d.newPassword === d.confirmPassword, {
-    message: "Konfirmasi password tidak cocok",
-    path: ["confirmPassword"],
-  });
-
-type ProfileForm = z.infer<typeof profileSchema>;
-type PasswordForm = z.infer<typeof passwordSchema>;
+import { useTranslations } from "next-intl";
+import { useAppLocale } from "@/components/providers/locale-provider";
 
 export default function ProfilePage() {
   const { data: session, update } = useSession();
+  const t = useTranslations("dashboard");
+  const { locale } = useAppLocale();
+  const isEn = locale === "en";
+
+  const profileSchema = z.object({
+    name: z.string().min(2, isEn ? "Name must be at least 2 characters" : "Nama minimal 2 karakter").max(50),
+    bio: z.string().max(300, isEn ? "Bio must be at most 300 characters" : "Bio maksimal 300 karakter").optional(),
+  });
+
+  const passwordSchema = z
+    .object({
+      oldPassword: z.string().min(1, isEn ? "Current password is required" : "Password lama diperlukan"),
+      newPassword: z.string().min(6, isEn ? "New password must be at least 6 characters" : "Password baru minimal 6 karakter"),
+      confirmPassword: z.string().min(1, isEn ? "Confirm password is required" : "Konfirmasi password diperlukan"),
+    })
+    .refine((d) => d.newPassword === d.confirmPassword, {
+      message: isEn ? "Passwords do not match" : "Konfirmasi password tidak cocok",
+      path: ["confirmPassword"],
+    });
+
+  type ProfileForm = z.infer<typeof profileSchema>;
+  type PasswordForm = z.infer<typeof passwordSchema>;
+
   const [isPending, startTransition] = useTransition();
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
@@ -72,7 +78,7 @@ export default function ProfilePage() {
             if (data.user.createdAt) {
               const d = new Date(data.user.createdAt);
               setMemberSince(
-                d.toLocaleDateString("id-ID", { month: "long", year: "numeric" })
+                d.toLocaleDateString(isEn ? "en-US" : "id-ID", { month: "long", year: "numeric" })
               );
             }
           }
@@ -81,7 +87,7 @@ export default function ProfilePage() {
           reset({ name: session.user?.name ?? "", bio: "" });
         });
     }
-  }, [session, reset]);
+  }, [session, reset, isEn]);
 
   const onSubmit = (data: ProfileForm) => {
     setError("");
@@ -98,7 +104,7 @@ export default function ProfilePage() {
         setTimeout(() => setSuccess(false), 3000);
       } else {
         const d = await res.json();
-        setError(d.error ?? "Gagal memperbarui profil");
+        setError(d.error ?? t("profile_update_failed"));
       }
     });
   };
@@ -125,10 +131,10 @@ export default function ProfilePage() {
         resetPwd();
         setTimeout(() => setPwdSuccess(false), 4000);
       } else {
-        setPwdError(json.error ?? "Gagal mengubah password");
+        setPwdError(json.error ?? t("password_update_failed"));
       }
     } catch {
-      setPwdError("Terjadi kesalahan. Coba lagi.");
+      setPwdError(t("error_generic"));
     } finally {
       setIsPwdPending(false);
     }
@@ -141,10 +147,10 @@ export default function ProfilePage() {
           className="text-2xl font-bold text-stone-900"
           style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
         >
-          Profil Saya
+          {t("profile_title")}
         </h1>
         <p className="text-stone-500 text-sm mt-1">
-          Kelola informasi profil akun kamu
+          {t("profile_subtitle")}
         </p>
       </div>
 
@@ -163,7 +169,7 @@ export default function ProfilePage() {
           <p className="text-sm text-stone-500 mt-0.5">{session?.user?.email}</p>
           <div className="mt-4 pt-4 border-t border-stone-100">
             <p className="text-xs text-stone-400">
-              {memberSince ? `Member sejak ${memberSince}` : "Member aktif"}
+              {memberSince ? t("member_since", { date: memberSince }) : t("active_member")}
             </p>
           </div>
         </div>
@@ -171,12 +177,12 @@ export default function ProfilePage() {
         {/* Edit Form */}
         <div className="lg:col-span-2 space-y-4">
           <div className="bg-white rounded-2xl border border-stone-200 p-6">
-            <h3 className="font-semibold text-stone-900 mb-4">Edit Profil</h3>
+            <h3 className="font-semibold text-stone-900 mb-4">{t("edit_profile_section")}</h3>
 
             {success && (
               <div className="mb-4 p-3 rounded-xl bg-green-50 border border-green-200 text-sm text-green-700 flex items-center gap-2">
                 <CheckCircle size={15} className="shrink-0" />
-                Profil berhasil diperbarui
+                {t("profile_updated")}
               </div>
             )}
             {error && (
@@ -188,8 +194,8 @@ export default function ProfilePage() {
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <Input
-                label="Nama Lengkap"
-                placeholder="Nama kamu"
+                label={t("full_name")}
+                placeholder={t("name_placeholder")}
                 error={errors.name?.message}
                 {...register("name")}
               />
@@ -199,16 +205,16 @@ export default function ProfilePage() {
                 <div className="h-10 px-3 rounded-xl border border-stone-200 bg-stone-50 flex items-center text-sm text-stone-500">
                   {session?.user?.email}
                   <span className="ml-auto text-xs bg-stone-200 text-stone-600 px-2 py-0.5 rounded-full">
-                    Tidak dapat diubah
+                    {t("email_readonly")}
                   </span>
                 </div>
               </div>
 
               <Textarea
                 label="Bio"
-                placeholder="Ceritakan sedikit tentang dirimu..."
+                placeholder={t("bio_placeholder")}
                 error={errors.bio?.message}
-                hint="Maks. 300 karakter"
+                hint={t("bio_hint")}
                 rows={4}
                 {...register("bio")}
               />
@@ -219,7 +225,7 @@ export default function ProfilePage() {
                   loading={isPending}
                   leftIcon={<Save size={16} />}
                 >
-                  Simpan Perubahan
+                  {t("save_changes")}
                 </Button>
               </div>
             </form>
@@ -229,13 +235,13 @@ export default function ProfilePage() {
           <div className="bg-white rounded-2xl border border-stone-200 p-6">
             <div className="flex items-center gap-2 mb-4">
               <KeyRound size={18} className="text-stone-400" />
-              <h3 className="font-semibold text-stone-900">Ubah Password</h3>
+              <h3 className="font-semibold text-stone-900">{t("change_password")}</h3>
             </div>
 
             {pwdSuccess && (
               <div className="mb-4 p-3 rounded-xl bg-green-50 border border-green-200 text-sm text-green-700 flex items-center gap-2">
                 <CheckCircle size={15} className="shrink-0" />
-                Password berhasil diperbarui
+                {t("password_updated")}
               </div>
             )}
             {pwdError && (
@@ -247,29 +253,29 @@ export default function ProfilePage() {
 
             <form onSubmit={handleSubmitPwd(onPasswordSubmit)} className="space-y-4">
               <Input
-                label="Password Lama"
+                label={t("old_password")}
                 type="password"
                 placeholder="••••••••"
                 error={pwdErrors.oldPassword?.message}
                 {...registerPwd("oldPassword")}
               />
               <Input
-                label="Password Baru"
+                label={t("new_password")}
                 type="password"
                 placeholder="••••••••"
                 error={pwdErrors.newPassword?.message}
-                hint="Minimal 6 karakter"
+                hint={t("new_password_hint")}
                 {...registerPwd("newPassword")}
               />
               <Input
-                label="Konfirmasi Password Baru"
+                label={t("confirm_password")}
                 type="password"
                 placeholder="••••••••"
                 error={pwdErrors.confirmPassword?.message}
                 {...registerPwd("confirmPassword")}
               />
               <Button type="submit" variant="outline" loading={isPwdPending}>
-                Ubah Password
+                {t("change_password")}
               </Button>
             </form>
           </div>

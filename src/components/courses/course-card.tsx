@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { Users, BookOpen, Clock, CheckCircle } from "lucide-react";
@@ -5,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Badge, LevelBadge } from "@/components/ui/badge";
 import { StarRating } from "@/components/ui/star-rating";
 import { formatCurrency, formatDuration } from "@/lib/utils";
+import { useAppLocale } from "@/components/providers/locale-provider";
 
 interface CourseCardProps {
   id: string;
@@ -45,9 +48,13 @@ export function CourseCard({
   duration,
   instructor,
   category,
-  locale = "id",
+  locale: propLocale,
   isEnrolled = false,
 }: CourseCardProps) {
+  const { locale: appLocale } = useAppLocale();
+  const locale = propLocale || appLocale || "id";
+  const isEn = locale === "en";
+
   const isFree = price === 0;
   const finalPrice = discountPrice ?? price;
   const hasDiscount = discountPrice != null && discountPrice < price;
@@ -75,13 +82,13 @@ export function CourseCard({
           {isEnrolled ? (
             <div className="absolute top-3 left-3 z-10">
               <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-600 text-white shadow-sm flex items-center gap-1">
-                <CheckCircle size={12} /> SUDAH DIAMBIL
+                <CheckCircle size={12} /> {isEn ? "ENROLLED" : "SUDAH DIAMBIL"}
               </span>
             </div>
           ) : isFree ? (
             <div className="absolute top-3 left-3">
               <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-green-500 text-white shadow-sm">
-                GRATIS
+                {isEn ? "FREE" : "GRATIS"}
               </span>
             </div>
           ) : null}
@@ -89,7 +96,7 @@ export function CourseCard({
           {!isEnrolled && hasDiscount && (
             <div className="absolute top-3 right-3">
               <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-red-500 text-white shadow-sm">
-                DISKON
+                {isEn ? "DISCOUNT" : "DISKON"}
               </span>
             </div>
           )}
@@ -102,7 +109,7 @@ export function CourseCard({
             <Badge variant="orange" className="text-[11px]">
               {category.name}
             </Badge>
-            <LevelBadge level={level} className="text-[11px]" />
+            <LevelBadge level={level} locale={locale} className="text-[11px]" />
           </div>
 
           {/* Title */}
@@ -133,7 +140,7 @@ export function CourseCard({
             {totalLessons && (
               <span className="flex items-center gap-1">
                 <BookOpen size={12} />
-                {totalLessons} materi
+                {totalLessons} {isEn ? "lessons" : "materi"}
               </span>
             )}
             {duration && (
@@ -145,7 +152,7 @@ export function CourseCard({
             {enrollCount > 0 && (
               <span className="flex items-center gap-1">
                 <Users size={12} />
-                {enrollCount.toLocaleString()}
+                {enrollCount.toLocaleString(locale === "en" ? "en-US" : "id-ID")}
               </span>
             )}
           </div>
@@ -154,10 +161,10 @@ export function CourseCard({
           <div className="flex items-center justify-between gap-2 mt-auto pt-2 border-t border-stone-100">
             {isEnrolled ? (
               <span className="inline-flex items-center gap-1 font-bold text-emerald-600 text-xs">
-                <CheckCircle size={13} /> Masuk ke Kelas &rarr;
+                <CheckCircle size={13} /> {isEn ? "Go to Course →" : "Masuk ke Kelas →"}
               </span>
             ) : isFree ? (
-              <span className="font-bold text-green-600">Gratis</span>
+              <span className="font-bold text-green-600">{isEn ? "Free" : "Gratis"}</span>
             ) : (
               <>
                 <span className="font-bold text-stone-900 text-base">
