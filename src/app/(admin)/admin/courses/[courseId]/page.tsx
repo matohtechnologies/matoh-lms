@@ -1,0 +1,569 @@
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
+import { useRouter, useParams, useSearchParams } from "next/navigation";
+import {
+  ArrowLeft,
+  Save,
+  Loader2,
+  CheckCircle2,
+  AlertCircle,
+  Trash2,
+  BookOpen,
+  Settings,
+  PlayCircle,
+  ExternalLink,
+  HelpCircle,
+  FileCode2,
+  MessageSquare,
+  Award,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input, Textarea } from "@/components/ui/input";
+import { CurriculumManager, type SectionData } from "./curriculum-manager";
+import { QuizManager } from "./quiz-manager";
+import { AssignmentManager } from "./assignment-manager";
+import { DiscussionManager } from "./discussion-manager";
+import { CertificateManager } from "./certificate-manager";
+
+interface Category {
+  id: string;
+  name: string;
+}
+
+interface CourseData {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  level: "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
+  price: number;
+  discountPrice?: number | null;
+  duration?: number | null;
+  thumbnail?: string | null;
+  published: boolean;
+  featured: boolean;
+  categoryId: string;
+  instructor: { name: string };
+  sections: SectionData[];
+}
+
+export default function EditCoursePage() {
+  const router = useRouter();
+  const params = useParams<{ courseId: string }>();
+  const searchParams = useSearchParams();
+  const courseId = params.courseId;
+
+  const initialTab = (searchParams.get("tab") as "curriculum" | "quizzes" | "assignments" | "discussions" | "certificates" | "settings") || "curriculum";
+  const [activeTab, setActiveTab] = useState<"curriculum" | "quizzes" | "assignments" | "discussions" | "certificates" | "settings">(initialTab);
+
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [sections, setSections] = useState<SectionData[]>([]);
+
+  // Form fields
+  const [title, setTitle] = useState("");
+  const [slug, setSlug] = useState("");
+  const [description, setDescription] = useState("");
+  const [level, setLevel] = useState<"BEGINNER" | "INTERMEDIATE" | "ADVANCED">("BEGINNER");
+  const [price, setPrice] = useState("0");
+  const [discountPrice, setDiscountPrice] = useState("");
+  const [duration, setDuration] = useState("0");
+  const [thumbnail, setThumbnail] = useState("");
+  const [published, setPublished] = useState(true);
+  const [featured, setFeatured] = useState(false);
+  const [categoryId, setCategoryId] = useState("");
+
+  const loadData = useCallback(async () => {
+    try {
+      const [courseRes, catRes] = await Promise.all([
+        fetch(`/api/admin/courses/${courseId}`),
+        fetch("/api/admin/courses"),
+      ]);
+
+      if (!courseRes.ok) {
+        setError("Kelas tidak ditemukan");
+        setLoading(false);
+        return;
+      }
+
+      const { course }: { course: CourseData } = await courseRes.json();
+      const { categories: cats }: { categories: Category[] } = await catRes.json();
+
+      setTitle(course.title);
+      setSlug(course.slug);
+      setDescription(course.description);
+      setLevel(course.level);
+      setPrice(String(course.price));
+      setDiscountPrice(course.discountPrice ? String(course.discountPrice) : "");
+      setDuration(course.duration ? String(course.duration) : "0");
+      setThumbnail(course.thumbnail ?? "");
+      setPublished(course.published);
+      setFeatured(course.featured);
+      setCategoryId(course.categoryId);
+      setCategories(cats || []);
+      setSections(course.sections || []);
+    } catch {
+      setError("Gagal memuat data kelas");
+    } finally {
+      setLoading(false);
+    }
+  }, [courseId]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    setError("");
+    setSuccess(false);
+
+    try {
+      const res = await fetch(`/api/admin/courses/${courseId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title,
+          slug,
+          description,
+          level,
+          price: Number(price),
+          discountPrice: discountPrice ? Number(discountPrice) : null,
+          duration: Number(duration),
+          thumbnail: thumbnail || null,
+          published,
+          featured,
+          categoryId: categoryId || undefined,
+        }),
+      });
+
+      if (res.ok) {
+        setSuccess(true);
+        setTimeout(() => setSuccess(false), 3000);
+      } else {
+        const d = await res.json();
+        setError(d.error ?? "Gagal menyimpan perubahan");
+      }
+    } catch {
+      setError("Terjadi kesalahan koneksi");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!confirm(`Hapus kelas "${title}"? Tindakan ini tidak dapat dibatalkan.`)) return;
+
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/admin/courses/${courseId}`, { method: "DELETE" });
+      if (res.ok) {
+        router.push("/admin/courses");
+      } else {
+        const d = await res.json();
+        setError(d.error ?? "Gagal menghapus kelas");
+      }
+    } catch {
+      setError("Terjadi kesalahan koneksi");
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 size={24} className="animate-spin text-orange-500" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-5xl mx-auto space-y-6 pb-12">
+      {/* Top Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <Link
+            href="/admin/courses"
+            className="w-10 h-10 rounded-xl border border-stone-200 bg-white flex items-center justify-center text-stone-600 hover:text-stone-900 hover:bg-stone-50 transition-colors shadow-xs"
+          >
+            <ArrowLeft size={16} />
+          </Link>
+          <div>
+            <div className="flex items-center gap-2">
+              <h1
+                className="text-2xl font-bold text-stone-900"
+                style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              >
+                Kelola Kelas
+              </h1>
+              <span
+                className={`px-2 py-0.5 rounded-full text-[11px] font-semibold ${
+                  published
+                    ? "bg-green-50 text-green-700 border border-green-200"
+                    : "bg-stone-100 text-stone-600 border border-stone-200"
+                }`}
+              >
+                {published ? "Terbit" : "Draf"}
+              </span>
+            </div>
+            <p className="text-stone-500 text-xs mt-0.5 truncate max-w-sm sm:max-w-md">
+              {title}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <a
+            href={`/learn/${courseId}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-stone-200 bg-white hover:bg-stone-50 text-stone-700 text-xs font-semibold transition-colors"
+          >
+            <PlayCircle size={14} className="text-orange-600" />
+            <span className="hidden sm:inline">Pratinjau Siswa</span>
+            <ExternalLink size={12} className="text-stone-400" />
+          </a>
+          <button
+            type="button"
+            onClick={handleDelete}
+            disabled={deleting}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-red-200 bg-white text-red-600 hover:bg-red-50 text-xs font-medium transition-colors disabled:opacity-50"
+          >
+            {deleting ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}
+            Hapus
+          </button>
+        </div>
+      </div>
+
+      {/* Navigation Tabs */}
+      <div className="flex items-center gap-2 border-b border-stone-200 pb-px overflow-x-auto scrollbar-none">
+        <button
+          type="button"
+          onClick={() => setActiveTab("curriculum")}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
+            activeTab === "curriculum"
+              ? "border-orange-600 text-orange-600 bg-white shadow-xs"
+              : "border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-100/60"
+          }`}
+        >
+          <BookOpen size={16} />
+          Materi & Kurikulum
+          <span className="px-1.5 py-0.2 rounded-full bg-orange-100 text-orange-700 text-[10px] font-bold">
+            {sections.reduce((acc, s) => acc + s.lessons.length, 0)}
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("quizzes")}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
+            activeTab === "quizzes"
+              ? "border-orange-600 text-orange-600 bg-white shadow-xs"
+              : "border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-100/60"
+          }`}
+        >
+          <HelpCircle size={16} />
+          Kuis & Latihan
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("assignments")}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
+            activeTab === "assignments"
+              ? "border-orange-600 text-orange-600 bg-white shadow-xs"
+              : "border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-100/60"
+          }`}
+        >
+          <FileCode2 size={16} />
+          Tugas & Submission
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("discussions")}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
+            activeTab === "discussions"
+              ? "border-orange-600 text-orange-600 bg-white shadow-xs"
+              : "border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-100/60"
+          }`}
+        >
+          <MessageSquare size={16} />
+          Forum Diskusi
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("certificates")}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
+            activeTab === "certificates"
+              ? "border-orange-600 text-orange-600 bg-white shadow-xs"
+              : "border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-100/60"
+          }`}
+        >
+          <Award size={16} />
+          Sertifikat
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("settings")}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
+            activeTab === "settings"
+              ? "border-orange-600 text-orange-600 bg-white shadow-xs"
+              : "border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-100/60"
+          }`}
+        >
+          <Settings size={16} />
+          Pengaturan Kelas
+        </button>
+      </div>
+
+      {/* Alerts */}
+      {success && (
+        <div className="p-4 rounded-2xl bg-green-50 border border-green-200 text-green-800 flex items-center gap-3">
+          <CheckCircle2 size={18} className="text-green-600 shrink-0" />
+          <p className="text-sm font-medium">Perubahan berhasil disimpan!</p>
+        </div>
+      )}
+      {error && (
+        <div className="p-4 rounded-2xl bg-red-50 border border-red-200 text-red-800 flex items-center gap-3">
+          <AlertCircle size={18} className="text-red-600 shrink-0" />
+          <p className="text-sm font-medium">{error}</p>
+        </div>
+      )}
+
+      {/* Tab 1: Curriculum & Materials Manager */}
+      {activeTab === "curriculum" && (
+        <CurriculumManager
+          courseId={courseId}
+          sections={sections}
+          onRefresh={loadData}
+        />
+      )}
+
+      {/* Tab 2: Quiz Manager */}
+      {activeTab === "quizzes" && (
+        <QuizManager courseId={courseId} />
+      )}
+
+      {/* Tab 3: Assignment & Submission Manager */}
+      {activeTab === "assignments" && (
+        <AssignmentManager courseId={courseId} />
+      )}
+
+      {/* Tab 4: Discussion Manager */}
+      {activeTab === "discussions" && (
+        <DiscussionManager courseId={courseId} />
+      )}
+
+      {/* Tab 5: Certificate Manager */}
+      {activeTab === "certificates" && (
+        <CertificateManager courseId={courseId} />
+      )}
+
+      {/* Tab 2: Settings & Metadata Form */}
+      {activeTab === "settings" && (
+        <form onSubmit={handleSave} className="space-y-6">
+          {/* Main Info */}
+          <div className="bg-white rounded-2xl border border-stone-200 p-6 shadow-warm space-y-5">
+            <h2 className="font-semibold text-stone-900 text-base border-b border-stone-100 pb-3">
+              Informasi Utama Kelas
+            </h2>
+
+            <Input
+              label="Judul Kelas"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-stone-700">URL Slug</label>
+              <div className="flex items-center rounded-xl border border-stone-200 bg-stone-50 px-3 py-2 text-sm text-stone-600">
+                <span className="text-stone-400 select-none mr-1">/courses/</span>
+                <input
+                  type="text"
+                  value={slug}
+                  onChange={(e) => setSlug(e.target.value)}
+                  className="bg-transparent flex-1 focus:outline-none text-stone-800 font-mono text-xs"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium text-stone-700">Kategori</label>
+                <select
+                  value={categoryId}
+                  onChange={(e) => setCategoryId(e.target.value)}
+                  className="w-full h-11 px-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                >
+                  {categories.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium text-stone-700">Tingkat Kesulitan</label>
+                <select
+                  value={level}
+                  onChange={(e) => setLevel(e.target.value as typeof level)}
+                  className="w-full h-11 px-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                >
+                  <option value="BEGINNER">Pemula (Beginner)</option>
+                  <option value="INTERMEDIATE">Menengah (Intermediate)</option>
+                  <option value="ADVANCED">Mahir (Advanced)</option>
+                </select>
+              </div>
+            </div>
+
+            <Textarea
+              label="Deskripsi Kelas"
+              rows={5}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
+
+          {/* Pricing */}
+          <div className="bg-white rounded-2xl border border-stone-200 p-6 shadow-warm space-y-5">
+            <h2 className="font-semibold text-stone-900 text-base border-b border-stone-100 pb-3">
+              Harga & Durasi
+            </h2>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-stone-700">Harga Normal (IDR)</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-2.5 text-sm font-medium text-stone-400">
+                    Rp
+                  </span>
+                  <input
+                    type="number"
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                    className="w-full h-11 pl-10 pr-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-stone-700">
+                  Harga Diskon (opsional)
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3 top-2.5 text-sm font-medium text-stone-400">
+                    Rp
+                  </span>
+                  <input
+                    type="number"
+                    value={discountPrice}
+                    onChange={(e) => setDiscountPrice(e.target.value)}
+                    placeholder="Kosongkan jika tidak ada"
+                    className="w-full h-11 pl-10 pr-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-stone-700">Durasi (Jam)</label>
+                <input
+                  type="number"
+                  value={duration}
+                  onChange={(e) => setDuration(e.target.value)}
+                  className="w-full h-11 px-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Thumbnail */}
+          <div className="bg-white rounded-2xl border border-stone-200 p-6 shadow-warm space-y-5">
+            <h2 className="font-semibold text-stone-900 text-base border-b border-stone-100 pb-3">
+              Thumbnail Banner
+            </h2>
+
+            <Input
+              label="URL Gambar Thumbnail"
+              placeholder="https://images.unsplash.com/..."
+              value={thumbnail}
+              onChange={(e) => setThumbnail(e.target.value)}
+            />
+            {thumbnail && (
+              <div className="mt-2">
+                <p className="text-xs font-medium text-stone-500 mb-1.5">Pratinjau:</p>
+                <div className="w-full sm:w-80 h-44 rounded-xl overflow-hidden border border-stone-200 bg-stone-100">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={thumbnail}
+                    alt="Preview"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src =
+                        "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&q=80";
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Visibility */}
+          <div className="bg-white rounded-2xl border border-stone-200 p-6 shadow-warm">
+            <h2 className="font-semibold text-stone-900 text-base border-b border-stone-100 pb-3 mb-4">
+              Visibilitas
+            </h2>
+            <div className="space-y-3">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={published}
+                  onChange={(e) => setPublished(e.target.checked)}
+                  className="w-4 h-4 rounded border-stone-300 text-orange-600 focus:ring-orange-500 accent-orange-600"
+                />
+                <div>
+                  <span className="text-sm font-medium text-stone-700">Publikasikan Kelas</span>
+                  <p className="text-xs text-stone-400">Kelas akan tampil di katalog publik</p>
+                </div>
+              </label>
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={featured}
+                  onChange={(e) => setFeatured(e.target.checked)}
+                  className="w-4 h-4 rounded border-stone-300 text-orange-600 focus:ring-orange-500 accent-orange-600"
+                />
+                <div>
+                  <span className="text-sm font-medium text-stone-700">
+                    Tampilkan di Halaman Utama
+                  </span>
+                  <p className="text-xs text-stone-400">
+                    Kelas muncul di seksi Rekomendasi/Featured di beranda
+                  </p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div className="flex justify-end pt-2">
+            <Button type="submit" loading={saving} leftIcon={<Save size={16} />}>
+              Simpan Informasi Kelas
+            </Button>
+          </div>
+        </form>
+      )}
+    </div>
+  );
+}

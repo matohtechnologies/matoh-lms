@@ -1,0 +1,125 @@
+{
+  "nav": {
+    "courses": "Kelas",
+    "about": "Tentang",
+    "login": "Masuk",
+    "register": "Daftar",
+    "dashboard": "Dashboard",
+    "profile": "Profil",
+    "logout": "Keluar",
+    "admin": "Admin"
+  },
+  "hero": {
+    "badge": "Platform belajar terpercaya",
+    "title": "Kuasai Skill Baru,\nRaih Karir Impian",
+    "subtitle": "Belajar dari instruktur berpengalaman dengan kurikulum yang relevan dengan industri. Mulai perjalanan belajarmu hari ini.",
+    "cta_primary": "Mulai Belajar Gratis",
+    "cta_secondary": "Lihat Semua Kelas",
+    "stat_students": "Pelajar Aktif",
+    "stat_courses": "Kelas Tersedia",
+    "stat_instructors": "Instruktur Expert",
+    "stat_rating": "Rating Rata-rata"
+  },
+  "courses": {
+    "title": "Kelas Populer",
+    "subtitle": "Dipilih oleh ribuan pelajar",
+    "view_all": "Lihat Semua Kelas",
+    "filter": {
+      "all": "Semua",
+      "category": "Kategori",
+      "level": "Level",
+      "price": "Harga",
+      "sort": "Urutkan"
+    },
+    "level": {
+      "BEGINNER": "Pemula",
+      "INTERMEDIATE": "Menengah",
+      "ADVANCED": "Lanjutan"
+    },
+    "free": "Gratis",
+    "students": "pelajar",
+    "lessons": "materi",
+    "enroll": "Daftar Kelas",
+    "buy_now": "Beli Sekarang",
+    "enrolled": "Sudah Terdaftar",
+    "continue": "Lanjutkan Belajar"
+  },
+  "course_detail": {
+    "what_learn": "Yang Akan Kamu Pelajari",
+    "curriculum": "Kurikulum",
+    "instructor": "Instruktur",
+    "reviews": "Ulasan",
+    "requirements": "Persyaratan",
+    "includes": "Termasuk",
+    "certificate": "Sertifikat",
+    "lifetime_access": "Akses Seumur Hidup",
+    "sections": "seksi",
+    "lessons": "materi"
+  },
+  "auth": {
+    "login_title": "Selamat Datang Kembali",
+    "login_subtitle": "Masuk ke akun kamu untuk melanjutkan belajar",
+    "register_title": "Buat Akun Baru",
+    "register_subtitle": "Bergabung dengan ribuan pelajar aktif",
+    "email": "Email",
+    "password": "Kata Sandi",
+    "name": "Nama Lengkap",
+    "login": "Masuk",
+    "register": "Daftar",
+    "or": "atau",
+    "continue_google": "Lanjutkan dengan Google",
+    "no_account": "Belum punya akun?",
+    "have_account": "Sudah punya akun?",
+    "forgot_password": "Lupa kata sandi?",
+    "agree_terms": "Dengan mendaftar, kamu setuju dengan",
+    "terms": "Syarat & Ketentuan",
+    "and": "dan",
+    "privacy": "Kebijakan Privasi"
+  },
+  "dashboard": {
+    "welcome": "Selamat datang",
+    "overview": "Ringkasan",
+    "my_courses": "Kelas Saya",
+    "certificates": "Sertifikat",
+    "profile": "Profil",
+    "orders": "Riwayat Pembelian",
+    "continue_learning": "Lanjutkan Belajar",
+    "completed": "Selesai",
+    "in_progress": "Sedang Belajar",
+    "not_started": "Belum Dimulai",
+    "progress": "Progress"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "order_summary": "Ringkasan Pesanan",
+    "payment_method": "Metode Pembayaran",
+    "pay_now": "Bayar Sekarang",
+    "processing": "Memproses...",
+    "success_title": "Pembayaran Berhasil!",
+    "success_subtitle": "Kamu sudah bisa mulai belajar sekarang",
+    "go_to_course": "Mulai Belajar"
+  },
+  "footer": {
+    "tagline": "Platform belajar online terpercaya untuk mengembangkan skill dan karir.",
+    "quick_links": "Tautan Cepat",
+    "support": "Dukungan",
+    "social": "Media Sosial",
+    "rights": "Hak cipta dilindungi."
+  },
+  "common": {
+    "loading": "Memuat...",
+    "error": "Terjadi kesalahan",
+    "not_found": "Tidak ditemukan",
+    "save": "Simpan",
+    "cancel": "Batal",
+    "delete": "Hapus",
+    "edit": "Edit",
+    "back": "Kembali",
+    "next": "Selanjutnya",
+    "previous": "Sebelumnya",
+    "search": "Cari kelas...",
+    "no_results": "Tidak ada hasil",
+    "minutes": "menit",
+    "hours": "jam"
+  }
+}

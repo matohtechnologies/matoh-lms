@@ -1,0 +1,125 @@
+{
+  "nav": {
+    "courses": "Courses",
+    "about": "About",
+    "login": "Sign In",
+    "register": "Sign Up",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "logout": "Sign Out",
+    "admin": "Admin"
+  },
+  "hero": {
+    "badge": "Trusted learning platform",
+    "title": "Master New Skills,\nAchieve Your Career Goals",
+    "subtitle": "Learn from experienced instructors with industry-relevant curriculum. Start your learning journey today.",
+    "cta_primary": "Start Learning Free",
+    "cta_secondary": "Browse All Courses",
+    "stat_students": "Active Students",
+    "stat_courses": "Available Courses",
+    "stat_instructors": "Expert Instructors",
+    "stat_rating": "Average Rating"
+  },
+  "courses": {
+    "title": "Popular Courses",
+    "subtitle": "Chosen by thousands of learners",
+    "view_all": "View All Courses",
+    "filter": {
+      "all": "All",
+      "category": "Category",
+      "level": "Level",
+      "price": "Price",
+      "sort": "Sort By"
+    },
+    "level": {
+      "BEGINNER": "Beginner",
+      "INTERMEDIATE": "Intermediate",
+      "ADVANCED": "Advanced"
+    },
+    "free": "Free",
+    "students": "students",
+    "lessons": "lessons",
+    "enroll": "Enroll Now",
+    "buy_now": "Buy Now",
+    "enrolled": "Already Enrolled",
+    "continue": "Continue Learning"
+  },
+  "course_detail": {
+    "what_learn": "What You'll Learn",
+    "curriculum": "Curriculum",
+    "instructor": "Instructor",
+    "reviews": "Reviews",
+    "requirements": "Requirements",
+    "includes": "This Course Includes",
+    "certificate": "Certificate",
+    "lifetime_access": "Lifetime Access",
+    "sections": "sections",
+    "lessons": "lessons"
+  },
+  "auth": {
+    "login_title": "Welcome Back",
+    "login_subtitle": "Sign in to your account to continue learning",
+    "register_title": "Create an Account",
+    "register_subtitle": "Join thousands of active learners",
+    "email": "Email",
+    "password": "Password",
+    "name": "Full Name",
+    "login": "Sign In",
+    "register": "Sign Up",
+    "or": "or",
+    "continue_google": "Continue with Google",
+    "no_account": "Don't have an account?",
+    "have_account": "Already have an account?",
+    "forgot_password": "Forgot password?",
+    "agree_terms": "By signing up, you agree to our",
+    "terms": "Terms of Service",
+    "and": "and",
+    "privacy": "Privacy Policy"
+  },
+  "dashboard": {
+    "welcome": "Welcome",
+    "overview": "Overview",
+    "my_courses": "My Courses",
+    "certificates": "Certificates",
+    "profile": "Profile",
+    "orders": "Purchase History",
+    "continue_learning": "Continue Learning",
+    "completed": "Completed",
+    "in_progress": "In Progress",
+    "not_started": "Not Started",
+    "progress": "Progress"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "order_summary": "Order Summary",
+    "payment_method": "Payment Method",
+    "pay_now": "Pay Now",
+    "processing": "Processing...",
+    "success_title": "Payment Successful!",
+    "success_subtitle": "You can start learning right now",
+    "go_to_course": "Start Learning"
+  },
+  "footer": {
+    "tagline": "Trusted online learning platform to develop your skills and career.",
+    "quick_links": "Quick Links",
+    "support": "Support",
+    "social": "Social Media",
+    "rights": "All rights reserved."
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "not_found": "Not found",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search courses...",
+    "no_results": "No results found",
+    "minutes": "minutes",
+    "hours": "hours"
+  }
+}
