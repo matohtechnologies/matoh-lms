@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Users, BookOpen, Clock } from "lucide-react";
+import { Users, BookOpen, Clock, CheckCircle } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge, LevelBadge } from "@/components/ui/badge";
 import { StarRating } from "@/components/ui/star-rating";
@@ -27,9 +27,11 @@ interface CourseCardProps {
     name: string;
   };
   locale?: string;
+  isEnrolled?: boolean;
 }
 
 export function CourseCard({
+  id,
   slug,
   title,
   thumbnail,
@@ -44,13 +46,15 @@ export function CourseCard({
   instructor,
   category,
   locale = "id",
+  isEnrolled = false,
 }: CourseCardProps) {
   const isFree = price === 0;
   const finalPrice = discountPrice ?? price;
   const hasDiscount = discountPrice != null && discountPrice < price;
+  const targetHref = isEnrolled ? `/learn/${id || slug}` : `/courses/${slug}`;
 
   return (
-    <Link href={`/courses/${slug}`}>
+    <Link href={targetHref}>
       <Card hover className="group flex flex-col h-full">
         {/* Thumbnail */}
         <div className="relative aspect-video w-full overflow-hidden bg-stone-100 rounded-t-2xl">
@@ -67,16 +71,22 @@ export function CourseCard({
               <BookOpen size={40} className="text-orange-300" />
             </div>
           )}
-          {/* Free badge */}
-          {isFree && (
+          {/* Enrolled badge */}
+          {isEnrolled ? (
+            <div className="absolute top-3 left-3 z-10">
+              <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-600 text-white shadow-sm flex items-center gap-1">
+                <CheckCircle size={12} /> SUDAH DIAMBIL
+              </span>
+            </div>
+          ) : isFree ? (
             <div className="absolute top-3 left-3">
               <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-green-500 text-white shadow-sm">
                 GRATIS
               </span>
             </div>
-          )}
+          ) : null}
           {/* Discount badge */}
-          {hasDiscount && (
+          {!isEnrolled && hasDiscount && (
             <div className="absolute top-3 right-3">
               <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-red-500 text-white shadow-sm">
                 DISKON
@@ -140,9 +150,13 @@ export function CourseCard({
             )}
           </div>
 
-          {/* Price */}
-          <div className="flex items-center gap-2 mt-auto pt-2 border-t border-stone-100">
-            {isFree ? (
+          {/* Price / Enrolled Status */}
+          <div className="flex items-center justify-between gap-2 mt-auto pt-2 border-t border-stone-100">
+            {isEnrolled ? (
+              <span className="inline-flex items-center gap-1 font-bold text-emerald-600 text-xs">
+                <CheckCircle size={13} /> Masuk ke Kelas &rarr;
+              </span>
+            ) : isFree ? (
               <span className="font-bold text-green-600">Gratis</span>
             ) : (
               <>

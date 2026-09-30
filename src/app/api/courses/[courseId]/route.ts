@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
 export async function GET(
   _req: NextRequest,
@@ -7,11 +8,16 @@ export async function GET(
 ) {
   try {
     const { courseId } = await params;
+    const session = await auth();
 
-    const course = await prisma.course.findUnique({
-      where: { id: courseId, published: true },
+    const course = await prisma.course.findFirst({
+      where: {
+        OR: [{ id: courseId }, { slug: courseId }],
+        published: true,
+      },
       select: {
         id: true,
+        slug: true,
         title: true,
         thumbnail: true,
         price: true,
@@ -27,9 +33,21 @@ export async function GET(
       return NextResponse.json({ error: "Course not found" }, { status: 404 });
     }
 
+    let isEnrolled = false;
+    if (session?.user?.id) {
+      const enrollment = await prisma.enrollment.findUnique({
+        where: {
+          userId_courseId: { userId: session.user.id, courseId: course.id },
+        },
+      });
+      isEnrolled = Boolean(enrollment || session.user.role === "ADMIN");
+    }
+
     return NextResponse.json({
+      isEnrolled,
       course: {
         id: course.id,
+        slug: course.slug,
         title: course.title,
         thumbnail: course.thumbnail,
         price: course.price,
@@ -40,7 +58,8 @@ export async function GET(
         category: { name: course.category.name },
       },
     });
-  } catch {
+  } catch (error) {
+    console.error("Error fetching course detail:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, CreditCard, Shield, Clock, BookOpen, Award } from "lucide-react";
+import { ArrowLeft, CreditCard, Shield, Clock, BookOpen, Award, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
 
@@ -30,6 +30,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
   const [loading, setLoading] = useState(true);
   const [paying, setPaying] = useState(false);
   const [courseId, setCourseId] = useState("");
+  const [isAlreadyEnrolled, setIsAlreadyEnrolled] = useState(false);
 
   useEffect(() => {
     params.then(async ({ courseId }) => {
@@ -39,6 +40,9 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
         if (res.ok) {
           const data = await res.json();
           setCourse(data.course);
+          if (data.isEnrolled) {
+            setIsAlreadyEnrolled(true);
+          }
         } else {
           setCourse(null);
         }
@@ -60,6 +64,11 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
       });
 
       const data = await res.json();
+
+      if (res.status === 409 || data.alreadyEnrolled) {
+        setIsAlreadyEnrolled(true);
+        return;
+      }
 
       if (!res.ok) {
         alert(data.error ?? "Terjadi kesalahan");
@@ -153,6 +162,43 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
           >
             Kembali ke Katalog
           </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (isAlreadyEnrolled) {
+    return (
+      <div className="min-h-screen bg-stone-50 pt-20 flex items-center justify-center px-4">
+        <div className="text-center p-8 sm:p-10 bg-white rounded-3xl border border-stone-200 shadow-warm-lg max-w-md w-full">
+          <div className="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto mb-4 text-emerald-600 shadow-inner">
+            <CheckCircle size={32} />
+          </div>
+          <h2
+            className="text-xl font-bold text-stone-900 mb-2"
+            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+          >
+            Kelas Sudah Anda Miliki
+          </h2>
+          <p className="text-xs text-stone-600 mb-6 leading-relaxed">
+            Anda sudah terdaftar dan memiliki akses penuh seumur hidup ke kelas{" "}
+            <strong>{course.title}</strong>. Anda tidak perlu membayar atau mendaftar ulang.
+          </p>
+          <div className="space-y-3">
+            <Link href={`/learn/${course.id || courseId}`} className="block w-full">
+              <Button
+                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm font-semibold"
+                size="lg"
+              >
+                Masuk ke Ruang Belajar Sekarang
+              </Button>
+            </Link>
+            <Link href="/dashboard/my-courses" className="block w-full">
+              <Button variant="outline" className="w-full">
+                Lihat Kelas Saya
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     );

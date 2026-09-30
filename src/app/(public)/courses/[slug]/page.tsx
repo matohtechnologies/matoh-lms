@@ -74,7 +74,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
         },
       },
     });
-    isEnrolled = !!enrollment;
+    isEnrolled = !!enrollment || session.user.role === "ADMIN";
   }
 
   const isFree = displayCourse.price === 0;
@@ -107,6 +107,12 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
               <div className="flex items-center gap-2 mb-4">
                 <Badge variant="orange">{displayCourse.category.name}</Badge>
                 <LevelBadge level={displayCourse.level} />
+                {isEnrolled && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-xs">
+                    <CheckCircle size={13} className="text-emerald-600" />
+                    Kelas Sudah Diambil
+                  </span>
+                )}
               </div>
               <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 leading-tight mb-4" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
                 {displayCourse.title}
@@ -332,9 +338,19 @@ function PriceCard({
 
   return (
     <div className="space-y-4">
-      {/* Price */}
+      {/* Price / Enrolled Status */}
       <div>
-        {isFree ? (
+        {isEnrolled ? (
+          <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl space-y-1">
+            <div className="flex items-center gap-2 text-emerald-800 font-bold text-sm">
+              <CheckCircle size={18} className="text-emerald-600 shrink-0" />
+              <span>Kelas Sudah Anda Miliki</span>
+            </div>
+            <p className="text-xs text-emerald-700 leading-relaxed">
+              Anda sudah terdaftar dan memiliki akses penuh seumur hidup ke materi kelas ini.
+            </p>
+          </div>
+        ) : isFree ? (
           <p className="text-3xl font-bold text-green-600">Gratis</p>
         ) : (
           <div>
@@ -357,13 +373,20 @@ function PriceCard({
 
       {/* CTA Button */}
       {isEnrolled ? (
-        <Link href={`/learn/${course.id}`}>
-          <Button className="w-full" size="lg">
-            Lanjutkan Belajar
+        <Link href={`/learn/${course.id}`} className="block w-full">
+          <Button
+            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-md shadow-emerald-950/20 flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
+            size="lg"
+          >
+            <Play size={16} />
+            Lanjutkan Belajar (Masuk Kelas)
           </Button>
         </Link>
       ) : (
-        <Link href={userId ? `/checkout/${course.id}` : `/login?callbackUrl=/checkout/${course.id}`}>
+        <Link
+          href={userId ? `/checkout/${course.id}` : `/login?callbackUrl=/checkout/${course.id}`}
+          className="block w-full"
+        >
           <Button className="w-full" size="lg">
             {isFree ? "Daftar Gratis" : "Beli Sekarang"}
           </Button>

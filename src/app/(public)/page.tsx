@@ -3,6 +3,7 @@ import { ArrowRight, Star, Users, BookOpen, Award, CheckCircle, Play, TrendingUp
 import { Button } from "@/components/ui/button";
 import { CourseCard } from "@/components/courses/course-card";
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
 import { getTranslations } from "next-intl/server";
 
 async function getFeaturedCourses() {
@@ -48,10 +49,24 @@ async function getStats() {
 export default async function HomePage() {
   const t = await getTranslations("hero");
   const tc = await getTranslations("courses");
-  const [featuredCourses, stats] = await Promise.all([
+  const [featuredCourses, stats, session] = await Promise.all([
     getFeaturedCourses(),
     getStats(),
+    auth(),
   ]);
+
+  const enrolledCourseIds = new Set<string>();
+  if (session?.user?.id) {
+    if (session.user.role === "ADMIN") {
+      featuredCourses.forEach((c) => enrolledCourseIds.add(c.id));
+    } else {
+      const enrollments = await prisma.enrollment.findMany({
+        where: { userId: session.user.id },
+        select: { courseId: true },
+      });
+      enrollments.forEach((e) => enrolledCourseIds.add(e.courseId));
+    }
+  }
 
   const statItems = [
     { value: stats.students.toLocaleString() + "+", label: t("stat_students"), icon: Users },
@@ -289,6 +304,7 @@ export default async function HomePage() {
                   duration={course.duration}
                   instructor={course.instructor}
                   category={course.category}
+                  isEnrolled={enrolledCourseIds.has(course.id)}
                 />
               ))}
             </div>

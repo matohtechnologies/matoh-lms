@@ -3,6 +3,7 @@ import { Search, SlidersHorizontal, Grid, List } from "lucide-react";
 import { CourseCard, CourseCardSkeleton } from "@/components/courses/course-card";
 import { CourseSortSelect } from "@/components/courses/course-sort-select";
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
 import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 
@@ -88,7 +89,8 @@ async function getCategories() {
 export default async function CoursesPage({ searchParams }: CoursesPageProps) {
   const params = await searchParams;
   const t = await getTranslations("courses");
-  const [{ courses, total, pages }, categories] = await Promise.all([
+  const [session, { courses, total, pages }, categories] = await Promise.all([
+    auth(),
     getCourses({
       q: params.q,
       category: params.category,
@@ -98,6 +100,19 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
     }),
     getCategories(),
   ]);
+
+  const enrolledCourseIds = new Set<string>();
+  if (session?.user?.id) {
+    if (session.user.role === "ADMIN") {
+      courses.forEach((c) => enrolledCourseIds.add(c.id));
+    } else {
+      const enrollments = await prisma.enrollment.findMany({
+        where: { userId: session.user.id },
+        select: { courseId: true },
+      });
+      enrollments.forEach((e) => enrolledCourseIds.add(e.courseId));
+    }
+  }
 
   const currentPage = params.page ? parseInt(params.page) : 1;
 
@@ -233,6 +248,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                       duration={course.duration}
                       instructor={(course as { instructor: { name?: string | null; image?: string | null } }).instructor}
                       category={course.category}
+                      isEnrolled={enrolledCourseIds.has(course.id)}
                     />
                   ))}
                 </div>
