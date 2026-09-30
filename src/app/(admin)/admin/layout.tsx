@@ -2,15 +2,9 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { BookOpen, LogOut, Shield } from "lucide-react";
 import { auth } from "@/lib/auth";
+import { getTranslations } from "next-intl/server";
 import AdminNavLink, { type AdminNavItem } from "./admin-nav-link";
 import SignOutButton from "@/components/auth/signout-button";
-
-const adminNavItems: AdminNavItem[] = [
-  { href: "/admin", label: "Overview", exact: true },
-  { href: "/admin/courses", label: "Manajemen Kelas" },
-  { href: "/admin/users", label: "Manajemen User" },
-  { href: "/admin/orders", label: "Semua Transaksi" },
-];
 
 export default async function AdminLayout({
   children,
@@ -20,6 +14,15 @@ export default async function AdminLayout({
   const session = await auth();
   if (!session) redirect("/login");
   if (session.user?.role !== "ADMIN") redirect("/dashboard");
+
+  const tAdmin = await getTranslations("admin");
+
+  const adminNavItems: AdminNavItem[] = [
+    { href: "/admin", label: tAdmin("nav_overview"), exact: true },
+    { href: "/admin/courses", label: tAdmin("nav_courses") },
+    { href: "/admin/users", label: tAdmin("nav_users") },
+    { href: "/admin/orders", label: tAdmin("nav_orders") },
+  ];
 
   return (
     <div className="min-h-screen bg-stone-50 flex flex-col lg:flex-row">
@@ -36,7 +39,7 @@ export default async function AdminLayout({
             href="/dashboard?view=student"
             className="text-xs text-stone-400 hover:text-white px-2.5 py-1 rounded-lg bg-stone-800"
           >
-            Siswa Mode
+            {tAdmin("student_mode")}
           </Link>
           <SignOutButton
             variant="admin"
@@ -96,14 +99,14 @@ export default async function AdminLayout({
 
           <div className="mt-8 pt-4 border-t border-stone-800">
             <p className="px-3 text-[11px] font-semibold text-stone-500 uppercase tracking-wider mb-2">
-              Navigasi Cepat
+              {tAdmin("quick_nav")}
             </p>
             <Link
               href="/dashboard?view=student"
               className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs text-stone-400 hover:text-white hover:bg-stone-800/60 transition-colors"
             >
               <BookOpen size={14} className="text-stone-500" />
-              Mode Pratinjau Siswa
+              {tAdmin("student_preview")}
             </Link>
           </div>
         </nav>

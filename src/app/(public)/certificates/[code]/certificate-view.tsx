@@ -5,7 +5,8 @@ import Link from "next/link";
 import { Award, Printer, Copy, Check, ArrowLeft, ShieldCheck, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-import { id as idLocale } from "date-fns/locale";
+import { enUS, id as idLocale } from "date-fns/locale";
+import { useTranslations, useLocale } from "next-intl";
 
 interface CertificateViewProps {
   code: string;
@@ -43,6 +44,9 @@ export function CertificateView({
   lockReason,
 }: CertificateViewProps) {
   const [copied, setCopied] = useState(false);
+  const t = useTranslations("certificate");
+  const locale = useLocale();
+  const dateLocale = locale === "en" ? enUS : idLocale;
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -56,8 +60,8 @@ export function CertificateView({
 
   const displayCode = certificateCode ?? code;
   const issueDisplay = issuedAt
-    ? format(new Date(issuedAt), "d MMMM yyyy", { locale: idLocale })
-    : format(new Date(), "d MMMM yyyy", { locale: idLocale });
+    ? format(new Date(issuedAt), "d MMMM yyyy", { locale: dateLocale })
+    : format(new Date(), "d MMMM yyyy", { locale: dateLocale });
 
   if (isLocked) {
     return (
@@ -70,24 +74,23 @@ export function CertificateView({
             className="text-2xl font-bold text-stone-900 mb-2"
             style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
           >
-            Sertifikat Belum Memenuhi Syarat
+            {t("not_eligible_title")}
           </h1>
           <p className="text-sm text-stone-600 leading-relaxed mb-6">
-            {lockReason ||
-              "Sertifikat kelulusan resmi belum dapat diterbitkan atau dicetak karena Anda belum memenuhi seluruh kriteria kelulusan (materi, kuis evaluasi, atau persetujuan tugas) pada kelas ini."}
+            {lockReason || t("not_eligible_desc")}
           </p>
           <div className="space-y-3">
             <Link
               href="/dashboard/my-courses"
               className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium transition-colors shadow-sm"
             >
-              Lanjutkan Belajar Sekarang
+              {t("continue_learning")}
             </Link>
             <Link
               href="/dashboard"
               className="w-full flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-stone-200 hover:bg-stone-50 text-stone-700 text-sm font-medium transition-colors"
             >
-              Kembali ke Dashboard
+              {t("back_to_dashboard")}
             </Link>
           </div>
         </div>
@@ -104,7 +107,7 @@ export function CertificateView({
           className="inline-flex items-center gap-2 text-sm text-stone-600 hover:text-stone-900 transition-colors font-medium"
         >
           <ArrowLeft size={16} />
-          Kembali ke Dashboard
+          {t("back_link")}
         </Link>
         <div className="flex items-center gap-3">
           <Button
@@ -119,10 +122,10 @@ export function CertificateView({
               )
             }
           >
-            {copied ? "Tautan Tersalin!" : "Salin Verifikasi"}
+            {copied ? t("copied") : t("copy_link")}
           </Button>
           <Button size="sm" onClick={handlePrint} leftIcon={<Printer size={14} />}>
-            Cetak / Simpan PDF
+            {t("print")}
           </Button>
         </div>
       </div>
@@ -153,7 +156,7 @@ export function CertificateView({
 
           <div className="my-6">
             <p className="text-xs uppercase tracking-wider text-stone-500 font-medium">
-              Diberikan kepada:
+              {t("awarded_to")}
             </p>
             <h1
               className="text-3xl sm:text-4xl font-extrabold text-stone-900 mt-2 mb-1"
@@ -214,15 +217,15 @@ export function CertificateView({
           {/* Verification Code Footer */}
           <div className="mt-8 pt-4 border-t border-dashed border-stone-200 flex flex-col sm:flex-row items-center justify-between text-[11px] text-stone-500 gap-2">
             <span>
-              ID Kredensial:{" "}
+              {t("credential_id")}{" "}
               <strong className="text-stone-700 font-mono">
                 {displayCode.toUpperCase()}
               </strong>
             </span>
             <span>
-              Diterbitkan Pada: <strong className="text-stone-700">{issueDisplay}</strong>
+              {t("issued_on")} <strong className="text-stone-700">{issueDisplay}</strong>
             </span>
-            <span className="text-green-700 font-medium">Status: Terverifikasi Resmi</span>
+            <span className="text-green-700 font-medium">{t("verified")}</span>
           </div>
         </div>
       </div>

@@ -3,6 +3,7 @@ import { ShoppingBag, Search, CheckCircle2, Clock, XCircle, ArrowUpRight, Filter
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { formatCurrency } from "@/lib/utils";
+import { getTranslations, getLocale } from "next-intl/server";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "Semua Transaksi — Admin" };
@@ -10,6 +11,9 @@ export const metadata: Metadata = { title: "Semua Transaksi — Admin" };
 export default async function AdminOrdersPage() {
   const session = await auth();
   if (!session || session.user?.role !== "ADMIN") redirect("/dashboard");
+
+  const t = await getTranslations("admin");
+  const locale = await getLocale();
 
   let orders: {
     id: string;
@@ -52,21 +56,21 @@ export default async function AdminOrdersPage() {
         return (
           <span className="inline-flex items-center gap-1.5 text-xs text-green-700 font-medium bg-green-50 px-2.5 py-1 rounded-full border border-green-200/60">
             <CheckCircle2 size={12} className="text-green-600" />
-            Berhasil
+            {t("status_success")}
           </span>
         );
       case "PENDING":
         return (
           <span className="inline-flex items-center gap-1.5 text-xs text-amber-700 font-medium bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200/60">
             <Clock size={12} className="text-amber-600" />
-            Menunggu
+            {t("status_pending")}
           </span>
         );
       default:
         return (
           <span className="inline-flex items-center gap-1.5 text-xs text-red-700 font-medium bg-red-50 px-2.5 py-1 rounded-full border border-red-200/60">
             <XCircle size={12} className="text-red-600" />
-            Gagal
+            {t("status_failed")}
           </span>
         );
     }
@@ -80,16 +84,16 @@ export default async function AdminOrdersPage() {
             className="text-2xl font-bold text-stone-900"
             style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
           >
-            Semua Transaksi
+            {t("orders_title")}
           </h1>
           <p className="text-stone-500 text-sm mt-1">
-            Riwayat pembayaran kursus dari seluruh gateway Midtrans & simulasi
+            {t("orders_subtitle")}
           </p>
         </div>
         <div className="flex items-center gap-3">
           <button className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-stone-200 bg-white text-stone-700 text-xs font-medium hover:bg-stone-50 shadow-sm transition-colors">
             <Download size={14} />
-            Ekspor CSV
+            {t("export_csv")}
           </button>
         </div>
       </div>
@@ -97,23 +101,23 @@ export default async function AdminOrdersPage() {
       {/* Overview Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white rounded-2xl border border-stone-200 p-5 shadow-warm">
-          <p className="text-xs font-medium text-stone-500">Total Pemasukan (Berhasil)</p>
+          <p className="text-xs font-medium text-stone-500">{t("total_income")}</p>
           <p className="text-2xl font-bold text-stone-900 mt-1">{formatCurrency(totalAmount)}</p>
-          <p className="text-xs text-green-600 mt-1">✓ Berhasil diselesaikan</p>
+          <p className="text-xs text-green-600 mt-1">{t("income_note")}</p>
         </div>
         <div className="bg-white rounded-2xl border border-stone-200 p-5 shadow-warm">
-          <p className="text-xs font-medium text-stone-500">Jumlah Transaksi Berhasil</p>
+          <p className="text-xs font-medium text-stone-500">{t("successful_orders")}</p>
           <p className="text-2xl font-bold text-stone-900 mt-1">
-            {orders.filter((o) => o.status === "PAID").length} Pesanan
+            {orders.filter((o) => o.status === "PAID").length}
           </p>
-          <p className="text-xs text-stone-400 mt-1">Dari {orders.length} total pesanan dibuat</p>
+          <p className="text-xs text-stone-400 mt-1">{t("from_total", { total: orders.length })}</p>
         </div>
         <div className="bg-white rounded-2xl border border-stone-200 p-5 shadow-warm">
-          <p className="text-xs font-medium text-stone-500">Menunggu Pembayaran</p>
+          <p className="text-xs font-medium text-stone-500">{t("pending_payment")}</p>
           <p className="text-2xl font-bold text-amber-600 mt-1">
-            {orders.filter((o) => o.status === "PENDING").length} Pesanan
+            {orders.filter((o) => o.status === "PENDING").length}
           </p>
-          <p className="text-xs text-stone-400 mt-1">Perlu konfirmasi payment gateway</p>
+          <p className="text-xs text-stone-400 mt-1">{t("pending_note")}</p>
         </div>
       </div>
 
@@ -123,16 +127,16 @@ export default async function AdminOrdersPage() {
           <div className="flex items-center gap-3 w-full sm:w-80">
             <Search size={16} className="text-stone-400 shrink-0" />
             <input
-              placeholder="Cari ID pesanan, siswa, atau kelas..."
+              placeholder={t("search_orders")}
               className="w-full text-sm text-stone-700 placeholder:text-stone-400 focus:outline-none"
             />
           </div>
           <div className="flex items-center gap-2 self-start sm:self-auto text-xs">
-            <span className="text-stone-400">Status:</span>
-            <button className="px-2.5 py-1 rounded-lg bg-orange-50 text-orange-700 font-medium">Semua</button>
-            <button className="px-2.5 py-1 rounded-lg hover:bg-stone-50 text-stone-600 transition-colors">Berhasil</button>
-            <button className="px-2.5 py-1 rounded-lg hover:bg-stone-50 text-stone-600 transition-colors">Menunggu</button>
-            <button className="px-2.5 py-1 rounded-lg hover:bg-stone-50 text-stone-600 transition-colors">Gagal</button>
+            <span className="text-stone-400">{t("filter_status")}</span>
+            <button className="px-2.5 py-1 rounded-lg bg-orange-50 text-orange-700 font-medium">{t("status_all")}</button>
+            <button className="px-2.5 py-1 rounded-lg hover:bg-stone-50 text-stone-600 transition-colors">{t("status_success")}</button>
+            <button className="px-2.5 py-1 rounded-lg hover:bg-stone-50 text-stone-600 transition-colors">{t("status_pending")}</button>
+            <button className="px-2.5 py-1 rounded-lg hover:bg-stone-50 text-stone-600 transition-colors">{t("status_failed")}</button>
           </div>
         </div>
 
@@ -140,13 +144,13 @@ export default async function AdminOrdersPage() {
           <table className="w-full text-left">
             <thead>
               <tr className="bg-stone-50/80 border-b border-stone-100">
-                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">ID Pesanan</th>
-                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Pelajar</th>
-                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Kelas</th>
-                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Metode</th>
-                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Nominal</th>
-                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Status</th>
-                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Waktu</th>
+                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_order_id")}</th>
+                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_learner")}</th>
+                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("course_col")}</th>
+                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_method")}</th>
+                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_nominal")}</th>
+                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_status")}</th>
+                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_time")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-stone-100">
@@ -176,7 +180,7 @@ export default async function AdminOrdersPage() {
                   </td>
                   <td className="px-5 py-4">{statusBadge(order.status)}</td>
                   <td className="px-5 py-4 text-xs text-stone-500">
-                    {order.createdAt.toLocaleDateString("id-ID", {
+                    {order.createdAt.toLocaleDateString(locale === "en" ? "en-US" : "id-ID", {
                       day: "numeric",
                       month: "short",
                       year: "numeric",

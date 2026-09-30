@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, MoreVertical, Shield, GraduationCap, User, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface UserActionsProps {
   userId: string;
@@ -15,6 +16,7 @@ export function UserActions({ userId, userName, currentRole, isSelf }: UserActio
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const t = useTranslations("admin");
 
   const changeRole = async (role: string) => {
     if (loading) return;
@@ -40,7 +42,7 @@ export function UserActions({ userId, userName, currentRole, isSelf }: UserActio
   };
 
   const deleteUser = async () => {
-    if (!confirm(`Hapus akun "${userName}"?\n\nSemua data pengguna ini akan dihapus secara permanen.`)) return;
+    if (!confirm(t("delete_user_confirm", { name: userName }))) return;
     setOpen(false);
     setLoading(true);
     try {
@@ -61,7 +63,7 @@ export function UserActions({ userId, userName, currentRole, isSelf }: UserActio
   if (isSelf) {
     return (
       <div className="flex items-center justify-end">
-        <span className="text-xs text-stone-400 italic">Akun Anda</span>
+        <span className="text-xs text-stone-400 italic">{t("your_account")}</span>
       </div>
     );
   }
@@ -73,7 +75,7 @@ export function UserActions({ userId, userName, currentRole, isSelf }: UserActio
         onClick={() => setOpen(!open)}
         disabled={loading}
         className="p-1.5 rounded-lg text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors disabled:opacity-50"
-        title="Opsi Pengguna"
+        title={t("user_options")}
       >
         <MoreVertical size={15} />
       </button>
@@ -83,7 +85,7 @@ export function UserActions({ userId, userName, currentRole, isSelf }: UserActio
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
           <div className="absolute right-0 top-8 w-48 bg-white rounded-xl border border-stone-200 shadow-warm-lg py-1.5 z-20">
             <p className="px-3 py-1 text-[10px] font-semibold text-stone-400 uppercase tracking-wider">
-              Ubah Role
+              {t("change_role")}
             </p>
             {currentRole !== "USER" && (
               <button
@@ -91,7 +93,7 @@ export function UserActions({ userId, userName, currentRole, isSelf }: UserActio
                 className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-stone-700 hover:bg-stone-50 transition-colors"
               >
                 <User size={13} className="text-stone-400" />
-                Jadikan Siswa
+                {t("make_student")}
               </button>
             )}
             {currentRole !== "INSTRUCTOR" && (
@@ -100,7 +102,7 @@ export function UserActions({ userId, userName, currentRole, isSelf }: UserActio
                 className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-stone-700 hover:bg-stone-50 transition-colors"
               >
                 <GraduationCap size={13} className="text-blue-500" />
-                Jadikan Instruktur
+                {t("make_instructor")}
               </button>
             )}
             {currentRole !== "ADMIN" && (
@@ -109,7 +111,7 @@ export function UserActions({ userId, userName, currentRole, isSelf }: UserActio
                 className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-stone-700 hover:bg-stone-50 transition-colors"
               >
                 <Shield size={13} className="text-orange-500" />
-                Jadikan Admin
+                {t("make_admin")}
               </button>
             )}
             <div className="border-t border-stone-100 mt-1 pt-1">
@@ -118,7 +120,7 @@ export function UserActions({ userId, userName, currentRole, isSelf }: UserActio
                 className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-red-600 hover:bg-red-50 transition-colors"
               >
                 <Trash2 size={13} />
-                Hapus Akun
+                {t("delete_account")}
               </button>
             </div>
           </div>

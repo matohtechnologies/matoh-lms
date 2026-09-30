@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/input";
+import { useTranslations } from "next-intl";
 
 export interface LessonData {
   id: string;
@@ -53,6 +54,7 @@ export function CurriculumManager({
   sections: initialSections,
   onRefresh,
 }: CurriculumManagerProps) {
+  const t = useTranslations("admin");
   const [sections, setSections] = useState<SectionData[]>(initialSections);
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>(
     initialSections.reduce((acc, s) => ({ ...acc, [s.id]: true }), {})
@@ -121,7 +123,7 @@ export function CurriculumManager({
           body: JSON.stringify({ title: sectionTitle }),
         });
         if (!res.ok) throw new Error("Gagal memperbarui bab/seksi");
-        showNotification("success", "Seksi materi berhasil diperbarui");
+        showNotification("success", t("section_saved"));
       } else {
         // Create section
         const res = await fetch(`/api/admin/courses/${courseId}/sections`, {
@@ -130,7 +132,7 @@ export function CurriculumManager({
           body: JSON.stringify({ title: sectionTitle }),
         });
         if (!res.ok) throw new Error("Gagal membuat bab/seksi baru");
-        showNotification("success", "Bab/seksi materi baru berhasil ditambahkan");
+        showNotification("success", t("section_created"));
       }
       setSectionModalOpen(false);
       await onRefresh();
@@ -142,7 +144,7 @@ export function CurriculumManager({
   };
 
   const handleDeleteSection = async (sectionId: string, sectionTitle: string) => {
-    if (!confirm(`Hapus seksi "${sectionTitle}" beserta semua materi di dalamnya?`)) return;
+    if (!confirm(t("delete_section_confirm", { title: sectionTitle }))) return;
 
     setIsPending(true);
     try {
@@ -150,7 +152,7 @@ export function CurriculumManager({
         method: "DELETE",
       });
       if (!res.ok) throw new Error("Gagal menghapus seksi materi");
-      showNotification("success", "Seksi materi berhasil dihapus");
+      showNotification("success", t("section_deleted"));
       await onRefresh();
     } catch (err: any) {
       showNotification("error", err.message || "Terjadi kesalahan");
@@ -202,7 +204,7 @@ export function CurriculumManager({
           }),
         });
         if (!res.ok) throw new Error("Gagal menyimpan perubahan materi");
-        showNotification("success", "Materi berhasil diperbarui");
+        showNotification("success", t("lesson_saved"));
       } else {
         // Create lesson under section
         const res = await fetch(
@@ -220,7 +222,7 @@ export function CurriculumManager({
           }
         );
         if (!res.ok) throw new Error("Gagal menambahkan materi baru");
-        showNotification("success", "Materi baru berhasil ditambahkan");
+        showNotification("success", t("lesson_created"));
       }
       setLessonModalOpen(false);
       await onRefresh();
@@ -232,7 +234,7 @@ export function CurriculumManager({
   };
 
   const handleDeleteLesson = async (lessonId: string, lessonTitle: string) => {
-    if (!confirm(`Hapus materi "${lessonTitle}"?`)) return;
+    if (!confirm(t("delete_lesson_confirm", { title: lessonTitle }))) return;
 
     setIsPending(true);
     try {
@@ -240,7 +242,7 @@ export function CurriculumManager({
         method: "DELETE",
       });
       if (!res.ok) throw new Error("Gagal menghapus materi");
-      showNotification("success", "Materi berhasil dihapus");
+      showNotification("success", t("lesson_deleted"));
       await onRefresh();
     } catch (err: any) {
       showNotification("error", err.message || "Terjadi kesalahan");
@@ -260,9 +262,9 @@ export function CurriculumManager({
       {/* Top Banner & Stats */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-white border border-stone-200 shadow-warm">
         <div>
-          <h2 className="text-lg font-bold text-stone-900">Kurikulum & Materi Pelajaran</h2>
+          <h2 className="text-lg font-bold text-stone-900">{t("curriculum_title")}</h2>
           <p className="text-sm text-stone-500 mt-0.5">
-            Total {sections.length} Seksi • {totalLessonsCount} Materi Pelajaran • ~{totalMinutes} Menit
+            {t("curriculum_summary", { sections: sections.length, lessons: totalLessonsCount, minutes: totalMinutes })}
           </p>
         </div>
 
@@ -274,7 +276,7 @@ export function CurriculumManager({
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-stone-200 bg-stone-50 hover:bg-stone-100 text-stone-700 text-xs font-semibold transition-colors"
           >
             <PlayCircle size={14} className="text-orange-600" />
-            Pratinjau Siswa
+            {t("student_preview")}
             <ExternalLink size={12} className="text-stone-400" />
           </a>
           <Button
@@ -283,7 +285,7 @@ export function CurriculumManager({
             leftIcon={<FolderPlus size={16} />}
             className="text-xs"
           >
-            Tambah Bab / Seksi
+            {t("add_section")}
           </Button>
         </div>
       </div>
@@ -312,12 +314,12 @@ export function CurriculumManager({
           <div className="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center mx-auto mb-3">
             <FolderPlus size={24} className="text-orange-500" />
           </div>
-          <h3 className="font-semibold text-stone-900 mb-1">Belum Ada Materi Pelajaran</h3>
+          <h3 className="font-semibold text-stone-900 mb-1">{t("no_lessons_title")}</h3>
           <p className="text-sm text-stone-500 max-w-sm mx-auto mb-4">
-            Mulai susun kurikulum kelas ini dengan menambahkan bab/seksi pertama.
+            {t("no_lessons_desc")}
           </p>
           <Button type="button" onClick={handleOpenAddSection} leftIcon={<Plus size={16} />}>
-            Buat Seksi Pertama
+            {t("create_first_section")}
           </Button>
         </div>
       ) : (
@@ -349,7 +351,7 @@ export function CurriculumManager({
                         {section.title}
                       </h3>
                       <p className="text-xs text-stone-500">
-                        {section.lessons.length} Materi
+                        {t("lessons_count_badge", { count: section.lessons.length })}
                       </p>
                     </div>
                   </div>
@@ -362,13 +364,13 @@ export function CurriculumManager({
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-orange-50 hover:bg-orange-100 text-orange-700 text-xs font-semibold transition-colors"
                     >
                       <Plus size={14} />
-                      <span className="hidden sm:inline">Tambah Materi</span>
+                      <span className="hidden sm:inline">{t("add_lesson")}</span>
                     </button>
                     <button
                       type="button"
                       onClick={() => handleOpenEditSection(section)}
                       className="p-2 rounded-xl hover:bg-stone-100 text-stone-500 hover:text-stone-800 transition-colors"
-                      title="Edit Judul Seksi"
+                      title={t("edit_section_title")}
                     >
                       <Edit2 size={15} />
                     </button>
@@ -376,7 +378,7 @@ export function CurriculumManager({
                       type="button"
                       onClick={() => handleDeleteSection(section.id, section.title)}
                       className="p-2 rounded-xl hover:bg-red-50 text-stone-400 hover:text-red-600 transition-colors"
-                      title="Hapus Seksi"
+                      title={t("delete_section")}
                     >
                       <Trash2 size={15} />
                     </button>
@@ -388,7 +390,7 @@ export function CurriculumManager({
                   <div className="divide-y divide-stone-100">
                     {section.lessons.length === 0 ? (
                       <div className="p-6 text-center text-xs text-stone-400">
-                        Belum ada materi di seksi ini. Klik &quot;Tambah Materi&quot; di atas untuk mulai mengisi materi.
+                        {t("empty_section")}
                       </div>
                     ) : (
                       section.lessons.map((lesson, lIndex) => (
@@ -414,20 +416,20 @@ export function CurriculumManager({
                               <div className="flex items-center gap-2 mt-0.5 text-xs text-stone-400">
                                 {lesson.duration ? (
                                   <span className="flex items-center gap-1">
-                                    <Clock size={11} /> {lesson.duration} Menit
+                                    <Clock size={11} /> {t("minutes_suffix", { count: lesson.duration })}
                                   </span>
                                 ) : null}
                                 {lesson.isFree ? (
                                   <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.2 rounded-md">
-                                    <Unlock size={11} /> Gratis Preview
+                                    <Unlock size={11} /> {t("free_preview")}
                                   </span>
                                 ) : (
                                   <span className="inline-flex items-center gap-1 text-[11px] text-stone-400">
-                                    <Lock size={11} /> Terkunci
+                                    <Lock size={11} /> {t("locked")}
                                   </span>
                                 )}
                                 {lesson.content ? (
-                                  <span className="text-stone-400 text-[11px]">• Ada teks bacaan</span>
+                                  <span className="text-stone-400 text-[11px]">{t("has_text")}</span>
                                 ) : null}
                               </div>
                             </div>
@@ -439,7 +441,7 @@ export function CurriculumManager({
                               type="button"
                               onClick={() => handleOpenEditLesson(section.id, lesson)}
                               className="p-1.5 rounded-lg hover:bg-stone-100 text-stone-500 hover:text-stone-800 transition-colors"
-                              title="Edit Materi"
+                              title={t("edit_lesson")}
                             >
                               <Edit2 size={14} />
                             </button>
@@ -447,7 +449,7 @@ export function CurriculumManager({
                               type="button"
                               onClick={() => handleDeleteLesson(lesson.id, lesson.title)}
                               className="p-1.5 rounded-lg hover:bg-red-50 text-stone-400 hover:text-red-600 transition-colors"
-                              title="Hapus Materi"
+                              title={t("delete_lesson")}
                             >
                               <Trash2 size={14} />
                             </button>
@@ -468,12 +470,12 @@ export function CurriculumManager({
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
           <div className="bg-white rounded-2xl border border-stone-200 shadow-warm-lg max-w-md w-full p-6 space-y-4">
             <h3 className="text-base font-bold text-stone-900">
-              {editingSection ? "Edit Bab / Seksi" : "Tambah Bab / Seksi Baru"}
+              {editingSection ? t("modal_edit_section") : t("modal_add_section")}
             </h3>
             <form onSubmit={handleSaveSection} className="space-y-4">
               <Input
-                label="Judul Seksi / Bab"
-                placeholder="Contoh: Bab 1: Pengenalan Dasar"
+                label={t("section_title_label")}
+                placeholder={t("section_title_placeholder")}
                 value={sectionTitle}
                 onChange={(e) => setSectionTitle(e.target.value)}
                 autoFocus
@@ -486,10 +488,10 @@ export function CurriculumManager({
                   onClick={() => setSectionModalOpen(false)}
                   disabled={isPending}
                 >
-                  Batal
+                  {t("cancel")}
                 </Button>
                 <Button type="submit" loading={isPending}>
-                  Simpan Seksi
+                  {t("save_section")}
                 </Button>
               </div>
             </form>
@@ -503,17 +505,17 @@ export function CurriculumManager({
           <div className="bg-white rounded-2xl border border-stone-200 shadow-warm-lg max-w-lg w-full p-6 space-y-4 my-8">
             <div className="border-b border-stone-100 pb-3">
               <h3 className="text-base font-bold text-stone-900">
-                {editingLesson ? "Edit Materi Pelajaran" : "Tambah Materi Pelajaran Baru"}
+                {editingLesson ? t("modal_edit_lesson") : t("modal_add_lesson")}
               </h3>
               <p className="text-xs text-stone-500 mt-0.5">
-                Masukkan detail video atau ringkasan materi untuk siswa
+                {t("lesson_modal_subtitle")}
               </p>
             </div>
 
             <form onSubmit={handleSaveLesson} className="space-y-4">
               <Input
-                label="Judul Materi"
-                placeholder="Contoh: Pengenalan Sintaks & Variabel"
+                label={t("lesson_title_label")}
+                placeholder={t("lesson_title_placeholder")}
                 value={lessonTitle}
                 onChange={(e) => setLessonTitle(e.target.value)}
                 autoFocus
@@ -522,7 +524,7 @@ export function CurriculumManager({
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Input
-                  label="Durasi (Menit)"
+                  label={t("duration_minutes_label")}
                   type="number"
                   placeholder="10"
                   min="1"
@@ -539,30 +541,30 @@ export function CurriculumManager({
                       className="w-4 h-4 rounded text-orange-600 focus:ring-orange-500 accent-orange-600"
                     />
                     <span className="text-sm font-medium text-stone-800">
-                      Gratis untuk Preview
+                      {t("free_preview_label")}
                     </span>
                   </label>
                   <p className="text-[11px] text-stone-400">
-                    Siswa belum membeli dapat menonton materi ini
+                    {t("free_preview_desc")}
                   </p>
                 </div>
               </div>
 
               <Input
-                label="URL Video (YouTube / MP4 / Stream)"
-                placeholder="https://www.youtube.com/watch?v=... atau link MP4"
+                label={t("video_url_label")}
+                placeholder={t("lesson_video_placeholder")}
                 value={lessonVideoUrl}
                 onChange={(e) => setLessonVideoUrl(e.target.value)}
-                hint="Dapat dikosongkan jika materi berbentuk artikel/bacaan"
+                hint={t("video_url_hint")}
               />
 
               <Textarea
-                label="Konten / Catatan Teks Materi (Markdown didukung)"
-                placeholder="Tuliskan rangkuman materi, link referensi, catatan kodingan, atau instruksi tugas..."
+                label={t("lesson_content_label")}
+                placeholder={t("lesson_content_placeholder")}
                 rows={5}
                 value={lessonContent}
                 onChange={(e) => setLessonContent(e.target.value)}
-                hint="Siswa dapat membaca catatan ini di bawah pemutar video"
+                hint={t("lesson_content_hint")}
               />
 
               <div className="flex items-center justify-end gap-2 pt-3 border-t border-stone-100">
@@ -572,10 +574,10 @@ export function CurriculumManager({
                   onClick={() => setLessonModalOpen(false)}
                   disabled={isPending}
                 >
-                  Batal
+                  {t("cancel")}
                 </Button>
                 <Button type="submit" loading={isPending}>
-                  {editingLesson ? "Simpan Materi" : "Tambahkan Materi"}
+                  {editingLesson ? t("save_lesson") : t("add_lesson_submit")}
                 </Button>
               </div>
             </form>

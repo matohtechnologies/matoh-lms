@@ -26,6 +26,7 @@ import { QuizManager } from "./quiz-manager";
 import { AssignmentManager } from "./assignment-manager";
 import { DiscussionManager } from "./discussion-manager";
 import { CertificateManager } from "./certificate-manager";
+import { useTranslations } from "next-intl";
 
 interface Category {
   id: string;
@@ -54,6 +55,7 @@ export default function EditCoursePage() {
   const params = useParams<{ courseId: string }>();
   const searchParams = useSearchParams();
   const courseId = params.courseId;
+  const t = useTranslations("admin");
 
   const initialTab = (searchParams.get("tab") as "curriculum" | "quizzes" | "assignments" | "discussions" | "certificates" | "settings") || "curriculum";
   const [activeTab, setActiveTab] = useState<"curriculum" | "quizzes" | "assignments" | "discussions" | "certificates" | "settings">(initialTab);
@@ -159,7 +161,7 @@ export default function EditCoursePage() {
   };
 
   const handleDelete = async () => {
-    if (!confirm(`Hapus kelas "${title}"? Tindakan ini tidak dapat dibatalkan.`)) return;
+    if (!confirm(t("delete_course_confirm", { title }))) return;
 
     setDeleting(true);
     try {
@@ -186,7 +188,7 @@ export default function EditCoursePage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6 pb-12">
+    <div className="max-w-6xl mx-auto space-y-6 pb-12">
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
@@ -202,7 +204,7 @@ export default function EditCoursePage() {
                 className="text-2xl font-bold text-stone-900"
                 style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
               >
-                Kelola Kelas
+                {t("manage_course")}
               </h1>
               <span
                 className={`px-2 py-0.5 rounded-full text-[11px] font-semibold ${
@@ -211,7 +213,7 @@ export default function EditCoursePage() {
                     : "bg-stone-100 text-stone-600 border border-stone-200"
                 }`}
               >
-                {published ? "Terbit" : "Draf"}
+                {published ? t("status_published") : t("status_draft")}
               </span>
             </div>
             <p className="text-stone-500 text-xs mt-0.5 truncate max-w-sm sm:max-w-md">
@@ -228,7 +230,7 @@ export default function EditCoursePage() {
             className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-stone-200 bg-white hover:bg-stone-50 text-stone-700 text-xs font-semibold transition-colors"
           >
             <PlayCircle size={14} className="text-orange-600" />
-            <span className="hidden sm:inline">Pratinjau Siswa</span>
+            <span className="hidden sm:inline">{t("student_preview")}</span>
             <ExternalLink size={12} className="text-stone-400" />
           </a>
           <button
@@ -238,24 +240,24 @@ export default function EditCoursePage() {
             className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-red-200 bg-white text-red-600 hover:bg-red-50 text-xs font-medium transition-colors disabled:opacity-50"
           >
             {deleting ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}
-            Hapus
+            {t("delete_course")}
           </button>
         </div>
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex items-center gap-2 border-b border-stone-200 pb-px overflow-x-auto scrollbar-none">
+      <div className="flex items-center gap-1 sm:gap-1.5 border-b border-stone-200 pb-px overflow-x-auto scrollbar-none">
         <button
           type="button"
           onClick={() => setActiveTab("curriculum")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
+          className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-t-xl text-xs sm:text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
             activeTab === "curriculum"
               ? "border-orange-600 text-orange-600 bg-white shadow-xs"
               : "border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-100/60"
           }`}
         >
-          <BookOpen size={16} />
-          Materi & Kurikulum
+          <BookOpen size={15} />
+          <span>{t("tab_curriculum")}</span>
           <span className="px-1.5 py-0.2 rounded-full bg-orange-100 text-orange-700 text-[10px] font-bold">
             {sections.reduce((acc, s) => acc + s.lessons.length, 0)}
           </span>
@@ -264,66 +266,66 @@ export default function EditCoursePage() {
         <button
           type="button"
           onClick={() => setActiveTab("quizzes")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
+          className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-t-xl text-xs sm:text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
             activeTab === "quizzes"
               ? "border-orange-600 text-orange-600 bg-white shadow-xs"
               : "border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-100/60"
           }`}
         >
-          <HelpCircle size={16} />
-          Kuis & Latihan
+          <HelpCircle size={15} />
+          <span>{t("tab_quizzes")}</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab("assignments")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
+          className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-t-xl text-xs sm:text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
             activeTab === "assignments"
               ? "border-orange-600 text-orange-600 bg-white shadow-xs"
               : "border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-100/60"
           }`}
         >
-          <FileCode2 size={16} />
-          Tugas & Submission
+          <FileCode2 size={15} />
+          <span>{t("tab_assignments")}</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab("discussions")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
+          className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-t-xl text-xs sm:text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
             activeTab === "discussions"
               ? "border-orange-600 text-orange-600 bg-white shadow-xs"
               : "border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-100/60"
           }`}
         >
-          <MessageSquare size={16} />
-          Forum Diskusi
+          <MessageSquare size={15} />
+          <span>{t("tab_discussions")}</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab("certificates")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
+          className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-t-xl text-xs sm:text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
             activeTab === "certificates"
               ? "border-orange-600 text-orange-600 bg-white shadow-xs"
               : "border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-100/60"
           }`}
         >
-          <Award size={16} />
-          Sertifikat
+          <Award size={15} />
+          <span>{t("tab_certificates")}</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab("settings")}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
+          className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-t-xl text-xs sm:text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
             activeTab === "settings"
               ? "border-orange-600 text-orange-600 bg-white shadow-xs"
               : "border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-100/60"
           }`}
         >
-          <Settings size={16} />
-          Pengaturan Kelas
+          <Settings size={15} />
+          <span>{t("tab_settings")}</span>
         </button>
       </div>
 

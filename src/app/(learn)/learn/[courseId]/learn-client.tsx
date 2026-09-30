@@ -35,6 +35,7 @@ import {
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
+import { useTranslations, useLocale } from "next-intl";
 
 export interface LearnLesson {
   id: string;
@@ -178,6 +179,8 @@ export default function LearnPageClient({
   initialCourse,
   initialCompletedLessonIds = [],
 }: LearnPageClientProps) {
+  const t = useTranslations("learn");
+  const locale = useLocale();
   const course = initialCourse;
 
   // Extract sections and lessons
@@ -636,8 +639,8 @@ export default function LearnPageClient({
           </h2>
           <div className="mt-3 bg-stone-950/60 p-2.5 rounded-xl border border-stone-800/80">
             <div className="flex items-center justify-between text-xs text-stone-400 mb-1.5 font-medium">
-              <span>Progres Belajar</span>
-              <span className="text-orange-400 font-bold">{progress}% Selesai</span>
+              <span>{t("progress")}</span>
+              <span className="text-orange-400 font-bold">{t("done_pct", { pct: progress })}</span>
             </div>
             <Progress value={progress} size="sm" />
           </div>
@@ -685,8 +688,8 @@ export default function LearnPageClient({
                         }`}
                         title={
                           isCompleted
-                            ? "Klik untuk membatalkan selesai"
-                            : "Klik untuk tandai selesai"
+                            ? t("toggle_complete")
+                            : t("toggle_incomplete")
                         }
                       >
                         {isCompleted ? <CheckCircle size={12} /> : <Play size={8} />}
@@ -710,14 +713,14 @@ export default function LearnPageClient({
         <div className="p-4 border-t border-stone-800 bg-stone-900/90">
           {certStatus?.isEnabled === false ? (
             <div className="p-3 rounded-xl bg-stone-800/50 border border-stone-800 text-stone-500 text-[11px] text-center">
-              Kelas ini tidak menerbitkan sertifikat
+              {t("cert_not_enabled")}
             </div>
           ) : certStatus?.isIssued ? (
             <div className="space-y-2">
               <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 flex items-center gap-2">
                 <Award size={18} className="text-emerald-400 shrink-0" />
                 <div className="min-w-0">
-                  <p className="text-xs font-bold text-emerald-300">Sertifikat Resmi Diterbitkan</p>
+                  <p className="text-xs font-bold text-emerald-300">{t("cert_issued_title")}</p>
                   <p className="text-[10px] text-emerald-400/80 font-mono truncate">
                     #{certStatus.certificate?.code}
                   </p>
@@ -730,7 +733,7 @@ export default function LearnPageClient({
                 className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white text-xs font-bold shadow-md transition-all"
               >
                 <ExternalLink size={14} />
-                <span>Lihat &amp; Cetak Sertifikat</span>
+                <span>{t("cert_view")}</span>
               </a>
             </div>
           ) : certStatus?.isEligible ? (
@@ -738,9 +741,9 @@ export default function LearnPageClient({
               <div className="p-2.5 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-300 flex items-start gap-2">
                 <Sparkles size={17} className="text-amber-400 shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-xs font-bold text-amber-200">Semua Kriteria Terpenuhi!</p>
+                  <p className="text-xs font-bold text-amber-200">{t("cert_eligible_title")}</p>
                   <p className="text-[10px] text-amber-300/80 leading-tight mt-0.5">
-                    Selamat! Anda telah menuntaskan seluruh kriteria kelulusan kelas ini.
+                    {t("cert_eligible_desc")}
                   </p>
                 </div>
               </div>
@@ -751,7 +754,7 @@ export default function LearnPageClient({
                 className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-400 hover:to-orange-500 text-white text-xs font-bold shadow-lg shadow-orange-950/40 transition-all animate-pulse disabled:opacity-50"
               >
                 {claimingCert ? <Loader2 size={14} className="animate-spin" /> : <Award size={14} />}
-                <span>Klaim Sertifikat Resmi</span>
+                <span>{t("cert_claim")}</span>
               </button>
             </div>
           ) : (
@@ -760,7 +763,7 @@ export default function LearnPageClient({
                 <div className="flex items-center justify-between mb-1.5">
                   <div className="flex items-center gap-1.5 text-xs font-semibold text-stone-300">
                     <Lock size={13} className="text-amber-500" />
-                    <span>Sertifikat Terkunci</span>
+                    <span>{t("cert_locked")}</span>
                   </div>
                   <span className="text-[11px] font-semibold text-amber-400">
                     {progress}%
@@ -771,16 +774,16 @@ export default function LearnPageClient({
                 <div className="space-y-1 pt-1.5 border-t border-stone-700/50 text-[10px]">
                   <div className="flex items-center justify-between">
                     <span className="text-stone-300">
-                      • Materi ({completedLessons.size}/{allLessons.length})
+                      • {t("criteria_material", { done: completedLessons.size, total: allLessons.length })}
                     </span>
                     {(certStatus?.criteria?.progress?.met ?? false) ||
                     progress >= (certStatus?.criteria?.progress?.required ?? 100) ? (
                       <span className="text-green-400 flex items-center gap-0.5 font-semibold">
-                        <Check size={11} /> Selesai
+                        <Check size={11} /> {t("criteria_done")}
                       </span>
                     ) : (
                       <span className="text-stone-500">
-                        Min. {certStatus?.criteria?.progress?.required ?? 100}%
+                        {t("criteria_min", { pct: certStatus?.criteria?.progress?.required ?? 100 })}
                       </span>
                     )}
                   </div>
@@ -789,14 +792,14 @@ export default function LearnPageClient({
                     (certStatus.criteria.quizzes.total > 0 ? (
                       <div className="flex items-center justify-between">
                         <span className="text-stone-300">
-                          • Kuis ({certStatus.criteria.quizzes.passed}/{certStatus.criteria.quizzes.total} Lulus)
+                          • {t("criteria_quiz", { passed: certStatus.criteria.quizzes.passed, total: certStatus.criteria.quizzes.total })}
                         </span>
                         {certStatus.criteria.quizzes.met ? (
                           <span className="text-green-400 flex items-center gap-0.5 font-semibold">
-                            <Check size={11} /> Lulus
+                            <Check size={11} /> {t("criteria_passed")}
                           </span>
                         ) : (
-                          <span className="text-amber-400 font-semibold">Belum Lulus</span>
+                          <span className="text-amber-400 font-semibold">{t("criteria_not_passed")}</span>
                         )}
                       </div>
                     ) : null)}
@@ -805,14 +808,14 @@ export default function LearnPageClient({
                     (certStatus.criteria.assignments.total > 0 ? (
                       <div className="flex items-center justify-between">
                         <span className="text-stone-300">
-                          • Tugas ({certStatus.criteria.assignments.approved}/{certStatus.criteria.assignments.total} Disetujui)
+                          • {t("criteria_assignment", { approved: certStatus.criteria.assignments.approved, total: certStatus.criteria.assignments.total })}
                         </span>
                         {certStatus.criteria.assignments.met ? (
                           <span className="text-green-400 flex items-center gap-0.5 font-semibold">
-                            <Check size={11} /> Disetujui
+                            <Check size={11} /> {t("criteria_approved")}
                           </span>
                         ) : (
-                          <span className="text-amber-400 font-semibold">Perlu Review</span>
+                          <span className="text-amber-400 font-semibold">{t("criteria_needs_review")}</span>
                         )}
                       </div>
                     ) : null)}
@@ -831,7 +834,7 @@ export default function LearnPageClient({
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
               className="p-2 rounded-xl hover:bg-stone-800 text-stone-400 hover:text-white transition-colors"
-              title={sidebarOpen ? "Tutup Silabus" : "Buka Silabus"}
+              title={sidebarOpen ? t("close_syllabus") : t("open_syllabus")}
             >
               {sidebarOpen ? <X size={18} /> : <List size={18} />}
             </button>
@@ -845,7 +848,7 @@ export default function LearnPageClient({
               href="/dashboard/my-courses"
               className="text-xs text-stone-400 hover:text-orange-400 font-medium transition-colors hidden sm:inline"
             >
-              Kembali ke Dashboard
+              {t("back_to_dashboard")}
             </Link>
           </div>
         </header>
@@ -869,7 +872,7 @@ export default function LearnPageClient({
                 </div>
                 <h3 className="text-base font-bold text-stone-200">{currentLesson.title}</h3>
                 <p className="text-xs text-stone-400 mt-1 max-w-sm mx-auto">
-                  Sesi video interaktif materi kelas. Tonton video ini dan praktikkan pada code editor Anda.
+                  {t("no_video_placeholder")}
                 </p>
               </div>
             )}
@@ -885,7 +888,7 @@ export default function LearnPageClient({
               leftIcon={<ChevronLeft size={16} />}
               className="bg-stone-800 border-stone-700 text-stone-200 hover:bg-stone-700 disabled:opacity-40"
             >
-              Sebelumnya
+              {t("prev")}
             </Button>
 
             <Button
@@ -906,12 +909,12 @@ export default function LearnPageClient({
               }
             >
               {savingProgress
-                ? "Menyimpan..."
+                ? t("saving")
                 : completedLessons.has(currentLesson.id)
-                ? "Selesai ✓"
+                ? t("done_check")
                 : nextLesson
-                ? "Tandai Selesai & Lanjut"
-                : "Tandai Selesai"}
+                ? t("mark_done_next")
+                : t("mark_done")}
             </Button>
 
             <Button
@@ -922,7 +925,7 @@ export default function LearnPageClient({
               rightIcon={<ChevronRight size={16} />}
               className="bg-stone-800 border-stone-700 text-stone-200 hover:bg-stone-700 disabled:opacity-40"
             >
-              Selanjutnya
+              {t("next")}
             </Button>
           </div>
 
@@ -930,20 +933,20 @@ export default function LearnPageClient({
           <div className="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
             <div className="flex border-b border-stone-800 mb-6 gap-2 sm:gap-4 overflow-x-auto scrollbar-none">
               {[
-                { key: "notes", label: "Materi & Rangkuman", icon: FileText },
+                { key: "notes", label: t("tab_notes"), icon: FileText },
                 {
                   key: "quiz",
-                  label: `Kuis Evaluasi (${quizzes.length})`,
+                  label: t("tab_quiz", { count: quizzes.length }),
                   icon: HelpCircle,
                 },
                 {
                   key: "assignment",
-                  label: `Tugas & Submission (${assignments.length})`,
+                  label: t("tab_assignment", { count: assignments.length }),
                   icon: FileCode2,
                 },
                 {
                   key: "discussion",
-                  label: `Forum Diskusi (${discussions.length})`,
+                  label: t("tab_discussion", { count: discussions.length }),
                   icon: MessageSquare,
                 },
               ].map(({ key, label, icon: Icon }) => (
@@ -972,7 +975,7 @@ export default function LearnPageClient({
                   </div>
                 ) : (
                   <div className="bg-stone-900/60 border border-stone-800 rounded-2xl p-6 text-center text-sm text-stone-500">
-                    Belum ada teks rangkuman materi untuk sesi ini.
+                    {t("no_notes")}
                   </div>
                 )}
               </div>
@@ -984,14 +987,14 @@ export default function LearnPageClient({
                 {loadingQuizzes ? (
                   <div className="p-8 text-center bg-stone-900 rounded-2xl border border-stone-800">
                     <Loader2 className="animate-spin text-orange-500 mx-auto mb-2" size={24} />
-                    <span className="text-xs text-stone-400">Memuat kuis kelas...</span>
+                    <span className="text-xs text-stone-400">{t("loading_quiz")}</span>
                   </div>
                 ) : quizzes.length === 0 ? (
                   <div className="bg-stone-900 border border-stone-800 rounded-2xl p-8 text-center space-y-2">
                     <HelpCircle className="mx-auto text-stone-600 mb-2" size={32} />
-                    <h3 className="text-base font-bold text-stone-200">Kuis Belum Tersedia</h3>
+                    <h3 className="text-base font-bold text-stone-200">{t("quiz_not_available")}</h3>
                     <p className="text-xs text-stone-400">
-                      Instruktur belum menambahkan kuis evaluasi untuk kelas ini.
+                      {t("quiz_not_available_desc")}
                     </p>
                   </div>
                 ) : (
@@ -1020,7 +1023,7 @@ export default function LearnPageClient({
                                 : "bg-stone-900 text-stone-400 hover:bg-stone-800"
                             }`}
                           >
-                            Kuis {idx + 1}: {q.title}
+                            {t("quiz_label", { n: idx + 1 })}: {q.title}
                           </button>
                         ))}
                       </div>
@@ -1067,7 +1070,7 @@ export default function LearnPageClient({
                                 }`}
                               >
                                 {isPassed ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
-                                Nilai: {currentScore} / 100 ({isPassed ? "LULUS" : "BELUM LULUS"})
+                                {t("score_label", { score: currentScore, status: isPassed ? t("passed") : t("not_passed") })}
                               </div>
                             )}
                           </div>
@@ -1103,7 +1106,8 @@ export default function LearnPageClient({
                                         {q.options.map((opt, optIdx) => {
                                           const isSelected = userAnswer === optIdx;
                                           const isThisCorrect = optIdx === q.correctAnswer;
-                                          const label = String.fromCharCode(65 + optIdx);                                           let optStyle =
+                                          const label = String.fromCharCode(65 + optIdx);
+                                          let optStyle =
                                             "bg-stone-950/60 border-stone-800 text-stone-300 hover:bg-stone-800/60";
 
                                           if (quizSubmitted) {
@@ -1143,7 +1147,7 @@ export default function LearnPageClient({
                                                       ? isCorrect
                                                         ? "bg-green-600 text-white"
                                                         : "bg-red-600 text-white"
-                                                      : "bg-orange-500 text-white"
+                                                        : "bg-orange-500 text-white"
                                                     : "bg-stone-800 text-stone-400"
                                                 }`}
                                               >
@@ -1180,7 +1184,7 @@ export default function LearnPageClient({
                                             className="text-green-400 mt-0.5 shrink-0"
                                           />
                                           <div>
-                                            <span className="font-bold">Pembahasan: </span>
+                                            <span className="font-bold">{t("explanation_label")}</span>
                                             {q.explanation}
                                           </div>
                                         </div>
@@ -1190,7 +1194,7 @@ export default function LearnPageClient({
                                       {quizSubmitted && !isCorrect && (
                                         <div className="p-2.5 bg-red-500/10 border border-red-500/20 rounded-xl text-xs text-red-300 flex items-center gap-2">
                                           <XCircle size={14} className="text-red-400 shrink-0" />
-                                          <span>Jawaban belum tepat. Silakan pelajari kembali materi dan kerjakan ulang untuk membuka pembahasan.</span>
+                                          <span>{t("wrong_answer")}</span>
                                         </div>
                                       )}
                                     </div>
@@ -1214,7 +1218,7 @@ export default function LearnPageClient({
                                 leftIcon={<RotateCcw size={14} />}
                                 className="bg-stone-800 border-stone-700 text-stone-200 hover:bg-stone-700"
                               >
-                                Kerjakan Ulang Kuis
+                                {t("retake_quiz")}
                               </Button>
                             ) : (
                               <Button
@@ -1228,7 +1232,7 @@ export default function LearnPageClient({
                                 className="bg-orange-600 hover:bg-orange-700 text-white"
                                 leftIcon={<CheckCircle2 size={15} />}
                               >
-                                Selesai & Cek Nilai
+                                {t("submit_quiz")}
                               </Button>
                             )}
                           </div>
@@ -1246,14 +1250,14 @@ export default function LearnPageClient({
                 {loadingAssignments ? (
                   <div className="p-8 text-center bg-stone-900 rounded-2xl border border-stone-800">
                     <Loader2 className="animate-spin text-orange-500 mx-auto mb-2" size={24} />
-                    <span className="text-xs text-stone-400">Memuat tugas kelas...</span>
+                    <span className="text-xs text-stone-400">{t("loading_assignments")}</span>
                   </div>
                 ) : assignments.length === 0 ? (
                   <div className="bg-stone-900 border border-stone-800 rounded-2xl p-8 text-center space-y-2">
                     <FileCode2 className="mx-auto text-stone-600 mb-2" size={32} />
-                    <h3 className="text-base font-bold text-stone-200">Tidak Ada Tugas Proyek</h3>
+                    <h3 className="text-base font-bold text-stone-200">{t("no_assignments")}</h3>
                     <p className="text-xs text-stone-400">
-                      Instruktur belum memberikan tugas proyek atau submission untuk kelas ini.
+                      {t("no_assignments_desc")}
                     </p>
                   </div>
                 ) : (
@@ -1290,7 +1294,7 @@ export default function LearnPageClient({
                                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-500/10 border border-orange-500/30 text-orange-300 text-xs font-semibold hover:bg-orange-500/20 transition-colors"
                                   >
                                     <Download size={13} className="text-orange-400" />
-                                    <span>Berkas Panduan: {assignment.fileName || "Unduh Panduan Tugas"}</span>
+                                    <span>{t("attachment_guide", { name: assignment.fileName || t("download_guide") })}</span>
                                   </a>
                                 </div>
                               )}
@@ -1302,22 +1306,22 @@ export default function LearnPageClient({
                               <div className="space-y-3">
                                 <div className="flex items-center justify-between flex-wrap gap-2">
                                   <span className="text-xs font-bold text-stone-400">
-                                    Status Pengumpulan:
+                                    {t("submission_status")}
                                   </span>
                                   {userSub.status === "APPROVED" ? (
                                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-green-500/20 text-green-300 border border-green-500/30">
                                       <CheckCircle2 size={13} />
-                                      Lulus ({userSub.score ?? 100}/100)
+                                      {t("approved", { score: userSub.score ?? 100 })}
                                     </span>
                                   ) : userSub.status === "REJECTED" ? (
                                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-500/20 text-red-300 border border-red-500/30">
                                       <XCircle size={13} />
-                                      Perlu Revisi ({userSub.score ?? 0}/100)
+                                      {t("rejected", { score: userSub.score ?? 0 })}
                                     </span>
                                   ) : (
                                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
                                       <Clock size={13} />
-                                      Sedang Ditinjau Mentor
+                                      {t("under_review")}
                                     </span>
                                   )}
                                 </div>
@@ -1326,7 +1330,7 @@ export default function LearnPageClient({
                                   {userSub.content && (
                                     <div>
                                       <span className="text-stone-400 block mb-1">
-                                        Tautan / Catatan Pengumpulan:
+                                        {t("submission_link_label")}
                                       </span>
                                       {userSub.content.startsWith("http") ? (
                                         <a
@@ -1348,7 +1352,7 @@ export default function LearnPageClient({
                                   {userSub.fileUrl && (
                                     <div className="pt-1">
                                       <span className="text-stone-400 block mb-1">
-                                        Berkas File yang Dikirim:
+                                        {t("submitted_file_label")}
                                       </span>
                                       <a
                                         href={userSub.fileUrl}
@@ -1358,7 +1362,7 @@ export default function LearnPageClient({
                                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-semibold transition-colors"
                                       >
                                         <Download size={13} className="text-stone-400" />
-                                        <span>{userSub.fileName || "Unduh Berkas Submission"}</span>
+                                        <span>{userSub.fileName || t("download_submission")}</span>
                                       </a>
                                     </div>
                                   )}
@@ -1367,7 +1371,7 @@ export default function LearnPageClient({
                                 {userSub.feedback && (
                                   <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-xs space-y-1">
                                     <span className="font-bold text-amber-300">
-                                      Catatan dari Mentor:
+                                      {t("mentor_note")}
                                     </span>
                                     <p className="text-stone-200 leading-relaxed">
                                       {userSub.feedback}
@@ -1378,12 +1382,12 @@ export default function LearnPageClient({
                                 {userSub.status === "REJECTED" && (
                                   <div className="pt-2 space-y-3">
                                     <label className="block text-xs font-semibold text-stone-300">
-                                      Kirim Revisi Tugas:
+                                      {t("submit_revision")}
                                     </label>
 
                                     <input
                                       type="text"
-                                      placeholder="Link GitHub / Vercel baru..."
+                                      placeholder={t("revision_placeholder")}
                                       value={submissionUrlInput[assignment.id] || ""}
                                       onChange={(e) =>
                                         setSubmissionUrlInput((prev) => ({
@@ -1422,12 +1426,12 @@ export default function LearnPageClient({
                                         {uploadingForAssignmentId === assignment.id ? (
                                           <span className="flex items-center gap-2 text-orange-400">
                                             <Loader2 size={14} className="animate-spin" />
-                                            Mengunggah file...
+                                            {t("uploading")}
                                           </span>
                                         ) : (
                                           <>
                                             <Upload size={14} />
-                                            <span>Atau unggah file revisi baru (.zip, .pdf, .docx, dll)</span>
+                                            <span>{t("upload_revision")}</span>
                                           </>
                                         )}
                                         <input
@@ -1448,7 +1452,7 @@ export default function LearnPageClient({
                                         className="bg-orange-600 hover:bg-orange-700 text-white text-xs"
                                         leftIcon={<Send size={13} />}
                                       >
-                                        Kirim Revisi Tugas
+                                        {t("submit_revision_btn")}
                                       </Button>
                                     </div>
                                   </div>
@@ -1458,7 +1462,7 @@ export default function LearnPageClient({
                               <div className="space-y-3">
                                 <div>
                                   <label className="block text-xs font-semibold text-stone-300 mb-1">
-                                    Tautan Hasil Proyek (GitHub / Website / Google Drive / Figma)
+                                    {t("submit_url_placeholder")}
                                   </label>
                                   <input
                                     type="text"
@@ -1477,7 +1481,7 @@ export default function LearnPageClient({
                                 {/* Upload File option */}
                                 <div>
                                   <label className="block text-xs font-semibold text-stone-300 mb-1">
-                                    Atau Unggah Berkas Tugas (ZIP, PDF, DOCX, Kode Sumber, Gambar)
+                                    {t("upload_file_label")}
                                   </label>
 
                                   {currentFile ? (
@@ -1507,16 +1511,13 @@ export default function LearnPageClient({
                                       {uploadingForAssignmentId === assignment.id ? (
                                         <div className="flex items-center gap-2 text-xs text-orange-400 font-semibold">
                                           <Loader2 size={16} className="animate-spin" />
-                                          Mengunggah file...
+                                          {t("uploading")}
                                         </div>
                                       ) : (
                                         <>
                                           <Upload size={18} className="text-stone-400 mb-1" />
                                           <span className="text-xs font-semibold text-stone-300">
-                                            Klik untuk memilih file dari komputer
-                                          </span>
-                                          <span className="text-[11px] text-stone-500 mt-0.5">
-                                            Mendukung arsip .zip, dokumen .pdf/.docx, kode sumber, dll.
+                                            {t("upload_file_label")}
                                           </span>
                                         </>
                                       )}
@@ -1539,7 +1540,7 @@ export default function LearnPageClient({
                                     className="bg-orange-600 hover:bg-orange-700 text-white text-xs"
                                     leftIcon={<Send size={13} />}
                                   >
-                                    Kumpulkan Tugas
+                                    {t("submit_assignment")}
                                   </Button>
                                 </div>
                               </div>
@@ -1562,13 +1563,13 @@ export default function LearnPageClient({
                   className="bg-stone-900 border border-stone-800 rounded-2xl p-5 space-y-3"
                 >
                   <h3 className="text-sm font-bold text-stone-200">
-                    Ajukan Pertanyaan ke Instruktur & Teman Kelas
+                    {t("post_discussion")}
                   </h3>
                   <textarea
                     rows={3}
                     value={newTopicText}
                     onChange={(e) => setNewTopicText(e.target.value)}
-                    placeholder="Tuliskan kendala coding atau pertanyaanmu seputar materi di sini..."
+                    placeholder={t("discussion_placeholder")}
                     className="w-full rounded-xl bg-stone-950 border border-stone-800 p-3 text-xs sm:text-sm text-stone-200 placeholder:text-stone-600 focus:outline-hidden focus:border-orange-500"
                   />
                   <div className="flex justify-end">
@@ -1579,7 +1580,7 @@ export default function LearnPageClient({
                       leftIcon={<Send size={14} />}
                       className="bg-orange-600 hover:bg-orange-700 text-white"
                     >
-                      Kirim Pertanyaan
+                      {t("post_discussion")}
                     </Button>
                   </div>
                 </form>
@@ -1587,7 +1588,9 @@ export default function LearnPageClient({
                 {loadingDiscussions ? (
                   <div className="p-8 text-center bg-stone-900 rounded-2xl border border-stone-800">
                     <Loader2 className="animate-spin text-orange-500 mx-auto mb-2" size={24} />
-                    <span className="text-xs text-stone-400">Memuat diskusi kelas...</span>
+                    <span className="text-xs text-stone-400">
+                      {locale === "en" ? "Loading discussions..." : "Memuat diskusi kelas..."}
+                    </span>
                   </div>
                 ) : discussions.length > 0 ? (
                   <div className="space-y-4">
@@ -1614,18 +1617,18 @@ export default function LearnPageClient({
                               </div>
                               <div>
                                 <span className="text-xs font-bold text-stone-200">
-                                  {d.user?.name || "Pengguna"}
+                                  {d.user?.name || (locale === "en" ? "User" : "Pengguna")}
                                 </span>
                                 {d.user?.role === "ADMIN" && (
                                   <span className="ml-2 inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-orange-600 text-white font-bold">
                                     <ShieldCheck size={11} />
-                                    Instruktur
+                                    {locale === "en" ? "Instructor" : "Instruktur"}
                                   </span>
                                 )}
                               </div>
                             </div>
                             <span className="text-[11px] text-stone-500">
-                              {new Date(d.createdAt).toLocaleDateString("id-ID", {
+                              {new Date(d.createdAt).toLocaleDateString(locale === "en" ? "en-US" : "id-ID", {
                                 day: "numeric",
                                 month: "short",
                                 hour: "2-digit",
@@ -1668,16 +1671,16 @@ export default function LearnPageClient({
                                           )}
                                         </div>
                                         <span className="font-bold text-stone-200">
-                                          {reply.user?.name || "Pengguna"}
+                                          {reply.user?.name || (locale === "en" ? "User" : "Pengguna")}
                                         </span>
                                         {isAdmin && (
                                           <span className="px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-orange-600 text-white">
-                                            Instruktur
+                                            {locale === "en" ? "Instructor" : "Instruktur"}
                                           </span>
                                         )}
                                       </div>
                                       <span className="text-[10px] text-stone-500">
-                                        {new Date(reply.createdAt).toLocaleDateString("id-ID", {
+                                        {new Date(reply.createdAt).toLocaleDateString(locale === "en" ? "en-US" : "id-ID", {
                                           day: "numeric",
                                           month: "short",
                                           hour: "2-digit",
@@ -1698,7 +1701,7 @@ export default function LearnPageClient({
                           <div className="flex gap-2">
                             <input
                               type="text"
-                              placeholder="Tulis balasan..."
+                              placeholder={t("reply_placeholder")}
                               value={replyTexts[d.id] || ""}
                               onChange={(e) =>
                                 setReplyTexts((prev) => ({ ...prev, [d.id]: e.target.value }))
@@ -1719,7 +1722,7 @@ export default function LearnPageClient({
                               className="bg-orange-600 hover:bg-orange-700 text-white text-xs shrink-0"
                               leftIcon={<Send size={12} />}
                             >
-                              Balas
+                              {t("send_reply")}
                             </Button>
                           </div>
                         </div>
@@ -1728,7 +1731,7 @@ export default function LearnPageClient({
                   </div>
                 ) : (
                   <div className="bg-stone-900/60 border border-stone-800 rounded-2xl p-8 text-center text-xs text-stone-500">
-                    Belum ada diskusi untuk materi ini. Tulis pertanyaan pertamamu di atas!
+                    {t("discussion_empty")}
                   </div>
                 )}
               </div>

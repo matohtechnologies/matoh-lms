@@ -3,6 +3,7 @@ import { Users, Search, Shield, GraduationCap, Mail } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { Badge } from "@/components/ui/badge";
+import { getTranslations, getLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { UserActions } from "./user-actions";
 
@@ -12,6 +13,9 @@ export default async function AdminUsersPage() {
   const session = await auth();
   if (!session || session.user?.role !== "ADMIN") redirect("/dashboard");
   const currentUserId = session.user.id;
+
+  const t = await getTranslations("admin");
+  const locale = await getLocale();
 
   let users: {
     id: string;
@@ -46,11 +50,11 @@ export default async function AdminUsersPage() {
   const roleBadge = (role: string) => {
     switch (role) {
       case "ADMIN":
-        return <Badge variant="warning">Admin</Badge>;
+        return <Badge variant="warning">{t("role_admin")}</Badge>;
       case "INSTRUCTOR":
-        return <Badge variant="info">Instruktur</Badge>;
+        return <Badge variant="info">{t("role_instructor")}</Badge>;
       default:
-        return <Badge variant="default">Siswa</Badge>;
+        return <Badge variant="default">{t("role_student")}</Badge>;
     }
   };
 
@@ -62,15 +66,15 @@ export default async function AdminUsersPage() {
             className="text-2xl font-bold text-stone-900"
             style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
           >
-            Manajemen Pengguna
+            {t("users_title")}
           </h1>
           <p className="text-stone-500 text-sm mt-1">
-            Kelola akses, peran, dan riwayat aktivitas seluruh anggota platform
+            {t("users_subtitle")}
           </p>
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs bg-stone-100 text-stone-600 px-3 py-1.5 rounded-full font-medium">
-            Total {users.length} Terdaftar
+            {t("total_registered", { count: users.length })}
           </span>
         </div>
       </div>
@@ -81,16 +85,16 @@ export default async function AdminUsersPage() {
           <div className="flex items-center gap-3 w-full sm:w-80">
             <Search size={16} className="text-stone-400 shrink-0" />
             <input
-              placeholder="Cari berdasarkan nama atau email..."
+              placeholder={t("search_users")}
               className="w-full text-sm text-stone-700 placeholder:text-stone-400 focus:outline-none"
             />
           </div>
           <div className="flex items-center gap-2 self-start sm:self-auto text-xs">
-            <span className="text-stone-400">Filter Role:</span>
-            <button className="px-2.5 py-1 rounded-lg bg-orange-50 text-orange-700 font-medium">Semua</button>
-            <button className="px-2.5 py-1 rounded-lg hover:bg-stone-50 text-stone-600 transition-colors">Siswa</button>
-            <button className="px-2.5 py-1 rounded-lg hover:bg-stone-50 text-stone-600 transition-colors">Instruktur</button>
-            <button className="px-2.5 py-1 rounded-lg hover:bg-stone-50 text-stone-600 transition-colors">Admin</button>
+            <span className="text-stone-400">{t("filter_role")}</span>
+            <button className="px-2.5 py-1 rounded-lg bg-orange-50 text-orange-700 font-medium">{t("filter_all")}</button>
+            <button className="px-2.5 py-1 rounded-lg hover:bg-stone-50 text-stone-600 transition-colors">{t("filter_student")}</button>
+            <button className="px-2.5 py-1 rounded-lg hover:bg-stone-50 text-stone-600 transition-colors">{t("filter_instructor")}</button>
+            <button className="px-2.5 py-1 rounded-lg hover:bg-stone-50 text-stone-600 transition-colors">{t("filter_admin")}</button>
           </div>
         </div>
 
@@ -99,12 +103,12 @@ export default async function AdminUsersPage() {
           <table className="w-full text-left">
             <thead>
               <tr className="bg-stone-50/80 border-b border-stone-100">
-                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Pengguna</th>
-                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Role</th>
-                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Kelas Diikuti</th>
-                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Bergabung</th>
-                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Status</th>
-                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide text-right">Aksi</th>
+                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_user")}</th>
+                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_role")}</th>
+                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_enrolled")}</th>
+                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_joined")}</th>
+                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_active")}</th>
+                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide text-right">{t("col_action")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-stone-100">
@@ -124,13 +128,13 @@ export default async function AdminUsersPage() {
                   <td className="px-5 py-4">{roleBadge(user.role)}</td>
                   <td className="px-5 py-4 text-sm text-stone-600">
                     {user.enrolledCount > 0 ? (
-                      <span className="font-medium text-stone-900">{user.enrolledCount} Kelas</span>
+                      <span className="font-medium text-stone-900">{t("enrolled_count", { count: user.enrolledCount })}</span>
                     ) : (
                       <span className="text-stone-400">-</span>
                     )}
                   </td>
                   <td className="px-5 py-4 text-sm text-stone-500">
-                    {user.createdAt.toLocaleDateString("id-ID", {
+                    {user.createdAt.toLocaleDateString(locale === "en" ? "en-US" : "id-ID", {
                       day: "numeric",
                       month: "short",
                       year: "numeric",
@@ -139,7 +143,7 @@ export default async function AdminUsersPage() {
                   <td className="px-5 py-4">
                     <span className="inline-flex items-center gap-1.5 text-xs text-green-700 font-medium bg-green-50 px-2 py-0.5 rounded-full border border-green-200/50">
                       <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                      Aktif
+                      {t("status_active")}
                     </span>
                   </td>
                   <td className="px-5 py-4 text-right">

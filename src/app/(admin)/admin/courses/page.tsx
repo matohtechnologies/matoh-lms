@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { Badge, LevelBadge } from "@/components/ui/badge";
 import { formatCurrency } from "@/lib/utils";
+import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import { DeleteCourseButton } from "./delete-course-button";
 
@@ -13,6 +14,8 @@ export const metadata: Metadata = { title: "Manajemen Kelas — Admin" };
 export default async function AdminCoursesPage() {
   const session = await auth();
   if (!session || session.user?.role !== "ADMIN") redirect("/dashboard");
+
+  const t = await getTranslations("admin");
 
   const courses = await prisma.course.findMany({
     include: {
@@ -28,16 +31,16 @@ export default async function AdminCoursesPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-stone-900" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-            Manajemen Kelas
+            {t("courses_title")}
           </h1>
-          <p className="text-stone-500 text-sm mt-1">{courses.length} kelas terdaftar</p>
+          <p className="text-stone-500 text-sm mt-1">{t("courses_count", { count: courses.length })}</p>
         </div>
         <Link
           href="/admin/courses/new"
           className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium transition-colors"
         >
           <Plus size={16} />
-          Tambah Kelas
+          {t("add_class")}
         </Link>
       </div>
 
@@ -46,27 +49,27 @@ export default async function AdminCoursesPage() {
         <div className="p-4 border-b border-stone-100 flex items-center gap-3">
           <Search size={16} className="text-stone-400" />
           <input
-            placeholder="Cari kelas..."
+            placeholder={t("search_courses")}
             className="flex-1 text-sm text-stone-700 placeholder:text-stone-400 focus:outline-none"
           />
         </div>
 
         {courses.length === 0 ? (
           <div className="p-12 text-center">
-            <p className="text-stone-400 text-sm">Belum ada kelas. Tambahkan kelas pertama!</p>
+            <p className="text-stone-400 text-sm">{t("no_courses")}</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="bg-stone-50 border-b border-stone-100">
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Kelas</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Kategori</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Level</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Harga</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Pelajar</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Status</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Aksi</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_course")}</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_category")}</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_level")}</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_price")}</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_learners")}</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_status")}</th>
+                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_action")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-stone-100">
@@ -85,7 +88,7 @@ export default async function AdminCoursesPage() {
                       <LevelBadge level={course.level} />
                     </td>
                     <td className="px-5 py-4 text-sm text-stone-900 font-medium">
-                      {course.price === 0 ? "Gratis" : formatCurrency(course.price)}
+                      {course.price === 0 ? t("free") : formatCurrency(course.price)}
                     </td>
                     <td className="px-5 py-4 text-sm text-stone-600">
                       {course._count.enrollments.toLocaleString()}
@@ -103,7 +106,7 @@ export default async function AdminCoursesPage() {
                           title="Kelola Materi & Kurikulum"
                         >
                           <BookOpen size={13} />
-                          <span className="hidden sm:inline">Materi</span>
+                          <span className="hidden sm:inline">{t("btn_content")}</span>
                         </Link>
                         <Link
                           href={`/courses/${course.slug}`}
