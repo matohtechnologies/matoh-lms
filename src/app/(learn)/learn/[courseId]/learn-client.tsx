@@ -197,14 +197,9 @@ export default function LearnPageClient({
 
   const [currentLesson, setCurrentLesson] = useState<LearnLesson>(defaultLesson);
   const [completedLessons, setCompletedLessons] = useState<Set<string>>(
-    new Set(
-      initialCompletedLessonIds.length > 0
-        ? initialCompletedLessonIds
-        : allLessons[0]?.id
-        ? [allLessons[0].id]
-        : []
-    )
+    new Set(initialCompletedLessonIds)
   );
+  const [savingProgress, setSavingProgress] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeTab, setActiveTab] = useState<"notes" | "quiz" | "assignment" | "discussion">("notes");
 
@@ -401,22 +396,66 @@ export default function LearnPageClient({
     fetchCertStatus();
   }, [fetchQuizzes, fetchAssignments, fetchDiscussions, fetchCertStatus]);
 
-  const markComplete = async () => {
-    if (!completedLessons.has(currentLesson.id)) {
-      setCompletedLessons((prev) => new Set([...prev, currentLesson.id]));
-      try {
-        await fetch("/api/progress", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ lessonId: currentLesson.id, courseId: course.id }),
+  const toggleLessonComplete = async (targetLessonId?: string) => {
+    const lessonId = targetLessonId || currentLesson.id;
+    const isCurrentlyCompleted = completedLessons.has(lessonId);
+    const newCompleted = !isCurrentlyCompleted;
+
+    // Optimistically update completedLessons in state
+    setCompletedLessons((prev) => {
+      const next = new Set(prev);
+      if (newCompleted) {
+        next.add(lessonId);
+      } else {
+        next.delete(lessonId);
+      }
+      return next;
+    });
+
+    try {
+      setSavingProgress(true);
+      const res = await fetch("/api/progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          lessonId,
+          courseId: course.id,
+          completed: newCompleted,
+        }),
+      });
+
+      if (!res.ok) {
+        // Revert on error
+        setCompletedLessons((prev) => {
+          const next = new Set(prev);
+          if (isCurrentlyCompleted) next.add(lessonId);
+          else next.delete(lessonId);
+          return next;
         });
-        fetchCertStatus();
-      } catch {}
+      } else {
+        // Immediately synchronize certificate status with DB
+        await fetchCertStatus();
+      }
+    } catch (err) {
+      console.error("Failed to update progress:", err);
+      // Revert on error
+      setCompletedLessons((prev) => {
+        const next = new Set(prev);
+        if (isCurrentlyCompleted) next.add(lessonId);
+        else next.delete(lessonId);
+        return next;
+      });
+    } finally {
+      setSavingProgress(false);
     }
-    if (nextLesson) {
+
+    // If marked as completed on current lesson and there is a next lesson, advance to next
+    if (newCompleted && lessonId === currentLesson.id && nextLesson) {
       setCurrentLesson(nextLesson);
     }
   };
+
+  const markComplete = () => toggleLessonComplete();
 
   // Upload Student Submission File
   const handleStudentFileUpload = async (
@@ -623,28 +662,43 @@ export default function LearnPageClient({
                   const isActive = lesson.id === currentLesson.id;
                   const isCompleted = completedLessons.has(lesson.id);
                   return (
-                    <button
+                    <div
                       key={lesson.id}
-                      onClick={() => setCurrentLesson(lesson)}
                       className={`w-full flex items-center gap-3 px-3.5 py-2.5 text-left transition-all ${
                         isActive
                           ? "bg-orange-600/20 text-orange-300 font-semibold border-l-2 border-orange-500"
                           : "hover:bg-stone-800/40 text-stone-300 border-l-2 border-transparent"
                       }`}
                     >
-                      <div
-                        className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-colors ${
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleLessonComplete(lesson.id);
+                        }}
+                        className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-transform hover:scale-110 ${
                           isCompleted
                             ? "bg-green-600 text-white"
                             : isActive
                             ? "border-2 border-orange-500 text-orange-400"
                             : "border border-stone-600 text-stone-500"
                         }`}
+                        title={
+                          isCompleted
+                            ? "Klik untuk membatalkan selesai"
+                            : "Klik untuk tandai selesai"
+                        }
                       >
                         {isCompleted ? <CheckCircle size={12} /> : <Play size={8} />}
-                      </div>
-                      <span className="text-xs truncate flex-1">{lesson.title}</span>
-                    </button>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setCurrentLesson(lesson)}
+                        className="text-xs truncate flex-1 text-left hover:text-white transition-colors"
+                      >
+                        {lesson.title}
+                      </button>
+                    </div>
                   );
                 })}
               </div>
@@ -709,7 +763,7 @@ export default function LearnPageClient({
                     <span>Sertifikat Terkunci</span>
                   </div>
                   <span className="text-[11px] font-semibold text-amber-400">
-                    {certStatus?.criteria?.progress.current ?? progress}%
+                    {progress}%
                   </span>
                 </div>
 
@@ -719,13 +773,14 @@ export default function LearnPageClient({
                     <span className="text-stone-300">
                       • Materi ({completedLessons.size}/{allLessons.length})
                     </span>
-                    {certStatus?.criteria?.progress.met ? (
+                    {(certStatus?.criteria?.progress?.met ?? false) ||
+                    progress >= (certStatus?.criteria?.progress?.required ?? 100) ? (
                       <span className="text-green-400 flex items-center gap-0.5 font-semibold">
                         <Check size={11} /> Selesai
                       </span>
                     ) : (
                       <span className="text-stone-500">
-                        Min. {certStatus?.criteria?.progress.required ?? 100}%
+                        Min. {certStatus?.criteria?.progress?.required ?? 100}%
                       </span>
                     )}
                   </div>
@@ -835,15 +890,24 @@ export default function LearnPageClient({
 
             <Button
               size="sm"
-              onClick={markComplete}
-              leftIcon={<CheckCircle size={15} />}
+              onClick={() => toggleLessonComplete()}
+              disabled={savingProgress}
+              leftIcon={
+                savingProgress ? (
+                  <Loader2 size={15} className="animate-spin" />
+                ) : (
+                  <CheckCircle size={15} />
+                )
+              }
               className={
                 completedLessons.has(currentLesson.id)
-                  ? "bg-green-600 hover:bg-green-700 text-white"
-                  : "bg-orange-600 hover:bg-orange-700 text-white"
+                  ? "bg-green-600 hover:bg-green-700 text-white shadow-sm"
+                  : "bg-orange-600 hover:bg-orange-700 text-white shadow-sm"
               }
             >
-              {completedLessons.has(currentLesson.id)
+              {savingProgress
+                ? "Menyimpan..."
+                : completedLessons.has(currentLesson.id)
                 ? "Selesai ✓"
                 : nextLesson
                 ? "Tandai Selesai & Lanjut"

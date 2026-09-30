@@ -50,9 +50,17 @@ export async function GET(
     }
 
     // Check enrollment
-    const enrollment = await prisma.enrollment.findUnique({
+    let enrollment = await prisma.enrollment.findUnique({
       where: { userId_courseId: { userId, courseId: course.id } },
     });
+
+    if (!enrollment && session.user?.role === "ADMIN") {
+      enrollment = await prisma.enrollment.upsert({
+        where: { userId_courseId: { userId, courseId: course.id } },
+        create: { userId, courseId: course.id },
+        update: {},
+      });
+    }
 
     if (!enrollment) {
       return NextResponse.json(
