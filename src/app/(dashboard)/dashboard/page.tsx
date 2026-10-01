@@ -129,6 +129,7 @@ export default async function DashboardPage({
     completedLessons: number;
     course: {
       title: string;
+      thumbnail: string | null;
       totalLessons: number | null;
       category: { name: string };
       instructor: { name: string | null };
@@ -208,175 +209,230 @@ export default async function DashboardPage({
     : t("start_journey");
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-7">
+      {/* Admin Preview Banner (if admin) */}
       {session.user?.role === "ADMIN" && (
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-stone-900 text-white shadow-warm border border-stone-800">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-gradient-to-r from-orange-50 via-amber-50 to-orange-50/70 border border-orange-200/80 text-stone-900 shadow-2xs">
           <div className="flex items-center gap-3">
-            <span className="text-xl">👑</span>
+            <div className="w-9 h-9 rounded-xl bg-orange-600 text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-2xs">
+              👑
+            </div>
             <div>
-              <p className="text-sm font-semibold text-orange-400">
+              <p className="text-xs font-bold text-orange-950">
                 {t("admin_preview_mode")}
               </p>
-              <p className="text-xs text-stone-400">
+              <p className="text-[11px] text-stone-600">
                 {t("admin_preview_desc")}
               </p>
             </div>
           </div>
           <Link
             href="/admin"
-            className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-orange-600 hover:bg-orange-500 text-white text-xs font-semibold transition-colors shadow-sm shrink-0"
+            className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold transition-colors shadow-2xs shrink-0"
           >
             {t("return_admin")}
           </Link>
         </div>
       )}
 
-      {/* Welcome Header */}
-      <div className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl p-6 text-white relative overflow-hidden">
-        <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-white/10 pointer-events-none" />
-        <div className="absolute -right-4 -bottom-8 w-28 h-28 rounded-full bg-white/10 pointer-events-none" />
-        <div className="relative z-10">
-          <p className="text-orange-100 text-sm font-medium mb-1">
-            {greeting}, {firstName}! 👋
-          </p>
-          <h1
-            className="text-2xl font-bold mb-3"
-            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
-          >
-            {headlineText}
-          </h1>
+      {/* Welcome Hero Banner */}
+      <div className="bg-gradient-to-br from-orange-600 via-orange-500 to-amber-600 rounded-3xl p-6 sm:p-8 text-white relative overflow-hidden shadow-warm">
+        {/* Subtle Decorative Aura */}
+        <div className="absolute -right-16 -top-16 w-56 h-56 rounded-full bg-white/10 pointer-events-none blur-xl" />
+        <div className="absolute -left-10 -bottom-10 w-44 h-44 rounded-full bg-amber-400/20 pointer-events-none blur-2xl" />
+
+        <div className="relative z-10 space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-amber-950 bg-white/90 backdrop-blur-xs px-3 py-1 rounded-full shadow-2xs">
+              <span>👋</span> {greeting}, {firstName}!
+            </span>
+            <span className="text-[11px] text-orange-100/90 font-medium">
+              Earthy Learning Hub
+            </span>
+          </div>
+
+          <div>
+            <h1
+              className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white max-w-xl leading-tight"
+              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            >
+              {headlineText}
+            </h1>
+            <p className="text-orange-100 text-xs sm:text-sm mt-1 max-w-lg leading-relaxed">
+              Tingkatkan keahlian Anda setiap hari melalui kurikulum terstruktur, proyek praktis, dan sertifikasi resmi.
+            </p>
+          </div>
+
+          {/* Embedded Course Resume Card */}
           {lastEnrollment ? (
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <p className="text-orange-100 text-xs mb-1">
-                  {t("continue_label")}
-                </p>
-                <p className="text-white font-medium text-sm truncate max-w-xs">
-                  {lastEnrollment.course.title}
-                </p>
-                <div className="mt-2 flex items-center gap-3">
-                  <div className="flex-1 max-w-xs h-1.5 rounded-full bg-white/30">
-                    <div
-                      className="h-full rounded-full bg-white"
-                      style={{ width: `${lastEnrollment.progressPct}%` }}
+            <div className="mt-4 p-4 sm:p-5 rounded-2xl bg-white/15 backdrop-blur-md border border-white/25 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-3.5 min-w-0">
+                {lastEnrollment.course.thumbnail ? (
+                  <div className="w-14 h-11 rounded-xl overflow-hidden bg-white/20 shrink-0 border border-white/30 shadow-2xs">
+                    <img
+                      src={lastEnrollment.course.thumbnail}
+                      alt={lastEnrollment.course.title}
+                      className="w-full h-full object-cover"
                     />
                   </div>
-                  <span className="text-xs text-orange-100 font-medium shrink-0">
-                    {lastEnrollment.progressPct}%
+                ) : (
+                  <div className="w-12 h-11 rounded-xl bg-white/20 flex items-center justify-center shrink-0 border border-white/30 shadow-2xs">
+                    <BookOpen size={20} className="text-white" />
+                  </div>
+                )}
+                <div className="min-w-0">
+                  <span className="text-[10px] uppercase tracking-wider font-extrabold text-orange-200 block">
+                    {t("continue_label")}
                   </span>
+                  <p className="text-sm font-bold text-white truncate max-w-xs sm:max-w-md">
+                    {lastEnrollment.course.title}
+                  </p>
+                  <div className="flex items-center gap-2.5 mt-1.5">
+                    <div className="w-28 sm:w-44 h-1.5 rounded-full bg-white/30 overflow-hidden">
+                      <div
+                        className="h-full bg-white rounded-full transition-all duration-500"
+                        style={{ width: `${lastEnrollment.progressPct}%` }}
+                      />
+                    </div>
+                    <span className="text-[11px] font-bold text-white">
+                      {lastEnrollment.progressPct}%
+                    </span>
+                  </div>
                 </div>
               </div>
+
               <Link
                 href={`/learn/${lastEnrollment.courseId}`}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white text-orange-600 text-sm font-semibold hover:bg-orange-50 transition-colors shrink-0 shadow-sm"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-white text-orange-700 text-xs font-bold hover:bg-orange-50 hover:scale-102 transition-all shrink-0 shadow-xs"
               >
-                <PlayCircle size={16} />
+                <PlayCircle size={15} className="text-orange-600" />
                 {t("continue_btn")}
               </Link>
             </div>
           ) : (
-            <Link
-              href="/courses"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white text-orange-600 text-sm font-semibold hover:bg-orange-50 transition-colors shadow-sm"
-            >
-              <GraduationCap size={16} />
-              {t("explore_courses")}
-            </Link>
+            <div className="pt-2">
+              <Link
+                href="/courses"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-orange-700 text-xs font-bold hover:bg-orange-50 transition-all shadow-xs"
+              >
+                <GraduationCap size={15} />
+                {t("explore_courses")}
+              </Link>
+            </div>
           )}
         </div>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map(({ label, value, icon: Icon, color, href }) => (
           <Link
             key={label}
             href={href}
-            className="bg-white rounded-2xl border border-stone-200 p-4 shadow-warm hover:shadow-warm-lg hover:-translate-y-0.5 transition-all duration-150 group"
+            className="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-xs hover:shadow-warm hover:-translate-y-0.5 transition-all duration-200 group"
           >
             <div
-              className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${
+              className={`w-11 h-11 rounded-xl flex items-center justify-center mb-3 transition-transform group-hover:scale-105 ${
                 color === "orange"
-                  ? "bg-orange-50"
+                  ? "bg-orange-50 text-orange-600"
                   : color === "green"
-                  ? "bg-green-50"
+                  ? "bg-emerald-50 text-emerald-600"
                   : color === "amber"
-                  ? "bg-amber-50"
-                  : "bg-blue-50"
+                  ? "bg-amber-50 text-amber-600"
+                  : "bg-blue-50 text-blue-600"
               }`}
             >
-              <Icon
-                size={18}
-                className={
-                  color === "orange"
-                    ? "text-orange-600"
-                    : color === "green"
-                    ? "text-green-600"
-                    : color === "amber"
-                    ? "text-amber-600"
-                    : "text-blue-600"
-                }
-              />
+              <Icon size={20} />
             </div>
-            <p className="text-2xl font-bold text-stone-900">{value}</p>
-            <p className="text-xs text-stone-500 mt-0.5">{label}</p>
+            <p
+              className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight"
+              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            >
+              {value}
+            </p>
+            <p className="text-xs font-medium text-stone-500 mt-1">{label}</p>
           </Link>
         ))}
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-5">
-        {/* My Courses */}
+      {/* Content Columns: My Courses (2 cols) & Recent Activity (1 col) */}
+      <div className="grid lg:grid-cols-3 gap-6">
+        {/* Left: My Courses */}
         <div className="lg:col-span-2">
-          <div className="bg-white rounded-2xl border border-stone-200 overflow-hidden">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-stone-100">
-              <h2 className="font-semibold text-stone-900">{t("my_courses_section")}</h2>
+          <div className="bg-white rounded-2xl border border-stone-200/80 shadow-xs overflow-hidden">
+            <div className="flex items-center justify-between px-6 py-4.5 border-b border-stone-100">
+              <div>
+                <h2
+                  className="font-bold text-stone-900 text-base"
+                  style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                >
+                  {t("my_courses_section")}
+                </h2>
+                <p className="text-xs text-stone-500 mt-0.5">Daftar kelas yang sedang Anda pelajari</p>
+              </div>
               <Link
                 href="/dashboard/my-courses"
-                className="text-xs text-orange-600 hover:underline flex items-center gap-1"
+                className="inline-flex items-center gap-1 text-xs font-semibold text-orange-600 hover:text-orange-700 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded-lg transition-colors border border-orange-200/60"
               >
                 {t("view_all")} <ArrowRight size={12} />
               </Link>
             </div>
 
             {enrollments.length > 0 ? (
-              <div className="divide-y divide-stone-50">
+              <div className="divide-y divide-stone-100">
                 {enrollments.map((enrollment) => (
                   <div
                     key={enrollment.id}
-                    className="flex items-center gap-4 px-5 py-4 hover:bg-stone-50/60 transition-colors group"
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 hover:bg-stone-50/70 transition-colors group"
                   >
-                    {/* Thumbnail */}
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-100 to-amber-100 flex items-center justify-center shrink-0">
-                      <BookOpen size={20} className="text-orange-500" />
-                    </div>
+                    <div className="flex items-center gap-3.5 min-w-0 flex-1">
+                      {enrollment.course.thumbnail ? (
+                        <div className="w-16 h-12 rounded-xl overflow-hidden bg-stone-100 border border-stone-200/80 shrink-0 relative">
+                          <img
+                            src={enrollment.course.thumbnail}
+                            alt={enrollment.course.title}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-16 h-12 rounded-xl bg-orange-50 border border-orange-200/60 flex items-center justify-center text-orange-600 shrink-0">
+                          <BookOpen size={20} />
+                        </div>
+                      )}
 
-                    {/* Info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm font-medium text-stone-900 truncate">
-                          {enrollment.course.title}
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <p className="text-sm font-bold text-stone-900 truncate">
+                            {enrollment.course.title}
+                          </p>
+                          {enrollment.completedAt && (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60 shrink-0">
+                              <CheckCircle2 size={11} /> Selesai
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-stone-500 mt-0.5">
+                          {enrollment.course.category.name} • {enrollment.course.instructor?.name || "Instruktur"}
                         </p>
-                        {enrollment.completedAt && (
-                          <CheckCircle2 size={14} className="text-green-500 shrink-0" />
-                        )}
-                      </div>
-                      <p className="text-xs text-stone-400 mt-0.5">
-                        {enrollment.course.category.name}
-                      </p>
-                      <div className="flex items-center gap-2 mt-2">
-                        <Progress value={enrollment.progressPct} size="sm" />
-                        <span className="text-[11px] text-stone-500 shrink-0">
-                          {enrollment.progressPct}%
-                        </span>
+                        <div className="flex items-center gap-3 mt-2 max-w-sm">
+                          <div className="flex-1 h-2 rounded-full bg-stone-100 overflow-hidden">
+                            <div
+                              className="h-full bg-orange-600 rounded-full transition-all duration-300"
+                              style={{ width: `${enrollment.progressPct}%` }}
+                            />
+                          </div>
+                          <span className="text-[11px] font-bold text-stone-600 shrink-0">
+                            {enrollment.progressPct}%
+                          </span>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Action */}
                     <Link
                       href={`/learn/${enrollment.courseId}`}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-50 text-orange-700 text-xs font-medium hover:bg-orange-100 transition-colors shrink-0 opacity-0 group-hover:opacity-100"
+                      className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-orange-50 hover:bg-orange-600 text-orange-700 hover:text-white text-xs font-bold border border-orange-200/80 hover:border-transparent transition-all shrink-0 shadow-2xs"
                     >
-                      <PlayCircle size={13} />
+                      <PlayCircle size={14} />
                       {enrollment.progressPct === 0
                         ? t("start")
                         : enrollment.completedAt
@@ -387,19 +443,19 @@ export default async function DashboardPage({
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12">
-                <div className="w-16 h-16 rounded-2xl bg-orange-50 flex items-center justify-center mx-auto mb-4">
-                  <BookOpen size={28} className="text-orange-300" />
+              <div className="text-center py-16 px-4">
+                <div className="w-14 h-14 rounded-2xl bg-orange-50 text-orange-500 flex items-center justify-center mx-auto mb-3.5">
+                  <BookOpen size={24} />
                 </div>
-                <p className="text-stone-700 font-medium mb-1">{t("no_courses_title")}</p>
-                <p className="text-sm text-stone-400 mb-5">
+                <p className="text-stone-900 font-bold text-sm mb-1">{t("no_courses_title")}</p>
+                <p className="text-xs text-stone-500 mb-5 max-w-sm mx-auto leading-relaxed">
                   {t("no_courses_desc")}
                 </p>
                 <Link
                   href="/courses"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 text-white text-sm font-medium hover:bg-orange-700 transition-colors"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold shadow-xs transition-colors"
                 >
-                  <Zap size={15} />
+                  <Zap size={14} />
                   {t("explore_courses")}
                 </Link>
               </div>
@@ -407,28 +463,33 @@ export default async function DashboardPage({
           </div>
         </div>
 
-        {/* Right Column */}
-        <div className="space-y-4">
+        {/* Right: Recent Activity & Quick Links */}
+        <div className="space-y-6">
           {/* Recent Activity */}
-          <div className="bg-white rounded-2xl border border-stone-200 overflow-hidden">
+          <div className="bg-white rounded-2xl border border-stone-200/80 shadow-xs overflow-hidden">
             <div className="px-5 py-4 border-b border-stone-100">
-              <h2 className="font-semibold text-stone-900">{t("recent_activity")}</h2>
+              <h2
+                className="font-bold text-stone-900 text-sm"
+                style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              >
+                {t("recent_activity")}
+              </h2>
             </div>
             {recentActivity.length > 0 ? (
-              <div className="divide-y divide-stone-50">
+              <div className="divide-y divide-stone-50 p-2">
                 {recentActivity.map((activity) => (
-                  <div key={activity.id} className="flex items-start gap-3 px-5 py-3.5">
-                    <div className="w-7 h-7 rounded-lg bg-green-50 flex items-center justify-center shrink-0 mt-0.5">
-                      <TrendingUp size={13} className="text-green-600" />
+                  <div key={activity.id} className="flex items-start gap-3 p-3 rounded-xl hover:bg-stone-50 transition-colors">
+                    <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5 border border-emerald-200/60">
+                      <TrendingUp size={13} />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-xs font-medium text-stone-700 leading-snug">
+                      <p className="text-xs font-semibold text-stone-800 leading-snug">
                         {t("lesson_completed")}
                       </p>
                       <p className="text-[11px] text-stone-500 truncate mt-0.5">
                         {activity.lesson.title}
                       </p>
-                      <p className="text-[10px] text-stone-400 mt-0.5">
+                      <p className="text-[10px] text-stone-400 mt-0.5 font-medium">
                         {new Date(activity.completedAt).toLocaleDateString(
                           isEn ? "en-US" : "id-ID",
                           {
@@ -444,17 +505,22 @@ export default async function DashboardPage({
                 ))}
               </div>
             ) : (
-              <div className="text-center py-8">
-                <Clock size={28} className="text-stone-200 mx-auto mb-2" />
+              <div className="text-center py-10">
+                <Clock size={24} className="text-stone-300 mx-auto mb-2" />
                 <p className="text-xs text-stone-400">{t("no_activity")}</p>
               </div>
             )}
           </div>
 
-          {/* Quick Links */}
-          <div className="bg-white rounded-2xl border border-stone-200 p-5">
-            <h2 className="font-semibold text-stone-900 mb-3">{t("quick_menu")}</h2>
-            <div className="space-y-2">
+          {/* Quick Menu */}
+          <div className="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-xs space-y-3">
+            <h2
+              className="font-bold text-stone-900 text-sm"
+              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            >
+              {t("quick_menu")}
+            </h2>
+            <div className="space-y-1.5">
               {[
                 { href: "/courses", labelKey: "browse_new_courses" as const, icon: GraduationCap, color: "orange" },
                 { href: "/dashboard/certificates", labelKey: "view_certificates" as const, icon: Award, color: "amber" },
@@ -464,38 +530,25 @@ export default async function DashboardPage({
                 <Link
                   key={href}
                   href={href}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-stone-50 transition-colors group"
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-stone-50 text-stone-700 hover:text-stone-900 text-xs font-semibold transition-colors border border-transparent hover:border-stone-200/60 group"
                 >
                   <div
-                    className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+                    className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
                       color === "orange"
-                        ? "bg-orange-50"
+                        ? "bg-orange-50 text-orange-600"
                         : color === "amber"
-                        ? "bg-amber-50"
+                        ? "bg-amber-50 text-amber-600"
                         : color === "blue"
-                        ? "bg-blue-50"
-                        : "bg-green-50"
+                        ? "bg-blue-50 text-blue-600"
+                        : "bg-emerald-50 text-emerald-600"
                     }`}
                   >
-                    <Icon
-                      size={15}
-                      className={
-                        color === "orange"
-                          ? "text-orange-600"
-                          : color === "amber"
-                          ? "text-amber-600"
-                          : color === "blue"
-                          ? "text-blue-600"
-                          : "text-green-600"
-                      }
-                    />
+                    <Icon size={14} />
                   </div>
-                  <span className="text-sm text-stone-700 group-hover:text-stone-900 transition-colors">
-                    {t(labelKey)}
-                  </span>
+                  <span className="truncate">{t(labelKey)}</span>
                   <ArrowRight
-                    size={14}
-                    className="ml-auto text-stone-300 group-hover:text-orange-500 transition-colors"
+                    size={13}
+                    className="ml-auto text-stone-300 group-hover:text-orange-600 transition-colors"
                   />
                 </Link>
               ))}

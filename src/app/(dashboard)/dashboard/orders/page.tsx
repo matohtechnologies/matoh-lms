@@ -77,22 +77,25 @@ export default async function OrdersPage() {
     .reduce((sum, o) => sum + o.amount, 0);
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1
-          className="text-2xl font-bold text-stone-900"
-          style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
-        >
-          {t("orders_title")}
-        </h1>
-        <p className="text-stone-500 text-sm mt-1">
-          {t("transactions_count", { count: orders.length })}
-        </p>
+    <div className="space-y-7">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-stone-200/60">
+        <div>
+          <h1
+            className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight"
+            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+          >
+            {t("orders_title")}
+          </h1>
+          <p className="text-stone-500 text-xs sm:text-sm mt-1">
+            {t("transactions_count", { count: orders.length })}
+          </p>
+        </div>
       </div>
 
       {/* Summary Cards */}
       {orders.length > 0 && (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {[
             {
               label: t("total_paid"),
@@ -117,17 +120,18 @@ export default async function OrdersPage() {
           ].map(({ label, value, color }) => (
             <div
               key={label}
-              className="bg-white rounded-xl border border-stone-200 p-4 shadow-warm"
+              className="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-xs hover:shadow-warm transition-all duration-200"
             >
-              <p className="text-xs text-stone-500 mb-1">{label}</p>
+              <p className="text-xs font-medium text-stone-500 mb-1">{label}</p>
               <p
-                className={`text-lg font-bold ${
+                className={`text-xl sm:text-2xl font-extrabold tracking-tight ${
                   color === "green"
-                    ? "text-green-700"
+                    ? "text-emerald-700"
                     : color === "amber"
-                    ? "text-amber-600"
+                    ? "text-amber-700"
                     : "text-red-600"
                 }`}
+                style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
               >
                 {value}
               </p>
@@ -137,44 +141,47 @@ export default async function OrdersPage() {
       )}
 
       {orders.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-stone-200 p-14 text-center">
-          <div className="w-16 h-16 rounded-2xl bg-stone-100 flex items-center justify-center mx-auto mb-4">
-            <ShoppingBag size={28} className="text-stone-400" />
+        <div className="bg-white rounded-3xl border border-stone-200/80 p-16 text-center shadow-xs">
+          <div className="w-16 h-16 rounded-2xl bg-orange-50 text-orange-500 flex items-center justify-center mx-auto mb-4 border border-orange-200/60 shadow-2xs">
+            <ShoppingBag size={28} />
           </div>
-          <h3 className="text-lg font-semibold text-stone-900 mb-2">
+          <h3
+            className="text-lg font-bold text-stone-900 mb-1.5"
+            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+          >
             {t("no_orders_title")}
           </h3>
-          <p className="text-stone-500 text-sm mb-6">
+          <p className="text-stone-500 text-xs sm:text-sm mb-6 max-w-sm mx-auto leading-relaxed">
             {t("no_orders_desc")}
           </p>
           <Link
             href="/courses"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 text-white text-sm font-medium hover:bg-orange-700 transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold shadow-xs transition-colors"
           >
-            <GraduationCap size={16} />
+            <GraduationCap size={15} />
             {t("explore_courses")}
           </Link>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-warm">
+        <div className="bg-white rounded-2xl border border-stone-200/80 overflow-hidden shadow-xs">
           {/* Mobile: Card list */}
           <div className="sm:hidden divide-y divide-stone-100">
             {orders.map((order) => {
               const status = statusConfig[order.status];
               const StatusIcon = status.icon;
               return (
-                <div key={order.id} className="p-4 space-y-2">
+                <div key={order.id} className="p-4 space-y-2.5">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-stone-900 truncate">
+                      <p className="text-sm font-bold text-stone-900 truncate">
                         {order.course.title}
                       </p>
-                      <p className="text-xs text-stone-400 mt-0.5">
+                      <p className="text-[11px] text-stone-400 mt-0.5">
                         {order.course.category.name}
                       </p>
                     </div>
                     <span
-                      className={`shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium border ${status.color}`}
+                      className={`shrink-0 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${status.color}`}
                     >
                       <StatusIcon size={11} />
                       {status.label}
@@ -186,7 +193,7 @@ export default async function OrdersPage() {
                         locale: dateLocale,
                       })}
                     </span>
-                    <span className="font-semibold text-stone-900">
+                    <span className="font-bold text-stone-900 bg-stone-100 px-2 py-0.5 rounded-md">
                       {formatCurrency(order.amount, locale)}
                     </span>
                   </div>
@@ -202,24 +209,14 @@ export default async function OrdersPage() {
 
           {/* Desktop: Table */}
           <div className="hidden sm:block overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-stone-100 bg-stone-50">
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">
-                    Order ID
-                  </th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">
-                    {t("order_course_col")}
-                  </th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">
-                    {t("order_date_col")}
-                  </th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">
-                    Total
-                  </th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">
-                    Status
-                  </th>
+                <tr className="border-b border-stone-100 bg-stone-50/80 text-[11px] font-bold text-stone-500 uppercase tracking-wider">
+                  <th className="px-5 py-3.5">Order ID</th>
+                  <th className="px-5 py-3.5">{t("order_course_col")}</th>
+                  <th className="px-5 py-3.5">{t("order_date_col")}</th>
+                  <th className="px-5 py-3.5">Total</th>
+                  <th className="px-5 py-3.5">Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-stone-100">
@@ -229,30 +226,32 @@ export default async function OrdersPage() {
                   return (
                     <tr
                       key={order.id}
-                      className="hover:bg-stone-50 transition-colors"
+                      className="hover:bg-stone-50/80 transition-colors"
                     >
-                      <td className="px-5 py-4 text-xs font-mono text-stone-500">
-                        {order.midtransOrderId?.slice(-12) ?? order.id.slice(-8)}
+                      <td className="px-5 py-4 font-mono text-[11px] text-stone-600">
+                        <span className="bg-stone-100 px-2 py-1 rounded-md">
+                          {order.midtransOrderId?.slice(-12) ?? order.id.slice(-8)}
+                        </span>
                       </td>
                       <td className="px-5 py-4">
-                        <p className="text-sm font-medium text-stone-900 truncate max-w-[180px]">
+                        <p className="font-bold text-stone-900 truncate max-w-[220px]">
                           {order.course.title}
                         </p>
-                        <p className="text-xs text-stone-400 mt-0.5">
+                        <p className="text-[11px] text-stone-400 mt-0.5">
                           {order.course.category.name}
                         </p>
                       </td>
-                      <td className="px-5 py-4 text-sm text-stone-500">
-                        {format(new Date(order.createdAt), "d MMM yyyy", {
+                      <td className="px-5 py-4 text-stone-500 font-medium">
+                        {format(new Date(order.createdAt), "d MMM yyyy, HH:mm", {
                           locale: dateLocale,
                         })}
                       </td>
-                      <td className="px-5 py-4 text-sm font-semibold text-stone-900">
+                      <td className="px-5 py-4 font-bold text-stone-900 text-sm">
                         {formatCurrency(order.amount, locale)}
                       </td>
                       <td className="px-5 py-4">
                         <span
-                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${status.color}`}
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold border ${status.color}`}
                         >
                           <StatusIcon size={12} />
                           {status.label}

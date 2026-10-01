@@ -76,52 +76,44 @@ export default async function MyCoursesPage() {
   const notStarted = enrollments.filter((e) => e.progressPct === 0).length;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-7">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-stone-200/60">
         <div>
           <h1
-            className="text-2xl font-bold text-stone-900"
+            className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight"
             style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
           >
             {t("my_courses_title")}
           </h1>
-          <p className="text-stone-500 text-sm mt-1">
+          <p className="text-stone-500 text-xs sm:text-sm mt-1">
             {t("courses_enrolled", { count: enrollments.length })}
           </p>
         </div>
         <Link
           href="/courses"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-stone-700 text-sm font-medium hover:bg-stone-50 transition-colors shadow-sm"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-stone-200/80 bg-white text-stone-700 hover:text-orange-700 text-xs font-semibold hover:bg-orange-50/60 transition-colors shadow-2xs shrink-0"
         >
-          <GraduationCap size={16} className="text-orange-500" />
+          <GraduationCap size={15} className="text-orange-600" />
           {t("find_new_course")}
         </Link>
       </div>
 
       {/* Summary Tabs */}
       {enrollments.length > 0 && (
-        <div className="flex items-center gap-3 flex-wrap">
+        <div className="flex items-center gap-2.5 flex-wrap">
           {[
-            { label: t("all"), value: enrollments.length, color: "stone" },
-            { label: t("completed"), value: completed, color: "green" },
-            { label: t("in_progress"), value: inProgress, color: "orange" },
-            { label: t("not_started"), value: notStarted, color: "stone" },
-          ].map(({ label, value, color }) => (
-            <div key={label} className="flex items-center gap-2">
-              <div
-                className={`w-2 h-2 rounded-full ${
-                  color === "green"
-                    ? "bg-green-500"
-                    : color === "orange"
-                    ? "bg-orange-500"
-                    : "bg-stone-300"
-                }`}
-              />
-              <span className="text-sm text-stone-600">
-                {label}:{" "}
-                <span className="font-semibold text-stone-900">{value}</span>
-              </span>
+            { label: t("all"), value: enrollments.length, bg: "bg-stone-100 text-stone-800 border-stone-200" },
+            { label: t("completed"), value: completed, bg: "bg-emerald-50 text-emerald-800 border-emerald-200" },
+            { label: t("in_progress"), value: inProgress, bg: "bg-orange-50 text-orange-800 border-orange-200" },
+            { label: t("not_started"), value: notStarted, bg: "bg-amber-50 text-amber-800 border-amber-200" },
+          ].map(({ label, value, bg }) => (
+            <div
+              key={label}
+              className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold border shadow-2xs ${bg}`}
+            >
+              <span>{label}:</span>
+              <span className="font-extrabold">{value}</span>
             </div>
           ))}
         </div>
@@ -129,52 +121,59 @@ export default async function MyCoursesPage() {
 
       {/* Empty State */}
       {enrollments.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-stone-200 p-14 text-center">
-          <div className="w-16 h-16 rounded-2xl bg-orange-50 flex items-center justify-center mx-auto mb-4">
-            <BookOpen size={28} className="text-orange-300" />
+        <div className="bg-white rounded-3xl border border-stone-200/80 p-16 text-center shadow-xs">
+          <div className="w-16 h-16 rounded-2xl bg-orange-50 text-orange-500 flex items-center justify-center mx-auto mb-4 border border-orange-200/60 shadow-2xs">
+            <BookOpen size={28} />
           </div>
-          <h3 className="text-lg font-semibold text-stone-900 mb-2">
+          <h3
+            className="text-lg font-bold text-stone-900 mb-1.5"
+            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+          >
             {t("no_courses_empty_title")}
           </h3>
-          <p className="text-stone-500 text-sm mb-6">
+          <p className="text-stone-500 text-xs sm:text-sm mb-6 max-w-sm mx-auto leading-relaxed">
             {t("no_courses_empty_desc")}
           </p>
           <Link
             href="/courses"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 text-white text-sm font-medium hover:bg-orange-700 transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold shadow-xs transition-colors"
           >
             {t("explore_courses")}
           </Link>
         </div>
       ) : (
-        <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">
           {enrollments.map((enrollment) => (
             <div
               key={enrollment.id}
-              className="bg-white rounded-2xl border border-stone-200 overflow-hidden hover:shadow-warm-lg hover:-translate-y-0.5 transition-all duration-200 group"
+              className="bg-white rounded-2xl border border-stone-200/80 overflow-hidden shadow-xs hover:shadow-warm hover:-translate-y-1 transition-all duration-200 group flex flex-col"
             >
               {/* Thumbnail */}
-              <div className="relative h-36 bg-gradient-to-br from-orange-100 to-amber-100 flex items-center justify-center">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
+              <div className="relative aspect-video bg-stone-100 flex items-center justify-center overflow-hidden">
                 {enrollment.course.thumbnail ? (
                   <img
                     src={enrollment.course.thumbnail}
                     alt={enrollment.course.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
                   />
                 ) : (
-                  <BookOpen size={36} className="text-orange-300" />
+                  <div className="w-full h-full bg-gradient-to-br from-orange-100 to-amber-100 flex items-center justify-center text-orange-500">
+                    <BookOpen size={36} />
+                  </div>
                 )}
 
-                {/* Overlay progress on thumbnail */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between">
-                  <Progress
-                    value={enrollment.progressPct}
-                    size="sm"
-                    className="flex-1"
-                  />
-                  <span className="ml-2 text-xs text-white font-semibold shrink-0">
+                {/* Overlay gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+
+                {/* Progress bar on thumbnail */}
+                <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between gap-2.5">
+                  <div className="flex-1 h-1.5 rounded-full bg-white/30 overflow-hidden">
+                    <div
+                      className="h-full bg-white rounded-full transition-all duration-500"
+                      style={{ width: `${enrollment.progressPct}%` }}
+                    />
+                  </div>
+                  <span className="text-[11px] text-white font-extrabold shrink-0 shadow-xs">
                     {enrollment.progressPct}%
                   </span>
                 </div>
@@ -182,7 +181,7 @@ export default async function MyCoursesPage() {
                 {/* Status Badge */}
                 {enrollment.completedAt && (
                   <div className="absolute top-3 right-3">
-                    <span className="flex items-center gap-1 px-2 py-1 rounded-full bg-green-500 text-white text-[11px] font-semibold">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500 text-white text-[10px] font-bold shadow-xs">
                       <CheckCircle2 size={11} />
                       {t("completed")}
                     </span>
@@ -191,51 +190,58 @@ export default async function MyCoursesPage() {
               </div>
 
               {/* Content */}
-              <div className="p-4 space-y-3">
-                <div>
-                  <Badge variant="orange" className="text-[11px] mb-1.5">
-                    {enrollment.course.category.name}
-                  </Badge>
-                  <h3 className="font-semibold text-stone-900 text-sm leading-snug line-clamp-2">
+              <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-bold text-orange-800 bg-orange-50 px-2 py-0.5 rounded-md border border-orange-200/60">
+                      {enrollment.course.category.name}
+                    </span>
+                  </div>
+                  <h3
+                    className="font-bold text-stone-900 text-sm leading-snug line-clamp-2"
+                    style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                  >
                     {enrollment.course.title}
                   </h3>
-                  <p className="text-xs text-stone-500 mt-1">
-                    {enrollment.course.instructor.name}
+                  <p className="text-xs text-stone-500 font-medium">
+                    Instruktur: {enrollment.course.instructor.name || "Ahmad Fadhil"}
                   </p>
                 </div>
 
-                {/* Progress Text */}
-                <div className="flex items-center gap-2 text-xs text-stone-500">
-                  <Clock size={12} />
-                  <span>
-                    {t("lessons_done", {
-                      done: enrollment.completedLessons,
-                      total: enrollment.course.totalLessons ?? "?",
-                    })}
-                  </span>
-                  {enrollment.completedAt && (
-                    <>
-                      <span>·</span>
-                      <Award size={12} className="text-amber-500" />
-                      <span className="text-amber-600 font-medium">
-                        {t("cert_available")}
-                      </span>
-                    </>
-                  )}
-                </div>
+                <div className="space-y-3 pt-2 border-t border-stone-100">
+                  {/* Progress Text */}
+                  <div className="flex items-center justify-between text-xs text-stone-500">
+                    <span className="flex items-center gap-1.5 font-medium">
+                      <Clock size={12} className="text-stone-400" />
+                      {t("lessons_done", {
+                        done: enrollment.completedLessons,
+                        total: enrollment.course.totalLessons ?? "?",
+                      })}
+                    </span>
+                    {enrollment.completedAt && (
+                      <Link
+                        href={`/dashboard/certificates`}
+                        className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-700 hover:text-amber-800 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200/60"
+                      >
+                        <Award size={11} />
+                        <span>Sertifikat</span>
+                      </Link>
+                    )}
+                  </div>
 
-                {/* CTA Button */}
-                <Link
-                  href={`/learn/${enrollment.courseId}`}
-                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium transition-colors"
-                >
-                  <PlayCircle size={15} />
-                  {enrollment.progressPct === 0
-                    ? t("start_learning")
-                    : enrollment.completedAt
-                    ? t("rewatch")
-                    : t("continue_learning_btn")}
-                </Link>
+                  {/* CTA Button */}
+                  <Link
+                    href={`/learn/${enrollment.courseId}`}
+                    className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold transition-all shadow-xs"
+                  >
+                    <PlayCircle size={14} />
+                    {enrollment.progressPct === 0
+                      ? t("start_learning")
+                      : enrollment.completedAt
+                      ? t("rewatch")
+                      : t("continue_learning_btn")}
+                  </Link>
+                </div>
               </div>
             </div>
           ))}

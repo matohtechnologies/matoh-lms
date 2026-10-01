@@ -135,49 +135,71 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
   ];
 
   return (
-    <div className="pt-20">
+    <div className="pt-20 bg-[#faf8f5] min-h-screen">
       {/* Header */}
-      <div className="bg-gradient-to-br from-stone-50 to-orange-50 border-b border-stone-200 py-10">
+      <div className="bg-gradient-to-b from-orange-50/70 via-[#faf8f5] to-[#faf8f5] border-b border-stone-200/70 py-12 sm:py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <h1 className="text-3xl font-bold text-stone-900 mb-2" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-100/70 text-orange-800 border border-orange-200/60 text-xs font-semibold mb-3">
+            <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
+            <span>{isEn ? "Earthy Learning Catalog" : "Katalog Belajar Earthy"}</span>
+          </div>
+          <h1
+            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-stone-900 mb-3 tracking-tight"
+            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+          >
             {t("catalog_title")}
           </h1>
-          <p className="text-stone-500 mb-6">
-            {isEn ? `${total} courses available for you` : `${total} kelas tersedia untuk kamu`}
+          <p className="text-stone-500 mb-6 text-sm sm:text-base max-w-2xl leading-relaxed">
+            {isEn
+              ? `Explore ${total} curated, industry-aligned courses crafted by leading tech practitioners.`
+              : `${total} kelas terstruktur dan kurikulum industri siap membantumu menguasai skill masa depan.`}
           </p>
 
           {/* Search bar */}
-          <form method="GET" action="/courses" className="flex gap-3 max-w-2xl">
+          <form method="GET" action="/courses" className="flex flex-col sm:flex-row gap-3 max-w-2xl">
             <div className="relative flex-1">
               <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
               <input
                 name="q"
                 defaultValue={params.q}
                 placeholder={t("search_placeholder")}
-                className="w-full h-11 pl-10 pr-4 rounded-xl border border-stone-300 bg-white text-sm text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all"
+                className="w-full h-12 pl-10 pr-4 rounded-2xl border border-stone-200 bg-white text-sm text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 shadow-xs transition-all"
               />
             </div>
             <button
               type="submit"
-              className="h-11 px-5 rounded-xl bg-orange-600 text-white text-sm font-medium hover:bg-orange-700 transition-colors"
+              className="px-6 h-12 rounded-2xl bg-orange-600 hover:bg-orange-700 text-white font-semibold text-sm shadow-warm hover:shadow-warm-lg transition-all shrink-0"
             >
-              {isEn ? "Search" : "Cari"}
+              {isEn ? "Search" : "Cari Kelas"}
             </button>
           </form>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
           {/* Sidebar Filters */}
-          <aside className="lg:w-56 shrink-0">
-            <div className="sticky top-24 space-y-6">
+          <aside className="lg:w-64 shrink-0 w-full">
+            <div className="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-xs sticky top-24 space-y-6">
               <div>
-                <h3 className="text-sm font-semibold text-stone-900 mb-3">{t("filter.category")}</h3>
+                <div className="flex items-center justify-between mb-3 pb-2 border-b border-stone-100">
+                  <h3 className="text-xs font-bold text-stone-900 uppercase tracking-wider">
+                    {t("filter.category")}
+                  </h3>
+                  {params.category && (
+                    <a href="/courses" className="text-[11px] text-orange-600 hover:underline">
+                      Reset
+                    </a>
+                  )}
+                </div>
                 <div className="space-y-1">
                   <a
                     href="/courses"
-                    className={`block px-3 py-2 rounded-lg text-sm transition-colors ${!params.category ? "bg-orange-50 text-orange-700 font-medium" : "text-stone-600 hover:bg-stone-50"}`}
+                    className={`block px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+                      !params.category
+                        ? "bg-orange-50/90 text-orange-950 font-bold border border-orange-200/80 shadow-2xs"
+                        : "text-stone-600 hover:text-stone-900 hover:bg-stone-50"
+                    }`}
                   >
                     {isEn ? "All Categories" : "Semua Kategori"}
                   </a>
@@ -185,7 +207,11 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                     <a
                       key={cat.id}
                       href={`/courses?category=${encodeURIComponent(cat.name)}${params.level ? `&level=${params.level}` : ""}${params.sort ? `&sort=${params.sort}` : ""}`}
-                      className={`block px-3 py-2 rounded-lg text-sm transition-colors ${params.category === cat.name ? "bg-orange-50 text-orange-700 font-medium" : "text-stone-600 hover:bg-stone-50"}`}
+                      className={`block px-3 py-2 rounded-xl text-xs font-medium transition-all ${
+                        params.category === cat.name
+                          ? "bg-orange-50/90 text-orange-950 font-bold border border-orange-200/80 shadow-2xs"
+                          : "text-stone-600 hover:text-stone-900 hover:bg-stone-50"
+                      }`}
                     >
                       {cat.name}
                     </a>
@@ -194,13 +220,21 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
               </div>
 
               <div>
-                <h3 className="text-sm font-semibold text-stone-900 mb-3">{t("filter.level")}</h3>
+                <div className="flex items-center justify-between mb-3 pb-2 border-b border-stone-100">
+                  <h3 className="text-xs font-bold text-stone-900 uppercase tracking-wider">
+                    {t("filter.level")}
+                  </h3>
+                </div>
                 <div className="space-y-1">
                   {levelOptions.map((opt) => (
                     <a
                       key={opt.value}
                       href={`/courses?${params.q ? `q=${params.q}&` : ""}${params.category ? `category=${params.category}&` : ""}level=${opt.value}${params.sort ? `&sort=${params.sort}` : ""}`}
-                      className={`block px-3 py-2 rounded-lg text-sm transition-colors ${params.level === opt.value ? "bg-orange-50 text-orange-700 font-medium" : "text-stone-600 hover:bg-stone-50"}`}
+                      className={`block px-3 py-2 rounded-xl text-xs font-medium transition-all ${
+                        params.level === opt.value
+                          ? "bg-orange-50/90 text-orange-950 font-bold border border-orange-200/80 shadow-2xs"
+                          : "text-stone-600 hover:text-stone-900 hover:bg-stone-50"
+                      }`}
                     >
                       {opt.label}
                     </a>

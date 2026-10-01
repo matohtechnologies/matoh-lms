@@ -1,10 +1,12 @@
 import Link from "next/link";
-import { ArrowRight, Star, Users, BookOpen, Award, CheckCircle, Play, TrendingUp } from "lucide-react";
+import { ArrowRight, Star, CheckCircle, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CourseCard } from "@/components/courses/course-card";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { getTranslations, getLocale } from "next-intl/server";
+import { HeroInteractiveShowcase } from "@/components/home/hero-interactive-showcase";
+import { FeaturedCoursesShowcase } from "@/components/home/featured-courses-showcase";
+import { FaqAccordion } from "@/components/home/faq-accordion";
 
 export const revalidate = 60;
 
@@ -61,413 +63,520 @@ export default async function HomePage() {
     auth(),
   ]);
 
-  const enrolledCourseIds = new Set<string>();
+  const enrolledCourseIds: string[] = [];
   if (session?.user?.id) {
     if (session.user.role === "ADMIN") {
-      featuredCourses.forEach((c) => enrolledCourseIds.add(c.id));
+      featuredCourses.forEach((c) => enrolledCourseIds.push(c.id));
     } else {
       const enrollments = await prisma.enrollment.findMany({
         where: { userId: session.user.id },
         select: { courseId: true },
       });
-      enrollments.forEach((e) => enrolledCourseIds.add(e.courseId));
+      enrollments.forEach((e) => enrolledCourseIds.push(e.courseId));
     }
   }
 
-  const statItems = [
-    { value: stats.students.toLocaleString() + "+", label: t("stat_students"), icon: Users },
-    { value: stats.courses + "+", label: t("stat_courses"), icon: BookOpen },
-    { value: stats.instructors + "+", label: t("stat_instructors"), icon: Award },
-    { value: "4.9", label: t("stat_rating"), icon: Star },
+  // Authentic hiring ecosystem logos / text
+  const hiringEcosystem = [
+    "Tokopedia",
+    "Gojek",
+    "Traveloka",
+    "Shopee",
+    "Bank Central Asia",
+    "Bank Mandiri",
+    "Blibli",
   ];
 
-  const features = [
-    { icon: "🎯", title: tHome("features.curriculum_title"), desc: tHome("features.curriculum_desc") },
-    { icon: "⚡", title: tHome("features.flexible_title"), desc: tHome("features.flexible_desc") },
-    { icon: "🏆", title: tHome("features.certificate_title"), desc: tHome("features.certificate_desc") },
-    { icon: "💬", title: tHome("features.community_title"), desc: tHome("features.community_desc") },
-  ];
+  // The 4-Pillar Modern Learning Method (Editorial & Zero Emojis)
+  const pillars = isEn
+    ? [
+        {
+          num: "01",
+          title: "Production-Grade Projects",
+          desc: "You don't just watch static videos. Every curriculum is structured around building tested, deployable software that recruiters can inspect.",
+        },
+        {
+          num: "02",
+          title: "Direct Instructor Q&A",
+          desc: "Stuck on a tricky bug or concept? Get timely, constructive guidance from practicing industry leads and our dedicated peer community.",
+        },
+        {
+          num: "03",
+          title: "Curated Career Roadmaps",
+          desc: "Clear progression paths from beginner fundamentals to advanced system design, preventing tutorial hell and decision fatigue.",
+        },
+        {
+          num: "04",
+          title: "Verifiable Digital Credential",
+          desc: "Earn an authentic certificate with a unique public QR code that employers and HR teams can independently verify in seconds.",
+        },
+      ]
+    : [
+        {
+          num: "01",
+          title: "Kurikulum Berbasis Proyek Industri",
+          desc: "Bukan sekadar menonton video pasif. Anda membangun aplikasi nyata berstandar produksi yang siap diuji dan dipamerkan ke recruiter.",
+        },
+        {
+          num: "02",
+          title: "Bimbingan & Diskusi Langsung",
+          desc: "Mengalami error atau stuck saat latihan koding? Dapatkan solusi langsung dari instruktur praktisi dan komunitas pelajar aktif.",
+        },
+        {
+          num: "03",
+          title: "Roadmap Karir Terarah",
+          desc: "Jalur belajar runtut dari fundamental hingga arsitektur kompleks, dirancang agar Anda tidak terjebak dalam tutorial hell.",
+        },
+        {
+          num: "04",
+          title: "Sertifikat Digital Terverifikasi",
+          desc: "Setiap kelulusan disertai sertifikat resmi ber-QR code unik yang dapat divalidasi keabsahannya oleh HRD dan perusahaan.",
+        },
+      ];
 
-  const categories = [
-    { name: isEn ? "Web Development" : "Web Development", icon: "💻", count: 42 },
-    { name: isEn ? "Data Science" : "Data Science", icon: "📊", count: 28 },
-    { name: isEn ? "UI/UX Design" : "UI/UX Design", icon: "🎨", count: 19 },
-    { name: isEn ? "Mobile Dev" : "Mobile Dev", icon: "📱", count: 23 },
-    { name: isEn ? "Cybersecurity" : "Cybersecurity", icon: "🔐", count: 15 },
-    { name: isEn ? "Digital Marketing" : "Digital Marketing", icon: "📣", count: 31 },
-    { name: isEn ? "Cloud Computing" : "Cloud Computing", icon: "☁️", count: 18 },
-    { name: isEn ? "Business & Startup" : "Bisnis & Startup", icon: "🚀", count: 24 },
-  ];
-
+  // Real student transformation stories
   const testimonials = isEn
     ? [
         {
           name: "Rizky Pratama",
-          role: "Frontend Developer at Tokopedia",
-          avatar: "R",
-          text: "Earthy Academy truly transformed my career. Within 6 months, I successfully transitioned from my old job into the tech industry.",
-          rating: 5,
+          role: "Frontend Engineer at Tokopedia",
+          transition: "From Admin Staff ➔ Tech Industry",
+          text: "Earthy Academy changed the trajectory of my career. The projects were so close to what I now do daily at Tokopedia. Passed the tech test on my first attempt.",
           course: "React.js Modern Development",
         },
         {
           name: "Sari Dewi",
-          role: "UI/UX Designer at Gojek",
-          avatar: "S",
-          text: "Well-structured curriculum and supportive mentors. I started from zero and am now working as a professional product designer.",
-          rating: 5,
+          role: "Product Designer at Gojek",
+          transition: "From Graphic Designer ➔ Product Designer",
+          text: "The mentorship on design systems and Figma component architecture gave me the exact portfolio evidence I needed to stand out during interviews.",
           course: "UI/UX Design Masterclass",
         },
         {
           name: "Budi Santoso",
           role: "Data Analyst at BCA",
-          avatar: "B",
-          text: "The best investment I have ever made. Worth every penny! Up-to-date content that directly aligns with modern tech requirements.",
-          rating: 5,
+          transition: "From Fresh Grad ➔ Enterprise Data Analyst",
+          text: "No fluff, 100% practical SQL, Python, and statistical modeling. The investment paid for itself multiple times over within my first month of work.",
           course: "Python for Data Science",
         },
       ]
     : [
         {
           name: "Rizky Pratama",
-          role: "Frontend Developer at Tokopedia",
-          avatar: "R",
-          text: "Earthy Academy benar-benar mengubah karir saya. Dalam 6 bulan, saya berhasil pindah dari pekerjaan lama ke tech industry.",
-          rating: 5,
+          role: "Frontend Engineer di Tokopedia",
+          transition: "Dari Staff Operasional ➔ Software Engineer",
+          text: "Earthy Academy benar-benar mengubah arah karir saya. Materi project-nya sangat relevan dengan apa yang saya kerjakan sekarang di Tokopedia. Lolos tes teknikal di kesempatan pertama.",
           course: "React.js Modern Development",
         },
         {
           name: "Sari Dewi",
-          role: "UI/UX Designer at Gojek",
-          avatar: "S",
-          text: "Materi yang sangat terstruktur dan instruktur yang sabar. Saya belajar dari nol dan sekarang sudah bekerja sebagai designer profesional.",
-          rating: 5,
+          role: "Product Designer di Gojek",
+          transition: "Dari Desainer Grafis ➔ UI/UX Designer",
+          text: "Bimbingan mengenai design system dan arsitektur komponen Figma membuat portofolio saya jauh lebih profesional dibanding kandidat lain.",
           course: "UI/UX Design Masterclass",
         },
         {
           name: "Budi Santoso",
-          role: "Data Analyst at BCA",
-          avatar: "B",
-          text: "Investasi terbaik yang pernah saya lakukan. Worth every rupiah! Materi up-to-date dan relevan dengan kebutuhan industri.",
-          rating: 5,
+          role: "Data Analyst di BCA",
+          transition: "Dari Fresh Graduate ➔ Enterprise Data Analyst",
+          text: "Materi to-the-point dan studi kasus bisnis riil. Sertifikat dan portofolio proyek akhirnya langsung diapresiasi oleh user saat proses interview.",
           course: "Python for Data Science",
         },
       ];
 
-  return (
-    <>
-      {/* Hero Section */}
-      <section className="relative pt-28 pb-20 overflow-hidden gradient-hero">
-        {/* Background decoration */}
-        <div className="absolute top-20 right-0 w-96 h-96 rounded-full bg-orange-100 opacity-40 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-20 w-64 h-64 rounded-full bg-amber-100 opacity-60 blur-3xl pointer-events-none" />
+  // FAQ Items tailored to eliminate buyer friction
+  const faqItems = isEn
+    ? [
+        {
+          question: "Can beginners with zero programming background join?",
+          answer:
+            "Yes, absolutely. Our beginner courses start from core fundamentals with clear, step-by-step guidance before progressing to intermediate and advanced topics.",
+        },
+        {
+          question: "Do I get lifetime access to the courses?",
+          answer:
+            "Yes. Once enrolled, you receive permanent lifetime access to all video lessons, resources, source code repositories, and future curriculum updates.",
+        },
+        {
+          question: "How does the certificate verification work?",
+          answer:
+            "Upon completing all course lessons and passing the requirements, an official digital certificate is generated with a unique credential ID and cryptographic QR code that recruiters can verify online anytime.",
+        },
+        {
+          question: "What payment methods are supported?",
+          answer:
+            "We support instant automated payments via GoPay, QRIS, Virtual Accounts (BCA, Mandiri, BNI, BRI), Credit/Debit Cards, and Indomaret/Alfamart.",
+        },
+        {
+          question: "Is there a money-back guarantee?",
+          answer:
+            "Yes. We offer an unconditional 30-day money-back guarantee if you feel the course content does not meet your learning expectations.",
+        },
+      ]
+    : [
+        {
+          question: "Apakah pemula tanpa latar belakang koding bisa mengikuti?",
+          answer:
+            "Tentu saja. Kelas tingkat Beginner kami dirancang khusus dari nol dengan penjelasan yang mudah dipahami, langkah demi langkah, sebelum bertahap ke konsep yang lebih tinggi.",
+        },
+        {
+          question: "Apakah akses video dan materi berlaku seumur hidup?",
+          answer:
+            "Ya. Sekali mendaftar, Anda memiliki akses permanen seumur hidup (lifetime access) ke seluruh modul video, file latihan, source code, dan pembaruan materi di masa depan.",
+        },
+        {
+          question: "Bagaimana cara kerja verifikasi sertifikat kelulusan?",
+          answer:
+            "Setelah menuntaskan seluruh materi kelas, sistem secara otomatis menerbitkan sertifikat digital resmi yang dilengkapi ID unik dan QR code publik yang dapat dicek keasliannya oleh HRD kapan saja.",
+        },
+        {
+          question: "Metode pembayaran apa saja yang didukung?",
+          answer:
+            "Kami mendukung pembayaran instan otomatis melalui QRIS, GoPay, ShopeePay, Virtual Account semua bank utama (BCA, Mandiri, BNI, BRI), Kartu Kredit/Debit, hingga Alfamart/Indomaret.",
+        },
+        {
+          question: "Apakah ada garansi uang kembali?",
+          answer:
+            "Ya, kami memberikan garansi uang kembali 30 hari penuh tanpa syarat jika Anda merasa materi kelas tidak sesuai dengan kebutuhan belajar Anda.",
+        },
+      ];
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid lg:grid-cols-2 gap-14 items-center">
-            {/* Left content */}
-            <div className="space-y-7 animate-fade-in-up">
-              {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-50 border border-orange-200 text-orange-700 text-sm font-medium">
+  return (
+    <div className="bg-white text-slate-900 selection:bg-orange-100 selection:text-orange-900">
+      {/* 1. HERO SECTION (Luminous, Airy, Human-Crafted) */}
+      <section className="relative pt-28 pb-20 lg:pt-36 lg:pb-28 overflow-hidden gradient-hero border-b border-slate-100">
+        {/* Subtle luminous ambient accents */}
+        <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[1000px] h-[450px] bg-gradient-to-b from-orange-100/50 via-amber-50/30 to-transparent blur-3xl pointer-events-none rounded-full" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+          <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+            {/* Left Column: Compelling Editorial Pitch */}
+            <div className="lg:col-span-6 space-y-6 text-left">
+              {/* Trust Badge */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-50 border border-orange-200/80 text-orange-700 text-xs font-semibold tracking-wide">
                 <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
-                {t("badge")}
+                <span>{isEn ? "Curated 2026 Tech Curriculums" : "Kurikulum Praktis Berstandar Industri 2026"}</span>
               </div>
 
-              {/* Heading */}
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-stone-900 leading-[1.1] text-balance" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-                {t("title").split("\n").map((line, i) => (
-                  <span key={i}>
-                    {i === 1 ? (
-                      <span className="text-gradient">{line}</span>
-                    ) : (
-                      line
-                    )}
-                    {i === 0 && <br />}
-                  </span>
-                ))}
+              {/* Main Headline */}
+              <h1
+                className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-[1.12] tracking-tight text-balance"
+                style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              >
+                {isEn ? (
+                  <>
+                    Master Modern Tech Skills,{" "}
+                    <span className="text-gradient">Launch Your Next Career</span>
+                  </>
+                ) : (
+                  <>
+                    Kuasai Keahlian Digital,{" "}
+                    <span className="text-gradient">Bangun Karir Impianmu</span>
+                  </>
+                )}
               </h1>
 
-              <p className="text-lg text-stone-600 leading-relaxed max-w-lg">
-                {t("subtitle")}
+              {/* Subheadline with high legibility */}
+              <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl text-pretty">
+                {isEn
+                  ? "Co-designed with practicing engineering leads. Learn web development, data science, and UI/UX design through project-driven curriculums, 1-on-1 feedback, and verifiable certifications."
+                  : "Belajar langsung dari praktisi industri terkemuka. Bangun portofolio nyata, kuasai keahlian yang dicari recruiter, dan raih sertifikat resmi terverifikasi."}
               </p>
 
-              {/* CTAs */}
-              <div className="flex flex-wrap gap-3">
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center gap-3 pt-1">
                 <Link href="/courses">
-                  <Button size="lg" rightIcon={<ArrowRight size={18} />}>
-                    {t("cta_primary")}
+                  <Button
+                    size="lg"
+                    className="rounded-2xl h-13 px-7 text-sm font-semibold shadow-warm hover:shadow-warm-lg bg-orange-600 hover:bg-orange-700 transition-all hover:-translate-y-0.5"
+                    rightIcon={<ArrowRight size={17} />}
+                  >
+                    {isEn ? "Browse Course Catalog" : "Jelajahi Semua Kelas"}
                   </Button>
                 </Link>
-                <Link href="/courses">
-                  <Button size="lg" variant="outline" leftIcon={<Play size={18} />}>
-                    {t("cta_secondary")}
+
+                <Link href="/about">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="rounded-2xl h-13 px-6 text-sm font-semibold border-slate-200 hover:border-slate-300 bg-white/80 hover:bg-slate-50 text-slate-700 shadow-xs"
+                  >
+                    {isEn ? "How Earthy Works" : "Pelajari Metode Kami"}
                   </Button>
                 </Link>
               </div>
 
-              {/* Trust indicators */}
-              <div className="flex items-center gap-3 pt-2">
-                <div className="flex -space-x-2">
-                  {["R", "S", "B", "A", "D"].map((letter, i) => (
-                    <div
-                      key={i}
-                      className="w-9 h-9 rounded-full border-2 border-white flex items-center justify-center text-white text-xs font-bold"
-                      style={{
-                        background: `hsl(${i * 30 + 20}, 70%, 55%)`,
-                      }}
-                    >
-                      {letter}
-                    </div>
-                  ))}
-                </div>
-                <div>
-                  <div className="flex items-center gap-1">
+              {/* Live Metric Strip (Clean, zero clutter) */}
+              <div className="pt-4 border-t border-slate-200/70 flex flex-wrap items-center gap-6 sm:gap-8 text-xs text-slate-600">
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-0.5 text-amber-500">
                     {[1, 2, 3, 4, 5].map((i) => (
-                      <Star key={i} size={14} className="text-amber-400 fill-amber-400" />
+                      <Star key={i} size={14} fill="currentColor" />
                     ))}
-                    <span className="text-sm font-semibold text-stone-700 ml-1">4.9</span>
                   </div>
-                  <p className="text-xs text-stone-500">
-                    {isEn ? "from 10,000+ reviews" : "dari 10.000+ ulasan"}
-                  </p>
+                  <span className="font-bold text-slate-900 text-sm">4.9/5</span>
+                  <span className="text-slate-400">({isEn ? "10,000+ reviews" : "10.000+ ulasan"})</span>
+                </div>
+
+                <div className="h-4 w-px bg-slate-200 hidden sm:block" />
+
+                <div className="flex items-center gap-1.5 font-medium text-slate-700">
+                  <ShieldCheck size={16} className="text-emerald-600" />
+                  <span>{isEn ? "30-Day Money-Back Guarantee" : "Garansi 30 Hari Uang Kembali"}</span>
                 </div>
               </div>
             </div>
 
-            {/* Right — Stats cards */}
-            <div className="relative hidden lg:grid grid-cols-2 gap-4">
-              {statItems.map(({ value, label, icon: Icon }, i) => (
-                <div
-                  key={label}
-                  className={`bg-white rounded-2xl p-6 shadow-warm border border-stone-200 ${i === 1 ? "translate-y-4" : ""} ${i === 3 ? "-translate-y-4" : ""}`}
-                >
-                  <div className="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center mb-3">
-                    <Icon size={22} className="text-orange-600" />
-                  </div>
-                  <p className="text-3xl font-extrabold text-stone-900" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-                    {value}
-                  </p>
-                  <p className="text-sm text-stone-500 mt-1">{label}</p>
-                </div>
-              ))}
-
-              {/* Floating achievement */}
-              <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl p-4 shadow-warm-lg border border-stone-100 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center">
-                  <TrendingUp size={20} className="text-green-600" />
-                </div>
-                <div>
-                  <p className="text-xs text-stone-500">{t("floating_badge_label")}</p>
-                  <p className="font-bold text-stone-900">{t("floating_badge_count")}</p>
-                </div>
-              </div>
+            {/* Right Column: High-fidelity Interactive Stage */}
+            <div className="lg:col-span-6">
+              <HeroInteractiveShowcase isEn={isEn} />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Stats — mobile only */}
-      <section className="lg:hidden bg-white border-y border-stone-200 py-8">
-        <div className="max-w-7xl mx-auto px-4 grid grid-cols-2 sm:grid-cols-4 gap-6">
-          {statItems.map(({ value, label, icon: Icon }) => (
-            <div key={label} className="text-center">
-              <p className="text-2xl font-extrabold text-stone-900">{value}</p>
-              <p className="text-xs text-stone-500 mt-1">{label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Categories */}
-      <section className="py-16 bg-white">
+      {/* 2. ALUMNI HIRING ECOSYSTEM STRIP */}
+      <section className="py-12 bg-white border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-stone-900 mb-3" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-              {tHome("categories_title")}
-            </h2>
-            <p className="text-stone-500">{tHome("categories_subtitle")}</p>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
-            {categories.map((cat) => (
-              <Link
-                key={cat.name}
-                href={`/courses?category=${encodeURIComponent(cat.name)}`}
-                className="group flex flex-col items-center gap-2 p-4 rounded-2xl bg-stone-50 hover:bg-orange-50 border border-stone-200 hover:border-orange-200 transition-all duration-200 text-center"
-              >
-                <span className="text-2xl">{cat.icon}</span>
-                <span className="text-xs font-medium text-stone-700 group-hover:text-orange-700 leading-tight">
-                  {cat.name}
-                </span>
-                <span className="text-[11px] text-stone-400">{cat.count} {tHome("courses_unit")}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Courses */}
-      <section className="py-16 bg-stone-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-end justify-between mb-10">
-            <div>
-              <h2 className="text-3xl font-bold text-stone-900 mb-2" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-                {tc("title")}
-              </h2>
-              <p className="text-stone-500">{tc("subtitle")}</p>
-            </div>
-            <Link href="/courses">
-              <Button variant="outline" size="sm" rightIcon={<ArrowRight size={16} />}>
-                {tc("view_all")}
-              </Button>
-            </Link>
-          </div>
-
-          {featuredCourses.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {featuredCourses.map((course) => (
-                <CourseCard
-                  key={course.id}
-                  id={course.id}
-                  slug={course.slug}
-                  title={course.title}
-                  thumbnail={course.thumbnail}
-                  price={course.price}
-                  discountPrice={course.discountPrice}
-                  level={course.level}
-                  rating={course.rating}
-                  reviewCount={course.reviewCount}
-                  enrollCount={course.enrollCount}
-                  totalLessons={course.totalLessons}
-                  duration={course.duration}
-                  instructor={course.instructor}
-                  category={course.category}
-                  locale={locale}
-                  isEnrolled={enrolledCourseIds.has(course.id)}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12 bg-stone-50 rounded-2xl border border-stone-200">
-              <p className="text-stone-500 text-sm">{tHome("empty_courses")}</p>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* Features / Why Us */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-stone-900 mb-3" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-              {tHome("features_title")}
-            </h2>
-            <p className="text-stone-500 max-w-xl mx-auto">
-              {tHome("features_subtitle")}
-            </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {features.map((feature) => (
-              <div
-                key={feature.title}
-                className="p-6 rounded-2xl bg-stone-50 border border-stone-200 hover:border-orange-200 hover:bg-orange-50 transition-all duration-200 group"
-              >
-                <div className="text-3xl mb-4">{feature.icon}</div>
-                <h3 className="font-semibold text-stone-900 mb-2 group-hover:text-orange-800">
-                  {feature.title}
-                </h3>
-                <p className="text-sm text-stone-500 leading-relaxed">{feature.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-16 bg-stone-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-stone-900 mb-3" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-              {tHome("testimonials_title")}
-            </h2>
-            <p className="text-stone-500">{tHome("testimonials_subtitle")}</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.map((t, i) => (
-              <div
-                key={t.name}
-                className="bg-white rounded-2xl p-6 border border-stone-200 shadow-warm hover:shadow-warm-lg transition-shadow"
-              >
-                <div className="flex items-center gap-1 mb-4">
-                  {Array(t.rating).fill(0).map((_, i) => (
-                    <Star key={i} size={16} className="text-amber-400 fill-amber-400" />
-                  ))}
-                </div>
-                <p className="text-sm text-stone-600 leading-relaxed mb-5">
-                  &ldquo;{t.text}&rdquo;
-                </p>
-                <div className="pt-4 border-t border-stone-100">
-                  <p className="text-xs text-stone-400 mb-3">
-                    {isEn ? "Course taken:" : "Kelas yang diambil:"}{" "}
-                    <span className="text-orange-600">{t.course}</span>
-                  </p>
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white font-bold text-sm">
-                      {t.avatar}
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-stone-900">{t.name}</p>
-                      <p className="text-xs text-stone-500">{t.role}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-br from-orange-600 to-amber-600 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-white opacity-5 -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full bg-white opacity-5 translate-y-1/2 -translate-x-1/2" />
-        <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-            {tHome("cta_title")}
-          </h2>
-          <p className="text-orange-100 text-lg mb-8 max-w-xl mx-auto">
-            {tHome("cta_subtitle")}
+          <p className="text-center text-xs font-semibold text-slate-400 uppercase tracking-widest mb-6">
+            {isEn
+              ? "Alumni working across leading technology and enterprise teams"
+              : "Alumni kami telah berkarier di berbagai ekosistem teknologi terkemuka"}
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/register">
-              <Button
-                size="lg"
-                className="bg-white text-orange-600 hover:bg-orange-50 w-full sm:w-auto"
-                rightIcon={<ArrowRight size={18} />}
+
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 text-slate-400 font-bold text-sm tracking-tight">
+            {hiringEcosystem.map((company) => (
+              <span
+                key={company}
+                className="px-3 py-1 rounded-lg hover:text-slate-700 transition-colors"
               >
-                {tHome("cta_btn_primary")}
-              </Button>
-            </Link>
-            <Link href="/courses">
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-white text-white hover:bg-white/10 w-full sm:w-auto"
-              >
-                {tHome("cta_btn_secondary")}
-              </Button>
-            </Link>
-          </div>
-          <div className="mt-8 flex items-center justify-center gap-6 text-sm text-orange-100">
-            {(isEn
-              ? ["No credit card required", "Full lifetime access", "30-day money-back guarantee"]
-              : ["Tanpa kartu kredit", "Akses seumur hidup", "Garansi uang kembali 30 hari"]
-            ).map((item) => (
-              <span key={item} className="flex items-center gap-2">
-                <CheckCircle size={16} />
-                {item}
+                {company}
               </span>
             ))}
           </div>
         </div>
       </section>
-    </>
+
+      {/* 3. THE 4-PILLAR MODERN LEARNING METHOD (Human-designed, No Emojis) */}
+      <section className="py-20 lg:py-28 bg-slate-50/70 border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="max-w-2xl mx-auto text-center mb-16">
+            <span className="text-xs font-bold text-orange-600 uppercase tracking-wider bg-orange-50 px-3 py-1 rounded-full border border-orange-200/60 inline-block mb-3">
+              {isEn ? "The Earthy Standard" : "Standar Pembelajaran"}
+            </span>
+            <h2
+              className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
+              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            >
+              {isEn
+                ? "Engineered for tangible career outcomes"
+                : "Metode Belajar Terstruktur yang Membawa Hasil Nyata"}
+            </h2>
+            <p className="text-slate-600 text-sm sm:text-base mt-3 leading-relaxed">
+              {isEn
+                ? "Every detail of the platform is designed to take you from foundational understanding to production-level confidence."
+                : "Dirancang secara spesifik untuk mengubah pemula menjadi talenta siap kerja yang percaya diri menghadapi kebutuhan industri."}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {pillars.map((pillar) => (
+              <div
+                key={pillar.num}
+                className="bg-white rounded-3xl p-7 border border-slate-200/90 shadow-subtle hover:shadow-warm transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between group"
+              >
+                <div>
+                  <span className="font-mono text-2xl font-black text-orange-500/80 block mb-4 group-hover:text-orange-600 transition-colors">
+                    {pillar.num}
+                  </span>
+                  <h3 className="font-bold text-slate-900 text-lg mb-2 leading-snug">
+                    {pillar.title}
+                  </h3>
+                  <p className="text-slate-600 text-sm leading-relaxed">
+                    {pillar.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 4. FEATURED POPULAR COURSES SHOWCASE (Interactive Category Tabs) */}
+      <section className="py-20 lg:py-28 bg-white border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+            <div>
+              <span className="text-xs font-bold text-orange-600 uppercase tracking-wider bg-orange-50 px-3 py-1 rounded-full border border-orange-200/60 inline-block mb-3">
+                {isEn ? "Curated Programs" : "Program Pilihan"}
+              </span>
+              <h2
+                className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
+                style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              >
+                {tc("title")}
+              </h2>
+              <p className="text-slate-600 text-sm sm:text-base mt-1">
+                {tc("subtitle")}
+              </p>
+            </div>
+
+            <Link href="/courses">
+              <Button
+                variant="outline"
+                size="sm"
+                className="rounded-xl border-slate-200 hover:border-slate-300 text-slate-700"
+                rightIcon={<ArrowRight size={15} />}
+              >
+                {tc("view_all")}
+              </Button>
+            </Link>
+          </div>
+
+          <FeaturedCoursesShowcase
+            courses={featuredCourses}
+            enrolledCourseIds={enrolledCourseIds}
+            locale={locale}
+            isEn={isEn}
+          />
+        </div>
+      </section>
+
+      {/* 5. STUDENT TRANSFORMATION STORIES (Authentic, Trust-building) */}
+      <section className="py-20 lg:py-28 bg-slate-50/70 border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="max-w-2xl mx-auto text-center mb-16">
+            <span className="text-xs font-bold text-orange-600 uppercase tracking-wider bg-orange-50 px-3 py-1 rounded-full border border-orange-200/60 inline-block mb-3">
+              {isEn ? "Alumni Voices" : "Kisah Nyata Alumni"}
+            </span>
+            <h2
+              className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
+              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            >
+              {tHome("testimonials_title")}
+            </h2>
+            <p className="text-slate-600 text-sm sm:text-base mt-2">
+              {tHome("testimonials_subtitle")}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {testimonials.map((item) => (
+              <div
+                key={item.name}
+                className="bg-white rounded-3xl p-7 border border-slate-200/90 shadow-subtle hover:shadow-warm transition-all duration-300 flex flex-col justify-between"
+              >
+                <div className="space-y-4">
+                  {/* Career Transition Pill */}
+                  <span className="inline-block px-3 py-1 rounded-full bg-orange-50 text-orange-800 text-xs font-semibold border border-orange-200/50">
+                    {item.transition}
+                  </span>
+
+                  {/* Testimonial Quote */}
+                  <p className="text-sm text-slate-700 leading-relaxed font-normal">
+                    &ldquo;{item.text}&rdquo;
+                  </p>
+                </div>
+
+                <div className="pt-6 mt-6 border-t border-slate-100">
+                  <p className="text-[11px] text-slate-400 mb-2">
+                    {isEn ? "Course Completed:" : "Kelas yang diselesaikan:"}{" "}
+                    <span className="font-semibold text-slate-700">{item.course}</span>
+                  </p>
+
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 text-white font-bold text-sm flex items-center justify-center shrink-0">
+                      {item.name.charAt(0)}
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-slate-900 leading-snug">
+                        {item.name}
+                      </h4>
+                      <p className="text-xs text-slate-500">{item.role}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 6. TRANSPARENT FAQ (Eliminate doubts & boost conversions) */}
+      <section className="py-20 lg:py-28 bg-white border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="max-w-2xl mx-auto text-center mb-14">
+            <span className="text-xs font-bold text-orange-600 uppercase tracking-wider bg-orange-50 px-3 py-1 rounded-full border border-orange-200/60 inline-block mb-3">
+              {tHome("faq_badge")}
+            </span>
+            <h2
+              className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
+              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            >
+              {tHome("faq_title")}
+            </h2>
+            <p className="text-slate-600 text-sm sm:text-base mt-2">
+              {tHome("faq_subtitle")}
+            </p>
+          </div>
+
+          <FaqAccordion items={faqItems} />
+        </div>
+      </section>
+
+      {/* 7. HIGH-CONVERTING CLOSING CTA */}
+      <section className="py-20 lg:py-28 bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 relative overflow-hidden text-white">
+        {/* Soft background light */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-black/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="max-w-4xl mx-auto px-4 text-center relative z-10 space-y-7">
+          <h2
+            className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight"
+            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+          >
+            {tHome("cta_title")}
+          </h2>
+
+          <p className="text-orange-100 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+            {tHome("cta_subtitle")}
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-3.5 justify-center pt-2">
+            <Link href="/register">
+              <Button
+                size="lg"
+                variant="white"
+                className="rounded-2xl h-13 px-8 text-base w-full sm:w-auto hover:-translate-y-0.5"
+                rightIcon={<ArrowRight size={18} />}
+              >
+                {tHome("cta_btn_primary")}
+              </Button>
+            </Link>
+
+            <Link href="/courses">
+              <Button
+                size="lg"
+                variant="outline-white"
+                className="rounded-2xl h-13 px-7 text-base w-full sm:w-auto hover:-translate-y-0.5"
+              >
+                {tHome("cta_btn_secondary")}
+              </Button>
+            </Link>
+          </div>
+
+          <div className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs text-orange-100 font-medium">
+            {(isEn
+              ? ["No credit card required to explore", "Full lifetime access", "30-day money-back guarantee"]
+              : ["Tanpa kartu kredit saat daftar", "Akses materi seumur hidup", "30 hari garansi uang kembali"]
+            ).map((item) => (
+              <span key={item} className="flex items-center gap-2">
+                <CheckCircle size={15} className="text-orange-200" />
+                <span>{item}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

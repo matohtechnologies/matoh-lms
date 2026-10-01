@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
 
 const certificateSettingSchema = z.object({
@@ -14,7 +15,7 @@ const certificateSettingSchema = z.object({
   signatoryRole2: z.string().optional().nullable(),
   templateUrl: z.string().optional().nullable(),
   templateConfig: z.any().optional().nullable(),
-  minProgress: z.number().min(0).max(100).default(100),
+  minProgress: z.coerce.number().min(0).max(100).default(100),
   requireQuizPassed: z.boolean().default(true),
   requireAssignmentApproved: z.boolean().default(true),
 });
@@ -118,6 +119,13 @@ export async function PUT(
       return NextResponse.json({ error: "Kelas tidak ditemukan" }, { status: 404 });
     }
 
+    const jsonConfigValue =
+      data.templateConfig === null
+        ? Prisma.DbNull
+        : data.templateConfig !== undefined
+        ? data.templateConfig
+        : undefined;
+
     const setting = await prisma.certificateSetting.upsert({
       where: { courseId: course.id },
       create: {
@@ -131,7 +139,7 @@ export async function PUT(
         signatoryName2: data.signatoryName2 ?? null,
         signatoryRole2: data.signatoryRole2 ?? "Head of Curriculum",
         templateUrl: data.templateUrl ?? null,
-        templateConfig: data.templateConfig ? (data.templateConfig as any) : undefined,
+        templateConfig: data.templateConfig ? data.templateConfig : Prisma.DbNull,
         minProgress: data.minProgress,
         requireQuizPassed: data.requireQuizPassed,
         requireAssignmentApproved: data.requireAssignmentApproved,
@@ -146,12 +154,12 @@ export async function PUT(
         signatoryName2: data.signatoryName2 ?? null,
         signatoryRole2: data.signatoryRole2 ?? "Head of Curriculum",
         templateUrl: data.templateUrl ?? null,
-        templateConfig: data.templateConfig !== undefined ? (data.templateConfig as any) : undefined,
+        templateConfig: jsonConfigValue,
         minProgress: data.minProgress,
         requireQuizPassed: data.requireQuizPassed,
         requireAssignmentApproved: data.requireAssignmentApproved,
       },
-    } as any);
+    });
 
     return NextResponse.json({
       success: true,
@@ -159,15 +167,16 @@ export async function PUT(
       message: "Pengaturan sertifikat berhasil disimpan",
     });
   } catch (error) {
-    if (error instanceof z.ZodError) {
+    if (error instanceof z.ZodError || (error as any)?.name === "ZodError") {
+      const err = error as z.ZodError;
       return NextResponse.json(
-        { error: error.issues[0]?.message ?? "Data tidak valid" },
+        { error: err.issues?.[0]?.message ?? "Data tidak valid" },
         { status: 400 }
       );
     }
     console.error("Error updating certificate setting:", error);
     return NextResponse.json(
-      { error: "Gagal menyimpan pengaturan sertifikat" },
+      { error: error instanceof Error ? error.message : "Gagal menyimpan pengaturan sertifikat" },
       { status: 500 }
     );
   }

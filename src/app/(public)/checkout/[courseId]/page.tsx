@@ -221,7 +221,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
   const hasDiscount = course.discountPrice != null && course.discountPrice < course.price;
 
   return (
-    <div className="min-h-screen bg-stone-50 pt-20">
+    <div className="min-h-screen bg-[#faf8f5] pt-20 pb-16">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
         {/* Back */}
         <Link href={`/courses/${courseId}`} className="inline-flex items-center gap-2 text-sm text-stone-500 hover:text-stone-900 mb-6 transition-colors">
@@ -229,7 +229,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
           {t("back_to_course")}
         </Link>
 
-        <h1 className="text-2xl font-bold text-stone-900 mb-6" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 mb-6 tracking-tight" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
           {t("title")}
         </h1>
 
@@ -237,8 +237,8 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
           {/* Order Summary */}
           <div className="lg:col-span-2 space-y-4">
             {/* Course Card */}
-            <div className="bg-white rounded-2xl border border-stone-200 p-5">
-              <h2 className="font-semibold text-stone-900 mb-4">{t("order_summary")}</h2>
+            <div className="bg-white rounded-2xl border border-stone-200/80 p-5 sm:p-6 shadow-xs">
+              <h2 className="font-bold text-stone-900 mb-4">{t("order_summary")}</h2>
               <div className="flex gap-4">
                 <div className="w-24 h-16 rounded-xl bg-stone-100 overflow-hidden shrink-0">
                   {course.thumbnail ? (

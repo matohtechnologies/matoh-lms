@@ -34,7 +34,7 @@ export default function SignOutButton({
   const defaultClasses = {
     navbar: "flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors text-left",
     dashboard: "flex w-full items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-red-600 hover:bg-red-50 transition-colors text-left font-medium",
-    admin: "flex w-full items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-stone-400 hover:text-red-400 hover:bg-red-950/30 transition-colors text-left font-medium",
+    admin: "flex w-full items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-stone-500 hover:text-red-600 hover:bg-red-50 transition-colors text-left font-medium",
   };
 
   return (

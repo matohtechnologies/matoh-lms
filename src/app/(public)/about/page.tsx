@@ -45,26 +45,26 @@ export default async function AboutPage() {
   ];
 
   return (
-    <div className="pt-20">
+    <div className="pt-20 bg-[#faf8f5] min-h-screen">
       {/* Hero */}
-      <section className="gradient-hero py-20 border-b border-stone-200">
+      <section className="py-20 border-b border-stone-200/70 bg-gradient-to-b from-orange-50/70 via-[#faf8f5] to-[#faf8f5]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-50 border border-orange-200 text-orange-700 text-sm font-medium mb-6">
-            <BookOpen size={16} />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-100/70 border border-orange-200/70 text-orange-800 text-xs font-bold mb-6 shadow-2xs">
+            <BookOpen size={14} className="text-orange-600" />
             {t("hero_badge")}
           </div>
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-stone-900 mb-6" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-stone-900 mb-6 tracking-tight" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
             {t("hero_title")}<br />
             <span className="text-gradient">{t("hero_highlight")}</span>
           </h1>
-          <p className="text-lg text-stone-600 leading-relaxed max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-stone-600 leading-relaxed max-w-2xl mx-auto">
             {t("hero_desc")}
           </p>
         </div>
       </section>
 
       {/* Stats */}
-      <section className="py-14 bg-white">
+      <section className="py-14 bg-white border-b border-stone-200/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
             {[
@@ -74,10 +74,10 @@ export default async function AboutPage() {
               { value: "4.9★", label: t("stat_rating") },
             ].map(({ value, label }) => (
               <div key={label} className="text-center">
-                <p className="text-4xl font-extrabold text-stone-900" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
+                <p className="text-3xl sm:text-4xl font-extrabold text-stone-900 tracking-tight" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
                   {value}
                 </p>
-                <p className="text-stone-500 text-sm mt-2">{label}</p>
+                <p className="text-stone-500 text-xs sm:text-sm mt-1.5 font-medium">{label}</p>
               </div>
             ))}
           </div>
@@ -85,18 +85,18 @@ export default async function AboutPage() {
       </section>
 
       {/* Mission & Vision */}
-      <section className="py-16 bg-stone-50">
+      <section className="py-16 bg-[#faf8f5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-stone-900" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
               {t("values_title")}
             </h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {values.map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="bg-white rounded-2xl border border-stone-200 p-7 hover:shadow-warm transition-shadow">
-                <div className="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center mb-5">
-                  <Icon size={22} className="text-orange-600" />
+              <div key={title} className="bg-white rounded-2xl border border-stone-200/80 p-7 hover:shadow-warm transition-all shadow-xs">
+                <div className="w-12 h-12 rounded-xl bg-orange-50 border border-orange-200/60 flex items-center justify-center mb-5 text-orange-600 shadow-2xs">
+                  <Icon size={22} />
                 </div>
                 <h3 className="font-bold text-stone-900 text-lg mb-3" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
                   {title}

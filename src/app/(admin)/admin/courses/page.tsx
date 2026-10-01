@@ -28,99 +28,155 @@ export default async function AdminCoursesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      {/* Top Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-stone-200/60">
         <div>
-          <h1 className="text-2xl font-bold text-stone-900" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
+          <h1
+            className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight"
+            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+          >
             {t("courses_title")}
           </h1>
-          <p className="text-stone-500 text-sm mt-1">{t("courses_count", { count: courses.length })}</p>
+          <p className="text-stone-500 text-xs sm:text-sm mt-1">{t("courses_count", { count: courses.length })}</p>
         </div>
         <Link
           href="/admin/courses/new"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-semibold shadow-xs transition-colors shrink-0"
         >
-          <Plus size={16} />
+          <Plus size={15} />
           {t("add_class")}
         </Link>
       </div>
 
-      {/* Search */}
-      <div className="bg-white rounded-2xl border border-stone-200 overflow-hidden">
-        <div className="p-4 border-b border-stone-100 flex items-center gap-3">
-          <Search size={16} className="text-stone-400" />
-          <input
-            placeholder={t("search_courses")}
-            className="flex-1 text-sm text-stone-700 placeholder:text-stone-400 focus:outline-none"
-          />
+      {/* Courses Table Container */}
+      <div className="bg-white rounded-2xl border border-stone-200/80 shadow-xs overflow-hidden">
+        {/* Search & Filter Header */}
+        <div className="p-4 border-b border-stone-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-stone-50 border border-stone-200/60 flex-1 max-w-md">
+            <Search size={15} className="text-stone-400 shrink-0" />
+            <input
+              placeholder={t("search_courses")}
+              className="flex-1 text-xs bg-transparent text-stone-800 placeholder:text-stone-400 focus:outline-none"
+            />
+          </div>
+
+          <div className="flex items-center gap-2 text-xs">
+            <span className="px-2.5 py-1 rounded-lg bg-orange-50 text-orange-800 font-bold border border-orange-200/60">
+              Total: {courses.length}
+            </span>
+            <span className="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200/60">
+              Publish: {courses.filter((c) => c.published).length}
+            </span>
+            <span className="px-2.5 py-1 rounded-lg bg-stone-100 text-stone-600 font-semibold border border-stone-200/60">
+              Draft: {courses.filter((c) => !c.published).length}
+            </span>
+          </div>
         </div>
 
         {courses.length === 0 ? (
-          <div className="p-12 text-center">
-            <p className="text-stone-400 text-sm">{t("no_courses")}</p>
+          <div className="p-16 text-center">
+            <div className="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center mx-auto mb-3">
+              <BookOpen size={22} />
+            </div>
+            <p className="text-stone-700 font-bold text-sm mb-1">{t("no_courses")}</p>
+            <p className="text-stone-400 text-xs">Klik tombol di atas untuk membuat kelas pertama Anda.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full text-left">
               <thead>
-                <tr className="bg-stone-50 border-b border-stone-100">
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_course")}</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_category")}</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_level")}</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_price")}</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_learners")}</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_status")}</th>
-                  <th className="text-left px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_action")}</th>
+                <tr className="bg-stone-50/80 border-b border-stone-100 text-[11px] font-bold text-stone-500 uppercase tracking-wider">
+                  <th className="px-5 py-3.5">{t("col_course")}</th>
+                  <th className="px-5 py-3.5">{t("col_category")}</th>
+                  <th className="px-5 py-3.5">{t("col_level")}</th>
+                  <th className="px-5 py-3.5">{t("col_price")}</th>
+                  <th className="px-5 py-3.5">{t("col_learners")}</th>
+                  <th className="px-5 py-3.5">{t("col_status")}</th>
+                  <th className="px-5 py-3.5 text-right">{t("col_action")}</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-stone-100">
+              <tbody className="divide-y divide-stone-100 text-xs">
                 {courses.map((course) => (
-                  <tr key={course.id} className="hover:bg-stone-50 transition-colors">
+                  <tr key={course.id} className="hover:bg-stone-50/80 transition-colors">
                     <td className="px-5 py-4">
-                      <div>
-                        <p className="text-sm font-medium text-stone-900 max-w-[250px] truncate">
-                          {course.title}
-                        </p>
-                        <p className="text-xs text-stone-400 mt-0.5">{course.instructor.name}</p>
+                      <div className="flex items-center gap-3">
+                        {course.thumbnail ? (
+                          <div className="w-12 h-8 rounded-lg overflow-hidden bg-stone-100 border border-stone-200/80 shrink-0 relative">
+                            <img
+                              src={course.thumbnail}
+                              alt={course.title}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-12 h-8 rounded-lg bg-orange-50 border border-orange-200/60 flex items-center justify-center text-orange-600 shrink-0">
+                            <BookOpen size={16} />
+                          </div>
+                        )}
+                        <div className="min-w-0 max-w-[260px]">
+                          <p className="font-bold text-stone-900 truncate">{course.title}</p>
+                          <p className="text-[11px] text-stone-400 truncate mt-0.5">
+                            Oleh: {course.instructor.name || "Instruktur"}
+                          </p>
+                        </div>
                       </div>
                     </td>
-                    <td className="px-5 py-4 text-sm text-stone-600">{course.category.name}</td>
+                    <td className="px-5 py-4 text-stone-600 font-medium">
+                      <span className="bg-stone-100 px-2 py-0.5 rounded-md text-[11px]">
+                        {course.category.name}
+                      </span>
+                    </td>
                     <td className="px-5 py-4">
                       <LevelBadge level={course.level} />
                     </td>
-                    <td className="px-5 py-4 text-sm text-stone-900 font-medium">
-                      {course.price === 0 ? t("free") : formatCurrency(course.price)}
+                    <td className="px-5 py-4 font-bold text-stone-900">
+                      {course.price === 0 ? (
+                        <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/60 text-[11px]">
+                          {t("free")}
+                        </span>
+                      ) : (
+                        formatCurrency(course.price)
+                      )}
                     </td>
-                    <td className="px-5 py-4 text-sm text-stone-600">
-                      {course._count.enrollments.toLocaleString()}
+                    <td className="px-5 py-4 text-stone-600 font-semibold">
+                      {course._count.enrollments.toLocaleString()} siswa
                     </td>
                     <td className="px-5 py-4">
                       <Badge variant={course.published ? "success" : "default"}>
-                        {course.published ? "Publish" : "Draft"}
+                        {course.published ? "Published" : "Draft"}
                       </Badge>
                     </td>
-                    <td className="px-5 py-4">
-                      <div className="flex items-center gap-1.5">
+                    <td className="px-5 py-4 text-right">
+                      <div className="inline-flex items-center gap-1.5">
                         <Link
                           href={`/admin/courses/${course.id}?tab=curriculum`}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-orange-50 hover:bg-orange-100 text-orange-700 text-xs font-semibold transition-colors"
-                          title="Kelola Materi & Kurikulum"
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-orange-50 hover:bg-orange-100 text-orange-700 font-bold transition-colors border border-orange-200/60 text-[11px]"
+                          title="Kelola Materi Kurikulum"
                         >
                           <BookOpen size={13} />
-                          <span className="hidden sm:inline">{t("btn_content")}</span>
+                          <span>Kurikulum</span>
                         </Link>
                         <Link
-                          href={`/courses/${course.slug}`}
-                          className="p-1.5 rounded-lg hover:bg-stone-100 text-stone-400 hover:text-stone-700 transition-colors"
-                          title="Lihat Halaman Publik"
+                          href={`/admin/courses/${course.id}?tab=certificate`}
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 font-bold transition-colors border border-amber-200/60 text-[11px]"
+                          title="Studio Sertifikat"
                         >
-                          <Eye size={15} />
+                          <span>Sertifikat</span>
                         </Link>
                         <Link
                           href={`/admin/courses/${course.id}?tab=settings`}
-                          className="p-1.5 rounded-lg hover:bg-stone-100 text-stone-400 hover:text-stone-700 transition-colors"
+                          className="p-1.5 rounded-lg text-stone-500 hover:text-stone-900 hover:bg-stone-100 transition-colors border border-stone-200/60"
                           title="Edit Pengaturan Kelas"
                         >
-                          <Edit size={15} />
+                          <Edit size={14} />
+                        </Link>
+                        <Link
+                          href={`/courses/${course.slug}`}
+                          target="_blank"
+                          className="p-1.5 rounded-lg text-stone-500 hover:text-stone-900 hover:bg-stone-100 transition-colors border border-stone-200/60"
+                          title="Lihat Halaman Publik"
+                        >
+                          <Eye size={14} />
                         </Link>
                         <DeleteCourseButton courseId={course.id} courseTitle={course.title} />
                       </div>

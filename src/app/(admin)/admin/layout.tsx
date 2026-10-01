@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import { getTranslations } from "next-intl/server";
 import AdminNavLink, { type AdminNavItem } from "./admin-nav-link";
 import SignOutButton from "@/components/auth/signout-button";
+import { UserSidebarBadge } from "@/components/layout/user-sidebar-badge";
 
 export default async function AdminLayout({
   children,
@@ -25,99 +26,120 @@ export default async function AdminLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-stone-50 flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-[#faf8f5] flex flex-col lg:flex-row">
       {/* Mobile Top Navigation */}
-      <header className="lg:hidden bg-stone-900 border-b border-stone-800 p-4 sticky top-0 z-40 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center">
-            <Shield size={14} className="text-white" />
+      <header className="lg:hidden bg-white/90 backdrop-blur-md border-b border-stone-200/80 p-4 sticky top-0 z-40 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-2xs">
+            <Shield size={16} className="text-white" />
           </div>
-          <span className="font-bold text-white text-sm">Admin Panel</span>
+          <div>
+            <span
+              className="font-bold text-stone-900 text-sm block leading-none"
+              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            >
+              Earthy<span className="text-orange-600">Admin</span>
+            </span>
+          </div>
         </Link>
         <div className="flex items-center gap-2">
           <Link
             href="/dashboard?view=student"
-            className="text-xs text-stone-400 hover:text-white px-2.5 py-1 rounded-lg bg-stone-800"
+            className="text-xs font-semibold text-stone-600 hover:text-orange-600 px-2.5 py-1.5 rounded-lg bg-stone-100 hover:bg-orange-50 transition-colors border border-stone-200/60"
           >
             {tAdmin("student_mode")}
           </Link>
           <SignOutButton
             variant="admin"
-            className="w-auto p-1.5 rounded-lg text-stone-400 hover:text-red-400"
+            className="w-auto p-1.5 rounded-lg text-stone-500 hover:text-red-600 hover:bg-red-50"
           >
             <span className="sr-only">Keluar</span>
           </SignOutButton>
-          <div className="w-7 h-7 rounded-full bg-orange-500 text-white text-xs font-bold flex items-center justify-center">
-            {session.user?.name?.[0]?.toUpperCase()}
-          </div>
+          <UserSidebarBadge
+            initialUser={{
+              name: session.user?.name,
+              email: session.user?.email,
+              image: session.user?.image,
+              role: session.user?.role,
+            }}
+            variant="mobile-admin"
+          />
         </div>
       </header>
 
       {/* Mobile Horizontal Subnav */}
-      <div className="lg:hidden bg-stone-900 px-4 py-2 border-b border-stone-800 flex gap-2 overflow-x-auto text-xs">
+      <div className="lg:hidden bg-white/80 backdrop-blur-xs px-4 py-2 border-b border-stone-200/80 flex gap-2 overflow-x-auto text-xs">
         {adminNavItems.map((item) => (
           <AdminNavLink key={item.href} item={item} />
         ))}
       </div>
 
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex w-60 shrink-0 bg-stone-900 flex-col fixed top-0 left-0 h-screen z-40">
-        <div className="p-5 border-b border-stone-800">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-sm">
-              <Shield size={16} className="text-white" />
+      <aside className="hidden lg:flex w-64 shrink-0 bg-white border-r border-stone-200/80 flex-col fixed top-0 left-0 h-screen z-40 shadow-xs">
+        {/* Brand Header */}
+        <div className="p-5 border-b border-stone-100 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+              <Shield size={18} className="text-white" />
             </div>
             <div>
-              <span className="font-bold text-white text-sm block leading-none">
-                Earthy Academy
+              <span
+                className="font-bold text-stone-900 text-sm block leading-tight"
+                style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              >
+                Earthy<span className="text-orange-600">Academy</span>
               </span>
-              <span className="text-[10px] text-orange-400 font-semibold uppercase tracking-wider">
+              <span className="inline-block text-[10px] text-orange-700 font-bold uppercase tracking-wider bg-orange-50 px-1.5 py-0.5 rounded border border-orange-200/60 mt-0.5">
                 Admin Console
               </span>
             </div>
           </Link>
         </div>
 
-        <div className="p-4 border-b border-stone-800">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white font-bold text-sm shrink-0">
-              {session.user?.name?.[0]?.toUpperCase()}
-            </div>
-            <div className="min-w-0">
-              <p className="text-sm font-medium text-white truncate">{session.user?.name}</p>
-              <p className="text-xs text-stone-400 truncate">Administrator</p>
-            </div>
-          </div>
+        {/* User Card */}
+        <div className="p-4 border-b border-stone-100">
+          <UserSidebarBadge
+            initialUser={{
+              name: session.user?.name,
+              email: session.user?.email,
+              image: session.user?.image,
+              role: session.user?.role,
+            }}
+            variant="admin"
+          />
         </div>
 
-        <nav className="flex-1 p-3 overflow-y-auto">
-          <div className="space-y-1">
-            {adminNavItems.map((item) => (
-              <AdminNavLink key={item.href} item={item} />
-            ))}
-          </div>
+        {/* Navigation Menu */}
+        <nav className="flex-1 p-3.5 overflow-y-auto space-y-1">
+          <p className="px-3 text-[10px] font-bold text-stone-400 uppercase tracking-wider mb-2">
+            Menu Utama
+          </p>
+          {adminNavItems.map((item) => (
+            <AdminNavLink key={item.href} item={item} />
+          ))}
 
-          <div className="mt-8 pt-4 border-t border-stone-800">
-            <p className="px-3 text-[11px] font-semibold text-stone-500 uppercase tracking-wider mb-2">
+          <div className="mt-8 pt-4 border-t border-stone-100">
+            <p className="px-3 text-[10px] font-bold text-stone-400 uppercase tracking-wider mb-2">
               {tAdmin("quick_nav")}
             </p>
             <Link
               href="/dashboard?view=student"
-              className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs text-stone-400 hover:text-white hover:bg-stone-800/60 transition-colors"
+              className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-stone-600 hover:text-orange-700 hover:bg-orange-50/60 transition-colors border border-transparent hover:border-orange-200/60"
             >
-              <BookOpen size={14} className="text-stone-500" />
+              <BookOpen size={14} className="text-stone-400" />
               {tAdmin("student_preview")}
             </Link>
           </div>
         </nav>
 
-        <div className="p-3 border-t border-stone-800">
+        {/* Sign Out Button */}
+        <div className="p-3 border-t border-stone-100">
           <SignOutButton variant="admin" />
         </div>
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 lg:ml-60 min-w-0">
+      <div className="flex-1 lg:ml-64 min-w-0">
         <main className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">{children}</main>
       </div>
     </div>

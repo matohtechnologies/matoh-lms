@@ -87,108 +87,202 @@ export default async function AdminDashboardPage() {
   ];
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-stone-900" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-          {t("overview")}
-        </h1>
-        <p className="text-stone-500 text-sm mt-1">{t("platform_summary")}</p>
+    <div className="space-y-7">
+      {/* Top Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-stone-200/60">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              Sistem Aktif
+            </span>
+          </div>
+          <h1
+            className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight"
+            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+          >
+            {t("overview")}
+          </h1>
+          <p className="text-stone-500 text-xs sm:text-sm mt-1">{t("platform_summary")}</p>
+        </div>
+
+        <div className="flex items-center gap-2.5">
+          <a
+            href="/admin/courses/new"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-semibold shadow-xs transition-colors"
+          >
+            <BookOpen size={14} />
+            {t("add_course")}
+          </a>
+        </div>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {statCards.map(({ label, value, icon: Icon, color, change }) => (
-          <div key={label} className="bg-white rounded-2xl border border-stone-200 p-5 shadow-warm">
-            <div className="flex items-start justify-between mb-3">
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                color === "blue" ? "bg-blue-50" :
-                color === "orange" ? "bg-orange-50" :
-                color === "green" ? "bg-green-50" : "bg-amber-50"
-              }`}>
-                <Icon size={18} className={
-                  color === "blue" ? "text-blue-600" :
-                  color === "orange" ? "text-orange-600" :
-                  color === "green" ? "text-green-600" : "text-amber-600"
-                } />
+          <div
+            key={label}
+            className="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-xs hover:shadow-warm transition-all duration-200 group"
+          >
+            <div className="flex items-start justify-between mb-3.5">
+              <div
+                className={`w-11 h-11 rounded-xl flex items-center justify-center transition-transform group-hover:scale-105 ${
+                  color === "blue"
+                    ? "bg-blue-50 text-blue-600"
+                    : color === "orange"
+                    ? "bg-orange-50 text-orange-600"
+                    : color === "green"
+                    ? "bg-emerald-50 text-emerald-600"
+                    : "bg-amber-50 text-amber-600"
+                }`}
+              >
+                <Icon size={20} />
               </div>
-              <span className="text-xs text-green-600 font-medium bg-green-50 px-2 py-0.5 rounded-full">
+              <span className="text-[11px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">
                 {change}
               </span>
             </div>
-            <p className="text-2xl font-bold text-stone-900">{value}</p>
-            <p className="text-xs text-stone-500 mt-1">{label}</p>
+            <p
+              className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight"
+              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            >
+              {value}
+            </p>
+            <p className="text-xs font-medium text-stone-500 mt-1">{label}</p>
           </div>
         ))}
       </div>
 
-      {/* Quick Actions */}
+      {/* Main Grid: Transactions & Quick Actions */}
       <div className="grid lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-stone-200 p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-stone-900">{t("recent_transactions")}</h2>
-            <a href="/admin/orders" className="text-sm text-orange-600 hover:underline">{t("view_all")}</a>
+        {/* Recent Transactions */}
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-stone-200/80 p-6 shadow-xs space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-stone-100">
+            <div>
+              <h2
+                className="text-base font-bold text-stone-900"
+                style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              >
+                {t("recent_transactions")}
+              </h2>
+              <p className="text-xs text-stone-500 mt-0.5">5 transaksi pembayaran kelas terbaru</p>
+            </div>
+            <a
+              href="/admin/orders"
+              className="inline-flex items-center gap-1 text-xs font-semibold text-orange-600 hover:text-orange-700 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded-lg transition-colors border border-orange-200/60"
+            >
+              {t("view_all")}
+            </a>
           </div>
+
           {stats.recentOrders.length > 0 ? (
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-stone-100">
-                  <th className="text-left text-xs font-medium text-stone-400 pb-2">{t("user_col")}</th>
-                  <th className="text-left text-xs font-medium text-stone-400 pb-2">{t("course_col")}</th>
-                  <th className="text-right text-xs font-medium text-stone-400 pb-2">{t("amount_col")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {stats.recentOrders.map((order) => (
-                  <tr key={order.id} className="border-b border-stone-50 last:border-0">
-                    <td className="py-3 text-sm text-stone-700">{order.user.name}</td>
-                    <td className="py-3 text-sm text-stone-500 truncate max-w-[150px]">{order.course.title}</td>
-                    <td className="py-3 text-sm font-medium text-stone-900 text-right">{formatCurrency(order.amount)}</td>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead>
+                  <tr className="border-b border-stone-100 text-stone-400 uppercase tracking-wider text-[10px]">
+                    <th className="pb-2.5 font-bold">{t("user_col")}</th>
+                    <th className="pb-2.5 font-bold">{t("course_col")}</th>
+                    <th className="pb-2.5 font-bold text-right">{t("amount_col")}</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-stone-50">
+                  {stats.recentOrders.map((order) => (
+                    <tr key={order.id} className="hover:bg-stone-50/80 transition-colors">
+                      <td className="py-3">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-7 h-7 rounded-lg bg-orange-100 text-orange-700 font-bold text-[11px] flex items-center justify-center shrink-0">
+                            {order.user.name?.[0]?.toUpperCase() || "U"}
+                          </div>
+                          <div>
+                            <p className="font-semibold text-stone-900">{order.user.name}</p>
+                            <p className="text-[10px] text-stone-400 truncate max-w-[140px]">
+                              {order.user.email}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-3">
+                        <p className="font-medium text-stone-700 truncate max-w-[200px]">
+                          {order.course.title}
+                        </p>
+                      </td>
+                      <td className="py-3 text-right">
+                        <span className="font-bold text-stone-900 bg-stone-100 px-2 py-1 rounded-md">
+                          {formatCurrency(order.amount)}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           ) : (
-            <div className="text-center py-8">
-              <ShoppingBag size={32} className="text-stone-200 mx-auto mb-2" />
-              <p className="text-sm text-stone-400">{t("no_transactions")}</p>
+            <div className="text-center py-12 bg-stone-50/50 rounded-xl border border-dashed border-stone-200">
+              <ShoppingBag size={32} className="text-stone-300 mx-auto mb-2" />
+              <p className="text-xs font-medium text-stone-500">{t("no_transactions")}</p>
             </div>
           )}
         </div>
 
-        {/* Quick Links */}
-        <div className="space-y-3">
-          <div className="bg-white rounded-2xl border border-stone-200 p-5">
-            <h2 className="font-semibold text-stone-900 mb-4">{t("quick_actions")}</h2>
+        {/* Quick Actions & Navigation */}
+        <div className="space-y-4">
+          <div className="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-xs space-y-3">
+            <h2
+              className="text-sm font-bold text-stone-900"
+              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            >
+              {t("quick_actions")}
+            </h2>
             <div className="space-y-2">
               <a
                 href="/admin/courses/new"
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-orange-50 hover:bg-orange-100 text-orange-700 text-sm font-medium transition-colors"
+                className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-orange-50 hover:bg-orange-100/80 text-orange-950 text-xs font-bold border border-orange-200/80 transition-all shadow-2xs"
               >
-                <BookOpen size={16} />
-                {t("add_course")}
+                <div className="w-6 h-6 rounded-lg bg-orange-600 text-white flex items-center justify-center shrink-0">
+                  <BookOpen size={13} />
+                </div>
+                <span>{t("add_course")}</span>
               </a>
+
               <a
                 href="/admin/courses"
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-stone-50 text-stone-700 text-sm transition-colors"
+                className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-stone-50 text-stone-700 text-xs font-semibold border border-stone-200/60 transition-colors"
               >
-                <BookOpen size={16} className="text-stone-400" />
-                {t("manage_courses")}
+                <div className="w-6 h-6 rounded-lg bg-stone-100 text-stone-600 flex items-center justify-center shrink-0">
+                  <BookOpen size={13} />
+                </div>
+                <span>{t("manage_courses")}</span>
               </a>
+
               <a
                 href="/admin/users"
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-stone-50 text-stone-700 text-sm transition-colors"
+                className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-stone-50 text-stone-700 text-xs font-semibold border border-stone-200/60 transition-colors"
               >
-                <Users size={16} className="text-stone-400" />
-                {t("manage_users")}
+                <div className="w-6 h-6 rounded-lg bg-stone-100 text-stone-600 flex items-center justify-center shrink-0">
+                  <Users size={13} />
+                </div>
+                <span>{t("manage_users")}</span>
               </a>
+
               <a
                 href="/admin/orders"
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-stone-50 text-stone-700 text-sm transition-colors"
+                className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-stone-50 text-stone-700 text-xs font-semibold border border-stone-200/60 transition-colors"
               >
-                <ShoppingBag size={16} className="text-stone-400" />
-                {t("all_transactions")}
+                <div className="w-6 h-6 rounded-lg bg-stone-100 text-stone-600 flex items-center justify-center shrink-0">
+                  <ShoppingBag size={13} />
+                </div>
+                <span>{t("all_transactions")}</span>
               </a>
             </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-amber-50 to-orange-50/60 rounded-2xl border border-amber-200/60 p-4.5 text-xs space-y-1.5">
+            <p className="font-bold text-amber-950 flex items-center gap-1.5">
+              <span>💡</span> Tips Pengelolaan
+            </p>
+            <p className="text-stone-600 leading-relaxed text-[11px]">
+              Gunakan Studio Sertifikat di dalam masing-masing halaman kelas untuk merancang tata letak dan syarat kelulusan otomatis bagi peserta didik.
+            </p>
           </div>
         </div>
       </div>

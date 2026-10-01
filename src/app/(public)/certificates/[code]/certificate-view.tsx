@@ -86,8 +86,8 @@ export function CertificateView({
 
   if (isLocked) {
     return (
-      <div className="min-h-screen bg-stone-50 flex items-center justify-center px-4">
-        <div className="max-w-md w-full bg-white rounded-3xl border border-stone-200 p-8 sm:p-10 text-center shadow-warm-lg">
+      <div className="min-h-screen bg-[#faf8f5] flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-white rounded-3xl border border-stone-200/80 p-8 sm:p-10 text-center shadow-warm-lg">
           <div className="w-16 h-16 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center mx-auto mb-6 text-amber-600">
             <Lock size={28} />
           </div>
@@ -103,7 +103,7 @@ export function CertificateView({
           <div className="space-y-3">
             <Link
               href="/dashboard/my-courses"
-              className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium transition-colors shadow-sm"
+              className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium transition-colors shadow-xs"
             >
               {t("continue_learning")}
             </Link>
@@ -120,7 +120,7 @@ export function CertificateView({
   }
 
   return (
-    <div className="certificate-view-wrapper min-h-screen bg-stone-100 py-12 px-4 sm:px-6 flex flex-col items-center justify-center print:bg-white print:p-0 print:m-0 print:min-h-0 print:h-auto print:block">
+    <div className="certificate-view-wrapper min-h-screen bg-[#faf8f5] py-12 px-4 sm:px-6 flex flex-col items-center justify-center print:bg-white print:p-0 print:m-0 print:min-h-0 print:h-auto print:block">
       {/* Top Action Bar */}
       <div className="w-full max-w-4xl flex items-center justify-between mb-6 print:hidden">
         <Link

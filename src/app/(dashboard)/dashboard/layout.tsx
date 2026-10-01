@@ -6,6 +6,7 @@ import { getTranslations, getLocale } from "next-intl/server";
 import DashboardNavLink from "./nav-link";
 import SignOutButton from "@/components/auth/signout-button";
 import MobileNav from "./mobile-nav";
+import { UserSidebarBadge } from "@/components/layout/user-sidebar-badge";
 
 export default async function DashboardLayout({
   children,
@@ -34,13 +35,13 @@ export default async function DashboardLayout({
   const isAdmin = session.user?.role === "ADMIN";
 
   return (
-    <div className="min-h-screen bg-stone-50 flex">
+    <div className="min-h-screen bg-[#faf8f5] flex">
       {/* ── Desktop Sidebar ─────────────────────────── */}
-      <aside className="hidden lg:flex w-64 shrink-0 bg-white border-r border-stone-200 flex-col fixed top-0 left-0 h-screen z-30">
+      <aside className="hidden lg:flex w-64 shrink-0 bg-white border-r border-stone-200/80 flex-col fixed top-0 left-0 h-screen z-30 shadow-xs">
         {/* Logo */}
         <div className="p-4 border-b border-stone-100 flex items-center">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-sm">
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-2xs group-hover:scale-105 transition-transform">
               <BookOpen size={16} className="text-white" />
             </div>
             <span
@@ -54,63 +55,56 @@ export default async function DashboardLayout({
 
         {/* User info */}
         <div className="p-4 border-b border-stone-100">
-          <div className="flex items-center gap-3 p-2 rounded-xl hover:bg-stone-50 transition-colors">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white font-bold shrink-0">
-              {userInitial}
-            </div>
-            <div className="overflow-hidden">
-              <div className="flex items-center gap-1.5">
-                <p className="text-sm font-semibold text-stone-900 truncate">{userName}</p>
-                {isAdmin && (
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-orange-100 text-orange-700 shrink-0">
-                    ADMIN
-                  </span>
-                )}
-              </div>
-              <p className="text-xs text-stone-500 truncate">{userEmail}</p>
-            </div>
-          </div>
+          <UserSidebarBadge
+            initialUser={{
+              name: userName,
+              email: userEmail,
+              image: session.user?.image,
+              role: session.user?.role,
+            }}
+            variant="dashboard"
+          />
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-3 overflow-y-auto">
+        <nav className="flex-1 p-3.5 overflow-y-auto space-y-1">
           {isAdmin && (
-            <div className="mb-4 p-3 rounded-xl bg-stone-900 text-white shadow-xs">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[11px] font-bold text-orange-400 uppercase tracking-wider flex items-center gap-1.5">
-                  <Shield size={13} /> Admin Console
+            <div className="mb-4 p-3.5 rounded-2xl bg-gradient-to-br from-orange-50 to-amber-50/80 border border-orange-200/80 shadow-2xs space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold text-orange-950 uppercase tracking-wider flex items-center gap-1.5">
+                  <Shield size={13} className="text-orange-600" /> Mode Administrator
                 </span>
               </div>
-              <p className="text-[11px] text-stone-400 mb-2.5">
+              <p className="text-[11px] text-stone-600 leading-snug">
                 {tDash("admin_console_desc")}
               </p>
               <Link
                 href="/admin"
-                className="flex items-center justify-center gap-2 w-full py-2 px-3 rounded-lg bg-orange-600 hover:bg-orange-500 text-white text-xs font-semibold transition-colors shadow-xs"
+                className="flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold transition-colors shadow-2xs"
               >
                 {tDash("open_admin_panel")}
               </Link>
             </div>
           )}
 
-          <p className="text-[10px] font-semibold text-stone-400 uppercase tracking-wider px-3 mb-2">
+          <p className="text-[10px] font-bold text-stone-400 uppercase tracking-wider px-3 mb-2">
             {tDash("learner_menu")}
           </p>
-          <div className="space-y-0.5">
+          <div className="space-y-1">
             {navItems.map((item) => (
               <DashboardNavLink key={item.href} item={item} />
             ))}
           </div>
 
           <div className="mt-6 pt-4 border-t border-stone-100">
-            <p className="text-[10px] font-semibold text-stone-400 uppercase tracking-wider px-3 mb-2">
+            <p className="text-[10px] font-bold text-stone-400 uppercase tracking-wider px-3 mb-2">
               {tDash("explore_section")}
             </p>
             <Link
               href="/courses"
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-stone-600 hover:bg-stone-50 hover:text-stone-900 transition-all"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-stone-600 hover:bg-stone-50 hover:text-orange-700 transition-all border border-transparent hover:border-stone-200/60"
             >
-              <BookOpen size={16} className="text-stone-400" />
+              <BookOpen size={15} className="text-stone-400" />
               {tDash("browse_courses")}
             </Link>
           </div>
@@ -123,11 +117,11 @@ export default async function DashboardLayout({
       </aside>
 
       {/* ── Main Content ─────────────────────────────── */}
-      <div className="flex-1 lg:ml-64 flex flex-col min-h-screen">
+      <div className="flex-1 lg:ml-64 flex flex-col min-h-screen min-w-0">
         {/* Mobile Top Header */}
-        <header className="lg:hidden bg-white border-b border-stone-200 px-4 h-14 flex items-center justify-between sticky top-0 z-20">
+        <header className="lg:hidden bg-white/90 backdrop-blur-md border-b border-stone-200/80 px-4 h-14 flex items-center justify-between sticky top-0 z-20">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center">
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-2xs">
               <BookOpen size={13} className="text-white" />
             </div>
             <span
@@ -137,16 +131,29 @@ export default async function DashboardLayout({
               Earthy<span className="text-orange-600">Academy</span>
             </span>
           </Link>
-          <div className="flex items-center">
-            {/* User avatar mobile */}
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white font-bold text-sm">
-              {userInitial}
-            </div>
+          <div className="flex items-center gap-2">
+            {isAdmin && (
+              <Link
+                href="/admin"
+                className="text-[10px] font-bold px-2 py-1 rounded bg-orange-100 text-orange-800 border border-orange-200/60"
+              >
+                Admin
+              </Link>
+            )}
+            <UserSidebarBadge
+              initialUser={{
+                name: userName,
+                email: userEmail,
+                image: session.user?.image,
+                role: session.user?.role,
+              }}
+              variant="mobile-dashboard"
+            />
           </div>
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-4 sm:p-5 lg:p-7 pb-24 lg:pb-7">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto pb-24 lg:pb-8">
           {children}
         </main>
 

@@ -8,6 +8,7 @@ import { Search, Menu, X, BookOpen, User, LogOut, LayoutDashboard, Shield } from
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "./language-switcher";
+import { useSession } from "next-auth/react";
 import SignOutButton from "@/components/auth/signout-button";
 
 interface NavbarProps {
@@ -21,6 +22,15 @@ interface NavbarProps {
 }
 
 export function Navbar({ user }: NavbarProps) {
+  const { data: session } = useSession();
+  const currentUser = session?.user
+    ? {
+        ...user,
+        ...session.user,
+        image: session.user.image ?? user?.image,
+        name: session.user.name ?? user?.name,
+      }
+    : user;
   const t = useTranslations("nav");
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -87,11 +97,19 @@ export function Navbar({ user }: NavbarProps) {
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                 className="flex items-center gap-2 px-3 py-1.5 rounded-xl hover:bg-stone-100 transition-colors"
               >
-                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white text-xs font-bold">
-                  {user.name?.[0]?.toUpperCase() ?? "U"}
+                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white text-xs font-bold overflow-hidden ring-1 ring-orange-200/60 shadow-2xs">
+                  {currentUser?.image ? (
+                    <img
+                      src={currentUser.image}
+                      alt={currentUser.name ?? "User"}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span>{currentUser?.name?.[0]?.toUpperCase() ?? "U"}</span>
+                  )}
                 </div>
                 <span className="hidden sm:block text-sm font-medium text-stone-700 max-w-[100px] truncate">
-                  {user.name}
+                  {currentUser?.name}
                 </span>
               </button>
 

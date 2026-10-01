@@ -77,21 +77,21 @@ export default async function AdminOrdersPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="space-y-7">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-stone-200/60">
         <div>
           <h1
-            className="text-2xl font-bold text-stone-900"
+            className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight"
             style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
           >
             {t("orders_title")}
           </h1>
-          <p className="text-stone-500 text-sm mt-1">
+          <p className="text-stone-500 text-xs sm:text-sm mt-1">
             {t("orders_subtitle")}
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <button className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-stone-200 bg-white text-stone-700 text-xs font-medium hover:bg-stone-50 shadow-sm transition-colors">
+          <button className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl border border-stone-200/80 bg-white text-stone-700 hover:text-stone-900 text-xs font-semibold hover:bg-stone-50 shadow-2xs transition-colors">
             <Download size={14} />
             {t("export_csv")}
           </button>
@@ -100,86 +100,107 @@ export default async function AdminOrdersPage() {
 
       {/* Overview Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white rounded-2xl border border-stone-200 p-5 shadow-warm">
+        <div className="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-xs hover:shadow-warm transition-all duration-200">
           <p className="text-xs font-medium text-stone-500">{t("total_income")}</p>
-          <p className="text-2xl font-bold text-stone-900 mt-1">{formatCurrency(totalAmount)}</p>
-          <p className="text-xs text-green-600 mt-1">{t("income_note")}</p>
+          <p
+            className="text-2xl sm:text-3xl font-extrabold text-stone-900 mt-1 tracking-tight"
+            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+          >
+            {formatCurrency(totalAmount)}
+          </p>
+          <p className="text-[11px] text-emerald-700 font-semibold mt-1 flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+            {t("income_note")}
+          </p>
         </div>
-        <div className="bg-white rounded-2xl border border-stone-200 p-5 shadow-warm">
+        <div className="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-xs hover:shadow-warm transition-all duration-200">
           <p className="text-xs font-medium text-stone-500">{t("successful_orders")}</p>
-          <p className="text-2xl font-bold text-stone-900 mt-1">
+          <p
+            className="text-2xl sm:text-3xl font-extrabold text-emerald-700 mt-1 tracking-tight"
+            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+          >
             {orders.filter((o) => o.status === "PAID").length}
           </p>
-          <p className="text-xs text-stone-400 mt-1">{t("from_total", { total: orders.length })}</p>
+          <p className="text-[11px] text-stone-400 mt-1">{t("from_total", { total: orders.length })}</p>
         </div>
-        <div className="bg-white rounded-2xl border border-stone-200 p-5 shadow-warm">
+        <div className="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-xs hover:shadow-warm transition-all duration-200">
           <p className="text-xs font-medium text-stone-500">{t("pending_payment")}</p>
-          <p className="text-2xl font-bold text-amber-600 mt-1">
+          <p
+            className="text-2xl sm:text-3xl font-extrabold text-amber-700 mt-1 tracking-tight"
+            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+          >
             {orders.filter((o) => o.status === "PENDING").length}
           </p>
-          <p className="text-xs text-stone-400 mt-1">{t("pending_note")}</p>
+          <p className="text-[11px] text-stone-400 mt-1">{t("pending_note")}</p>
         </div>
       </div>
 
       {/* Transactions Table Container */}
-      <div className="bg-white rounded-2xl border border-stone-200 shadow-warm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-stone-200/80 shadow-xs overflow-hidden">
         <div className="p-4 border-b border-stone-100 flex flex-col sm:flex-row gap-3 items-center justify-between">
-          <div className="flex items-center gap-3 w-full sm:w-80">
-            <Search size={16} className="text-stone-400 shrink-0" />
+          <div className="flex items-center gap-3 w-full sm:w-80 px-3 py-2 rounded-xl bg-stone-50 border border-stone-200/60">
+            <Search size={15} className="text-stone-400 shrink-0" />
             <input
               placeholder={t("search_orders")}
-              className="w-full text-sm text-stone-700 placeholder:text-stone-400 focus:outline-none"
+              className="w-full text-xs bg-transparent text-stone-700 placeholder:text-stone-400 focus:outline-none"
             />
           </div>
-          <div className="flex items-center gap-2 self-start sm:self-auto text-xs">
-            <span className="text-stone-400">{t("filter_status")}</span>
-            <button className="px-2.5 py-1 rounded-lg bg-orange-50 text-orange-700 font-medium">{t("status_all")}</button>
-            <button className="px-2.5 py-1 rounded-lg hover:bg-stone-50 text-stone-600 transition-colors">{t("status_success")}</button>
-            <button className="px-2.5 py-1 rounded-lg hover:bg-stone-50 text-stone-600 transition-colors">{t("status_pending")}</button>
-            <button className="px-2.5 py-1 rounded-lg hover:bg-stone-50 text-stone-600 transition-colors">{t("status_failed")}</button>
+          <div className="flex items-center gap-1.5 self-start sm:self-auto text-xs">
+            <span className="text-stone-400 mr-1 text-[11px]">{t("filter_status")}:</span>
+            <button className="px-2.5 py-1 rounded-lg bg-orange-50 text-orange-950 font-bold border border-orange-200/60 text-[11px]">{t("status_all")}</button>
+            <button className="px-2.5 py-1 rounded-lg hover:bg-stone-50 text-stone-600 transition-colors border border-transparent hover:border-stone-200/60 text-[11px]">{t("status_success")}</button>
+            <button className="px-2.5 py-1 rounded-lg hover:bg-stone-50 text-stone-600 transition-colors border border-transparent hover:border-stone-200/60 text-[11px]">{t("status_pending")}</button>
+            <button className="px-2.5 py-1 rounded-lg hover:bg-stone-50 text-stone-600 transition-colors border border-transparent hover:border-stone-200/60 text-[11px]">{t("status_failed")}</button>
           </div>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left">
+          <table className="w-full text-left text-xs">
             <thead>
-              <tr className="bg-stone-50/80 border-b border-stone-100">
-                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_order_id")}</th>
-                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_learner")}</th>
-                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("course_col")}</th>
-                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_method")}</th>
-                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_nominal")}</th>
-                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_status")}</th>
-                <th className="px-5 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">{t("col_time")}</th>
+              <tr className="bg-stone-50/80 border-b border-stone-100 text-[11px] font-bold text-stone-500 uppercase tracking-wider">
+                <th className="px-5 py-3.5">{t("col_order_id")}</th>
+                <th className="px-5 py-3.5">{t("col_learner")}</th>
+                <th className="px-5 py-3.5">{t("course_col")}</th>
+                <th className="px-5 py-3.5">{t("col_method")}</th>
+                <th className="px-5 py-3.5">{t("col_nominal")}</th>
+                <th className="px-5 py-3.5">{t("col_status")}</th>
+                <th className="px-5 py-3.5">{t("col_time")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-stone-100">
               {orders.map((order) => (
-                <tr key={order.id} className="hover:bg-stone-50/60 transition-colors">
+                <tr key={order.id} className="hover:bg-stone-50/80 transition-colors">
                   <td className="px-5 py-4">
-                    <span className="font-mono text-xs font-medium text-stone-700 bg-stone-100 px-2 py-1 rounded-md">
-                      {order.id}
+                    <span className="font-mono text-[11px] font-bold text-stone-700 bg-stone-100 px-2 py-1 rounded-md border border-stone-200/60">
+                      {order.id.slice(0, 16)}
                     </span>
                   </td>
                   <td className="px-5 py-4">
-                    <div>
-                      <p className="text-sm font-medium text-stone-900">{order.user.name}</p>
-                      <p className="text-xs text-stone-400 mt-0.5">{order.user.email}</p>
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-7 h-7 rounded-lg bg-orange-100 text-orange-700 font-bold text-[11px] flex items-center justify-center shrink-0">
+                        {order.user.name?.[0]?.toUpperCase() || "U"}
+                      </div>
+                      <div>
+                        <p className="font-bold text-stone-900">{order.user.name}</p>
+                        <p className="text-[10px] text-stone-400 mt-0.5">{order.user.email}</p>
+                      </div>
                     </div>
                   </td>
                   <td className="px-5 py-4">
-                    <p className="text-sm text-stone-700 max-w-[200px] truncate" title={order.course.title}>
+                    <p className="font-medium text-stone-700 max-w-[200px] truncate" title={order.course.title}>
                       {order.course.title}
                     </p>
                   </td>
-                  <td className="px-5 py-4 text-xs font-medium text-stone-600 uppercase">
-                    {order.paymentType.replace(/_/g, " ")}
+                  <td className="px-5 py-4 text-stone-600 font-bold uppercase text-[11px]">
+                    <span className="bg-stone-100 px-2 py-0.5 rounded-md border border-stone-200/60">
+                      {order.paymentType.replace(/_/g, " ")}
+                    </span>
                   </td>
-                  <td className="px-5 py-4 text-sm font-semibold text-stone-900">
+                  <td className="px-5 py-4 font-bold text-stone-900 text-sm">
                     {formatCurrency(order.amount)}
                   </td>
                   <td className="px-5 py-4">{statusBadge(order.status)}</td>
-                  <td className="px-5 py-4 text-xs text-stone-500">
+                  <td className="px-5 py-4 text-[11px] text-stone-500 font-medium">
                     {order.createdAt.toLocaleDateString(locale === "en" ? "en-US" : "id-ID", {
                       day: "numeric",
                       month: "short",

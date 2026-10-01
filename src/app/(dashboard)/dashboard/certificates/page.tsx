@@ -52,104 +52,109 @@ export default async function CertificatesPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1
-          className="text-2xl font-bold text-stone-900"
-          style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
-        >
-          {t("certs_title")}
-        </h1>
-        <p className="text-stone-500 text-sm mt-1">
-          {t("certs_count", { count: certificates.length })}
-        </p>
+    <div className="space-y-7">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-stone-200/60">
+        <div>
+          <h1
+            className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight"
+            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+          >
+            {t("certs_title")}
+          </h1>
+          <p className="text-stone-500 text-xs sm:text-sm mt-1">
+            {t("certs_count", { count: certificates.length })}
+          </p>
+        </div>
       </div>
 
       {certificates.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-stone-200 p-14 text-center">
-          <div className="w-16 h-16 rounded-2xl bg-amber-50 flex items-center justify-center mx-auto mb-4">
-            <Award size={28} className="text-amber-400" />
+        <div className="bg-white rounded-3xl border border-stone-200/80 p-16 text-center shadow-xs">
+          <div className="w-16 h-16 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto mb-4 border border-amber-200/60 shadow-2xs">
+            <Award size={30} />
           </div>
-          <h3 className="text-lg font-semibold text-stone-900 mb-2">
+          <h3
+            className="text-lg font-bold text-stone-900 mb-1.5"
+            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+          >
             {t("no_certs_title")}
           </h3>
-          <p className="text-stone-500 text-sm mb-2">
+          <p className="text-stone-500 text-xs sm:text-sm mb-2 max-w-sm mx-auto">
             {t("no_certs_desc")}
           </p>
-          <p className="text-xs text-stone-400 mb-6">
+          <p className="text-[11px] text-stone-400 mb-6 max-w-sm mx-auto">
             {t("no_certs_hint")}
           </p>
-          <div className="flex items-center justify-center gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/dashboard/my-courses"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 text-white text-sm font-medium hover:bg-orange-700 transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold shadow-xs transition-colors"
             >
-              <BookOpen size={16} />
+              <BookOpen size={14} />
               {t("view_my_courses")}
             </Link>
             <Link
               href="/courses"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-stone-200 bg-white text-stone-700 text-sm font-medium hover:bg-stone-50 transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-stone-200/80 bg-white text-stone-700 hover:text-orange-700 text-xs font-bold hover:bg-orange-50/60 transition-colors shadow-2xs"
             >
-              <GraduationCap size={16} />
+              <GraduationCap size={14} />
               {t("explore_courses")}
             </Link>
           </div>
         </div>
       ) : (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {certificates.map((cert) => (
             <div
               key={cert.id}
-              className="bg-white rounded-2xl border border-stone-200 overflow-hidden hover:shadow-warm-lg hover:-translate-y-0.5 transition-all duration-200 group"
+              className="bg-white rounded-2xl border border-stone-200/80 overflow-hidden shadow-xs hover:shadow-warm hover:-translate-y-1 transition-all duration-200 group flex flex-col justify-between"
             >
               {/* Certificate Preview Banner */}
-              <div className="h-32 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 flex items-center justify-center relative border-b border-stone-100 overflow-hidden">
+              <div className="h-36 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100/80 flex items-center justify-center relative border-b border-stone-100 overflow-hidden p-3">
                 {/* Decorative border */}
-                <div className="absolute inset-2 border border-amber-300/50 rounded-xl pointer-events-none" />
-                <div className="absolute inset-3 border border-dashed border-amber-200/80 rounded-xl pointer-events-none" />
+                <div className="absolute inset-2.5 border border-amber-300/60 rounded-xl pointer-events-none" />
+                <div className="absolute inset-3.5 border border-dashed border-amber-300/40 rounded-lg pointer-events-none" />
 
-                {/* Watermark dots */}
-                <div className="absolute top-3 left-3 w-4 h-4 rounded-full border-2 border-amber-300/30" />
-                <div className="absolute top-3 right-3 w-4 h-4 rounded-full border-2 border-amber-300/30" />
-                <div className="absolute bottom-3 left-3 w-4 h-4 rounded-full border-2 border-amber-300/30" />
-                <div className="absolute bottom-3 right-3 w-4 h-4 rounded-full border-2 border-amber-300/30" />
-
-                <div className="text-center relative z-10">
-                  <div className="w-10 h-10 rounded-xl bg-amber-100 border border-amber-300/60 flex items-center justify-center mx-auto mb-1.5">
-                    <Award size={20} className="text-amber-600" />
+                <div className="text-center relative z-10 space-y-1">
+                  <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-400/50 flex items-center justify-center mx-auto shadow-2xs">
+                    <Award size={20} className="text-amber-700" />
                   </div>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-stone-500">
+                  <p className="text-[10px] font-extrabold uppercase tracking-widest text-amber-950">
                     Certificate of Completion
                   </p>
-                  <p className="text-[10px] font-mono text-stone-400 mt-0.5">
+                  <p className="text-[9px] font-mono font-bold text-amber-800 bg-amber-100/80 px-2 py-0.5 rounded-full inline-block border border-amber-200">
                     #{cert.certificateCode.slice(-8).toUpperCase()}
                   </p>
                 </div>
               </div>
 
               {/* Info */}
-              <div className="p-4">
-                <p className="text-xs font-semibold text-orange-600 mb-1">
-                  {cert.course.category.name}
-                </p>
-                <h3 className="font-semibold text-stone-900 text-sm leading-snug mb-1 line-clamp-2">
-                  {cert.course.title}
-                </h3>
-                <p className="text-xs text-stone-500 mb-1">
-                  {t("cert_instructor")}: {cert.course.instructor.name}
-                </p>
-                <p className="text-xs text-stone-400 mb-4">
-                  {t("cert_issued")}:{" "}
-                  {format(new Date(cert.issuedAt), "d MMMM yyyy", {
-                    locale: dateLocale,
-                  })}
-                </p>
+              <div className="p-5 space-y-3 flex-1 flex flex-col justify-between">
+                <div>
+                  <span className="text-[10px] font-bold text-orange-800 bg-orange-50 px-2 py-0.5 rounded-md border border-orange-200/60 inline-block mb-1.5">
+                    {cert.course.category.name}
+                  </span>
+                  <h3
+                    className="font-bold text-stone-900 text-sm leading-snug line-clamp-2"
+                    style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                  >
+                    {cert.course.title}
+                  </h3>
+                  <p className="text-xs text-stone-500 mt-1 font-medium">
+                    {t("cert_instructor")}: {cert.course.instructor?.name || "Ahmad Fadhil"}
+                  </p>
+                  <p className="text-[11px] text-stone-400 mt-0.5">
+                    {t("cert_issued")}:{" "}
+                    {format(new Date(cert.issuedAt), "d MMMM yyyy", {
+                      locale: dateLocale,
+                    })}
+                  </p>
+                </div>
 
                 <Link
                   href={`/certificates/${cert.certificateCode}`}
                   target="_blank"
-                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-semibold hover:from-orange-600 hover:to-amber-600 transition-all shadow-sm"
+                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold transition-all shadow-xs"
                 >
                   <ExternalLink size={13} />
                   {t("cert_view_print")}

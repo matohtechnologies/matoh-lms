@@ -108,7 +108,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
       ];
 
   return (
-    <div className="pt-20">
+    <div className="pt-20 bg-[#faf8f5] min-h-screen pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Content */}
