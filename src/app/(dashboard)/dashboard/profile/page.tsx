@@ -131,9 +131,9 @@ export default function ProfilePage() {
 
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("folder", "avatars");
 
-      const uploadRes = await fetch("/api/upload", {
+      // Upload and store directly into PostgreSQL database (via /api/user/avatar)
+      const uploadRes = await fetch("/api/user/avatar", {
         method: "POST",
         body: formData,
       });
@@ -144,23 +144,13 @@ export default function ProfilePage() {
       }
 
       const uploadedUrl = uploadJson.url as string;
-
-      // Persist in DB
-      const patchRes = await fetch("/api/user/profile", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ image: uploadedUrl }),
-      });
-
-      if (!patchRes.ok) {
-        throw new Error(isEn ? "Failed to save photo" : "Gagal menyimpan foto profil");
-      }
+      const avatarEndpoint = (uploadJson.avatarUrl as string) || uploadedUrl;
 
       // Synchronize session immediately
-      await update({ image: uploadedUrl });
+      await update({ image: avatarEndpoint });
       setAvatarUrl(uploadedUrl);
       setAvatarMessage({
-        text: isEn ? "Profile photo updated!" : "Foto profil berhasil diperbarui!",
+        text: isEn ? "Profile photo saved to database!" : "Foto profil berhasil disimpan ke database!",
         type: "success",
       });
       setTimeout(() => setAvatarMessage(null), 4000);
@@ -180,20 +170,19 @@ export default function ProfilePage() {
       setIsUploadingAvatar(true);
       setAvatarMessage(null);
 
-      const patchRes = await fetch("/api/user/profile", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ image: null }),
+      // Remove directly from PostgreSQL database
+      const deleteRes = await fetch("/api/user/avatar", {
+        method: "DELETE",
       });
 
-      if (!patchRes.ok) {
+      if (!deleteRes.ok) {
         throw new Error(isEn ? "Failed to remove photo" : "Gagal menghapus foto");
       }
 
       await update({ image: null });
       setAvatarUrl(null);
       setAvatarMessage({
-        text: isEn ? "Profile photo removed" : "Foto profil berhasil dihapus",
+        text: isEn ? "Profile photo removed from database" : "Foto profil berhasil dihapus dari database",
         type: "success",
       });
       setTimeout(() => setAvatarMessage(null), 3000);

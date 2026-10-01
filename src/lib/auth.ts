@@ -63,13 +63,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) {
         token.role = (user as { role?: string }).role;
         token.id = user.id;
-        token.picture = user.image ?? null;
+        const userImg = (user as { image?: string | null }).image;
+        token.picture = userImg?.startsWith("data:")
+          ? `/api/user/avatar?id=${user.id}`
+          : (userImg ?? null);
       }
       if (trigger === "update" && session) {
         if (session.name !== undefined) token.name = session.name;
-        if (session.image !== undefined) token.picture = session.image;
         if (session.user?.name !== undefined) token.name = session.user.name;
-        if (session.user?.image !== undefined) token.picture = session.user.image;
+
+        const updatedImg = session.image !== undefined ? session.image : session.user?.image;
+        if (updatedImg !== undefined) {
+          token.picture = updatedImg?.startsWith("data:")
+            ? `/api/user/avatar?id=${token.id}&t=${Date.now()}`
+            : (updatedImg ?? null);
+        }
       }
       return token;
     },

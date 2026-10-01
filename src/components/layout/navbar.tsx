@@ -122,14 +122,14 @@ export function Navbar({ user }: NavbarProps) {
                   <div className="absolute right-0 top-full mt-2 w-52 bg-white rounded-2xl border border-stone-200 shadow-warm-lg py-1.5 z-20">
                     <div className="px-4 py-2.5 border-b border-stone-100">
                       <div className="flex items-center gap-1.5">
-                        <p className="text-sm font-semibold text-stone-900 truncate">{user.name}</p>
-                        {user.role === "ADMIN" && (
+                        <p className="text-sm font-semibold text-stone-900 truncate">{currentUser?.name}</p>
+                        {currentUser?.role === "ADMIN" && (
                           <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-orange-100 text-orange-700">
                             ADMIN
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-stone-500 truncate">{user.email}</p>
+                      <p className="text-xs text-stone-500 truncate">{currentUser?.email}</p>
                     </div>
 
                     {user.role === "ADMIN" ? (

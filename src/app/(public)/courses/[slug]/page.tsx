@@ -272,8 +272,16 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                 {isEn ? "About the Instructor" : "Tentang Instruktur"}
               </h2>
               <div className="flex items-start gap-4">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white text-2xl font-bold shrink-0">
-                  {displayCourse.instructor.name?.[0]?.toUpperCase()}
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white text-2xl font-bold shrink-0 overflow-hidden ring-1 ring-stone-200/80">
+                  {displayCourse.instructor.image ? (
+                    <img
+                      src={displayCourse.instructor.image}
+                      alt={displayCourse.instructor.name || "Instructor"}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span>{displayCourse.instructor.name?.[0]?.toUpperCase()}</span>
+                  )}
                 </div>
                 <div>
                   <h3 className="font-bold text-stone-900">{displayCourse.instructor.name}</h3>
