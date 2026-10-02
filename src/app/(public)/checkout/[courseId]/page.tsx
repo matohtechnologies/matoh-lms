@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, CreditCard, Shield, Clock, BookOpen, Award, CheckCircle } from "lucide-react";
+import { ArrowLeft, CreditCard, Shield, Clock, BookOpen, Award, CheckCircle, Tag, X, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
 import { resolveThumbnailUrl } from "@/lib/youtube";
@@ -38,6 +38,57 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
   const [courseId, setCourseId] = useState("");
   const [isAlreadyEnrolled, setIsAlreadyEnrolled] = useState(false);
 
+  // Coupon state
+  const [couponInput, setCouponInput] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState<{
+    code: string;
+    discountAmount: number;
+    discountType: string;
+    discountValue: number;
+  } | null>(null);
+  const [couponError, setCouponError] = useState("");
+  const [validatingCoupon, setValidatingCoupon] = useState(false);
+
+  const handleApplyCoupon = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!couponInput.trim()) return;
+
+    setValidatingCoupon(true);
+    setCouponError("");
+
+    try {
+      const res = await fetch("/api/coupons/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: couponInput.trim(), courseId }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setCouponError(data.error || "Gagal memvalidasi kupon");
+        setAppliedCoupon(null);
+      } else {
+        setAppliedCoupon({
+          code: data.coupon.code,
+          discountAmount: data.discountAmount,
+          discountType: data.coupon.discountType,
+          discountValue: data.coupon.discountValue,
+        });
+        setCouponError("");
+      }
+    } catch {
+      setCouponError("Terjadi kesalahan saat memeriksa kupon");
+    } finally {
+      setValidatingCoupon(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponInput("");
+    setCouponError("");
+  };
+
   useEffect(() => {
     params.then(async ({ courseId }) => {
       setCourseId(courseId);
@@ -66,7 +117,10 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
       const res = await fetch("/api/payment/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ courseId }),
+        body: JSON.stringify({
+          courseId,
+          couponCode: appliedCoupon?.code ?? null,
+        }),
       });
 
       const data = await res.json();
@@ -271,8 +325,90 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
               </div>
             </div>
 
+            {/* Coupon Box */}
+            <div className="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-xs">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-sm font-bold text-stone-900 flex items-center gap-1.5">
+                  <Tag size={16} className="text-orange-600" />
+                  {isEn ? "Have a Promo Code?" : "Punya Kode Promo / Kupon?"}
+                </span>
+                {appliedCoupon && (
+                  <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                    {isEn ? "Coupon Applied" : "Kupon Aktif"}
+                  </span>
+                )}
+              </div>
+
+              {appliedCoupon ? (
+                <div className="flex items-center justify-between p-3 rounded-xl bg-orange-50/80 border border-orange-200/80">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-orange-500 text-white flex items-center justify-center font-bold text-xs shrink-0">
+                      %
+                    </div>
+                    <div>
+                      <span className="font-mono font-bold text-sm text-orange-950 uppercase">
+                        {appliedCoupon.code}
+                      </span>
+                      <p className="text-xs text-orange-700">
+                        {isEn ? "Discount of" : "Potongan hemat"} {formatCurrency(appliedCoupon.discountAmount, locale)}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleRemoveCoupon}
+                    className="text-xs text-stone-400 hover:text-red-600 transition-colors p-1"
+                    title={isEn ? "Remove coupon" : "Hapus kupon"}
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleApplyCoupon} className="space-y-2">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={couponInput}
+                      onChange={(e) => {
+                        setCouponInput(e.target.value.toUpperCase());
+                        setCouponError("");
+                      }}
+                      placeholder="CONTOH: EARTHY50"
+                      className="flex-1 px-3.5 py-2.5 rounded-xl border border-stone-200 text-sm uppercase font-mono tracking-wider focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                    />
+                    <Button
+                      type="submit"
+                      variant="outline"
+                      size="sm"
+                      loading={validatingCoupon}
+                      disabled={!couponInput.trim()}
+                      className="px-4 shrink-0 font-medium"
+                    >
+                      {isEn ? "Apply" : "Terapkan"}
+                    </Button>
+                  </div>
+                  {couponError && (
+                    <p className="text-xs text-red-600 flex items-center gap-1 font-medium">
+                      <AlertCircle size={13} /> {couponError}
+                    </p>
+                  )}
+                  <div className="flex items-center gap-1.5 text-[11px] text-stone-400 pt-1">
+                    <span>{isEn ? "Try promo code: " : "Coba kode promo: "}</span>
+                    <button
+                      type="button"
+                      onClick={() => setCouponInput("EARTHY50")}
+                      className="font-mono text-orange-600 hover:underline font-bold"
+                    >
+                      EARTHY50
+                    </button>
+                    <span>(Diskon 50%)</span>
+                  </div>
+                </form>
+              )}
+            </div>
+
             {/* Payment Info */}
-            <div className="bg-white rounded-2xl border border-stone-200 p-5">
+            <div className="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-xs">
               <h2 className="font-semibold text-stone-900 mb-4">{t("payment_method")}</h2>
               <p className="text-sm text-stone-500">
                 {isEn
@@ -304,47 +440,74 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
 
           {/* Price Summary */}
           <div>
-            <div className="bg-white rounded-2xl border border-stone-200 p-5 shadow-warm sticky top-24">
+            <div className="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-warm sticky top-24">
               <h2 className="font-semibold text-stone-900 mb-4">{t("total_payment")}</h2>
 
-              <div className="space-y-3 border-b border-stone-100 pb-4">
-                <div className="flex justify-between text-sm">
-                  <span className="text-stone-500">{t("original_price")}</span>
-                  <span className="text-stone-700">
-                    {hasDiscount ? (
-                      <span className="line-through">{formatCurrency(course.price, locale)}</span>
-                    ) : (
-                      formatCurrency(course.price, locale)
-                    )}
-                  </span>
-                </div>
-                {hasDiscount && (
-                  <div className="flex justify-between text-sm">
-                    <span className="text-stone-500">{t("discount")}</span>
-                    <span className="text-green-600">
-                      -{formatCurrency(course.price - finalPrice, locale)}
-                    </span>
-                  </div>
-                )}
-              </div>
+              {(() => {
+                const basePrice = course.discountPrice ?? course.price;
+                const couponDiscount = appliedCoupon?.discountAmount ?? 0;
+                const finalPrice = Math.max(0, basePrice - couponDiscount);
+                const hasCourseDiscount = course.discountPrice != null && course.discountPrice < course.price;
 
-              <div className="flex justify-between items-center py-4">
-                <span className="font-bold text-stone-900">Total</span>
-                <span className="text-2xl font-extrabold text-orange-600">
-                  {formatCurrency(finalPrice, locale)}
-                </span>
-              </div>
+                return (
+                  <>
+                    <div className="space-y-3 border-b border-stone-100 pb-4">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-stone-500">{t("original_price")}</span>
+                        <span className="text-stone-700">
+                          {hasCourseDiscount ? (
+                            <span className="line-through">{formatCurrency(course.price, locale)}</span>
+                          ) : (
+                            formatCurrency(course.price, locale)
+                          )}
+                        </span>
+                      </div>
+                      {hasCourseDiscount && (
+                        <div className="flex justify-between text-sm">
+                          <span className="text-stone-500">{t("discount")}</span>
+                          <span className="text-green-600">
+                            -{formatCurrency(course.price - basePrice, locale)}
+                          </span>
+                        </div>
+                      )}
+                      {appliedCoupon && (
+                        <div className="flex justify-between text-sm font-semibold text-orange-600 bg-orange-50/80 px-2 py-1.5 rounded-lg border border-orange-200/60">
+                          <span className="flex items-center gap-1 font-mono uppercase text-xs">
+                            <Tag size={12} /> {appliedCoupon.code}
+                          </span>
+                          <span>-{formatCurrency(appliedCoupon.discountAmount, locale)}</span>
+                        </div>
+                      )}
+                    </div>
 
-              <Button
-                id="pay-btn"
-                className="w-full"
-                size="lg"
-                onClick={handlePay}
-                loading={paying}
-                leftIcon={<CreditCard size={18} />}
-              >
-                {t("pay_now")}
-              </Button>
+                    <div className="flex justify-between items-center py-4">
+                      <span className="font-bold text-stone-900">Total</span>
+                      <span className="text-2xl font-extrabold text-orange-600">
+                        {finalPrice === 0 ? (
+                          <span className="text-emerald-600 uppercase font-black tracking-wide text-xl">
+                            {isEn ? "FREE" : "GRATIS"}
+                          </span>
+                        ) : (
+                          formatCurrency(finalPrice, locale)
+                        )}
+                      </span>
+                    </div>
+
+                    <Button
+                      id="pay-btn"
+                      className="w-full shadow-xs"
+                      size="lg"
+                      onClick={handlePay}
+                      loading={paying}
+                      leftIcon={finalPrice === 0 ? <CheckCircle size={18} /> : <CreditCard size={18} />}
+                    >
+                      {finalPrice === 0
+                        ? (isEn ? "Claim Free Access" : "Klaim Akses Gratis")
+                        : t("pay_now")}
+                    </Button>
+                  </>
+                );
+              })()}
 
               <div className="mt-4 space-y-2">
                 {[

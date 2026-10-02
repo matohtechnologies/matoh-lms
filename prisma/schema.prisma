@@ -53,6 +53,7 @@ model User {
   discussions       Discussion[]
   discussionReplies DiscussionReply[]
   quizAttempts      QuizAttempt[]
+  notes             StudyNote[]
 
   @@map("users")
 }
@@ -145,6 +146,8 @@ model Course {
   quizzes            Quiz[]
   assignments        Assignment[]
   discussions        Discussion[]
+  resources          CourseResource[]
+  notes              StudyNote[]
 
   @@index([categoryId])
   @@index([instructorId])
@@ -180,6 +183,7 @@ model Lesson {
 
   section   Section    @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   progress  Progress[]
+  notes     StudyNote[]
 
   @@unique([sectionId, slug])
   @@map("lessons")
@@ -231,6 +235,9 @@ model Order {
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  couponId        String?
+  discountAmount  Float?      @default(0)
+  coupon          Coupon?     @relation(fields: [couponId], references: [id], onDelete: SetNull)
 
   @@index([userId])
   @@index([courseId])
@@ -417,3 +424,65 @@ model DiscussionReply {
 
   @@map("discussion_replies")
 }
+
+enum DiscountType {
+  PERCENTAGE
+  FIXED
+}
+
+model Coupon {
+  id            String       @id @default(cuid())
+  code          String       @unique
+  discountType  DiscountType @default(PERCENTAGE)
+  discountValue Float        // Percentage (e.g. 20 for 20%) or Fixed amount in IDR
+  minPurchase   Float?       @default(0)
+  maxDiscount   Float?       // Cap for percentage discounts in IDR
+  maxUsage      Int?         // Limit total redemptions
+  usedCount     Int          @default(0)
+  expiresAt     DateTime?
+  isActive      Boolean      @default(true)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  orders        Order[]
+
+  @@map("coupons")
+}
+
+model CourseResource {
+  id          String   @id @default(cuid())
+  courseId    String
+  title       String
+  description String?
+  fileUrl     String
+  fileName    String?
+  fileSize    Int?     // bytes
+  type        String   @default("FILE") // FILE, GITHUB, FIGMA, SLIDE
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([courseId])
+  @@map("course_resources")
+}
+
+model StudyNote {
+  id        String   @id @default(cuid())
+  userId    String
+  courseId  String
+  lessonId  String
+  timestamp Int      // seconds into video (e.g. 145 = 02:25)
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@index([userId, courseId])
+  @@index([lessonId])
+  @@map("study_notes")
+}
+

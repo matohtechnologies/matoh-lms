@@ -32,7 +32,11 @@ import {
   Upload,
   Download,
   Paperclip,
+  Bookmark,
+  FolderDown,
+  Trash2,
 } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { useTranslations, useLocale } from "next-intl";
@@ -156,6 +160,28 @@ interface Discussion {
   replies: DiscussionReply[];
 }
 
+interface StudyNoteItem {
+  id: string;
+  courseId: string;
+  lessonId: string;
+  timestamp: number;
+  content: string;
+  createdAt: string;
+  lesson?: { id: string; title: string; order: number };
+}
+
+interface CourseResourceItem {
+  id: string;
+  courseId: string;
+  title: string;
+  description?: string | null;
+  fileUrl: string;
+  fileName?: string | null;
+  fileSize?: number | null;
+  type: string;
+  createdAt: string;
+}
+
 function getEmbedUrl(url?: string | null): string | null {
   if (!url) return null;
   const trimmed = url.trim();
@@ -198,13 +224,39 @@ export default function LearnPageClient({
     content: "Instruktur sedang mempersiapkan materi pembelajaran untuk kelas ini.",
   };
 
+  const { data: session } = useSession();
   const [currentLesson, setCurrentLesson] = useState<LearnLesson>(defaultLesson);
   const [completedLessons, setCompletedLessons] = useState<Set<string>>(
     new Set(initialCompletedLessonIds)
   );
   const [savingProgress, setSavingProgress] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [activeTab, setActiveTab] = useState<"notes" | "quiz" | "assignment" | "discussion">("notes");
+  const [activeTab, setActiveTab] = useState<
+    "notes" | "studyNotes" | "resources" | "quiz" | "assignment" | "discussion"
+  >("notes");
+
+  // Dynamic Forensic Watermark State
+  const [watermarkPos, setWatermarkPos] = useState({ x: 18, y: 18 });
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setWatermarkPos({
+        x: Math.floor(8 + Math.random() * 65),
+        y: Math.floor(10 + Math.random() * 70),
+      });
+    }, 18000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // In-Video Study Notes State
+  const [studyNotes, setStudyNotes] = useState<StudyNoteItem[]>([]);
+  const [loadingNotes, setLoadingNotes] = useState(false);
+  const [newNoteContent, setNewNoteContent] = useState("");
+  const [newNoteTimestamp, setNewNoteTimestamp] = useState(0);
+  const [savingNote, setSavingNote] = useState(false);
+
+  // Course Resources State
+  const [resources, setResources] = useState<CourseResourceItem[]>([]);
+  const [loadingResources, setLoadingResources] = useState(false);
 
   // Quizzes State
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
@@ -392,12 +444,113 @@ export default function LearnPageClient({
     }
   }, [courseId]);
 
+  // Fetch Study Notes
+  const fetchNotes = useCallback(async () => {
+    try {
+      setLoadingNotes(true);
+      const res = await fetch(`/api/courses/${courseId}/notes`);
+      if (res.ok) {
+        const d = await res.json();
+        setStudyNotes(d.notes || []);
+      }
+    } catch (err) {
+      console.error("Failed to load study notes", err);
+    } finally {
+      setLoadingNotes(false);
+    }
+  }, [courseId]);
+
+  // Create Study Note
+  const handleCreateNote = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newNoteContent.trim()) return;
+
+    try {
+      setSavingNote(true);
+      const res = await fetch(`/api/courses/${courseId}/notes`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          lessonId: currentLesson.id !== "default-lesson" ? currentLesson.id : allLessons[0]?.id,
+          timestamp: newNoteTimestamp,
+          content: newNoteContent.trim(),
+        }),
+      });
+
+      if (res.ok) {
+        const d = await res.json();
+        setStudyNotes((prev) => [d.note, ...prev]);
+        setNewNoteContent("");
+      } else {
+        const err = await res.json();
+        alert(err.error || "Gagal menyimpan catatan");
+      }
+    } catch {
+      alert("Terjadi kesalahan saat menyimpan catatan");
+    } finally {
+      setSavingNote(false);
+    }
+  };
+
+  // Delete Study Note
+  const handleDeleteNote = async (noteId: string) => {
+    try {
+      const res = await fetch(`/api/courses/${courseId}/notes?noteId=${noteId}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setStudyNotes((prev) => prev.filter((n) => n.id !== noteId));
+      }
+    } catch (err) {
+      console.error("Failed to delete note", err);
+    }
+  };
+
+  // Export Notes to Markdown
+  const handleExportNotes = () => {
+    if (studyNotes.length === 0) return;
+    const header = `# Catatan Belajar: ${course.title}\nOleh: ${session?.user?.name || "Pelajar"}\nTanggal: ${new Date().toLocaleDateString("id-ID")}\n\n---\n\n`;
+    const body = studyNotes
+      .map((n) => {
+        const mins = Math.floor(n.timestamp / 60);
+        const secs = n.timestamp % 60;
+        const timeStr = `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+        return `### ${n.lesson?.title || "Materi"} [⏱️ ${timeStr}]\n\n${n.content}\n`;
+      })
+      .join("\n---\n\n");
+    const blob = new Blob([header + body], { type: "text/markdown;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `Catatan_${course.slug || "kursus"}.md`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // Fetch Course Resources
+  const fetchResources = useCallback(async () => {
+    try {
+      setLoadingResources(true);
+      const res = await fetch(`/api/courses/${courseId}/resources`);
+      if (res.ok) {
+        const d = await res.json();
+        setResources(d.resources || []);
+      }
+    } catch (err) {
+      console.error("Failed to load resources", err);
+    } finally {
+      setLoadingResources(false);
+    }
+  }, [courseId]);
+
   useEffect(() => {
     fetchQuizzes();
     fetchAssignments();
     fetchDiscussions();
     fetchCertStatus();
-  }, [fetchQuizzes, fetchAssignments, fetchDiscussions, fetchCertStatus]);
+    fetchNotes();
+    fetchResources();
+  }, [fetchQuizzes, fetchAssignments, fetchDiscussions, fetchCertStatus, fetchNotes, fetchResources]);
 
   const toggleLessonComplete = async (targetLessonId?: string) => {
     const lessonId = targetLessonId || currentLesson.id;
@@ -857,6 +1010,19 @@ export default function LearnPageClient({
         <div className="flex-1 overflow-y-auto custom-scrollbar">
           {/* Video Player Stage */}
           <div className="w-full bg-black flex items-center justify-center relative aspect-video max-h-[520px] shadow-2xl">
+            {/* Dynamic Forensic Watermark for Anti-Piracy */}
+            {session?.user && (
+              <div
+                className="absolute pointer-events-none select-none z-20 text-[10px] font-mono tracking-widest px-2.5 py-0.5 rounded-full bg-black/40 text-white/30 backdrop-blur-2xs transition-all duration-1000 ease-in-out border border-white/5"
+                style={{
+                  top: `${watermarkPos.y}%`,
+                  left: `${watermarkPos.x}%`,
+                }}
+              >
+                🔒 {session.user.email || session.user.name} • Earthy Academy
+              </div>
+            )}
+
             {currentLesson.videoUrl ? (
               <iframe
                 src={getEmbedUrl(currentLesson.videoUrl) || ""}
@@ -929,11 +1095,21 @@ export default function LearnPageClient({
             </Button>
           </div>
 
-          {/* Dicoding-style Tabs: Notes, Quiz, Assignments, Discussion */}
+          {/* Dicoding-style Tabs: Notes, Study Notes, Resources, Quiz, Assignments, Discussion */}
           <div className="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
             <div className="flex border-b border-stone-800 mb-6 gap-2 sm:gap-4 overflow-x-auto scrollbar-none">
               {[
                 { key: "notes", label: t("tab_notes"), icon: FileText },
+                {
+                  key: "studyNotes",
+                  label: locale === "en" ? `Notes (${studyNotes.length})` : `Catatan (${studyNotes.length})`,
+                  icon: Bookmark,
+                },
+                {
+                  key: "resources",
+                  label: locale === "en" ? `Resources (${resources.length})` : `Bahan Belajar (${resources.length})`,
+                  icon: FolderDown,
+                },
                 {
                   key: "quiz",
                   label: t("tab_quiz", { count: quizzes.length }),
@@ -981,7 +1157,209 @@ export default function LearnPageClient({
               </div>
             )}
 
-            {/* TAB 2: INTERACTIVE QUIZZES */}
+            {/* TAB 2: IN-VIDEO TIMESTAMPED STUDY NOTES */}
+            {activeTab === "studyNotes" && (
+              <div className="space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 bg-stone-900 border border-stone-800 rounded-2xl">
+                  <div>
+                    <h3 className="text-base font-bold text-stone-100 flex items-center gap-2">
+                      <Bookmark size={18} className="text-orange-400" />
+                      {locale === "en" ? "My Timestamped Notes" : "Catatan Belajar Ber-Timestamp"}
+                    </h3>
+                    <p className="text-xs text-stone-400 mt-1">
+                      {locale === "en"
+                        ? "Save personal timestamps & notes while learning. Export anytime to Markdown."
+                        : "Tulis catatan dan tandai momen penting pada materi ini. Unduh kapan saja ke format Markdown."}
+                    </p>
+                  </div>
+                  {studyNotes.length > 0 && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleExportNotes}
+                      leftIcon={<Download size={14} />}
+                      className="bg-stone-800 border-stone-700 text-stone-200 hover:bg-stone-700 text-xs shrink-0"
+                    >
+                      {locale === "en" ? "Export to (.md)" : "Unduh Catatan (.md)"}
+                    </Button>
+                  )}
+                </div>
+
+                {/* Form Add Note */}
+                <form onSubmit={handleCreateNote} className="bg-stone-900/90 border border-stone-800 p-4 sm:p-5 rounded-2xl space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-stone-300">
+                      {locale === "en" ? "Add Note for: " : "Tambah Catatan untuk: "}
+                      <span className="text-orange-400">{currentLesson.title}</span>
+                    </span>
+                    <div className="flex items-center gap-1.5 text-xs text-stone-400 font-mono">
+                      <span>⏱️ Detik:</span>
+                      <input
+                        type="number"
+                        min="0"
+                        value={newNoteTimestamp}
+                        onChange={(e) => setNewNoteTimestamp(Math.max(0, parseInt(e.target.value) || 0))}
+                        className="w-16 px-2 py-1 rounded bg-stone-800 border border-stone-700 text-stone-200 text-center text-xs focus:outline-none focus:border-orange-500"
+                        title="Detik dalam video (misal: 60 = 01:00)"
+                      />
+                    </div>
+                  </div>
+
+                  <textarea
+                    value={newNoteContent}
+                    onChange={(e) => setNewNoteContent(e.target.value)}
+                    placeholder={locale === "en" ? "Write your key insight, formula, or reminder here..." : "Tulis ringkasan rumus, poin penting, atau pengingat di sini..."}
+                    rows={3}
+                    className="w-full p-3 rounded-xl bg-stone-950 border border-stone-800 text-stone-200 text-sm placeholder:text-stone-600 focus:outline-none focus:border-orange-500"
+                  />
+
+                  <div className="flex justify-end">
+                    <Button
+                      type="submit"
+                      size="sm"
+                      disabled={savingNote || !newNoteContent.trim()}
+                      loading={savingNote}
+                      leftIcon={<Bookmark size={14} />}
+                      className="bg-orange-600 hover:bg-orange-700 text-white text-xs font-semibold"
+                    >
+                      {locale === "en" ? "Save Note" : "Simpan Catatan"}
+                    </Button>
+                  </div>
+                </form>
+
+                {/* Notes List */}
+                {loadingNotes ? (
+                  <div className="p-8 text-center bg-stone-900 rounded-2xl border border-stone-800">
+                    <Loader2 className="animate-spin text-orange-500 mx-auto mb-2" size={24} />
+                    <span className="text-xs text-stone-400">{locale === "en" ? "Loading notes..." : "Memuat catatan..."}</span>
+                  </div>
+                ) : studyNotes.length === 0 ? (
+                  <div className="bg-stone-900/60 border border-stone-800 rounded-2xl p-8 text-center space-y-2">
+                    <Bookmark className="mx-auto text-stone-600 mb-2" size={32} />
+                    <h4 className="text-sm font-bold text-stone-300">
+                      {locale === "en" ? "No notes yet" : "Belum ada catatan"}
+                    </h4>
+                    <p className="text-xs text-stone-500 max-w-sm mx-auto">
+                      {locale === "en"
+                        ? "Take timestamped notes while watching video lessons to retain knowledge better."
+                        : "Tuliskan poin penting saat menonton video untuk memperkuat pemahaman materi."}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {studyNotes.map((note) => {
+                      const mins = Math.floor(note.timestamp / 60);
+                      const secs = note.timestamp % 60;
+                      const timeStr = `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+
+                      return (
+                        <div
+                          key={note.id}
+                          className="p-4 rounded-xl bg-stone-900 border border-stone-800/90 flex items-start justify-between gap-3 group"
+                        >
+                          <div className="space-y-1.5 flex-1">
+                            <div className="flex items-center gap-2">
+                              <span className="px-2 py-0.5 rounded-md bg-orange-950/60 border border-orange-800/60 text-orange-400 font-mono text-[11px] font-bold">
+                                ⏱️ {timeStr}
+                              </span>
+                              <span className="text-xs font-semibold text-stone-300">
+                                {note.lesson?.title || "Materi"}
+                              </span>
+                            </div>
+                            <p className="text-xs sm:text-sm text-stone-200 whitespace-pre-wrap leading-relaxed">
+                              {note.content}
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteNote(note.id)}
+                            className="text-stone-500 hover:text-red-400 p-1 transition-colors"
+                            title="Hapus catatan"
+                          >
+                            <Trash2 size={15} />
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* TAB 3: RESOURCE VAULT / BAHAN BELAJAR */}
+            {activeTab === "resources" && (
+              <div className="space-y-6">
+                <div className="p-5 bg-stone-900 border border-stone-800 rounded-2xl">
+                  <h3 className="text-base font-bold text-stone-100 flex items-center gap-2">
+                    <FolderDown size={18} className="text-orange-400" />
+                    {locale === "en" ? "Course Resources & Starter Files" : "Bahan Belajar & Source Code"}
+                  </h3>
+                  <p className="text-xs text-stone-400 mt-1">
+                    {locale === "en"
+                      ? "Download official project templates, Figma design kits, cheatsheets, and slides provided for this course."
+                      : "Unduh file proyek, template Figma, slide materi, dan cheatsheet resmi untuk kelas ini."}
+                  </p>
+                </div>
+
+                {loadingResources ? (
+                  <div className="p-8 text-center bg-stone-900 rounded-2xl border border-stone-800">
+                    <Loader2 className="animate-spin text-orange-500 mx-auto mb-2" size={24} />
+                    <span className="text-xs text-stone-400">{locale === "en" ? "Loading resources..." : "Memuat bahan belajar..."}</span>
+                  </div>
+                ) : resources.length === 0 ? (
+                  <div className="bg-stone-900/60 border border-stone-800 rounded-2xl p-8 text-center space-y-2">
+                    <FolderDown className="mx-auto text-stone-600 mb-2" size={32} />
+                    <h4 className="text-sm font-bold text-stone-300">
+                      {locale === "en" ? "No resources available yet" : "Bahan belajar belum tersedia"}
+                    </h4>
+                    <p className="text-xs text-stone-500 max-w-sm mx-auto">
+                      {locale === "en"
+                        ? "The instructor will upload supplementary assets and project files here."
+                        : "Instruktur akan mengunggah aset tambahan dan file proyek di bagian ini."}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    {resources.map((item) => (
+                      <div
+                        key={item.id}
+                        className="p-5 rounded-2xl bg-stone-900 border border-stone-800 flex flex-col justify-between hover:border-stone-700 transition-colors"
+                      >
+                        <div className="space-y-2 mb-4">
+                          <div className="flex items-center justify-between">
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-orange-950/60 text-orange-400 border border-orange-800/40">
+                              {item.type}
+                            </span>
+                            {item.fileName && (
+                              <span className="text-[11px] text-stone-500 font-mono truncate max-w-[140px]">
+                                {item.fileName}
+                              </span>
+                            )}
+                          </div>
+                          <h4 className="text-sm font-bold text-stone-100">{item.title}</h4>
+                          {item.description && (
+                            <p className="text-xs text-stone-400 leading-relaxed">{item.description}</p>
+                          )}
+                        </div>
+
+                        <a
+                          href={item.fileUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-semibold transition-colors w-full border border-stone-700"
+                        >
+                          <Download size={14} />
+                          <span>{locale === "en" ? "Download / Open Link" : "Unduh / Buka Tautan"}</span>
+                          <ExternalLink size={12} className="opacity-60" />
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* TAB 4: INTERACTIVE QUIZZES */}
             {activeTab === "quiz" && (
               <div className="space-y-6">
                 {loadingQuizzes ? (

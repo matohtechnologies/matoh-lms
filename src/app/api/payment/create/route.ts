@@ -9,6 +9,7 @@ import { checkRateLimit } from "@/lib/rate-limit";
 
 const createPaymentSchema = z.object({
   courseId: z.string(),
+  couponCode: z.string().optional().nullable(),
 });
 
 export async function POST(req: NextRequest) {
@@ -29,7 +30,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { courseId } = createPaymentSchema.parse(body);
+    const { courseId, couponCode } = createPaymentSchema.parse(body);
 
     // Get course from DB
     const course = await prisma.course.findFirst({
@@ -54,8 +55,45 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Kamu sudah terdaftar di kelas ini" }, { status: 409 });
     }
 
-    // If free course, enroll directly
-    if (course.price === 0) {
+    let baseAmount = course.discountPrice ?? course.price;
+    let discountAmount = 0;
+    let appliedCouponId: string | null = null;
+
+    // Validate and apply coupon if provided
+    if (couponCode && typeof couponCode === "string" && couponCode.trim().length > 0) {
+      const coupon = await prisma.coupon.findUnique({
+        where: { code: couponCode.trim().toUpperCase() },
+      });
+
+      if (coupon && coupon.isActive) {
+        const isExpired = coupon.expiresAt && new Date(coupon.expiresAt) < new Date();
+        const isQuotaExceeded = coupon.maxUsage && coupon.usedCount >= coupon.maxUsage;
+        const isMinMet = !coupon.minPurchase || baseAmount >= coupon.minPurchase;
+
+        if (!isExpired && !isQuotaExceeded && isMinMet) {
+          appliedCouponId = coupon.id;
+          if (coupon.discountType === "PERCENTAGE") {
+            discountAmount = (baseAmount * coupon.discountValue) / 100;
+            if (coupon.maxDiscount && discountAmount > coupon.maxDiscount) {
+              discountAmount = coupon.maxDiscount;
+            }
+          } else {
+            discountAmount = Math.min(coupon.discountValue, baseAmount);
+          }
+
+          // Increment coupon usage
+          await prisma.coupon.update({
+            where: { id: coupon.id },
+            data: { usedCount: { increment: 1 } },
+          }).catch(() => null);
+        }
+      }
+    }
+
+    const finalAmount = Math.max(0, baseAmount - discountAmount);
+
+    // If free course or 100% discount, enroll directly
+    if (finalAmount === 0 || course.price === 0) {
       await prisma.enrollment.create({
         data: { userId: session.user.id, courseId: course.id },
       }).catch(() => null);
@@ -65,18 +103,34 @@ export async function POST(req: NextRequest) {
         data: { enrollCount: { increment: 1 } },
       }).catch(() => null);
 
+      // Record free/zero-payment order
+      const orderId = `EA-FREE-${Date.now()}-${nanoid(6).toUpperCase()}`;
+      await prisma.order.create({
+        data: {
+          userId: session.user.id,
+          courseId: course.id,
+          amount: 0,
+          discountAmount,
+          couponId: appliedCouponId,
+          midtransOrderId: orderId,
+          status: "PAID",
+          paidAt: new Date(),
+        },
+      }).catch(() => null);
+
       return NextResponse.json({ success: true, type: "free" });
     }
 
     // Create order
     const orderId = `EA-${Date.now()}-${nanoid(6).toUpperCase()}`;
-    const finalAmount = course.discountPrice ?? course.price;
 
     await prisma.order.create({
       data: {
         userId: session.user.id,
         courseId: course.id,
         amount: finalAmount,
+        discountAmount,
+        couponId: appliedCouponId,
         midtransOrderId: orderId,
         status: "PENDING",
       },

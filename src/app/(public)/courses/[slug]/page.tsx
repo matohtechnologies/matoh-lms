@@ -107,8 +107,50 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
         "Bergabung dengan komunitas pelajar aktif",
       ];
 
+  const courseJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: displayCourse.title,
+    description: displayCourse.description,
+    provider: {
+      "@type": "Organization",
+      name: "Earthy Academy",
+      sameAs: "http://localhost:3000",
+    },
+    instructor: {
+      "@type": "Person",
+      name: displayCourse.instructor?.name || "Instruktur Earthy Academy",
+    },
+    offers: {
+      "@type": "Offer",
+      category: isFree ? "Free" : "Paid",
+      price: finalPrice,
+      priceCurrency: "IDR",
+      availability: "https://schema.org/InStock",
+    },
+    hasCourseInstance: {
+      "@type": "CourseInstance",
+      courseMode: "Online",
+      courseWorkload: `PT${displayCourse.duration || 60}M`,
+    },
+    ...(displayCourse.rating && displayCourse.rating > 0
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: displayCourse.rating.toFixed(1),
+            reviewCount: Math.max(1, displayCourse.reviewCount || 1),
+          },
+        }
+      : {}),
+  };
+
   return (
     <div className="pt-20 bg-[#faf8f5] min-h-screen pb-16">
+      {/* Schema.org Course JSON-LD for Google Rich Results */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(courseJsonLd) }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Content */}
