@@ -561,6 +561,12 @@
     "awarded_to": "Diberikan kepada:",
     "credential_id": "ID Kredensial:",
     "issued_on": "Diterbitkan Pada:",
-    "verified": "Status: Terverifikasi Resmi"
+    "verified": "Status: Terverifikasi Resmi",
+    "tab_front": "Sisi Depan (Sertifikat)",
+    "tab_back": "Sisi Belakang (Transkrip Nilai)",
+    "tab_both": "2 Halaman Lengkap",
+    "flip_to_back": "Lihat Transkrip Nilai (Halaman Belakang)",
+    "flip_to_front": "Lihat Sertifikat (Halaman Depan)",
+    "print_both_pages": "Cetak / Simpan PDF (2 Halaman)"
   }
 }

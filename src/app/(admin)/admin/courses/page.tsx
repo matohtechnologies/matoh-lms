@@ -157,7 +157,7 @@ export default async function AdminCoursesPage() {
                           <span>Kurikulum</span>
                         </Link>
                         <Link
-                          href={`/admin/courses/${course.id}?tab=certificate`}
+                          href={`/admin/courses/${course.id}?tab=certificates`}
                           className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 font-bold transition-colors border border-amber-200/60 text-[11px]"
                           title="Studio Sertifikat"
                         >

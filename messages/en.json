@@ -561,6 +561,12 @@
     "awarded_to": "Awarded to:",
     "credential_id": "Credential ID:",
     "issued_on": "Issued On:",
-    "verified": "Status: Officially Verified"
+    "verified": "Status: Officially Verified",
+    "tab_front": "Front Page (Certificate)",
+    "tab_back": "Back Page (Transcript)",
+    "tab_both": "Full 2 Pages",
+    "flip_to_back": "View Academic Transcript (Back Page)",
+    "flip_to_front": "View Certificate (Front Page)",
+    "print_both_pages": "Print / Save PDF (2 Pages)"
   }
 }

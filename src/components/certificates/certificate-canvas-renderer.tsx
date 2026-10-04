@@ -132,6 +132,19 @@ export function CertificateCanvasRenderer({
     return "border-2 border-solid";
   };
 
+  // Dynamic aspect ratio based on config (Default: A4 Landscape 297mm x 210mm)
+  const getAspectRatioStyle = () => {
+    switch (config.aspectRatio) {
+      case "16:9":
+        return { aspectRatio: "16 / 9" };
+      case "16:10":
+        return { aspectRatio: "16 / 10" };
+      case "a4":
+      default:
+        return { aspectRatio: "297 / 210" }; // 1.414:1 standard certificate landscape
+    }
+  };
+
   return (
     <div
       ref={containerRef}
@@ -141,10 +154,12 @@ export function CertificateCanvasRenderer({
           onSelectElement?.(null);
         }
       }}
-      className={`relative w-full aspect-[16/10] overflow-hidden select-none transition-all ${getBorderClasses()} ${className}`}
+      className={`relative w-full overflow-hidden select-none transition-all ${getBorderClasses()} ${className}`}
       style={{
         backgroundColor: config.backgroundColor || "#ffffff",
         borderColor: config.borderColor || "#e2e8f0",
+        containerType: "inline-size",
+        ...getAspectRatioStyle(),
       }}
     >
       {/* Background Image if uploaded */}
@@ -171,10 +186,24 @@ export function CertificateCanvasRenderer({
             transform: "translate(-50%, -50%)",
           }}
         >
-          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-3 border-amber-500/30 bg-amber-50/90 flex items-center justify-center text-amber-700 shadow-md">
-            <ShieldCheck className="w-6 h-6 text-amber-600" />
+          <div
+            className="rounded-full border-3 border-amber-500/30 bg-amber-50/90 flex items-center justify-center text-amber-700 shadow-md"
+            style={{
+              width: "calc((56 / 1050) * 100cqw)",
+              height: "calc((56 / 1050) * 100cqw)",
+              minWidth: "32px",
+              minHeight: "32px",
+            }}
+          >
+            <ShieldCheck className="w-1/2 h-1/2 text-amber-600" />
           </div>
-          <span className="text-[8px] sm:text-[9px] font-bold text-amber-800 uppercase tracking-wider bg-amber-100/90 px-2 py-0.5 rounded-full mt-1">
+          <span
+            className="font-bold text-amber-800 uppercase tracking-wider bg-amber-100/90 rounded-full mt-1"
+            style={{
+              fontSize: "calc((8.5 / 1050) * 100cqw)",
+              padding: "calc((2 / 1050) * 100cqw) calc((8 / 1050) * 100cqw)",
+            }}
+          >
             VERIFIED
           </span>
         </div>
@@ -214,15 +243,15 @@ export function CertificateCanvasRenderer({
                   : el.textAlign === "right"
                   ? "translate(-100%, -50%)"
                   : "translate(0, -50%)",
-              maxWidth: el.maxWidth ? `${el.maxWidth}%` : "90%",
+              maxWidth: el.maxWidth ? `${el.maxWidth}%` : "92%",
               width: el.textAlign === "center" ? "auto" : undefined,
               textAlign: el.textAlign,
             }}
           >
             <p
-              className={`${getFontFamilyClass(el.fontFamily)} leading-tight`}
+              className={`${getFontFamilyClass(el.fontFamily)} leading-[1.25]`}
               style={{
-                fontSize: `clamp(9px, ${el.fontSize * 0.08}vw + ${el.fontSize * 0.4}px, ${el.fontSize}px)`,
+                fontSize: `calc((${el.fontSize} / 1050) * 100cqw)`,
                 fontWeight: getFontWeightStyle(el.fontWeight),
                 fontStyle: el.fontStyle || "normal",
                 color: el.color || "#1c1917",

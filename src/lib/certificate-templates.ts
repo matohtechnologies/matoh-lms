@@ -28,8 +28,33 @@ export interface CertificateElement {
   maxWidth?: number; // percentage e.g. 80
 }
 
+export interface CertificateBackDesignConfig {
+  presetId?: string;
+  backgroundType: "image" | "color" | "gradient";
+  backgroundColor?: string;
+  backgroundGradient?: string;
+  backgroundUrl?: string | null;
+  borderStyle: "none" | "solid" | "double" | "dashed" | "gold-frame";
+  borderColor?: string;
+  borderWidth?: number;
+  tableTheme: "dark" | "amber" | "blue" | "emerald" | "minimal";
+  headerTitle: string;
+  headerSubtitle: string;
+  showWorkloadColumn: boolean;
+  showCategoryColumn: boolean;
+  showGradeColumn: boolean;
+  showStatusBadge: boolean;
+  showScoreSummary: boolean;
+  showPredicate: boolean;
+  showScaleLegend: boolean;
+  showQrCode: boolean;
+}
+
 export interface CertificateDesignConfig {
   presetId?: string;
+  aspectRatio?: "a4" | "16:10" | "16:9";
+  canvasWidth?: number;
+  canvasHeight?: number;
   backgroundType: "image" | "color" | "gradient";
   backgroundColor?: string;
   backgroundGradient?: string;
@@ -40,7 +65,95 @@ export interface CertificateDesignConfig {
   showSealBadge?: boolean;
   sealPosition?: { x: number; y: number };
   elements: CertificateElement[];
+  backConfig?: CertificateBackDesignConfig;
 }
+
+export const DEFAULT_BACK_DESIGN_PRESET: CertificateBackDesignConfig = {
+  presetId: "academic-slate",
+  backgroundType: "color",
+  backgroundColor: "#ffffff",
+  backgroundUrl: null,
+  borderStyle: "solid",
+  borderColor: "#e2e8f0",
+  tableTheme: "dark",
+  headerTitle: "Transkrip Nilai & Capaian Kompetensi",
+  headerSubtitle: "Official Academic Transcript & Competency Assessment",
+  showWorkloadColumn: true,
+  showCategoryColumn: true,
+  showGradeColumn: true,
+  showStatusBadge: true,
+  showScoreSummary: true,
+  showPredicate: true,
+  showScaleLegend: true,
+  showQrCode: true,
+};
+
+export const BACK_DESIGN_PRESETS: {
+  id: string;
+  name: string;
+  description: string;
+  config: CertificateBackDesignConfig;
+}[] = [
+  {
+    id: "academic-slate",
+    name: "Akademik Formal (Slate)",
+    description: "Desain transkrip standar universitas dengan header tabel gelap dan garis bersih.",
+    config: {
+      ...DEFAULT_BACK_DESIGN_PRESET,
+      presetId: "academic-slate",
+      tableTheme: "dark",
+      borderStyle: "solid",
+    },
+  },
+  {
+    id: "classic-gold",
+    name: "Classic Gold Luxury",
+    description: "Bingkai emas elegan bernuansa hangat dengan aksen kuning gading.",
+    config: {
+      ...DEFAULT_BACK_DESIGN_PRESET,
+      presetId: "classic-gold",
+      tableTheme: "amber",
+      borderStyle: "gold-frame",
+      backgroundColor: "#fffdfa",
+    },
+  },
+  {
+    id: "ocean-maritime",
+    name: "Blue Ocean Tech",
+    description: "Gaya maritim & teknologi dengan aksen biru laut yang tajam dan segar.",
+    config: {
+      ...DEFAULT_BACK_DESIGN_PRESET,
+      presetId: "ocean-maritime",
+      tableTheme: "blue",
+      borderStyle: "double",
+      backgroundColor: "#f8fafc",
+    },
+  },
+  {
+    id: "emerald-nature",
+    name: "Emerald Eco (Hijau)",
+    description: "Nuansa ekologi maritim hijau segar untuk program keberlanjutan.",
+    config: {
+      ...DEFAULT_BACK_DESIGN_PRESET,
+      presetId: "emerald-nature",
+      tableTheme: "emerald",
+      borderStyle: "solid",
+      backgroundColor: "#fcfdfc",
+    },
+  },
+  {
+    id: "clean-minimal",
+    name: "Minimalis Modern",
+    description: "Sangat bersih dan minimalis tanpa banyak ornamen, mengutamakan keterbacaan data.",
+    config: {
+      ...DEFAULT_BACK_DESIGN_PRESET,
+      presetId: "clean-minimal",
+      tableTheme: "minimal",
+      borderStyle: "solid",
+      backgroundColor: "#ffffff",
+    },
+  },
+];
 
 export interface CertificateDataValues {
   // snake_case placeholders

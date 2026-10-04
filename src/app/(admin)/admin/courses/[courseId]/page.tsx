@@ -61,8 +61,11 @@ export default function EditCoursePage() {
   const courseId = params.courseId;
   const t = useTranslations("admin");
 
-  const initialTab = (searchParams.get("tab") as "curriculum" | "quizzes" | "assignments" | "discussions" | "certificates" | "settings") || "curriculum";
-  const [activeTab, setActiveTab] = useState<"curriculum" | "quizzes" | "assignments" | "discussions" | "certificates" | "settings">(initialTab);
+  const VALID_TABS = ["curriculum", "quizzes", "assignments", "discussions", "certificates", "settings"] as const;
+  type AdminTab = typeof VALID_TABS[number];
+  const tabParam = searchParams.get("tab");
+  const initialTab: AdminTab = VALID_TABS.includes(tabParam as AdminTab) ? (tabParam as AdminTab) : "curriculum";
+  const [activeTab, setActiveTab] = useState<AdminTab>(initialTab);
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);

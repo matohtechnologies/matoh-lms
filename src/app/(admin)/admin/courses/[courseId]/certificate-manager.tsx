@@ -21,13 +21,20 @@ import {
   Trash2,
   Image as ImageIcon,
   Palette,
+  FileText,
 } from "lucide-react";
 import { format } from "date-fns";
 import { id as idLocale } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { CertificateDesigner } from "@/components/certificates/certificate-designer";
+import { CertificateBackDesigner } from "@/components/certificates/certificate-back-designer";
 import { CertificateCanvasRenderer } from "@/components/certificates/certificate-canvas-renderer";
-import { CertificateDesignConfig, CertificateDataValues } from "@/lib/certificate-templates";
+import { CertificateTranscriptCard } from "@/components/certificates/certificate-transcript-card";
+import {
+  CertificateDesignConfig,
+  CertificateBackDesignConfig,
+  CertificateDataValues,
+} from "@/lib/certificate-templates";
 
 interface CertificateSetting {
   isEnabled: boolean;
@@ -62,7 +69,9 @@ interface CertificateManagerProps {
 }
 
 export function CertificateManager({ courseId }: CertificateManagerProps) {
-  const [activeView, setActiveView] = useState<"studio" | "settings" | "recipients">("studio");
+  const [activeView, setActiveView] = useState<"settings" | "studio" | "recipients">("settings");
+  const [studioTab, setStudioTab] = useState<"front" | "back">("front");
+  const [previewSide, setPreviewSide] = useState<"front" | "back">("front");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
@@ -209,9 +218,14 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
     setErrorMsg("");
 
     try {
+      const updatedConfig: CertificateDesignConfig = {
+        ...newConfig,
+        backConfig: form.templateConfig?.backConfig ?? newConfig.backConfig,
+      };
+
       const updatedForm = {
         ...form,
-        templateConfig: newConfig,
+        templateConfig: updatedConfig,
         templateUrl: bgUrl !== undefined ? bgUrl : form.templateUrl,
       };
 
@@ -229,6 +243,48 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
       setTimeout(() => setSuccessMsg(""), 4000);
     } catch (err: unknown) {
       setErrorMsg(err instanceof Error ? err.message : "Gagal menyimpan desain sertifikat");
+      throw err;
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleSaveBackDesigner = async (newBackConfig: CertificateBackDesignConfig) => {
+    setSaving(true);
+    setSuccessMsg("");
+    setErrorMsg("");
+
+    try {
+      const currentConfig: CertificateDesignConfig = form.templateConfig || {
+        elements: [],
+        backgroundType: "color",
+        borderStyle: "solid",
+      };
+
+      const updatedConfig: CertificateDesignConfig = {
+        ...currentConfig,
+        backConfig: newBackConfig,
+      };
+
+      const updatedForm = {
+        ...form,
+        templateConfig: updatedConfig,
+      };
+
+      const res = await fetch(`/api/admin/courses/${courseId}/certificate`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedForm),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Gagal menyimpan desain transkrip belakang");
+
+      setForm(updatedForm);
+      setSuccessMsg("Desain transkrip nilai (sisi belakang) berhasil disimpan!");
+      setTimeout(() => setSuccessMsg(""), 4000);
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : "Gagal menyimpan desain sisi belakang");
       throw err;
     } finally {
       setSaving(false);
@@ -301,20 +357,6 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
       <div className="flex flex-wrap items-center gap-2 border-b border-stone-200 pb-3">
         <button
           type="button"
-          onClick={() => setActiveView("studio")}
-          className={cn(
-            "flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all",
-            activeView === "studio"
-              ? "bg-orange-600 text-white shadow-sm"
-              : "bg-white hover:bg-stone-100 text-stone-700 border border-stone-200"
-          )}
-        >
-          <Palette size={15} />
-          Studio Desain Sertifikat (Visual Editor)
-        </button>
-
-        <button
-          type="button"
           onClick={() => setActiveView("settings")}
           className={cn(
             "flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all",
@@ -324,7 +366,21 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
           )}
         >
           <Sliders size={15} />
-          Kriteria Kelulusan &amp; Pengaturan
+          Pengaturan &amp; Kriteria Kelulusan
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveView("studio")}
+          className={cn(
+            "flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all",
+            activeView === "studio"
+              ? "bg-orange-600 text-white shadow-sm"
+              : "bg-white hover:bg-stone-100 text-stone-700 border border-stone-200"
+          )}
+        >
+          <Palette size={15} />
+          Studio Desain Visual (Kustom Canvas)
         </button>
 
         <button
@@ -354,25 +410,124 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
 
       {/* Tab 1: Dynamic Visual Designer Studio */}
       {activeView === "studio" && (
-        <CertificateDesigner
-          initialConfig={form.templateConfig}
-          initialTemplateUrl={form.templateUrl}
-          courseTitle={courseInfo?.title || "Judul Kursus"}
-          sampleData={{
-            student_name: "Muhammad Rizky Pratama",
-            course_title: courseInfo?.title || "Fullstack Web Development Mastery",
-            category_name: "Teknologi & Pemrograman",
-            issue_date: format(new Date(), "d MMMM yyyy", { locale: idLocale }),
-            certificate_code: "EA-2026-CERT-DEMO",
-            issuer_name: form.issuerName || "Earthy Academy",
-            signatory_name_1: form.signatoryName1 || courseInfo?.instructorName || "Ahmad Fadhil",
-            signatory_role_1: form.signatoryRole1 || "Lead Instructor",
-            signatory_name_2: form.signatoryName2 || "Dr. Santoso W.",
-            signatory_role_2: form.signatoryRole2 || "Head of Curriculum",
-            subtitle: form.subtitle,
-          }}
-          onSave={handleSaveDesigner}
-        />
+        <div className="space-y-6">
+          {/* Subtabs: Front vs Back Designer */}
+          <div className="flex items-center gap-2 p-1.5 bg-stone-100 rounded-2xl border border-stone-200 w-fit">
+            <button
+              type="button"
+              onClick={() => setStudioTab("front")}
+              className={cn(
+                "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all",
+                studioTab === "front"
+                  ? "bg-white text-stone-900 shadow-xs"
+                  : "text-stone-600 hover:text-stone-900"
+              )}
+            >
+              <Award size={14} className={studioTab === "front" ? "text-orange-600" : "text-stone-400"} />
+              <span>Editor Sisi Depan (Sertifikat)</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setStudioTab("back")}
+              className={cn(
+                "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all",
+                studioTab === "back"
+                  ? "bg-white text-stone-900 shadow-xs"
+                  : "text-stone-600 hover:text-stone-900"
+              )}
+            >
+              <FileText size={14} className={studioTab === "back" ? "text-blue-600" : "text-stone-400"} />
+              <span>Editor Sisi Belakang (Transkrip Nilai)</span>
+            </button>
+          </div>
+
+          {studioTab === "front" ? (
+            <CertificateDesigner
+              initialConfig={form.templateConfig}
+              initialTemplateUrl={form.templateUrl}
+              courseTitle={courseInfo?.title || "Judul Kursus"}
+              sampleData={{
+                student_name: "Muhammad Rizky Pratama",
+                course_title: courseInfo?.title || "Fullstack Web Development Mastery",
+                category_name: "Teknologi & Pemrograman",
+                issue_date: format(new Date(), "d MMMM yyyy", { locale: idLocale }),
+                certificate_code: "EA-2026-CERT-DEMO",
+                issuer_name: form.issuerName || "DigiBlueCamp",
+                signatory_name_1: form.signatoryName1 || courseInfo?.instructorName || "Ahmad Fadhil",
+                signatory_role_1: form.signatoryRole1 || "Lead Instructor",
+                signatory_name_2: form.signatoryName2 || "Dr. Santoso W.",
+                signatory_role_2: form.signatoryRole2 || "Head of Curriculum",
+                subtitle: form.subtitle,
+              }}
+              onSave={handleSaveDesigner}
+            />
+          ) : (
+            <CertificateBackDesigner
+              initialConfig={form.templateConfig?.backConfig}
+              courseTitle={courseInfo?.title || "Judul Kursus"}
+              sampleData={{
+                studentName: "Muhammad Rizky Pratama",
+                courseTitle: courseInfo?.title || "Fullstack Web Development Mastery",
+                categoryName: "Teknologi & Pemrograman",
+                certificateCode: "EA-2026-CERT-DEMO",
+                issueDisplay: format(new Date(), "d MMMM yyyy", { locale: idLocale }),
+                issuerName: form.issuerName || "DigiBlueCamp",
+                instructorName: form.signatoryName1 || courseInfo?.instructorName || "Ahmad Fadhil",
+                signatoryRole1: form.signatoryRole1 || "Lead Instructor",
+                signatoryName2: form.signatoryName2 || "Dr. Santoso W.",
+                signatoryRole2: form.signatoryRole2 || "Head of Curriculum",
+                totalLessons: 12,
+                totalHours: 18,
+                overallScore: 94.5,
+                finalGrade: "A",
+                predicate: "DENGAN PUJIAN (DISTINCTION)",
+                items: [
+                  {
+                    id: "m1",
+                    title: "Pemahaman Konsep & Fundamental Kurikulum",
+                    type: "module",
+                    workload: "6 JP",
+                    score: 95,
+                    maxScore: 100,
+                    grade: "A",
+                    status: "KOMPETEN",
+                  },
+                  {
+                    id: "m2",
+                    title: "Penerapan Praktik & Studi Lapangan",
+                    type: "module",
+                    workload: "8 JP",
+                    score: 92,
+                    maxScore: 100,
+                    grade: "A",
+                    status: "KOMPETEN",
+                  },
+                  {
+                    id: "q1",
+                    title: "Evaluasi Komprehensif Pemahaman Materi",
+                    type: "quiz",
+                    workload: "Evaluasi Kuis",
+                    score: 96,
+                    maxScore: 100,
+                    grade: "A",
+                    status: "LULUS",
+                  },
+                  {
+                    id: "a1",
+                    title: "Proyek Akhir & Portofolio Mandiri Teruji",
+                    type: "assignment",
+                    workload: "Proyek Praktik",
+                    score: 95,
+                    maxScore: 100,
+                    grade: "A",
+                    status: "DISETUJUI",
+                  },
+                ],
+              }}
+              onSave={handleSaveBackDesigner}
+            />
+          )}
+        </div>
       )}
 
       {/* Tab 2: Settings & Criteria */}
@@ -706,10 +861,34 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
         {/* Right Form: Live Certificate Preview (5 cols) */}
         <div className="lg:col-span-5 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-stone-500 flex items-center gap-1.5">
-              <Eye size={14} className="text-orange-600" />
-              Pratinjau Nyata Sertifikat
-            </h3>
+            <div className="inline-flex items-center bg-stone-100 p-0.5 rounded-lg border border-stone-200">
+              <button
+                type="button"
+                onClick={() => setPreviewSide("front")}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-1 rounded-md text-[11px] font-bold transition-all",
+                  previewSide === "front"
+                    ? "bg-white text-stone-900 shadow-2xs"
+                    : "text-stone-500 hover:text-stone-800"
+                )}
+              >
+                <Award size={12} className={previewSide === "front" ? "text-orange-600" : "text-stone-400"} />
+                <span>Sisi Depan</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setPreviewSide("back")}
+                className={cn(
+                  "flex items-center gap-1.5 px-3 py-1 rounded-md text-[11px] font-bold transition-all",
+                  previewSide === "back"
+                    ? "bg-white text-stone-900 shadow-2xs"
+                    : "text-stone-500 hover:text-stone-800"
+                )}
+              >
+                <FileText size={12} className={previewSide === "back" ? "text-blue-600" : "text-stone-400"} />
+                <span>Sisi Belakang (Transkrip)</span>
+              </button>
+            </div>
             <span
               className={cn(
                 "text-[10px] font-semibold px-2 py-0.5 rounded-full border",
@@ -723,7 +902,64 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
           </div>
 
           {/* Certificate Miniature Preview */}
-          {form.templateConfig && form.templateConfig.elements?.length > 0 ? (
+          {previewSide === "back" ? (
+            <div className="space-y-3">
+              <div className="w-full rounded-2xl shadow-warm overflow-hidden bg-white border border-stone-200">
+                <CertificateTranscriptCard
+                  backConfig={form.templateConfig?.backConfig}
+                  data={{
+                    studentName: "Nama Siswa Teladan",
+                    courseTitle: courseInfo?.title || "Judul Kursus",
+                    categoryName: "Kategori Kursus",
+                    certificateCode: "EA-SAMPLE-2026",
+                    issueDisplay: format(new Date(), "d MMMM yyyy", { locale: idLocale }),
+                    issuerName: form.issuerName || "DigiBlueCamp",
+                    instructorName: form.signatoryName1 || courseInfo?.instructorName || "Ahmad Fadhil",
+                    signatoryRole1: form.signatoryRole1 || "Lead Instructor",
+                    signatoryName2: form.signatoryName2 || "Dr. Santoso W.",
+                    signatoryRole2: form.signatoryRole2 || "Head of Curriculum",
+                    totalLessons: 10,
+                    totalHours: 16,
+                    overallScore: 92.5,
+                    finalGrade: "A",
+                    predicate: "DENGAN PUJIAN (DISTINCTION)",
+                    items: [
+                      {
+                        id: "m1",
+                        title: "Penguasaan Modul & Kurikulum Teori",
+                        type: "module",
+                        workload: "8 JP",
+                        score: 95,
+                        maxScore: 100,
+                        grade: "A",
+                        status: "KOMPETEN",
+                      },
+                      {
+                        id: "q1",
+                        title: "Evaluasi Pemahaman Materi (Kuis)",
+                        type: "quiz",
+                        workload: "Evaluasi Kuis",
+                        score: 90,
+                        maxScore: 100,
+                        grade: "A",
+                        status: "LULUS",
+                      },
+                      {
+                        id: "a1",
+                        title: "Studi Kasus & Portofolio Proyek Akhir",
+                        type: "assignment",
+                        workload: "Proyek Praktik",
+                        score: 92,
+                        maxScore: 100,
+                        grade: "A",
+                        status: "DISETUJUI",
+                      },
+                    ],
+                  }}
+                />
+              </div>
+            </div>
+          ) : form.templateConfig && form.templateConfig.elements?.length > 0 ? (
             <div className="space-y-3">
               <div className="w-full rounded-2xl shadow-warm overflow-hidden bg-white border border-stone-200">
                 <CertificateCanvasRenderer
@@ -734,7 +970,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                     category_name: "Kategori Kursus",
                     issue_date: format(new Date(), "d MMMM yyyy", { locale: idLocale }),
                     certificate_code: "EA-SAMPLE-2026",
-                    issuer_name: form.issuerName || "Earthy Academy",
+                    issuer_name: form.issuerName || "DigiBlueCamp",
                     signatory_name_1: form.signatoryName1 || "Ahmad Fadhil",
                     signatory_role_1: form.signatoryRole1 || "Lead Instructor",
                     signatory_name_2: form.signatoryName2 || "Dr. Santoso W.",
@@ -792,7 +1028,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                     className="text-xs font-bold tracking-widest uppercase text-stone-800"
                     style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
                   >
-                    {form.issuerName || "Earthy Academy"}
+                    {form.issuerName || "DigiBlueCamp"}
                   </h4>
                   <p className="text-[8px] uppercase tracking-widest text-amber-700 font-semibold mt-0.5">
                     {form.title || "Certificate of Completion"}
@@ -863,9 +1099,9 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
               Fitur Sertifikat Digital:
             </p>
             <ul className="list-disc pl-4 space-y-0.5 text-[10px]">
+              <li>Mendukung 2 halaman (Halaman 1: Sertifikat, Halaman 2: Transkrip Nilai).</li>
               <li>Memiliki URL verifikasi unik yang dapat dibagikan publik.</li>
               <li>Dapat dicetak langsung atau disimpan sebagai file PDF berkualitas tinggi.</li>
-              <li>Kredensial tersimpan secara permanen pada profil &amp; dashboard siswa.</li>
             </ul>
           </div>
         </div>
@@ -873,7 +1109,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
     )}
 
       {/* Tab 3: Recipients Table */}
-      {(activeView === "recipients" || activeView === "settings") && (
+      {activeView === "recipients" && (
         <div className="bg-white rounded-2xl border border-stone-200 p-6 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">

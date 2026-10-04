@@ -27,6 +27,10 @@ import {
   AlignRight,
   Loader2,
   ExternalLink,
+  ZoomIn,
+  ZoomOut,
+  Maximize2,
+  Minimize2,
 } from "lucide-react";
 
 interface CertificateDesignerProps {
@@ -58,12 +62,39 @@ export function CertificateDesigner({
   );
   const [activeTab, setActiveTab] = useState<"element" | "canvas" | "presets" | "elements_list">("element");
   const [previewMode, setPreviewMode] = useState<"sample" | "tags">("sample");
+  const [zoomScale, setZoomScale] = useState<"fit" | "75" | "100" | "125">("100");
+  const [isWideStudio, setIsWideStudio] = useState(false);
   const [saving, setSaving] = useState(false);
   const [uploadingBg, setUploadingBg] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const selectedElement = config.elements.find((el) => el.id === selectedElementId);
+
+  const handleZoomOut = () => {
+    if (zoomScale === "125") setZoomScale("100");
+    else if (zoomScale === "100") setZoomScale("75");
+    else if (zoomScale === "75") setZoomScale("fit");
+  };
+
+  const handleZoomIn = () => {
+    if (zoomScale === "fit") setZoomScale("75");
+    else if (zoomScale === "75") setZoomScale("100");
+    else if (zoomScale === "100") setZoomScale("125");
+  };
+
+  const currentRatio = config.aspectRatio || "a4";
+  const getRatioDimensionText = () => {
+    switch (currentRatio) {
+      case "16:9":
+        return "1050 × 590 px (16:9 Widescreen)";
+      case "16:10":
+        return "1050 × 656 px (16:10 Standar)";
+      case "a4":
+      default:
+        return "1050 × 742 px (A4 Landscape 297 × 210 mm)";
+    }
+  };
 
   // Handle selecting an element from canvas or list
   const handleSelectElement = (id: string | null) => {
@@ -264,26 +295,160 @@ export function CertificateDesigner({
         </div>
       )}
 
-      {/* Main Designer Grid: Canvas (Left 7) + Inspector (Right 5) */}
+      {/* Main Designer Grid: Canvas + Inspector */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left: Interactive Canvas Work Area (7 cols) */}
-        <div className="lg:col-span-7 space-y-3">
-          <div className="bg-stone-900 rounded-3xl p-4 sm:p-6 shadow-warm-lg flex flex-col items-center justify-center">
-            {/* Aspect Container */}
-            <div className="w-full max-w-2xl">
-              <CertificateCanvasRenderer
-                config={config}
-                data={sampleData}
-                isInteractive={true}
-                selectedElementId={selectedElementId}
-                onSelectElement={handleSelectElement}
-                onUpdateElementPosition={handleUpdatePosition}
-                useSampleFallback={previewMode === "sample"}
-                className="rounded-2xl shadow-2xl"
-              />
+        {/* Interactive Canvas Work Area (8 cols in split mode, 12 cols in wide studio mode) */}
+        <div className={`${isWideStudio ? "lg:col-span-12" : "lg:col-span-8"} space-y-3 transition-all`}>
+          <div className="bg-stone-900 rounded-3xl p-4 sm:p-5 shadow-warm-lg flex flex-col border border-stone-800">
+            {/* Workbench Header Toolbar: Dimension info, Aspect ratio, Zoom, and Wide Mode */}
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-3 mb-3 border-b border-stone-800 text-xs">
+              {/* Left: Document Dimension & Aspect Ratio Selector */}
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-stone-800/80 text-amber-300 font-mono text-[11px] border border-stone-700/60 shadow-2xs">
+                  📐 {getRatioDimensionText()}
+                </span>
+
+                <div className="flex items-center bg-stone-800/90 rounded-lg p-0.5 border border-stone-700/60">
+                  <button
+                    type="button"
+                    onClick={() => setConfig((prev) => ({ ...prev, aspectRatio: "a4" }))}
+                    className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-all ${
+                      currentRatio === "a4" ? "bg-amber-500 text-stone-950 font-bold" : "text-stone-400 hover:text-stone-200"
+                    }`}
+                  >
+                    A4 Landscape
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfig((prev) => ({ ...prev, aspectRatio: "16:10" }))}
+                    className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-all ${
+                      currentRatio === "16:10" ? "bg-amber-500 text-stone-950 font-bold" : "text-stone-400 hover:text-stone-200"
+                    }`}
+                  >
+                    16:10
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfig((prev) => ({ ...prev, aspectRatio: "16:9" }))}
+                    className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-all ${
+                      currentRatio === "16:9" ? "bg-amber-500 text-stone-950 font-bold" : "text-stone-400 hover:text-stone-200"
+                    }`}
+                  >
+                    16:9
+                  </button>
+                </div>
+              </div>
+
+              {/* Right: Zoom Controls & Wide Workspace Toggle */}
+              <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex items-center bg-stone-800/90 rounded-lg p-0.5 border border-stone-700/60">
+                  <button
+                    type="button"
+                    onClick={handleZoomOut}
+                    disabled={zoomScale === "fit"}
+                    className="p-1 text-stone-400 hover:text-white disabled:opacity-30 transition-colors"
+                    title="Zoom Out"
+                  >
+                    <ZoomOut size={13} />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setZoomScale("fit")}
+                    className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-all ${
+                      zoomScale === "fit" ? "bg-stone-700 text-white font-bold" : "text-stone-400 hover:text-stone-200"
+                    }`}
+                  >
+                    Fit
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setZoomScale("75")}
+                    className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-all ${
+                      zoomScale === "75" ? "bg-stone-700 text-white font-bold" : "text-stone-400 hover:text-stone-200"
+                    }`}
+                  >
+                    75%
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setZoomScale("100")}
+                    className={`px-2.5 py-0.5 rounded text-[11px] font-bold transition-all ${
+                      zoomScale === "100" ? "bg-orange-600 text-white shadow-xs" : "text-amber-400 hover:text-amber-300"
+                    }`}
+                    title="Ukuran Nyata Dokumen (1050px)"
+                  >
+                    100% (Ukuran Sebenarnya)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setZoomScale("125")}
+                    className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-all ${
+                      zoomScale === "125" ? "bg-stone-700 text-white font-bold" : "text-stone-400 hover:text-stone-200"
+                    }`}
+                  >
+                    125%
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleZoomIn}
+                    disabled={zoomScale === "125"}
+                    className="p-1 text-stone-400 hover:text-white disabled:opacity-30 transition-colors"
+                    title="Zoom In"
+                  >
+                    <ZoomIn size={13} />
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsWideStudio(!isWideStudio)}
+                  className={`p-1.5 rounded-lg border transition-all ${
+                    isWideStudio
+                      ? "bg-amber-500/20 text-amber-300 border-amber-500/40"
+                      : "bg-stone-800 text-stone-300 border-stone-700 hover:bg-stone-700"
+                  }`}
+                  title={isWideStudio ? "Kembalikan Tampilan Split" : "Perluas Studio Kanvas Penuh"}
+                >
+                  {isWideStudio ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
+                </button>
+              </div>
             </div>
+
+            {/* Scrollable Artboard Canvas Stage */}
+            <div className="w-full overflow-auto p-2 sm:p-6 flex justify-center items-center rounded-2xl bg-stone-950/50 border border-stone-800/80 min-h-[440px]">
+              <div
+                style={{
+                  width:
+                    zoomScale === "fit"
+                      ? "100%"
+                      : zoomScale === "75"
+                      ? "788px"
+                      : zoomScale === "125"
+                      ? "1312px"
+                      : "1050px", // 100% Ukuran Sebenarnya!
+                  maxWidth: zoomScale === "fit" ? "1050px" : undefined,
+                  minWidth: zoomScale === "100" ? "1050px" : zoomScale === "125" ? "1312px" : undefined,
+                }}
+                className="transition-all duration-200 shrink-0"
+              >
+                <CertificateCanvasRenderer
+                  config={config}
+                  data={sampleData}
+                  isInteractive={true}
+                  selectedElementId={selectedElementId}
+                  onSelectElement={handleSelectElement}
+                  onUpdateElementPosition={handleUpdatePosition}
+                  useSampleFallback={previewMode === "sample"}
+                  className="rounded-2xl shadow-2xl bg-white"
+                />
+              </div>
+            </div>
+
             <p className="text-[11px] text-stone-400 mt-3 text-center">
-              💡 <span className="font-semibold text-stone-300">Tips:</span> Klik elemen teks mana pun di atas kanvas dan geser (drag) untuk mengatur posisinya secara presisi.
+              💡 <span className="font-semibold text-stone-300">Tips:</span> Kanvas dirender pada{" "}
+              <strong className="text-amber-300">Ukuran Sebenarnya (1050px)</strong> sehingga proporsi huruf dan tata letak persis sama dengan hasil cetak. Klik dan geser elemen teks untuk mengubah posisi.
             </p>
           </div>
 
@@ -315,8 +480,12 @@ export function CertificateDesigner({
           </div>
         </div>
 
-        {/* Right: Inspector & Settings Tabs (5 cols) */}
-        <div className="lg:col-span-5 bg-white rounded-2xl border border-stone-200 shadow-warm overflow-hidden">
+        {/* Right / Bottom: Inspector & Settings Tabs */}
+        <div
+          className={`${
+            isWideStudio ? "lg:col-span-12" : "lg:col-span-4"
+          } bg-white rounded-2xl border border-stone-200 shadow-warm overflow-hidden transition-all`}
+        >
           {/* Inspector Tab Bar */}
           <div className="flex border-b border-stone-200 bg-stone-50/70 p-1">
             <button
@@ -631,6 +800,72 @@ export function CertificateDesigner({
               <h4 className="text-xs font-bold uppercase tracking-wider text-stone-500">
                 Pengaturan Latar &amp; Bingkai Kanvas
               </h4>
+
+              {/* Format & Rasio Aspek Kanvas */}
+              <div className="p-4 rounded-xl border border-stone-200 bg-stone-50 space-y-2.5">
+                <span className="text-xs font-bold text-stone-800 flex items-center gap-1.5">
+                  <Sliders size={14} className="text-orange-600" />
+                  Format Dokumen &amp; Rasio Aspek
+                </span>
+                <p className="text-[11px] text-stone-500">
+                  Pilih ukuran standar yang digunakan saat mencetak PDF dan menampilkan sertifikat:
+                </p>
+                <div className="grid grid-cols-1 gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setConfig((prev) => ({ ...prev, aspectRatio: "a4" }))}
+                    className={`flex items-center justify-between p-2.5 rounded-xl border text-left text-xs transition-all ${
+                      currentRatio === "a4"
+                        ? "border-orange-500 bg-orange-50/70 text-orange-950 font-bold"
+                        : "border-stone-200 bg-white text-stone-700 hover:bg-stone-100"
+                    }`}
+                  >
+                    <div>
+                      <p className="font-bold">A4 Landscape (297 × 210 mm)</p>
+                      <p className="text-[10px] text-stone-500 font-normal">
+                        Standar resmi ijazah &amp; sertifikat kelulusan (Resolusi 1050 × 742 px)
+                      </p>
+                    </div>
+                    {currentRatio === "a4" && <CheckCircle2 size={16} className="text-orange-600 shrink-0" />}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setConfig((prev) => ({ ...prev, aspectRatio: "16:10" }))}
+                    className={`flex items-center justify-between p-2.5 rounded-xl border text-left text-xs transition-all ${
+                      currentRatio === "16:10"
+                        ? "border-orange-500 bg-orange-50/70 text-orange-950 font-bold"
+                        : "border-stone-200 bg-white text-stone-700 hover:bg-stone-100"
+                    }`}
+                  >
+                    <div>
+                      <p className="font-bold">Standar Layar Digital (16:10)</p>
+                      <p className="text-[10px] text-stone-500 font-normal">
+                        Format modern proporsional laptop &amp; tablet (Resolusi 1050 × 656 px)
+                      </p>
+                    </div>
+                    {currentRatio === "16:10" && <CheckCircle2 size={16} className="text-orange-600 shrink-0" />}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setConfig((prev) => ({ ...prev, aspectRatio: "16:9" }))}
+                    className={`flex items-center justify-between p-2.5 rounded-xl border text-left text-xs transition-all ${
+                      currentRatio === "16:9"
+                        ? "border-orange-500 bg-orange-50/70 text-orange-950 font-bold"
+                        : "border-stone-200 bg-white text-stone-700 hover:bg-stone-100"
+                    }`}
+                  >
+                    <div>
+                      <p className="font-bold">Layar Lebar / Widescreen (16:9)</p>
+                      <p className="text-[10px] text-stone-500 font-normal">
+                        Format presentasi video &amp; monitor lebar (Resolusi 1050 × 590 px)
+                      </p>
+                    </div>
+                    {currentRatio === "16:9" && <CheckCircle2 size={16} className="text-orange-600 shrink-0" />}
+                  </button>
+                </div>
+              </div>
 
               {/* Upload Custom Background */}
               <div className="p-4 rounded-xl border border-stone-200 bg-stone-50 space-y-3">
