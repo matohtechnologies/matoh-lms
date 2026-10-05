@@ -49,12 +49,12 @@ export function CertificateView({
   code,
   isLocked,
   studentName = "Pelajar",
-  courseTitle = "Kelas Earthy Academy",
-  instructorName = "Ahmad Fadhil",
-  signatoryRole1 = "Lead Instructor",
-  signatoryName2 = "Dr. Santoso W.",
-  signatoryRole2 = "Head of Curriculum",
-  issuerName = "Earthy Academy",
+  courseTitle = "Pelatihan Matoh Technologies",
+  instructorName = "Dr. G. Prabantoro, SE., MM., CBec.",
+  signatoryRole1 = "Lead Instructor & RnD Director",
+  signatoryName2 = "Dr. E. Lovita, SE., Ak., M.Si., CA.",
+  signatoryRole2 = "Head of Academic Board",
+  issuerName = "PT. Matoh Technologies Indonesia",
   certificateTitle = "Certificate of Completion",
   subtitle = "Atas keberhasilannya dalam menyelesaikan seluruh modul kurikulum, kuis evaluasi, studi kasus komprehensif, dan pemenuhan seluruh kriteria kelulusan.",
   categoryName,
@@ -153,7 +153,7 @@ export function CertificateView({
 
   if (isLocked) {
     return (
-      <div className="min-h-screen bg-[#faf8f5] flex items-center justify-center px-4">
+      <div className="min-h-screen bg-[#faf8f5] pt-24 sm:pt-28 pb-12 flex items-center justify-center px-4">
         <div className="max-w-md w-full bg-white rounded-3xl border border-stone-200/80 p-8 sm:p-10 text-center shadow-warm-lg">
           <div className="w-16 h-16 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center mx-auto mb-6 text-amber-600">
             <Lock size={28} />
@@ -187,7 +187,7 @@ export function CertificateView({
   }
 
   return (
-    <div className="certificate-view-wrapper min-h-screen bg-[#faf8f5] py-8 sm:py-12 px-4 sm:px-6 flex flex-col items-center justify-start print:bg-white print:p-0 print:m-0 print:min-h-0 print:h-auto print:block">
+    <div className="certificate-view-wrapper min-h-screen bg-[#faf8f5] pt-24 sm:pt-28 pb-12 sm:pb-16 px-4 sm:px-6 flex flex-col items-center justify-start print:bg-white print:p-0 print:m-0 print:min-h-0 print:h-auto print:block">
       {/* Print CSS Rules */}
       <style jsx global>{`
         @media print {

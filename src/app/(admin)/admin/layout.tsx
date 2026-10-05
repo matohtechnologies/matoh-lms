@@ -38,7 +38,7 @@ export default async function AdminLayout({
               className="font-bold text-slate-900 text-sm block leading-none"
               style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
             >
-              Earthy<span className="text-blue-600">Admin</span>
+              Matoh<span className="text-blue-600">Admin</span>
             </span>
           </div>
         </Link>
@@ -87,7 +87,7 @@ export default async function AdminLayout({
                 className="font-bold text-slate-900 text-sm block leading-tight"
                 style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
               >
-                Earthy<span className="text-blue-600">Academy</span>
+                Matoh<span className="text-blue-600">Technologies</span>
               </span>
               <span className="inline-block text-[10px] text-blue-700 font-bold uppercase tracking-wider bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200/60 mt-0.5">
                 Admin Console

@@ -85,7 +85,7 @@ export default function ForgotPasswordPage() {
               className="font-bold text-stone-900 text-xl"
               style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
             >
-              Earthy<span className="text-blue-600">Academy</span>
+              Matoh<span className="text-blue-600">Technologies</span>
             </span>
           </Link>
           <h1

@@ -36,7 +36,7 @@
     "categories_subtitle": "Find courses that match your interests and career goals",
     "courses_unit": "courses",
     "features_badge": "Our Advantages",
-    "features_title": "Why Learn at Earthy Academy?",
+    "features_title": "Why Learn at Matoh Technologies?",
     "features_subtitle": "World-class interactive learning experience designed to accelerate your career",
     "features": {
       "curriculum_title": "Relevant Curriculum",
@@ -281,23 +281,23 @@
     "secure_payment": "Safe & Encrypted Transaction"
   },
   "about": {
-    "hero_badge": "About Earthy Academy",
+    "hero_badge": "About PT. Matoh Technologies Indonesia",
     "hero_title": "We Believe That",
-    "hero_highlight": "Learning Is Everyone's Right",
-    "hero_desc": "Earthy Academy was founded with a single mission: to make high-quality technology education accessible to anyone, anywhere, without barriers.",
+    "hero_highlight": "Digital Capability is Essential to Growth",
+    "hero_desc": "PT. Matoh Technologies Indonesia empowers small & medium enterprises (SMEs) with business digitization and guides academic researchers with robust analytical methodologies.",
     "stat_students": "Active Learners",
     "stat_courses": "Available Courses",
-    "stat_instructors": "Expert Instructors",
-    "stat_rating": "Platform Rating",
+    "stat_instructors": "Expert Mentors",
+    "stat_rating": "Satisfaction Rating",
     "values_title": "Mission, Vision & Values",
     "mission_title": "Our Mission",
-    "mission_desc": "To provide high-quality, affordable, and industry-relevant education for everyone so that anyone can achieve their dream career.",
+    "mission_desc": "To implement business digitization for SMEs, modernize digital teaching & research processes for academia, and socialize digital tools across society.",
     "vision_title": "Our Vision",
-    "vision_desc": "To be the leading online learning ecosystem trusted by millions of learners and thousands of top enterprises.",
+    "vision_desc": "To be the premier digital technology learning center for SMEs, academic scholars, and students.",
     "value_title": "Our Values",
-    "value_desc": "Uncompromising quality, continuous innovation, a supportive community, and relentless dedication to learner success.",
-    "team_title": "The Team Behind Earthy Academy",
-    "team_subtitle": "Dedicated individuals working passionately every day to provide you with the best learning experience."
+    "value_desc": "Methodological accuracy, actionable practical impact, academic integrity, and sustainable mentoring.",
+    "team_title": "The Team & Instructors Behind Matoh Technologies",
+    "team_subtitle": "Experienced industry practitioners and doctors dedicated to advancing your digital competence."
   },
   "footer": {
     "tagline": "Trusted online learning platform to develop your skills and professional career.",
@@ -478,7 +478,9 @@
     "section_deleted": "Section deleted successfully",
     "lesson_saved": "Lesson updated successfully",
     "lesson_created": "New lesson added successfully",
-    "lesson_deleted": "Lesson deleted successfully"
+    "lesson_deleted": "Lesson deleted successfully",
+    "cancel": "Cancel",
+    "save": "Save"
   },
   "learn": {
     "progress": "Learning Progress",

@@ -9,7 +9,7 @@ import { id as idLocale, enUS as enLocale } from "date-fns/locale";
 import { getLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Orders — Earthy Academy" };
+export const metadata: Metadata = { title: "Riwayat Transaksi — PT. Matoh Technologies Indonesia" };
 
 interface OrderItem {
   id: string;

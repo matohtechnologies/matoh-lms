@@ -90,11 +90,11 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
     title: "Certificate of Completion",
     subtitle:
       "Atas keberhasilannya dalam menyelesaikan seluruh modul kurikulum, evaluasi kuis, dan pemenuhan seluruh kriteria kelulusan.",
-    issuerName: "Earthy Academy",
+    issuerName: "PT. Matoh Technologies Indonesia",
     signatoryName1: "",
-    signatoryRole1: "Lead Instructor",
-    signatoryName2: "Dr. Santoso W.",
-    signatoryRole2: "Head of Curriculum",
+    signatoryRole1: "Lead Instructor & RnD Director",
+    signatoryName2: "Dr. E. Lovita, SE., Ak., M.Si., CA.",
+    signatoryRole2: "Head of Academic Board",
     templateUrl: null,
     templateConfig: null,
     minProgress: 100,
@@ -162,12 +162,12 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
           subtitle:
             data.setting.subtitle ||
             "Atas keberhasilannya dalam menyelesaikan seluruh modul kurikulum, evaluasi kuis, dan pemenuhan seluruh kriteria kelulusan.",
-          issuerName: data.setting.issuerName || "Earthy Academy",
+          issuerName: data.setting.issuerName || "PT. Matoh Technologies Indonesia",
           signatoryName1:
-            data.setting.signatoryName1 || data.course?.instructorName || "Ahmad Fadhil",
-          signatoryRole1: data.setting.signatoryRole1 || "Lead Instructor",
-          signatoryName2: data.setting.signatoryName2 || "Dr. Santoso W.",
-          signatoryRole2: data.setting.signatoryRole2 || "Head of Curriculum",
+            data.setting.signatoryName1 || data.course?.instructorName || "Dr. G. Prabantoro, SE., MM., CBec.",
+          signatoryRole1: data.setting.signatoryRole1 || "Lead Instructor & RnD Director",
+          signatoryName2: data.setting.signatoryName2 || "Dr. E. Lovita, SE., Ak., M.Si., CA.",
+          signatoryRole2: data.setting.signatoryRole2 || "Head of Academic Board",
           templateUrl: data.setting.templateUrl || null,
           templateConfig: data.setting.templateConfig || null,
           minProgress: data.setting.minProgress ?? 100,
@@ -451,12 +451,12 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                 course_title: courseInfo?.title || "Fullstack Web Development Mastery",
                 category_name: "Teknologi & Pemrograman",
                 issue_date: format(new Date(), "d MMMM yyyy", { locale: idLocale }),
-                certificate_code: "EA-2026-CERT-DEMO",
-                issuer_name: form.issuerName || "Earthy Academy",
-                signatory_name_1: form.signatoryName1 || courseInfo?.instructorName || "Ahmad Fadhil",
-                signatory_role_1: form.signatoryRole1 || "Lead Instructor",
-                signatory_name_2: form.signatoryName2 || "Dr. Santoso W.",
-                signatory_role_2: form.signatoryRole2 || "Head of Curriculum",
+                certificate_code: "MT-2026-CERT-DEMO",
+                issuer_name: form.issuerName || "PT. Matoh Technologies Indonesia",
+                signatory_name_1: form.signatoryName1 || courseInfo?.instructorName || "Dr. G. Prabantoro, SE., MM., CBec.",
+                signatory_role_1: form.signatoryRole1 || "Lead Instructor & RnD Director",
+                signatory_name_2: form.signatoryName2 || "Dr. E. Lovita, SE., Ak., M.Si., CA.",
+                signatory_role_2: form.signatoryRole2 || "Head of Academic Board",
                 subtitle: form.subtitle,
               }}
               onSave={handleSaveDesigner}
@@ -469,12 +469,12 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                 studentName: "Muhammad Rizky Pratama",
                 courseTitle: courseInfo?.title || "Fullstack Web Development Mastery",
                 categoryName: "Teknologi & Pemrograman",
-                certificateCode: "EA-2026-CERT-DEMO",
+                certificateCode: "MT-2026-CERT-DEMO",
                 issueDisplay: format(new Date(), "d MMMM yyyy", { locale: idLocale }),
-                issuerName: form.issuerName || "Earthy Academy",
-                instructorName: form.signatoryName1 || courseInfo?.instructorName || "Ahmad Fadhil",
-                signatoryRole1: form.signatoryRole1 || "Lead Instructor",
-                signatoryName2: form.signatoryName2 || "Dr. Santoso W.",
+                issuerName: form.issuerName || "PT. Matoh Technologies Indonesia",
+                instructorName: form.signatoryName1 || courseInfo?.instructorName || "Dr. G. Prabantoro, SE., MM., CBec.",
+                signatoryRole1: form.signatoryRole1 || "Lead Instructor & RnD Director",
+                signatoryName2: form.signatoryName2 || "Dr. E. Lovita, SE., Ak., M.Si., CA.",
                 signatoryRole2: form.signatoryRole2 || "Head of Curriculum",
                 totalLessons: 12,
                 totalHours: 18,
@@ -780,7 +780,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                   type="text"
                   value={form.issuerName}
                   onChange={(e) => setForm({ ...form, issuerName: e.target.value })}
-                  placeholder="Contoh: Earthy Academy"
+                  placeholder="Contoh: PT. Matoh Technologies Indonesia"
                   className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-blue-500"
                 />
               </div>
@@ -911,13 +911,13 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                     studentName: "Nama Siswa Teladan",
                     courseTitle: courseInfo?.title || "Judul Kursus",
                     categoryName: "Kategori Kursus",
-                    certificateCode: "EA-SAMPLE-2026",
+                    certificateCode: "MT-SAMPLE-2026",
                     issueDisplay: format(new Date(), "d MMMM yyyy", { locale: idLocale }),
-                    issuerName: form.issuerName || "Earthy Academy",
-                    instructorName: form.signatoryName1 || courseInfo?.instructorName || "Ahmad Fadhil",
-                    signatoryRole1: form.signatoryRole1 || "Lead Instructor",
-                    signatoryName2: form.signatoryName2 || "Dr. Santoso W.",
-                    signatoryRole2: form.signatoryRole2 || "Head of Curriculum",
+                    issuerName: form.issuerName || "PT. Matoh Technologies Indonesia",
+                    instructorName: form.signatoryName1 || courseInfo?.instructorName || "Dr. G. Prabantoro, SE., MM., CBec.",
+                    signatoryRole1: form.signatoryRole1 || "Lead Instructor & RnD Director",
+                    signatoryName2: form.signatoryName2 || "Dr. E. Lovita, SE., Ak., M.Si., CA.",
+                    signatoryRole2: form.signatoryRole2 || "Head of Academic Board",
                     totalLessons: 10,
                     totalHours: 16,
                     overallScore: 92.5,
@@ -969,12 +969,12 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                     course_title: courseInfo?.title || "Judul Kursus",
                     category_name: "Kategori Kursus",
                     issue_date: format(new Date(), "d MMMM yyyy", { locale: idLocale }),
-                    certificate_code: "EA-SAMPLE-2026",
-                    issuer_name: form.issuerName || "Earthy Academy",
-                    signatory_name_1: form.signatoryName1 || "Ahmad Fadhil",
-                    signatory_role_1: form.signatoryRole1 || "Lead Instructor",
-                    signatory_name_2: form.signatoryName2 || "Dr. Santoso W.",
-                    signatory_role_2: form.signatoryRole2 || "Head of Curriculum",
+                    certificate_code: "MT-SAMPLE-2026",
+                    issuer_name: form.issuerName || "PT. Matoh Technologies Indonesia",
+                    signatory_name_1: form.signatoryName1 || "Dr. G. Prabantoro, SE., MM., CBec.",
+                    signatory_role_1: form.signatoryRole1 || "Lead Instructor & RnD Director",
+                    signatory_name_2: form.signatoryName2 || "Dr. E. Lovita, SE., Ak., M.Si., CA.",
+                    signatory_role_2: form.signatoryRole2 || "Head of Academic Board",
                     subtitle: form.subtitle,
                   }}
                   isInteractive={false}
@@ -1028,7 +1028,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                     className="text-xs font-bold tracking-widest uppercase text-stone-800"
                     style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
                   >
-                    {form.issuerName || "Earthy Academy"}
+                    {form.issuerName || "PT. Matoh Technologies Indonesia"}
                   </h4>
                   <p className="text-[8px] uppercase tracking-widest text-blue-700 font-semibold mt-0.5">
                     {form.title || "Certificate of Completion"}

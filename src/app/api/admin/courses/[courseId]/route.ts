@@ -9,6 +9,10 @@ const courseUpdateSchema = z.object({
   slug: z.string().min(3).max(200).regex(/^[a-z0-9-]+$/).optional(),
   description: z.string().min(10).optional(),
   categoryId: z.string().optional(),
+  instructorId: z.string().optional(),
+  instructorHeadline: z.string().nullable().optional(),
+  instructorBio: z.string().nullable().optional(),
+  whatYouLearn: z.union([z.string(), z.array(z.string())]).nullable().optional(),
   level: z.enum(["BEGINNER", "INTERMEDIATE", "ADVANCED"]).optional(),
   price: z.number().min(0).optional(),
   discountPrice: z.number().min(0).nullable().optional(),
@@ -34,7 +38,7 @@ export async function GET(
       where: { id: courseId },
       include: {
         category: true,
-        instructor: { select: { name: true } },
+        instructor: { select: { id: true, name: true, email: true, image: true, headline: true, bio: true } },
         sections: {
           include: { lessons: { orderBy: { order: "asc" } } },
           orderBy: { order: "asc" },
@@ -66,10 +70,19 @@ export async function PATCH(
     const body = await req.json();
     const data = courseUpdateSchema.parse(body);
 
+    const { whatYouLearn: rawWhatYouLearn, thumbnail: rawThumbnail, ...restData } = data;
+
+    const whatYouLearnStr = Array.isArray(rawWhatYouLearn)
+      ? JSON.stringify(rawWhatYouLearn)
+      : rawWhatYouLearn;
+
     const updateData = {
-      ...data,
-      ...(data.thumbnail !== undefined && {
-        thumbnail: data.thumbnail ? resolveThumbnailUrl(data.thumbnail) : null,
+      ...restData,
+      ...(rawWhatYouLearn !== undefined && {
+        whatYouLearn: whatYouLearnStr ?? null,
+      }),
+      ...(rawThumbnail !== undefined && {
+        thumbnail: rawThumbnail ? resolveThumbnailUrl(rawThumbnail) : null,
       }),
     };
 

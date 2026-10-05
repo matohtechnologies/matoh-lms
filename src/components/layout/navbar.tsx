@@ -33,6 +33,15 @@ import { useAppLocale } from "@/components/providers/locale-provider";
 import { useSession } from "next-auth/react";
 import SignOutButton from "@/components/auth/signout-button";
 
+interface NavbarCategoryItem {
+  id: string;
+  name: string;
+  nameEn?: string | null;
+  slug: string;
+  icon?: string | null;
+  _count?: { courses: number };
+}
+
 interface NavbarProps {
   user?: {
     id: string;
@@ -41,9 +50,10 @@ interface NavbarProps {
     image?: string | null;
     role?: string;
   } | null;
+  categories?: NavbarCategoryItem[];
 }
 
-export function Navbar({ user }: NavbarProps) {
+export function Navbar({ user, categories }: NavbarProps) {
   const { data: session } = useSession();
   const { locale } = useAppLocale();
   const isEn = locale === "en";
@@ -91,64 +101,47 @@ export function Navbar({ user }: NavbarProps) {
     }, 150);
   };
 
-  const programCategories = [
-    {
-      icon: Code2,
-      color: "text-blue-600 bg-blue-50 border-blue-200/60",
-      name: isEn ? "Web & Software Engineering" : "Pengembangan Web & Software",
-      desc: isEn
-        ? "Modern Fullstack, React/Next.js Frontend & Scalable Node.js Backend"
-        : "Fullstack modern, Frontend React/Next.js & Backend Node.js scalable",
-      href: "/courses?category=Web+Development",
-      badge: isEn ? "Most Popular" : "Paling Populer",
-    },
-    {
-      icon: Database,
-      color: "text-emerald-600 bg-emerald-50 border-emerald-200/60",
-      name: isEn ? "Data Science & AI Engineering" : "Sains Data & AI Engineering",
-      desc: isEn
-        ? "Python analytics, applied Machine Learning & Generative AI"
-        : "Python analytics, Machine Learning terapan & Generative AI",
-      href: "/courses?category=Data+Science",
-      badge: isEn ? "Career Trend" : "Tren Karir",
-    },
-    {
-      icon: Palette,
-      color: "text-purple-600 bg-purple-50 border-purple-200/60",
-      name: isEn ? "UI/UX & Product Design" : "Desain UI/UX & Produk",
-      desc: isEn
-        ? "Figma mastery, empirical user research & industry design systems"
-        : "Figma mastery, riset pengguna empiris & Design System industri",
-      href: "/courses?category=UI%2FUX+Design",
-    },
-    {
-      icon: Smartphone,
-      color: "text-amber-600 bg-amber-50 border-amber-200/60",
-      name: isEn ? "Mobile App Development" : "Pengembangan Aplikasi Mobile",
-      desc: isEn
-        ? "Cross-platform iOS & Android apps with Flutter & React Native"
-        : "Multi-platform iOS & Android dengan Flutter & React Native",
-      href: "/courses?category=Mobile+Dev",
-    },
-    {
-      icon: Cloud,
-      color: "text-sky-600 bg-sky-50 border-sky-200/60",
-      name: isEn ? "Cloud Computing & DevOps" : "Komputasi Cloud & DevOps",
-      desc: isEn
-        ? "Docker containers, Kubernetes clusters & production AWS deployments"
-        : "Docker container, Kubernetes cluster & deployment AWS production",
-      href: "/courses?category=Cloud+Computing",
-    },
-    {
-      icon: TrendingUp,
-      color: "text-rose-600 bg-rose-50 border-rose-200/60",
-      name: isEn ? "Digital Marketing & Growth" : "Pemasaran Digital & Growth",
-      desc: isEn
-        ? "Acquisition strategy, organic SEO, and digital conversion optimization"
-        : "Strategi akuisisi, SEO organik, dan optimasi konversi digital",
-      href: "/courses?category=Digital+Marketing",
-    },
-  ];
+  const getCategoryIcon = (slug: string) => {
+    if (slug.includes("web") || slug.includes("code")) return Code2;
+    if (slug.includes("data") || slug.includes("ai")) return Database;
+    if (slug.includes("design") || slug.includes("ui")) return Palette;
+    if (slug.includes("mobile") || slug.includes("app")) return Smartphone;
+    if (slug.includes("cloud") || slug.includes("devops")) return Cloud;
+    if (slug.includes("marketing") || slug.includes("growth")) return TrendingUp;
+    return BookOpen;
+  };
+
+  const getCategoryColor = (slug: string) => {
+    if (slug.includes("web")) return "text-blue-600 bg-blue-50 border-blue-200/60";
+    if (slug.includes("data")) return "text-emerald-600 bg-emerald-50 border-emerald-200/60";
+    if (slug.includes("design")) return "text-purple-600 bg-purple-50 border-purple-200/60";
+    if (slug.includes("mobile")) return "text-amber-600 bg-amber-50 border-amber-200/60";
+    if (slug.includes("cloud")) return "text-sky-600 bg-sky-50 border-sky-200/60";
+    if (slug.includes("marketing")) return "text-rose-600 bg-rose-50 border-rose-200/60";
+    return "text-blue-600 bg-blue-50 border-blue-200/60";
+  };
+
+  const programCategories = (categories && categories.length > 0)
+    ? categories.map((cat) => ({
+        icon: getCategoryIcon(cat.slug),
+        color: getCategoryColor(cat.slug),
+        name: isEn ? (cat.nameEn || cat.name) : cat.name,
+        desc: cat._count?.courses !== undefined
+          ? (isEn ? `${cat._count.courses} active courses available` : `${cat._count.courses} kelas tersedia`)
+          : (isEn ? "Curated learning track" : "Program belajar terstruktur"),
+        href: `/courses?category=${encodeURIComponent(cat.name)}`,
+        badge: cat._count?.courses && cat._count.courses > 0 ? (isEn ? `${cat._count.courses} Courses` : `${cat._count.courses} Kelas`) : undefined,
+      }))
+    : [
+        {
+          icon: Code2,
+          color: "text-blue-600 bg-blue-50 border-blue-200/60",
+          name: isEn ? "All Programs" : "Semua Program",
+          desc: isEn ? "Browse all available courses in database" : "Jelajahi semua kelas di database",
+          href: "/courses",
+          badge: undefined,
+        },
+      ];
 
   const programFormats = [
     {
@@ -199,7 +192,7 @@ export function Navbar({ user }: NavbarProps) {
             className="font-bold text-stone-900 text-lg sm:text-xl tracking-tight"
             style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
           >
-            Earthy<span className="text-blue-600">Academy</span>
+            Matoh<span className="text-blue-600">Technologies</span>
           </span>
         </Link>
 

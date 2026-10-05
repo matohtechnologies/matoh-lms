@@ -784,7 +784,7 @@ export default function LearnPageClient({
               <BookOpen size={14} className="text-white" />
             </div>
             <span className="text-sm font-bold text-white tracking-tight">
-              Earthy<span className="text-blue-400">Academy</span>
+              Matoh<span className="text-blue-400">Technologies</span>
             </span>
           </Link>
           <h2 className="text-sm font-bold text-stone-100 leading-snug line-clamp-2" title={course.title}>
@@ -1019,7 +1019,7 @@ export default function LearnPageClient({
                   left: `${watermarkPos.x}%`,
                 }}
               >
-                🔒 {session.user.email || session.user.name} • Earthy Academy
+                🔒 {session.user.email || session.user.name} • Matoh Technologies
               </div>
             )}
 

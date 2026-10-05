@@ -96,8 +96,8 @@ export function ContactForm({ locale: propLocale }: ContactFormProps) {
 
   const waMessage = encodeURIComponent(
     isEn
-      ? `Hello Earthy Academy team, my name is ${formData.name || "Prospective Student"}.\nI have an inquiry regarding: ${selectedCategoryLabel}.\nMessage: ${formData.message || "Please provide more details regarding your learning programs."}`
-      : `Halo Tim Earthy Academy, perkenalkan saya ${formData.name || "Calon Siswa"}.\nSaya ingin bertanya mengenai: ${selectedCategoryLabel}.\nPesan: ${formData.message || "Mohon informasi lebih lanjut seputar program belajar."}`
+      ? `Hello Matoh Technologies team, my name is ${formData.name || "Prospective Student"}.\nI have an inquiry regarding: ${selectedCategoryLabel}.\nMessage: ${formData.message || "Please provide more details regarding your learning programs."}`
+      : `Halo Tim Matoh Technologies, perkenalkan saya ${formData.name || "Calon Peserta"}.\nSaya ingin berkonsultasi mengenai: ${selectedCategoryLabel}.\nPesan: ${formData.message || "Mohon informasi lebih lanjut seputar program pelatihan."}`
   );
 
   return (
@@ -123,9 +123,9 @@ export function ContactForm({ locale: propLocale }: ContactFormProps) {
               <p className="text-sm text-stone-600 max-w-md mx-auto leading-relaxed">
                 {isEn ? (
                   <>
-                    Thank you for reaching out to Earthy Academy,{" "}
+                    Thank you for reaching out to Matoh Technologies,{" "}
                     <strong className="text-stone-900">{formData.name}</strong>.
-                    Our academic advisors will get back to you via WhatsApp or
+                    Our academic & technical advisors will get back to you via WhatsApp or
                     email within{" "}
                     <span className="font-semibold text-blue-600">
                       1 business day
@@ -134,9 +134,9 @@ export function ContactForm({ locale: propLocale }: ContactFormProps) {
                   </>
                 ) : (
                   <>
-                    Terima kasih telah menghubungi Earthy Academy,{" "}
+                    Terima kasih telah menghubungi Matoh Technologies,{" "}
                     <strong className="text-stone-900">{formData.name}</strong>.
-                    Tim konsultan akademik kami akan merespons melalui WhatsApp
+                    Tim konsultan kami akan merespons melalui WhatsApp
                     atau email dalam waktu maksimal{" "}
                     <span className="font-semibold text-blue-600">
                       1x24 jam kerja
@@ -308,8 +308,8 @@ export function ContactForm({ locale: propLocale }: ContactFormProps) {
                 <ShieldCheck size={16} className="text-blue-600 shrink-0" />
                 <span>
                   {isEn
-                    ? "Your personal data is encrypted & secure with Earthy Academy"
-                    : "Privasi data Anda terlindungi & aman bersama Earthy Academy"}
+                    ? "Your personal data is encrypted & secure with Matoh Technologies"
+                    : "Privasi data Anda terlindungi & aman bersama Matoh Technologies"}
                 </span>
               </div>
 

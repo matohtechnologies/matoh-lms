@@ -7,9 +7,10 @@ import { Play, Pause, CheckCircle2, Award, Code2, Sparkles, Volume2, ShieldCheck
 
 interface HeroInteractiveShowcaseProps {
   isEn: boolean;
+  studentCount?: number;
 }
 
-export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) {
+export function HeroInteractiveShowcase({ isEn, studentCount = 0 }: HeroInteractiveShowcaseProps) {
   const [activeTab, setActiveTab] = useState<"video" | "project" | "certificate">("video");
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState<"1x" | "1.25x" | "1.5x">("1.25x");
@@ -28,7 +29,7 @@ export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) 
             <span className="w-3 h-3 rounded-full bg-amber-400/80" />
             <span className="w-3 h-3 rounded-full bg-emerald-400/80" />
             <span className="ml-2 text-xs font-medium text-slate-400 tracking-wide">
-              earthy-studio / classroom
+              matoh-technologies / classroom
             </span>
           </div>
 
@@ -90,7 +91,7 @@ export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) 
                 <div className="relative w-full h-full bg-black">
                   <iframe
                     src="https://www.youtube-nocookie.com/embed/843nec-IvW0?autoplay=1&rel=0&modestbranding=1"
-                    title="Next.js 14 in 100 Seconds - Earthy Academy Preview"
+                    title="Matoh Technologies - Interactive Digital Class Preview"
                     className="w-full h-full border-0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
@@ -125,7 +126,7 @@ export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) 
                   {/* Background preview image */}
                   <Image
                     src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1000&q=80"
-                    alt="Next.js Architecture Lesson"
+                    alt="Interactive Classroom Lesson"
                     fill
                     sizes="(max-width: 768px) 100vw, 600px"
                     className="object-cover opacity-85 group-hover:scale-102 transition-transform duration-500"
@@ -155,10 +156,10 @@ export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) 
                   <div className="absolute bottom-0 inset-x-0 p-3.5 flex items-center justify-between text-white text-xs">
                     <div className="flex items-center gap-2 min-w-0">
                       <span className="font-semibold text-[11px] bg-blue-600 px-2 py-0.5 rounded shrink-0">
-                        Modul 04
+                        {isEn ? "Demo Lesson" : "Pratinjau Modul"}
                       </span>
                       <span className="text-slate-200 text-xs truncate max-w-[200px] sm:max-w-xs font-medium">
-                        Server Components & Data Caching
+                        {isEn ? "Digital Transformation & Applied Analytics" : "Digital Marketing & Penerapan Analisis MCDM"}
                       </span>
                     </div>
 
@@ -175,30 +176,30 @@ export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) 
                       >
                         {playbackSpeed}
                       </button>
-                      <span className="text-[11px] text-slate-300 font-mono">14:20 / 18:45</span>
+                      <span className="text-[11px] text-slate-300 font-mono">HD 1080p</span>
                     </div>
                   </div>
 
                   {/* Progress Line */}
                   <div className="absolute bottom-0 inset-x-0 h-1 bg-white/20">
-                    <div className="h-full bg-blue-500 w-[74%] transition-all duration-300" />
+                    <div className="h-full bg-blue-500 w-[60%] transition-all duration-300" />
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Lesson Info & Instructor */}
+            {/* Lesson Info */}
             <div className="flex items-center justify-between pt-1">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-sky-500 flex items-center justify-center text-white font-bold text-sm shadow-sm">
-                  AR
+                  MT
                 </div>
                 <div>
                   <h4 className="text-sm font-bold text-slate-900 leading-snug">
-                    Agung Pratama, S.Kom
+                    Matoh Technologies
                   </h4>
                   <p className="text-xs text-slate-500">
-                    Lead Fullstack Engineer • Ex-Shopee
+                    {isEn ? "Digital Learning Ecosystem" : "Ekosistem Pembelajaran Digital Terakreditasi"}
                   </p>
                 </div>
               </div>
@@ -210,10 +211,10 @@ export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) 
                     {isEn ? "Now Playing Preview" : "Sedang Memutar"}
                   </span>
                 ) : (
-                  <div>
-                    <span className="text-xs font-semibold text-slate-900 block">38 dari 45 Selesai</span>
-                    <span className="text-[11px] text-emerald-600 font-medium">85% Kelulusan</span>
-                  </div>
+                  <span className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 bg-slate-50 px-3 py-1 rounded-full border border-slate-200">
+                    <Sparkles size={13} className="text-blue-600" />
+                    <span>{isEn ? "Click to play" : "Klik untuk putar"}</span>
+                  </span>
                 )}
               </div>
             </div>
@@ -226,7 +227,7 @@ export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) 
             <div className="rounded-2xl border border-slate-200/90 bg-slate-50 p-4 space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-900 uppercase tracking-wider">
-                  {isEn ? "Industry-Standard Capstone" : "Tugas Akhir Berstandar Industri"}
+                  {isEn ? "Applied Business Case Study" : "Studi Kasus Bisnis & Riset Terapan"}
                 </span>
                 <span className="text-[11px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 font-semibold">
                   Portfolio-Ready
@@ -234,16 +235,16 @@ export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) 
               </div>
               <h4 className="text-base font-bold text-slate-900">
                 {isEn
-                  ? "Build a Production E-Learning SaaS with Next.js, Stripe & PostgreSQL"
-                  : "Membangun Sistem SaaS E-Learning dengan Next.js, Stripe, & PostgreSQL"}
+                  ? "End-to-End Digital Marketing Strategy & MCDM Decision Modeling"
+                  : "Strategi Digital Marketing Terpadu & Pemodelan Keputusan MCDM"}
               </h4>
               <p className="text-xs text-slate-600 leading-relaxed">
                 {isEn
-                  ? "Not just another to-do list tutorial. You will build payment webhooks, role-based authorization, SSRF security guards, and PostgreSQL query caches."
-                  : "Bukan sekadar aplikasi to-do list. Anda akan mengimplementasikan webhook pembayaran, role-based authorization, optimasi SSRF/CSP, dan query cache PostgreSQL."}
+                  ? "Formulate actionable digital transformation campaigns, structural decision matrices (AHP/ISM), and market forecasting ready for corporate or research publication."
+                  : "Susun kampanye transformasi digital, matriks keputusan struktural (AHP/ISM), dan peramalan bisnis yang siap diterapkan di UMKM maupun publikasi riset bereputasi."}
               </p>
               <div className="flex flex-wrap gap-2 pt-1">
-                {["Next.js 15", "TypeScript", "Prisma ORM", "PostgreSQL", "Tailwind CSS", "Midtrans"].map(
+                {["Digital Marketing", "Social Media", "MCDM (AHP)", "MCDM (ISM)", "Forecasting Analysis", "Design Thinking"].map(
                   (tag) => (
                     <span
                       key={tag}
@@ -260,8 +261,8 @@ export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) 
               <CheckCircle2 size={16} className="text-emerald-600 shrink-0" />
               <span>
                 {isEn
-                  ? "Instructors provide direct 1-on-1 code reviews on your GitHub pull requests."
-                  : "Instruktur memberikan code review langsung pada pull request GitHub Anda."}
+                  ? "Curriculums include code reviews, guided milestones, and hands-on exercises."
+                  : "Kurikulum mencakup ulasan kode, tahapan terarah, dan latihan langsung."}
               </span>
             </div>
           </div>
@@ -288,35 +289,30 @@ export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) 
               </div>
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-blue-200 text-[11px] font-mono text-slate-700 font-semibold shadow-2xs">
                 <ShieldCheck size={13} className="text-emerald-600" />
-                <span>{isEn ? "CODE: EA-CERT-2026-X99" : "KODE: EA-CERT-2026-X99"}</span>
+                <span>{isEn ? "VERIFIED DIGITAL CREDENTIAL" : "KREDENSIAL DIGITAL RESMI"}</span>
               </div>
             </div>
           </div>
         )}
 
-        {/* Bottom Social Proof Bar */}
+        {/* Bottom Status Proof Bar */}
         <div className="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="flex -space-x-1.5">
-              {["bg-blue-500", "bg-purple-500", "bg-emerald-500", "bg-sky-500"].map((bg, idx) => (
-                <div
-                  key={idx}
-                  className={`w-6 h-6 rounded-full border-2 border-white ${bg} text-white text-[9px] font-bold flex items-center justify-center shadow-2xs`}
-                >
-                  {String.fromCharCode(65 + idx)}
-                </div>
-              ))}
-            </div>
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span className="text-xs text-slate-600 font-medium">
-              <strong className="text-slate-900 font-bold">
-                {isEn ? "1,240+ students" : "1.240+ siswa"}
-              </strong>{" "}
-              {isEn ? "active learning today" : "aktif belajar hari ini"}
+              {studentCount > 0 ? (
+                <>
+                  <strong className="text-slate-900 font-bold">{studentCount}</strong>{" "}
+                  {isEn ? "registered learners" : "siswa terdaftar"}
+                </>
+              ) : (
+                <span>{isEn ? "24/7 Self-Paced Platform" : "Akses Belajar Mandiri 24/7"}</span>
+              )}
             </span>
           </div>
 
           <span className="text-[11px] font-semibold text-blue-700 bg-blue-50 border border-blue-200/60 px-2.5 py-1 rounded-lg">
-            {isEn ? "Accredited" : "Terakreditasi"}
+            {isEn ? "Online Academy" : "Akademi Digital"}
           </span>
         </div>
       </div>

@@ -8,6 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/input";
 import { extractYouTubeVideoId, getYouTubeThumbnailUrl, isYouTubeUrl, resolveThumbnailUrl } from "@/lib/youtube";
 import { CourseMediaPicker } from "@/components/admin/course-media-picker";
+import {
+  CourseInstructorPicker,
+  type InstructorOption,
+} from "@/components/admin/course-instructor-picker";
+import { CourseLearningOutcomesEditor } from "@/components/admin/course-learning-outcomes-editor";
 
 interface Category {
   id: string;
@@ -20,11 +25,23 @@ export default function NewCoursePage() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
   const [categories, setCategories] = useState<Category[]>([]);
+  const [instructors, setInstructors] = useState<InstructorOption[]>([]);
 
   // Form State
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [categoryId, setCategoryId] = useState("");
+  const [instructorId, setInstructorId] = useState("");
+  const [instructorHeadline, setInstructorHeadline] = useState("");
+  const [instructorBio, setInstructorBio] = useState("");
+  const [whatYouLearnItems, setWhatYouLearnItems] = useState<string[]>([
+    "Memahami konsep dasar dan fundamental materi secara komprehensif",
+    "Mengimplementasikan project nyata dari tahap inisiasi hingga deployment/production",
+    "Menguasai best practices, framework, dan metodologi standar industri modern",
+    "Membangun portofolio project unggulan yang siap dipresentasikan kepada klien & rekruter",
+    "Mendapatkan sertifikat kelulusan resmi dengan verifikasi kode kredensial & QR Code",
+    "Bergabung dengan komunitas belajar interaktif dan sesi bimbingan bersama instruktur",
+  ]);
   const [level, setLevel] = useState("BEGINNER");
   const [price, setPrice] = useState("499000");
   const [isFree, setIsFree] = useState(false);
@@ -42,6 +59,12 @@ export default function NewCoursePage() {
         if (d.categories?.length) {
           setCategories(d.categories);
           setCategoryId(d.categories[0].id);
+        }
+        if (d.instructors?.length) {
+          setInstructors(d.instructors);
+          setInstructorId(d.instructors[0].id);
+          if (d.instructors[0].headline) setInstructorHeadline(d.instructors[0].headline);
+          if (d.instructors[0].bio) setInstructorBio(d.instructors[0].bio);
         }
       })
       .catch(() => {});
@@ -74,6 +97,10 @@ export default function NewCoursePage() {
           slug: slug || title.toLowerCase().replace(/\s+/g, "-"),
           description,
           categoryId: categoryId || undefined,
+          instructorId: instructorId || undefined,
+          instructorHeadline: instructorHeadline || null,
+          instructorBio: instructorBio || null,
+          whatYouLearn: whatYouLearnItems,
           level,
           price: isFree ? 0 : Number(price),
           duration: Number(duration),
@@ -232,6 +259,23 @@ export default function NewCoursePage() {
             />
           </div>
         </div>
+
+        {/* Instructor Selection & About Instructor Customization */}
+        <CourseInstructorPicker
+          instructors={instructors}
+          selectedInstructorId={instructorId}
+          onInstructorChange={setInstructorId}
+          instructorHeadline={instructorHeadline}
+          onHeadlineChange={setInstructorHeadline}
+          instructorBio={instructorBio}
+          onBioChange={setInstructorBio}
+        />
+
+        {/* What You Will Learn (Learning Outcomes) Editor */}
+        <CourseLearningOutcomesEditor
+          value={whatYouLearnItems}
+          onChange={setWhatYouLearnItems}
+        />
 
         {/* Pricing & Duration Card */}
         <div className="bg-white rounded-2xl border border-stone-200 p-6 shadow-warm space-y-5">

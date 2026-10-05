@@ -19,27 +19,27 @@ const plusJakarta = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: "Earthy Academy — Platform Belajar Online",
-    template: "%s | Earthy Academy",
+    default: "PT. Matoh Technologies Indonesia — Platform Pelatihan & Pembelajaran Digital",
+    template: "%s | Matoh Technologies",
   },
   description:
-    "Platform belajar online terpercaya dengan kelas berkualitas tinggi dari instruktur berpengalaman. Kuasai skill baru dan raih karir impianmu.",
-  keywords: ["online learning", "kelas online", "belajar", "programming", "desain", "bisnis"],
-  authors: [{ name: "Earthy Academy" }],
-  creator: "Earthy Academy",
+    "Platform resmi PT. Matoh Technologies Indonesia (SK Kemenkumham: AHU-064920.AH.01.30.Tahun 2024). Pelatihan digital marketing, inovasi bisnis, dan analisis keputusan terstruktur bagi UMKM dan akademisi.",
+  keywords: ["matoh technologies", "pelatihan digital marketing", "kursus umkm", "mcdm ahp ism", "design thinking", "riset bisnis", "literasi digital"],
+  authors: [{ name: "PT. Matoh Technologies Indonesia" }],
+  creator: "PT. Matoh Technologies Indonesia",
   openGraph: {
     type: "website",
     locale: "id_ID",
-    url: "https://earthyacademy.com",
-    title: "Earthy Academy — Platform Belajar Online",
+    url: "https://www.matohtechnologies.com",
+    title: "PT. Matoh Technologies Indonesia — Make You Ready Digital",
     description:
-      "Platform belajar online terpercaya dengan kelas berkualitas tinggi.",
-    siteName: "Earthy Academy",
+      "Pusat pembelajaran penerapan teknologi digital terbaik bagi pelaku usaha (UMKM), akademisi, dan peserta didik.",
+    siteName: "Matoh Technologies",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Earthy Academy",
-    description: "Platform belajar online terpercaya",
+    title: "PT. Matoh Technologies Indonesia",
+    description: "Make You Ready Digital — Platform Pelatihan Digital Modern",
   },
   robots: {
     index: true,

@@ -93,7 +93,7 @@ export default function RegisterPage() {
               <BookOpen size={18} className="text-white" />
             </div>
             <span className="font-bold text-stone-900 text-lg" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-              Earthy<span className="text-blue-600">Academy</span>
+              Matoh<span className="text-blue-600">Technologies</span>
             </span>
           </Link>
         </div>

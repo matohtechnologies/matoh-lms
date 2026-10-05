@@ -19,11 +19,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const isEn = locale === "en";
   return {
     title: isEn
-      ? "Contact & Academic Advisory | Earthy Academy"
-      : "Kontak & Layanan Konsultasi | Earthy Academy",
+      ? "Contact & Consultation | PT. Matoh Technologies Indonesia"
+      : "Kontak & Layanan Konsultasi | PT. Matoh Technologies Indonesia",
     description: isEn
-      ? "Reach out to Earthy Academy's academic advisors and support team. Get personalized course recommendations, tech career roadmaps, corporate training inquiries, or technical support."
-      : "Hubungi tim konsultan akademik dan layanan bantuan Earthy Academy. Dapatkan panduan pemilihan kelas, roadmap karir teknologi, konsultasi kemitraan, atau bantuan teknis.",
+      ? "Reach out to PT. Matoh Technologies Indonesia advisors. Inquiries for digital marketing training, AHP/ISM decision analysis, research publication, or corporate consultation."
+      : "Hubungi tim konsultan PT. Matoh Technologies Indonesia. Dapatkan panduan pelatihan digital marketing, pemodelan keputusan AHP/ISM, penerbitan riset, atau konsultasi bisnis UMKM.",
   };
 }
 
@@ -34,40 +34,50 @@ export default async function ContactPage() {
   const contactChannels = [
     {
       icon: Phone,
-      title: isEn ? "Official WhatsApp Hotline" : "WhatsApp Hotline Resmi",
-      detail: "+62 821-4567-8901",
+      title: isEn ? "WhatsApp / Telegram Hotline" : "WhatsApp / Telegram Hotline",
+      detail: "+62 812-1010-6680",
       subtext: isEn
-        ? "Fast response under 15 minutes during operational hours"
-        : "Respons cepat di bawah 15 menit pada jam operasional",
+        ? "Fast response during business hours (08:00 - 17:00 WIB)"
+        : "Respons cepat selama jam kerja operasional (08:00 - 17:00 WIB)",
       actionLabel: isEn ? "Chat on WhatsApp ➔" : "Chat WhatsApp ➔",
-      actionUrl: isEn
-        ? "https://wa.me/6282145678901?text=Hello%20Earthy%20Academy,%20I%20would%20like%20to%20consult%20about%20learning%20programs."
-        : "https://wa.me/6282145678901?text=Halo%20Earthy%20Academy,%20saya%20ingin%20konsultasi%20program%20belajar.",
-      badge: isEn ? "Fastest" : "Paling Cepat",
+      actionUrl: "https://wa.me/6281210106680?text=Halo%20Matoh%20Technologies,%20saya%20ingin%20konsultasi%20program%20pelatihan%20dan%20layanan.",
+      badge: isEn ? "Hotline 1" : "Utama",
       badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
     },
     {
-      icon: Mail,
-      title: isEn ? "Official Academic Support Email" : "Email Resmi Tim Akademik",
-      detail: "halo@earthyacademy.com",
+      icon: Phone,
+      title: isEn ? "Consultation & Research Line" : "Layanan Konsultasi & Riset",
+      detail: "+62 812-1414-0084",
       subtext: isEn
-        ? "For syllabus inquiries, certificate verification & support tickets"
-        : "Untuk pengajuan silabus, verifikasi sertifikat & tiket bantuan",
-      actionLabel: isEn ? "Send Email ➔" : "Kirim Email ➔",
-      actionUrl: "mailto:halo@earthyacademy.com",
-      badge: isEn ? "Official" : "Resmi",
+        ? "Research orders, publications & academic workshops"
+        : "Saluran khusus pengajuan riset, publikasi jurnal, dan workshop akademisi",
+      actionLabel: isEn ? "Contact Research Line ➔" : "Hubungi Riset ➔",
+      actionUrl: "https://wa.me/6281214140084?text=Halo%20Matoh%20Technologies,%20saya%20ingin%20konsultasi%20layanan%20riset%20dan%20publikasi.",
+      badge: isEn ? "Hotline 2" : "Riset & B2B",
       badgeColor: "bg-blue-50 text-blue-700 border-blue-200",
     },
     {
-      icon: Building,
-      title: isEn ? "Corporate & Enterprise Training" : "Kemitraan Corporate & B2B",
-      detail: "partnership@earthyacademy.com",
+      icon: Mail,
+      title: isEn ? "Official Email" : "Email Resmi Kantor",
+      detail: "info@matohtechnologies.com",
       subtext: isEn
-        ? "Engineering team upskilling, campus scholarships & CSR partnerships"
-        : "Pelatihan tim engineering, beasiswa kampus, & CSR program",
-      actionLabel: isEn ? "Contact Partnerships ➔" : "Hubungi Kemitraan ➔",
-      actionUrl: "mailto:partnership@earthyacademy.com",
-      badge: isEn ? "Enterprise" : "B2B Training",
+        ? "Official correspondence, institutional proposals & support"
+        : "Korespondensi resmi, proposal institusi, dan konfirmasi pelatihan",
+      actionLabel: isEn ? "Send Email ➔" : "Kirim Email ➔",
+      actionUrl: "mailto:info@matohtechnologies.com",
+      badge: isEn ? "Official" : "Resmi",
+      badgeColor: "bg-sky-50 text-sky-700 border-sky-200",
+    },
+    {
+      icon: Building,
+      title: isEn ? "Office Landline" : "Telepon Kantor",
+      detail: "(021) 4786 6642",
+      subtext: isEn
+        ? "Rawamangun Office, Jakarta Timur"
+        : "Kantor operasional Rawamangun, Jakarta Timur",
+      actionLabel: isEn ? "Call Office ➔" : "Hubungi Kantor ➔",
+      actionUrl: "tel:02147866642",
+      badge: isEn ? "Office" : "Kantor",
       badgeColor: "bg-purple-50 text-purple-700 border-purple-200",
     },
   ];
@@ -91,19 +101,19 @@ export default async function ContactPage() {
     },
     {
       q: isEn
-        ? "Does Earthy Academy have a physical office open for visits?"
-        : "Apakah Earthy Academy memiliki kantor fisik yang dapat dikunjungi?",
+        ? "Does Matoh Technologies have a physical office open for visits?"
+        : "Apakah Matoh Technologies memiliki kantor fisik yang dapat dikunjungi?",
       a: isEn
-        ? "Yes, our headquarters is located at Tekno Satrio Tower, 14th Floor, Mega Kuningan, South Jakarta. For in-person consultations, please schedule an appointment in advance via WhatsApp."
-        : "Ya, kantor pusat kami berlokasi di Menara Tekno Satrio, Lt. 14, Kawasan Mega Kuningan, Jakarta Selatan. Untuk kunjungan konsultasi tatap muka, harap membuat janji temu terlebih dahulu melalui WhatsApp.",
+        ? "Yes, our headquarters is located at Jl. RAMUSEL I/7A (Rawamangun Muka Selatan), Rawamangun, Pulo Gadung, East Jakarta 13220. For in-person consultations, please schedule an appointment in advance via WhatsApp or phone."
+        : "Ya, kantor pusat kami berlokasi di Jl. RAMUSEL I/7A (Rawamangun Muka Selatan), Rawamangun, Pulo Gadung, Jakarta Timur 13220. Untuk kunjungan konsultasi tatap muka, harap membuat janji temu terlebih dahulu melalui WhatsApp atau telepon kantor (021) 4786 6642.",
     },
     {
       q: isEn
-        ? "How can I verify the authenticity of an Earthy Academy certificate?"
+        ? "How can I verify the authenticity of a Matoh Technologies certificate?"
         : "Bagaimana cara memverifikasi keaslian sertifikat yang saya peroleh?",
       a: isEn
-        ? "Every graduate certificate features a unique credential ID (e.g. EA-MUNR6MWY-2P67) and a cryptographic QR code that anyone can verify publicly on our verification portal with no fees."
-        : "Setiap sertifikat kelulusan Earthy Academy dilengkapi dengan kode kredensial unik (contoh: EA-MUNR6MWY-2P67) dan QR Code resmi yang dapat dicek langsung secara publik di portal verifikasi kami tanpa dipungut biaya.",
+        ? "Every graduate certificate features a unique credential ID (e.g. MT-MUNR6MWY-2P67) and a cryptographic QR code that anyone can verify publicly on our verification portal with no fees."
+        : "Setiap sertifikat kelulusan resmi PT. Matoh Technologies Indonesia dilengkapi dengan kode kredensial unik (contoh: MT-MUNR6MWY-2P67) dan QR Code resmi yang dapat dicek langsung secara publik di portal verifikasi kami tanpa dipungut biaya.",
     },
   ];
 
@@ -188,23 +198,21 @@ export default async function ContactPage() {
               {/* Office & Operational Hours Card */}
               <div className="bg-white rounded-2xl border border-stone-200/80 p-6 shadow-2xs space-y-4">
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-stone-100 flex items-center justify-center text-stone-700 shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200/60 flex items-center justify-center text-blue-600 shrink-0">
                     <MapPin size={20} />
                   </div>
                   <div>
                     <h4 className="text-xs font-bold uppercase tracking-wider text-stone-500 mb-1">
-                      {isEn ? "Headquarters & Learning Hub" : "Kantor Pusat & Learning Hub"}
+                      {isEn ? "Registered Office Address" : "Alamat Kantor Operasional"}
                     </h4>
                     <p className="text-sm font-bold text-stone-900 leading-snug">
-                      {isEn ? "Tekno Satrio Tower, 14th Floor" : "Menara Tekno Satrio, Lantai 14"}
+                      PT. Matoh Technologies Indonesia
                     </p>
                     <p className="text-xs text-stone-600 mt-1 leading-relaxed">
-                      Jl. Prof. DR. Satrio No. Kav. C4, Karet Kuningan, Setiabudi, Jakarta Selatan 12940
+                      Jl. RAMUSEL I/7A (Rawamangun Muka Selatan), Rawamangun, Pulo Gadung, Jakarta Timur, DKI Jakarta 13220
                     </p>
-                    <p className="text-[11px] text-stone-400 mt-1">
-                      {isEn
-                        ? "Convenient access via Kuningan LRT Station (3 min walk) & Departemen Kesehatan TransJakarta Bus Stop."
-                        : "Akses mudah via Stasiun LRT Kuningan (3 menit jalan kaki) & Halte TransJakarta Departemen Kesehatan."}
+                    <p className="text-[11px] text-blue-700 font-mono mt-1 font-semibold">
+                      SK Kemenkumham RI: AHU-064920.AH.01.30.Tahun 2024
                     </p>
                   </div>
                 </div>
@@ -294,7 +302,7 @@ export default async function ContactPage() {
                 className="inline-flex items-center gap-1.5 text-xs font-bold text-stone-700 hover:text-stone-900 bg-stone-100 hover:bg-stone-200 px-4 py-2 rounded-xl transition-colors"
               >
                 <Users size={14} />
-                {isEn ? "Get to Know Earthy Academy" : "Kenal Lebih Dekat Earthy Academy"}
+                {isEn ? "Get to Know Matoh Technologies" : "Kenal Lebih Dekat Matoh Technologies"}
               </Link>
             </div>
           </div>

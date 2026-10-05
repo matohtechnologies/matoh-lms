@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, BookOpen } from "lucide-react";
 import { CourseCard } from "@/components/courses/course-card";
 import { Button } from "@/components/ui/button";
 
@@ -121,6 +121,33 @@ export function FeaturedCoursesShowcase({
             />
           ))}
         </div>
+      ) : courses.length === 0 ? (
+        <div className="text-center py-16 px-6 bg-slate-50/60 rounded-3xl border border-slate-200/80 max-w-2xl mx-auto space-y-4">
+          <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 mx-auto flex items-center justify-center shadow-xs">
+            <BookOpen size={24} />
+          </div>
+          <div>
+            <h3 className="text-base font-bold text-slate-900">
+              {isEn ? "Curriculums Under Preparation" : "Kelas Baru Sedang Dipersiapkan"}
+            </h3>
+            <p className="text-slate-500 text-xs sm:text-sm mt-1 max-w-md mx-auto leading-relaxed">
+              {isEn
+                ? "Our engineering leads are actively preparing production-grade curriculums. Check back soon or explore our learning method."
+                : "Kurikulum berkualitas tinggi sedang disusun bersama praktisi industri. Kunjungi kembali segera atau jelajahi metode belajar kami."}
+            </p>
+          </div>
+          <div className="pt-2">
+            <Link href="/about">
+              <Button
+                variant="outline"
+                size="sm"
+                className="rounded-xl border-slate-300 text-slate-700 bg-white"
+              >
+                {isEn ? "Learn About Our Method" : "Pelajari Metode Kami"}
+              </Button>
+            </Link>
+          </div>
+        </div>
       ) : (
         <div className="text-center py-16 bg-white rounded-3xl border border-slate-200/80">
           <p className="text-slate-500 text-sm">
@@ -130,18 +157,20 @@ export function FeaturedCoursesShowcase({
       )}
 
       {/* Bottom CTA to All Courses */}
-      <div className="pt-4 text-center">
-        <Link href="/courses">
-          <Button
-            size="lg"
-            variant="outline"
-            className="rounded-2xl border-slate-300 hover:border-slate-400 bg-white shadow-xs"
-            rightIcon={<ArrowRight size={16} />}
-          >
-            {isEn ? "Explore Full Course Catalog" : "Jelajahi Seluruh Katalog Kelas"}
-          </Button>
-        </Link>
-      </div>
+      {courses.length > 0 && (
+        <div className="pt-4 text-center">
+          <Link href="/courses">
+            <Button
+              size="lg"
+              variant="outline"
+              className="rounded-2xl border-slate-300 hover:border-slate-400 bg-white shadow-xs"
+              rightIcon={<ArrowRight size={16} />}
+            >
+              {isEn ? "Explore Full Course Catalog" : "Jelajahi Seluruh Katalog Kelas"}
+            </Button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

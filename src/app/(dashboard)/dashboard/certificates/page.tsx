@@ -8,7 +8,7 @@ import { format } from "date-fns";
 import { id as idLocale, enUS as enLocale } from "date-fns/locale";
 import { getLocale, getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = { title: "Certificates — Earthy Academy" };
+export const metadata: Metadata = { title: "Sertifikat Kelulusan — PT. Matoh Technologies Indonesia" };
 
 interface CertItem {
   id: string;

@@ -11,7 +11,7 @@ import { formatCurrency } from "@/lib/utils";
 import { getLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Dashboard — Earthy Academy" };
+export const metadata: Metadata = { title: "Dashboard — PT. Matoh Technologies Indonesia" };
 
 async function getDashboardData(userId: string) {
   try {
@@ -247,7 +247,7 @@ export default async function DashboardPage({
               <span>👋</span> {greeting}, {firstName}!
             </span>
             <span className="text-[11px] text-blue-100/90 font-medium">
-              Earthy Learning Hub
+              Matoh Learning Hub
             </span>
           </div>
 

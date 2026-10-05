@@ -31,6 +31,11 @@ import { CertificateManager } from "./certificate-manager";
 import { useTranslations } from "next-intl";
 import { resolveThumbnailUrl } from "@/lib/youtube";
 import { CourseMediaPicker } from "@/components/admin/course-media-picker";
+import {
+  CourseInstructorPicker,
+  type InstructorOption,
+} from "@/components/admin/course-instructor-picker";
+import { CourseLearningOutcomesEditor } from "@/components/admin/course-learning-outcomes-editor";
 
 interface Category {
   id: string;
@@ -50,7 +55,19 @@ interface CourseData {
   published: boolean;
   featured: boolean;
   categoryId: string;
-  instructor: { name: string };
+  instructorId?: string;
+  instructorHeadline?: string | null;
+  instructorBio?: string | null;
+  whatYouLearn?: string | null;
+  instructor: {
+    id?: string;
+    name: string;
+    email?: string;
+    image?: string | null;
+    headline?: string | null;
+    bio?: string | null;
+    role?: string;
+  };
   sections: SectionData[];
 }
 
@@ -73,6 +90,7 @@ export default function EditCoursePage() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
   const [categories, setCategories] = useState<Category[]>([]);
+  const [instructors, setInstructors] = useState<InstructorOption[]>([]);
   const [sections, setSections] = useState<SectionData[]>([]);
 
   // Form fields
@@ -87,6 +105,10 @@ export default function EditCoursePage() {
   const [published, setPublished] = useState(true);
   const [featured, setFeatured] = useState(false);
   const [categoryId, setCategoryId] = useState("");
+  const [instructorId, setInstructorId] = useState("");
+  const [instructorHeadline, setInstructorHeadline] = useState("");
+  const [instructorBio, setInstructorBio] = useState("");
+  const [whatYouLearnItems, setWhatYouLearnItems] = useState<string[]>([]);
 
   const loadData = useCallback(async () => {
     try {
@@ -102,7 +124,8 @@ export default function EditCoursePage() {
       }
 
       const { course }: { course: CourseData } = await courseRes.json();
-      const { categories: cats }: { categories: Category[] } = await catRes.json();
+      const { categories: cats, instructors: insList }: { categories: Category[]; instructors: InstructorOption[] } =
+        await catRes.json();
 
       setTitle(course.title);
       setSlug(course.slug);
@@ -116,7 +139,29 @@ export default function EditCoursePage() {
       setFeatured(course.featured);
       setCategoryId(course.categoryId);
       setCategories(cats || []);
+      setInstructors(insList || []);
       setSections(course.sections || []);
+
+      // Instructor states
+      setInstructorId(course.instructorId || course.instructor?.id || (insList?.[0]?.id ?? ""));
+      setInstructorHeadline(course.instructorHeadline || course.instructor?.headline || "");
+      setInstructorBio(course.instructorBio || course.instructor?.bio || "");
+
+      // What You Learn states
+      if (course.whatYouLearn) {
+        try {
+          const parsed = JSON.parse(course.whatYouLearn);
+          if (Array.isArray(parsed)) {
+            setWhatYouLearnItems(parsed);
+          } else {
+            setWhatYouLearnItems(course.whatYouLearn.split("\n").map((s) => s.trim()).filter(Boolean));
+          }
+        } catch {
+          setWhatYouLearnItems(course.whatYouLearn.split("\n").map((s) => s.trim()).filter(Boolean));
+        }
+      } else {
+        setWhatYouLearnItems([]);
+      }
     } catch {
       setError("Gagal memuat data kelas");
     } finally {
@@ -150,6 +195,10 @@ export default function EditCoursePage() {
           published,
           featured,
           categoryId: categoryId || undefined,
+          instructorId: instructorId || undefined,
+          instructorHeadline: instructorHeadline || null,
+          instructorBio: instructorBio || null,
+          whatYouLearn: whatYouLearnItems,
         }),
       });
 
@@ -445,6 +494,23 @@ export default function EditCoursePage() {
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
+
+          {/* Instructor Selection & About Instructor Customization */}
+          <CourseInstructorPicker
+            instructors={instructors}
+            selectedInstructorId={instructorId}
+            onInstructorChange={setInstructorId}
+            instructorHeadline={instructorHeadline}
+            onHeadlineChange={setInstructorHeadline}
+            instructorBio={instructorBio}
+            onBioChange={setInstructorBio}
+          />
+
+          {/* What You Will Learn (Learning Outcomes) Editor */}
+          <CourseLearningOutcomesEditor
+            value={whatYouLearnItems}
+            onChange={setWhatYouLearnItems}
+          />
 
           {/* Pricing */}
           <div className="bg-white rounded-2xl border border-stone-200 p-6 shadow-warm space-y-5">

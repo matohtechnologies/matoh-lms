@@ -194,12 +194,12 @@ export const PLACEHOLDER_OPTIONS = [
   { key: "certificate_title", label: "Judul Sertifikat", tag: "{{certificate_title}}", defaultText: "Certificate of Completion" },
   { key: "certificate_subtitle", label: "Narasi / Keterangan", tag: "{{certificate_subtitle}}", defaultText: "Atas kelulusan seluruh modul kurikulum, evaluasi kuis, dan pemenuhan seluruh kriteria akademik." },
   { key: "issue_date", label: "Tanggal Terbit", tag: "{{issue_date}}", defaultText: "30 September 2026" },
-  { key: "certificate_code", label: "Kode Kredensial / ID", tag: "{{certificate_code}}", defaultText: "EA-CERT-2026-9041" },
-  { key: "issuer_name", label: "Nama Lembaga / Institusi", tag: "{{issuer_name}}", defaultText: "Earthy Academy" },
-  { key: "signatory_name1", label: "Nama Tanda Tangan 1", tag: "{{signatory_name1}}", defaultText: "Ahmad Fadhil, M.Kom." },
-  { key: "signatory_role1", label: "Jabatan Tanda Tangan 1", tag: "{{signatory_role1}}", defaultText: "Lead Instructor" },
-  { key: "signatory_name2", label: "Nama Tanda Tangan 2", tag: "{{signatory_name2}}", defaultText: "Dr. Santoso W., Ph.D." },
-  { key: "signatory_role2", label: "Jabatan Tanda Tangan 2", tag: "{{signatory_role2}}", defaultText: "Head of Curriculum" },
+  { key: "certificate_code", label: "Kode Kredensial / ID", tag: "{{certificate_code}}", defaultText: "MT-CERT-2026-9041" },
+  { key: "issuer_name", label: "Nama Lembaga / Institusi", tag: "{{issuer_name}}", defaultText: "PT. Matoh Technologies Indonesia" },
+  { key: "signatory_name1", label: "Nama Tanda Tangan 1", tag: "{{signatory_name1}}", defaultText: "Dr. G. Prabantoro, SE., MM., CBec." },
+  { key: "signatory_role1", label: "Jabatan Tanda Tangan 1", tag: "{{signatory_role1}}", defaultText: "Lead Instructor & RnD Director" },
+  { key: "signatory_name2", label: "Nama Tanda Tangan 2", tag: "{{signatory_name2}}", defaultText: "Dr. E. Lovita, SE., Ak., M.Si., CA." },
+  { key: "signatory_role2", label: "Jabatan Tanda Tangan 2", tag: "{{signatory_role2}}", defaultText: "Head of Academic Board" },
 ] as const;
 
 export const DEFAULT_DESIGN_PRESETS: { id: string; name: string; description: string; config: CertificateDesignConfig }[] = [

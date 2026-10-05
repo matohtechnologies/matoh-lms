@@ -25,7 +25,7 @@ const getCourse = cache(async (slug: string) => {
     return await prisma.course.findUnique({
       where: { slug, published: true },
       include: {
-        instructor: { select: { id: true, name: true, image: true, bio: true } },
+        instructor: { select: { id: true, name: true, image: true, headline: true, bio: true } },
         category: true,
         sections: {
           include: {
@@ -89,23 +89,44 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
   const isFree = displayCourse.price === 0;
   const finalPrice = displayCourse.discountPrice ?? displayCourse.price;
 
-  const whatYouLearn = isEn
-    ? [
-        "Master foundational concepts and comprehensive principles",
-        "Implement real-world practical projects from scratch to production",
-        "Adopt professional best practices used by leading tech companies",
-        "Build an impressive portfolio to showcase to recruiters",
-        "Earn an industry-recognized certificate of completion",
-        "Join an active community of learners and experienced mentors",
-      ]
-    : [
-        "Memahami konsep dasar dan fundamental materi",
-        "Mengimplementasikan project nyata dari awal sampai production",
-        "Menguasai best practices yang digunakan industri",
-        "Membangun portfolio project yang impressive",
-        "Mendapatkan sertifikat yang diakui perusahaan",
-        "Bergabung dengan komunitas pelajar aktif",
-      ];
+  let customWhatYouLearn: string[] | null = null;
+  if (displayCourse.whatYouLearn) {
+    try {
+      const parsed = JSON.parse(displayCourse.whatYouLearn);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        customWhatYouLearn = parsed.filter(
+          (item) => typeof item === "string" && item.trim().length > 0
+        );
+      }
+    } catch {
+      const lines = displayCourse.whatYouLearn
+        .split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean);
+      if (lines.length > 0) customWhatYouLearn = lines;
+    }
+  }
+
+  const whatYouLearn =
+    customWhatYouLearn && customWhatYouLearn.length > 0
+      ? customWhatYouLearn
+      : isEn
+      ? [
+          "Master foundational concepts and comprehensive principles",
+          "Implement real-world practical projects from scratch to production",
+          "Adopt professional best practices used by leading tech companies",
+          "Build an impressive portfolio to showcase to recruiters",
+          "Earn an industry-recognized certificate of completion",
+          "Join an active community of learners and experienced mentors",
+        ]
+      : [
+          "Memahami konsep dasar dan fundamental materi",
+          "Mengimplementasikan project nyata dari awal sampai production",
+          "Menguasai best practices yang digunakan industri",
+          "Membangun portfolio project yang impressive",
+          "Mendapatkan sertifikat yang diakui perusahaan",
+          "Bergabung dengan komunitas pelajar aktif",
+        ];
 
   const courseJsonLd = {
     "@context": "https://schema.org",
@@ -114,12 +135,12 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
     description: displayCourse.description,
     provider: {
       "@type": "Organization",
-      name: "Earthy Academy",
-      sameAs: "http://localhost:3000",
+      name: "PT. Matoh Technologies Indonesia",
+      sameAs: "https://www.matohtechnologies.com",
     },
     instructor: {
       "@type": "Person",
-      name: displayCourse.instructor?.name || "Instruktur Earthy Academy",
+      name: displayCourse.instructor?.name || "Dewan Instruktur Matoh Technologies",
     },
     offers: {
       "@type": "Offer",
@@ -327,12 +348,17 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                 </div>
                 <div>
                   <h3 className="font-bold text-stone-900">{displayCourse.instructor.name}</h3>
-                  <p className="text-sm text-blue-600 mb-2">{isEn ? "Senior Instructor" : "Instruktur Senior"}</p>
-                  <p className="text-sm text-stone-600 leading-relaxed">
-                    {displayCourse.instructor.bio ??
+                  <p className="text-sm font-semibold text-blue-600 mb-2">
+                    {displayCourse.instructorHeadline ||
+                      displayCourse.instructor.headline ||
+                      (isEn ? "Lead Instructor" : "Dewan Instruktur")}
+                  </p>
+                  <p className="text-sm text-stone-600 leading-relaxed whitespace-pre-line">
+                    {displayCourse.instructorBio ||
+                      displayCourse.instructor.bio ||
                       (isEn
-                        ? "Experienced industry practitioner with over 5 years in technology. Mentored over 10,000 learners with recognized professional credentials."
-                        : "Instruktur berpengalaman dengan lebih dari 5 tahun di industri teknologi. Telah mengajar lebih dari 10.000 pelajar dan memiliki sertifikasi internasional di bidangnya.")}
+                        ? "Experienced industry practitioner and educator with deep domain expertise and real-world implementation track record."
+                        : "Praktisi dan akademisi berpengalaman dengan rekam jejak riset, konsultasi industri, dan pembimbingan intensif.")}
                   </p>
                 </div>
               </div>

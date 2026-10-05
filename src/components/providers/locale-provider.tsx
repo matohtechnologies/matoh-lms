@@ -72,7 +72,11 @@ export default function LocaleProvider({
 
   return (
     <LocaleContext.Provider value={{ locale, switchLocale, isPending }}>
-      <NextIntlClientProvider locale={locale} messages={currentMessages}>
+      <NextIntlClientProvider
+        locale={locale}
+        messages={currentMessages}
+        timeZone="Asia/Jakarta"
+      >
         {children}
       </NextIntlClientProvider>
     </LocaleContext.Provider>

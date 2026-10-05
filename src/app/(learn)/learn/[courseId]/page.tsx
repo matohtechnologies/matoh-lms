@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import LearnPageClient, { type LearnCourseData } from "./learn-client";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Ruang Belajar — Earthy Academy" };
+export const metadata: Metadata = { title: "Ruang Belajar — PT. Matoh Technologies Indonesia" };
 
 interface LearnPageProps {
   params: Promise<{ courseId: string }>;

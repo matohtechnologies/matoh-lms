@@ -43,11 +43,15 @@ export function Footer() {
                 <BookOpen size={16} className="text-white" />
               </div>
               <span className="font-bold text-white text-lg" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-                Earthy<span className="text-blue-400">Academy</span>
+                Matoh<span className="text-blue-400">Technologies</span>
               </span>
             </Link>
-            <p className="text-sm leading-relaxed text-stone-400 mb-5">
-              {t("tagline")}
+            <p className="text-xs leading-relaxed text-stone-400 mb-3">
+              PT. Matoh Technologies Indonesia (SK Kemenkumham: AHU-064920.AH.01.30.Tahun 2024). Pusat pembelajaran penerapan teknologi digital terbaik bagi pelaku usaha (UMKM), akademisi, dan peserta didik.
+            </p>
+            <p className="text-xs text-stone-500 mb-5 leading-normal">
+              Jl. RAMUSEL I/7A, Rawamangun, Jakarta Timur 13220<br />
+              Hotline: 0812-1010-6680 | info@matohtechnologies.com
             </p>
             <div className="flex items-center gap-3">
               {[
@@ -141,12 +145,12 @@ export function Footer() {
 
         <div className="mt-12 pt-6 border-t border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-sm text-stone-500">
-            © {currentYear} Earthy Academy. {t("rights")}
+            © 2008 - {currentYear} PT. Matoh Technologies Indonesia. {t("rights")}
           </p>
           <div className="flex items-center gap-1 text-sm text-stone-500">
-            <span>{t("made_with")}</span>
-            <span className="text-red-500">♥</span>
-            <span>{t("in_indonesia")}</span>
+            <span>Make You Ready Digital</span>
+            <span className="mx-1">•</span>
+            <span>Indonesia</span>
           </div>
         </div>
       </div>

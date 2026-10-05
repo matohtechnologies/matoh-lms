@@ -48,7 +48,7 @@ export default async function DashboardLayout({
               className="font-bold text-slate-900 text-base"
               style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
             >
-              Earthy<span className="text-blue-600">Academy</span>
+              Matoh<span className="text-blue-600">Technologies</span>
             </span>
           </Link>
         </div>
@@ -128,7 +128,7 @@ export default async function DashboardLayout({
               className="font-bold text-slate-900 text-sm"
               style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
             >
-              Earthy<span className="text-blue-600">Academy</span>
+              Matoh<span className="text-blue-600">Technologies</span>
             </span>
           </Link>
           <div className="flex items-center gap-2">

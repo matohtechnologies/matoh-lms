@@ -36,7 +36,7 @@
     "categories_subtitle": "Temukan kelas yang sesuai dengan minat dan tujuan karirmu",
     "courses_unit": "kelas",
     "features_badge": "Keunggulan Kami",
-    "features_title": "Mengapa Belajar di Earthy Academy?",
+    "features_title": "Mengapa Belajar di Matoh Technologies?",
     "features_subtitle": "Pengalaman belajar interaktif kelas dunia yang dirancang untuk akselerasi karirmu",
     "features": {
       "curriculum_title": "Kurikulum Relevan",
@@ -281,23 +281,23 @@
     "secure_payment": "Transaksi Aman & Terenkripsi"
   },
   "about": {
-    "hero_badge": "Tentang Earthy Academy",
+    "hero_badge": "Tentang PT. Matoh Technologies Indonesia",
     "hero_title": "Kami Percaya Bahwa",
-    "hero_highlight": "Belajar Itu Hak Semua Orang",
-    "hero_desc": "Earthy Academy didirikan dengan satu tujuan: membuat pendidikan teknologi berkualitas tinggi bisa diakses oleh siapa saja, di mana saja, tanpa hambatan.",
+    "hero_highlight": "Teknologi Digital Kunci Pertumbuhan",
+    "hero_desc": "PT. Matoh Technologies Indonesia didirikan untuk mendampingi digitalisasi pelaku usaha (UMKM) dan mengoptimalkan proses riset serta pembelajaran bagi akademisi.",
     "stat_students": "Pelajar Aktif",
     "stat_courses": "Kelas Tersedia",
-    "stat_instructors": "Instruktur Expert",
-    "stat_rating": "Rating Platform",
+    "stat_instructors": "Instruktur Ahli",
+    "stat_rating": "Rating Kepuasan",
     "values_title": "Misi, Visi & Nilai",
     "mission_title": "Misi Kami",
-    "mission_desc": "Menyediakan akses pendidikan berkualitas tinggi yang terjangkau dan relevan untuk semua kalangan, sehingga setiap orang bisa meraih karir impian mereka.",
+    "mission_desc": "Menerapkan digitalisasi proses bisnis bagi UMKM, proses belajar mengajar bagi akademisi, dan mensosialisasikan teknologi terapan secara berkesinambungan.",
     "vision_title": "Visi Kami",
-    "vision_desc": "Menjadi platform belajar online terdepan yang dipercaya oleh jutaan pelajar dan ribuan perusahaan terkemuka.",
+    "vision_desc": "Menjadi pusat pembelajaran penerapan teknologi digital terbaik bagi pelaku usaha (UMKM), akademisi, dan peserta didik.",
     "value_title": "Nilai Kami",
-    "value_desc": "Kualitas tanpa kompromi, inovasi berkelanjutan, komunitas yang supportif, dan dedikasi penuh pada keberhasilan siswa.",
-    "team_title": "Tim di Balik Earthy Academy",
-    "team_subtitle": "Orang-orang berdedikasi yang bekerja keras untuk memberikan pengalaman belajar terbaik bagi Anda."
+    "value_desc": "Akurasi metodologi riset, efektivitas terapan industri, integritas akademik, dan pendampingan berkelanjutan.",
+    "team_title": "Tim & Dewan Pakar Matoh Technologies",
+    "team_subtitle": "Praktisi dan akademisi berpengalaman yang mendampingi transformasi digital Anda secara langsung."
   },
   "footer": {
     "tagline": "Platform belajar online terpercaya untuk mengembangkan skill dan karir profesional Anda.",
@@ -478,7 +478,9 @@
     "section_deleted": "Seksi materi berhasil dihapus",
     "lesson_saved": "Materi berhasil diperbarui",
     "lesson_created": "Materi baru berhasil ditambahkan",
-    "lesson_deleted": "Materi berhasil dihapus"
+    "lesson_deleted": "Materi berhasil dihapus",
+    "cancel": "Batal",
+    "save": "Simpan"
   },
   "learn": {
     "progress": "Progres Belajar",

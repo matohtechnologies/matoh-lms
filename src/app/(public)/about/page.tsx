@@ -16,16 +16,17 @@ import {
   GraduationCap,
 } from "lucide-react";
 import { getTranslations, getLocale } from "next-intl/server";
+import { prisma } from "@/lib/prisma";
 import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
   return {
-    title: locale === "en" ? "About Us | Earthy Academy" : "Tentang Kami | Earthy Academy",
+    title: locale === "en" ? "About Us | PT. Matoh Technologies Indonesia" : "Tentang Kami | PT. Matoh Technologies Indonesia",
     description:
       locale === "en"
-        ? "Discover the story, pedagogical pillars, and expert team behind Earthy Academy — bridging Indonesia's talent gap with industry-grade software education."
-        : "Kenali kisah, pilar pembelajaran, dan tim praktisi di balik Earthy Academy — menjembatani kesenjangan talenta digital Indonesia melalui kurikulum berstandar industri.",
+        ? "Discover the history, vision, mission, and expert board behind PT. Matoh Technologies Indonesia (AHU-064920.AH.01.30.Tahun 2024) — empowering MSMEs and academia through applied digital technology."
+        : "Kenali sejarah, visi, misi, dan tim ahli di balik PT. Matoh Technologies Indonesia (SK Menkumham: AHU-064920.AH.01.30.Tahun 2024) — memberdayakan UMKM dan insan akademik melalui literasi teknologi digital terapan.",
   };
 }
 
@@ -33,63 +34,63 @@ export default async function AboutPage() {
   const locale = await getLocale();
   const isEn = locale === "en";
 
+  const [studentsCount, coursesCount, lessonsCount, certsCount, dbInstructors] = await Promise.all([
+    prisma.user.count({ where: { role: "USER" } }).catch(() => 0),
+    prisma.course.count({ where: { published: true } }).catch(() => 0),
+    prisma.lesson.count().catch(() => 0),
+    prisma.certificate.count().catch(() => 0),
+    prisma.user.findMany({
+      where: { role: { in: ["INSTRUCTOR", "ADMIN"] } },
+      select: { id: true, name: true, image: true, bio: true, role: true },
+      take: 8,
+    }).catch(() => []),
+  ]);
+
+  const statsList = [
+    { value: studentsCount.toLocaleString(), label: isEn ? "Registered Learners" : "Siswa & Peserta Didik" },
+    { value: coursesCount.toLocaleString(), label: isEn ? "Published Programs" : "Program Pelatihan" },
+    { value: lessonsCount.toLocaleString(), label: isEn ? "Learning Modules" : "Modul Pembelajaran" },
+    { value: certsCount.toLocaleString(), label: isEn ? "Verified Certificates" : "Sertifikat Kelulusan" },
+  ];
+
   const pillars = [
     {
       num: "01",
-      title: isEn ? "Production-Grade Projects" : "Proyek Riil Standar Industri",
+      title: isEn ? "Applied Business & SME Digitalization" : "Digitalisasi Bisnis & UMKM Terapan",
       desc: isEn
-        ? "No copy-pasting tutorials. Every syllabus requires building tested, deployable software using current stacks like Next.js 15, TypeScript, PostgreSQL, and Docker."
-        : "Bukan sekadar menonton video tutorial. Setiap siswa ditantang membangun produk utuh siap pakai yang diuji langsung, siap diinspeksi oleh recruiter perusahaan teknologi.",
+        ? "Only 40% of Indonesian MSMEs utilize digital marketing. Our programs are engineered to bridge this gap, proven to accelerate revenue performance up to 70%."
+        : "Baru 40% UMKM di Indonesia yang memanfaatkan pemasaran digital. Program kami dirancang praktis untuk menutup celah ini dan terbukti meningkatkan performa penjualan hingga 70%.",
     },
     {
       num: "02",
-      title: isEn ? "Personal Code Reviews" : "Review Kode & Mentorship Personal",
+      title: isEn ? "Academic & Educational Innovation" : "Inovasi Pembelajaran Akademisi",
       desc: isEn
-        ? "Assignments are reviewed line-by-line by seasoned practitioners. You learn best practices, clean architecture, and how code reviews work in real engineering teams."
-        : "Setiap penugasan dan proyek akhir diperiksa baris per baris oleh praktisi berpengalaman. Siswa mendapatkan feedback terukur mengenai arsitektur kode dan best practice.",
+        ? "Empowering educators, lecturers, and researchers with modern asynchronous learning tools, research methods, and curriculum digitization."
+        : "Memberdayakan pendidik, dosen, dan peneliti dengan model pembelajaran digital asinkron, kurikulum berbasis teknologi, dan manajemen riset modern.",
     },
     {
       num: "03",
-      title: isEn ? "Verifiable Academic Credentials" : "Kredensial Resmi Berbasis QR",
+      title: isEn ? "Advanced Decision Modeling (MCDM)" : "Metodologi Keputusan Ilmiah (MCDM)",
       desc: isEn
-        ? "Every certificate of completion is backed by an immutable credential ID and complete competency transcript, allowing employers to verify scores instantly."
-        : "Setiap lulusan dibekali sertifikat resmi dengan ID kredensial unik dan transkrip nilai dua sisi yang dapat diverifikasi secara publik oleh perusahaan manapun secara real-time.",
+        ? "Direct instruction in Analytic Hierarchy Process (AHP) and Interpretive Structural Modeling (ISM) for policy makers, researchers, and corporate strategists."
+        : "Pelatihan komprehensif Analytic Hierarchy Process (AHP) dan Interpretive Structural Modeling (ISM) untuk perumusan kebijakan publik dan strategi bisnis objektif.",
     },
     {
       num: "04",
-      title: isEn ? "Industry Hiring Ecosystem" : "Jaringan Komunitas & Karir",
+      title: isEn ? "Verifiable Digital Credentials" : "Kredensial Digital Terverifikasi",
       desc: isEn
-        ? "Connect with a growing network of tech professionals, alumni working at leading tech firms, and hiring partners actively scouting modern digital talent."
-        : "Terhubung langsung dengan ribuan alumni yang kini berkarir di decacorn, perbankan, dan agensi terkemuka di Indonesia dan regional Asia Tenggara.",
+        ? "Official certificates with unique tamper-proof validation QR codes and permanent online registry, backed by PT. Matoh Technologies Indonesia."
+        : "Setiap kelulusan diterbitkan sertifikat digital resmi ber-QR code unik dan kode validasi permanen yang dapat diverifikasi oleh institusi manapun.",
     },
   ];
 
-  const leadership = [
-    {
-      name: "Arif Wibowo",
-      role: "Founder & Chief Executive",
-      experience: "Ex-Engineering Lead Tokopedia & Traveloka",
-      bio: "10+ tahun pengalaman membangun sistem backend berskala puluhan juta transaksi per hari. Berkomitmen mentransformasi talenta rekayasa perangkat lunak Indonesia.",
-    },
-    {
-      name: "Dr. Budi Santoso",
-      role: "Head of Academic Curriculum & AI",
-      experience: "Ph.D. in Computer Science (ITB), Ex-Senior Data Scientist",
-      bio: "Peneliti dan praktisi Machine Learning dengan 15+ publikasi internasional. Merancang kurikulum sains data praktis yang relevan dengan kebutuhan industri mutakhir.",
-    },
-    {
-      name: "Sarah Kusuma",
-      role: "Head of Product Design & Experience",
-      experience: "Ex-Lead Product Designer Unicorn",
-      bio: "Membimbing ratusan desainer produk digital memahami riset pengguna empiris, Design System terstruktur, dan prototipe interaktif berstandar global.",
-    },
-    {
-      name: "Ahmad Fadhil",
-      role: "Lead Software Architect",
-      experience: "Senior Fullstack Engineer & AWS Certified Specialist",
-      bio: "Spesialis arsitektur frontend modern, performa web, dan continuous integration. Memastikan kurikulum coding Earthy Academy selalu relevan dengan versi produksi terkini.",
-    },
-  ];
+  const leadership = dbInstructors.map((user) => ({
+    name: user.name || (user.role === "ADMIN" ? "Admin Matoh Technologies" : "Instruktur"),
+    role: user.role === "ADMIN" ? (isEn ? "Platform Administrator" : "Administrator Platform") : (isEn ? "Expert Instructor" : "Dewan Pengajar & Peneliti"),
+    experience: isEn ? "Certified Expert" : "Praktisi & Akademisi Terverifikasi",
+    bio: user.bio || (isEn ? "Dedicated expert fostering digital literacy and research excellence." : "Pakar dan pembimbing kurikulum terapan PT. Matoh Technologies Indonesia."),
+    image: user.image,
+  }));
 
   return (
     <div className="pt-20 bg-[#f8fafc] min-h-screen">
@@ -98,35 +99,60 @@ export default async function AboutPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/70 text-blue-700 text-xs font-bold mb-6 shadow-2xs">
             <BookOpen size={14} className="text-blue-600" />
-            {isEn ? "About Earthy Academy" : "Mengenal Earthy Academy"}
+            {isEn ? "PT. Matoh Technologies Indonesia" : "Profil PT. Matoh Technologies Indonesia"}
           </div>
           <h1
             className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 mb-6 tracking-tight"
             style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
           >
-            {isEn ? "Built by Engineers," : "Dibuat oleh Praktisi,"} <br />
-            <span className="text-gradient">
-              {isEn ? "For the Next Generation of Builders" : "Untuk Generasi Baru Talenta Digital"}
-            </span>
+            Make You <br />
+            <span className="text-gradient">Ready Digital</span>
           </h1>
           <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
             {isEn
-              ? "We bridge the gap between academic theory and real-world software engineering through hands-on projects, rigorous code reviews, and transparent accredited credentials."
-              : "Kami didirikan dengan satu misi nyata: menutup jurang antara teori akademik tradisional dan kebutuhan industri teknologi yang dinamis melalui kurikulum praktis berbasis proyek produksi."}
+              ? "Center of excellence for digital technology adoption, empowering entrepreneurs, MSMEs, educators, and researchers through structured learning and applied consultation."
+              : "Menjadi pusat pembelajaran penerapan teknologi digital terbaik bagi pelaku usaha (UMKM), akademisi, dan peserta didik di seluruh Indonesia."}
           </p>
         </div>
       </section>
 
+      {/* History & Legal Standing */}
+      <section className="py-16 bg-white border-b border-slate-200/60">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <div className="grid md:grid-cols-12 gap-8 items-center">
+            <div className="md:col-span-4">
+              <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded-full border border-blue-200/60 inline-block mb-3">
+                {isEn ? "Established in 2000" : "Sejarah & Legalitas"}
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                {isEn ? "25+ Years of Digital Literacy Journey" : "Perjalanan Lebih dari Dua Dekade Literasi Digital"}
+              </h2>
+              <div className="mt-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-600 space-y-1">
+                <p className="font-semibold text-slate-900">Badan Hukum Resmi:</p>
+                <p>PT. Matoh Technologies Indonesia</p>
+                <p className="font-mono text-blue-700 text-[11px]">AHU-064920.AH.01.30.Tahun 2024</p>
+              </div>
+            </div>
+            <div className="md:col-span-8 space-y-4 text-slate-600 text-sm leading-relaxed">
+              <p>
+                <strong>Matoh Technologies</strong> berdiri pada tahun 2000 dan awalnya bernama <strong>BARQNET</strong>. Berawal dari fasilitas komputer personal untuk akses internet dan pelatihan pemanfaatan teknologi internet bagi mahasiswa, dosen, dan pelaku bisnis (UMKM).
+              </p>
+              <p>
+                Pada tahun 2008, BARQNET resmi bertransformasi menjadi <strong>Matoh Technologies</strong> yang menawarkan layanan pelatihan, penelitian, dan konsultasi pemanfaatan teknologi digital dalam dunia bisnis dan pendidikan.
+              </p>
+              <p>
+                Saat ini, Matoh Technologies telah resmi berbadan hukum sebagai <strong>PT. Matoh Technologies Indonesia</strong>. Kami terus berinovasi menghadirkan sistem pembelajaran berbasis Learning Management System (LMS) modern dan terotomatisasi penuh guna mencetak talenta unggul yang siap menghadapi era kecerdasan buatan dan ekonomi digital.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Concrete Stats */}
-      <section className="py-14 bg-white border-b border-slate-200/60">
+      <section className="py-14 bg-[#f8fafc] border-b border-slate-200/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
-            {[
-              { value: "12,400+", label: isEn ? "Graduated Students" : "Siswa & Alumni Aktif" },
-              { value: "240+", label: isEn ? "Curriculum Modules" : "Modul & Kelas Tersedia" },
-              { value: "94.2%", label: isEn ? "Course Completion Rate" : "Tingkat Kelulusan Program" },
-              { value: "4.9 / 5.0", label: isEn ? "Average Alumni Rating" : "Rating Kepuasan Belajar" },
-            ].map(({ value, label }) => (
+            {statsList.map(({ value, label }) => (
               <div key={label} className="text-center">
                 <p
                   className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
@@ -142,22 +168,22 @@ export default async function AboutPage() {
       </section>
 
       {/* 4 Pedagogical Pillars */}
-      <section className="py-20 bg-[#f8fafc]">
+      <section className="py-20 bg-white border-b border-slate-200/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded-full border border-blue-200/60 inline-block mb-3">
-              {isEn ? "Our Learning Methodology" : "Metodologi Pembelajaran Kami"}
+              {isEn ? "Core Pillars" : "Keyakinan & Pilar Kami"}
             </span>
             <h2
               className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
               style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
             >
-              {isEn ? "The 4 Standards Behind Every Curriculum" : "4 Pilar Standar Kualitas Earthy Academy"}
+              {isEn ? "The Foundation Behind Matoh Technologies" : "Fokus Nyata untuk Hasil yang Terukur"}
             </h2>
             <p className="text-slate-600 text-sm mt-2">
               {isEn
-                ? "Every program is designed to transform enthusiastic learners into confident, job-ready technology professionals."
-                : "Setiap kelas dirancang sistematis agar siswa memiliki portofolio yang dapat diandalkan saat wawancara kerja."}
+                ? "Connecting digital competencies directly to tangible business revenue and research credibility."
+                : "Menghubungkan keahlian digital langsung dengan performa pendapatan bisnis dan kredibilitas riset ilmiah."}
             </p>
           </div>
 
@@ -165,7 +191,7 @@ export default async function AboutPage() {
             {pillars.map((p) => (
               <div
                 key={p.num}
-                className="bg-white rounded-3xl border border-slate-200/80 p-7 hover:shadow-warm transition-all group flex flex-col justify-between"
+                className="bg-[#f8fafc] rounded-3xl border border-slate-200/80 p-7 hover:shadow-warm transition-all group flex flex-col justify-between"
               >
                 <div>
                   <span className="font-mono text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-200/60 inline-block mb-5">
@@ -184,7 +210,6 @@ export default async function AboutPage() {
           </div>
         </div>
       </section>
-
       {/* Leadership & Instructors */}
       <section className="py-20 bg-white border-t border-slate-200/70">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -205,26 +230,36 @@ export default async function AboutPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {leadership.map((person) => (
-              <div
-                key={person.name}
-                className="bg-[#f8fafc] rounded-3xl border border-slate-200/80 p-6 flex flex-col justify-between hover:border-blue-200 hover:bg-blue-50/20 transition-all"
-              >
-                <div>
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 to-sky-500 text-white flex items-center justify-center font-bold text-xl mb-4 shadow-xs">
-                    {person.name.charAt(0)}
+          {leadership.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {leadership.map((person) => (
+                <div
+                  key={person.name}
+                  className="bg-[#f8fafc] rounded-3xl border border-slate-200/80 p-6 flex flex-col justify-between hover:border-blue-200 hover:bg-blue-50/20 transition-all"
+                >
+                  <div>
+                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 to-sky-500 text-white flex items-center justify-center font-bold text-xl mb-4 shadow-xs">
+                      {person.name.charAt(0)}
+                    </div>
+                    <h4 className="font-bold text-slate-900 text-base">{person.name}</h4>
+                    <p className="text-xs font-semibold text-blue-600 mt-0.5">{person.role}</p>
+                    <p className="text-[11px] text-slate-400 font-mono mt-1 pb-3 border-b border-slate-200/60">
+                      {person.experience}
+                    </p>
+                    <p className="text-xs text-slate-600 leading-relaxed mt-3">{person.bio}</p>
                   </div>
-                  <h4 className="font-bold text-slate-900 text-base">{person.name}</h4>
-                  <p className="text-xs font-semibold text-blue-600 mt-0.5">{person.role}</p>
-                  <p className="text-[11px] text-slate-400 font-mono mt-1 pb-3 border-b border-slate-200/60">
-                    {person.experience}
-                  </p>
-                  <p className="text-xs text-slate-600 leading-relaxed mt-3">{person.bio}</p>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="bg-[#f8fafc] rounded-3xl border border-slate-200/80 p-12 text-center max-w-xl mx-auto">
+              <p className="text-slate-600 text-sm">
+                {isEn
+                  ? "Instructor profiles are currently being updated by the administration team."
+                  : "Profil tim pengajar dan instruktur sedang dalam proses sinkronisasi oleh pihak administrasi."}
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -239,7 +274,7 @@ export default async function AboutPage() {
           </h2>
           <p className="text-blue-100 text-sm sm:text-base leading-relaxed max-w-xl mx-auto">
             {isEn
-              ? "Explore all 240+ structured modules or consult with our academic admissions team today."
+              ? "Explore all curriculum courses or consult with our academic admissions team today."
               : "Jelajahi seluruh katalog silabus kelas atau hubungi tim konsultan kami untuk menemukan jalur belajar terbaik."}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">

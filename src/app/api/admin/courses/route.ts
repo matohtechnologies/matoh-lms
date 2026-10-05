@@ -9,6 +9,10 @@ const courseSchema = z.object({
   slug: z.string().min(3).max(200).regex(/^[a-z0-9-]+$/, "Slug hanya boleh huruf kecil, angka, dan tanda -"),
   description: z.string().min(10, "Deskripsi minimal 10 karakter"),
   categoryId: z.string().optional(),
+  instructorId: z.string().optional(),
+  instructorHeadline: z.string().nullable().optional(),
+  instructorBio: z.string().nullable().optional(),
+  whatYouLearn: z.union([z.string(), z.array(z.string())]).nullable().optional(),
   level: z.enum(["BEGINNER", "INTERMEDIATE", "ADVANCED"]),
   price: z.number().min(0),
   discountPrice: z.number().min(0).nullable().optional(),
@@ -24,11 +28,26 @@ export async function GET() {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const categories = await prisma.category.findMany({
-      orderBy: { name: "asc" },
-    });
+    const [categories, instructors] = await Promise.all([
+      prisma.category.findMany({
+        orderBy: { name: "asc" },
+      }),
+      prisma.user.findMany({
+        where: { role: { in: ["ADMIN", "INSTRUCTOR"] } },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          image: true,
+          headline: true,
+          bio: true,
+          role: true,
+        },
+        orderBy: { name: "asc" },
+      }),
+    ]);
 
-    return NextResponse.json({ categories });
+    return NextResponse.json({ categories, instructors });
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
@@ -60,17 +79,28 @@ export async function POST(req: NextRequest) {
       categoryId = defaultCat?.id;
     }
 
-    // Ensure valid instructorId
-    let instructorId = session.user.id;
-    const instructorExists = await prisma.user.findUnique({ where: { id: instructorId } });
-    if (!instructorExists) {
-      const fallbackInstructor = await prisma.user.findFirst({
-        where: { role: { in: ["ADMIN", "INSTRUCTOR"] } },
-      });
-      if (fallbackInstructor) {
-        instructorId = fallbackInstructor.id;
+    // Determine instructorId
+    let instructorId = data.instructorId || session.user.id;
+    if (data.instructorId) {
+      const instructorExists = await prisma.user.findUnique({ where: { id: data.instructorId } });
+      if (!instructorExists) {
+        instructorId = session.user.id;
+      }
+    } else {
+      const instructorExists = await prisma.user.findUnique({ where: { id: instructorId } });
+      if (!instructorExists) {
+        const fallbackInstructor = await prisma.user.findFirst({
+          where: { role: { in: ["ADMIN", "INSTRUCTOR"] } },
+        });
+        if (fallbackInstructor) {
+          instructorId = fallbackInstructor.id;
+        }
       }
     }
+
+    const whatYouLearnStr = Array.isArray(data.whatYouLearn)
+      ? JSON.stringify(data.whatYouLearn)
+      : data.whatYouLearn;
 
     const course = await prisma.course.create({
       data: {
@@ -85,6 +115,9 @@ export async function POST(req: NextRequest) {
         published: data.published,
         categoryId: categoryId!,
         instructorId,
+        instructorHeadline: data.instructorHeadline || null,
+        instructorBio: data.instructorBio || null,
+        whatYouLearn: whatYouLearnStr || null,
       },
     });
 

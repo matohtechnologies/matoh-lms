@@ -6,11 +6,11 @@ import { z } from "zod";
 const lessonCreateSchema = z.object({
   title: z.string().min(2, "Judul materi minimal 2 karakter").max(200),
   slug: z.string().optional(),
-  videoUrl: z.string().url("URL video tidak valid").optional().or(z.literal("")),
+  videoUrl: z.string().url("URL video tidak valid").optional().nullable().or(z.literal("")),
   duration: z.number().min(0).optional(),
   isFree: z.boolean().optional(),
   order: z.number().int().optional(),
-  content: z.string().optional().or(z.literal("")),
+  content: z.string().optional().nullable().or(z.literal("")),
 });
 
 export async function POST(

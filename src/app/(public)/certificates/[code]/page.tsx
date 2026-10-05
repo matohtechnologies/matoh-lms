@@ -73,7 +73,7 @@ export async function generateMetadata({ params }: CertificatePageProps): Promis
   if (!cert) return { title: "Sertifikat Tidak Ditemukan" };
   return {
     title: `Sertifikat: ${cert.course.title} — ${cert.user.name}`,
-    description: `Sertifikat kelulusan resmi dari Earthy Academy untuk kelas ${cert.course.title}`,
+    description: `Sertifikat kelulusan resmi dari PT. Matoh Technologies Indonesia untuk kelas ${cert.course.title}`,
   };
 }
 
@@ -274,16 +274,16 @@ export default async function CertificateViewPage({ params, searchParams }: Cert
       categoryName: certificate.course.category.name,
       certificateCode: certificate.certificateCode,
       issueDisplay,
-      issuerName: certificate.issuerName || setting?.issuerName || "Earthy Academy",
+      issuerName: certificate.issuerName || setting?.issuerName || "PT. Matoh Technologies Indonesia",
       instructorName:
         certificate.signatoryName1 ||
         setting?.signatoryName1 ||
         certificate.course.instructor.name ||
-        "Ahmad Fadhil",
-      signatoryRole1: certificate.signatoryRole1 || setting?.signatoryRole1 || "Lead Instructor",
-      signatoryName2: certificate.signatoryName2 || setting?.signatoryName2 || "Dr. Santoso W.",
+        "Dr. G. Prabantoro, SE., MM., CBec.",
+      signatoryRole1: certificate.signatoryRole1 || setting?.signatoryRole1 || "Lead Instructor & RnD Director",
+      signatoryName2: certificate.signatoryName2 || setting?.signatoryName2 || "Dr. E. Lovita, SE., Ak., M.Si., CA.",
       signatoryRole2:
-        certificate.signatoryRole2 || setting?.signatoryRole2 || "Head of Curriculum",
+        certificate.signatoryRole2 || setting?.signatoryRole2 || "Head of Academic Board",
       qrCodeUrl,
       totalLessons: totalLessons || 10,
       totalHours,
@@ -308,17 +308,17 @@ export default async function CertificateViewPage({ params, searchParams }: Cert
           setting?.subtitle ||
           "Atas keberhasilannya dalam menyelesaikan seluruh modul kurikulum, evaluasi kuis, dan pemenuhan seluruh kriteria kelulusan."
         }
-        issuerName={certificate.issuerName || setting?.issuerName || "Earthy Academy"}
+        issuerName={certificate.issuerName || setting?.issuerName || "PT. Matoh Technologies Indonesia"}
         instructorName={
           certificate.signatoryName1 ||
           setting?.signatoryName1 ||
           certificate.course.instructor.name ||
-          "Ahmad Fadhil"
+          "Dr. G. Prabantoro, SE., MM., CBec."
         }
-        signatoryRole1={certificate.signatoryRole1 || setting?.signatoryRole1 || "Lead Instructor"}
-        signatoryName2={certificate.signatoryName2 || setting?.signatoryName2 || "Dr. Santoso W."}
+        signatoryRole1={certificate.signatoryRole1 || setting?.signatoryRole1 || "Lead Instructor & RnD Director"}
+        signatoryName2={certificate.signatoryName2 || setting?.signatoryName2 || "Dr. E. Lovita, SE., Ak., M.Si., CA."}
         signatoryRole2={
-          certificate.signatoryRole2 || setting?.signatoryRole2 || "Head of Curriculum"
+          certificate.signatoryRole2 || setting?.signatoryRole2 || "Head of Academic Board"
         }
         templateUrl={certificate.templateUrl || setting?.templateUrl || undefined}
         templateConfig={(certificate as any).templateConfig || (setting as any)?.templateConfig || null}

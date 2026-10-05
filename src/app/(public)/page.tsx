@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Star, CheckCircle, ShieldCheck } from "lucide-react";
+import { ArrowRight, Star, CheckCircle, ShieldCheck, Quote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
@@ -39,14 +39,40 @@ async function getFeaturedCourses() {
 
 async function getStats() {
   try {
-    const [students, courses, instructors] = await Promise.all([
+    const [students, courses, instructors, reviewsAgg] = await Promise.all([
       prisma.user.count({ where: { role: "USER" } }),
       prisma.course.count({ where: { published: true } }),
       prisma.user.count({ where: { role: "INSTRUCTOR" } }),
+      prisma.review.aggregate({
+        _avg: { rating: true },
+        _count: { id: true },
+      }),
     ]);
-    return { students, courses, instructors };
+    return {
+      students,
+      courses,
+      instructors,
+      reviewAvg: reviewsAgg._avg.rating || 0,
+      reviewCount: reviewsAgg._count.id || 0,
+    };
   } catch {
-    return { students: 0, courses: 0, instructors: 0 };
+    return { students: 0, courses: 0, instructors: 0, reviewAvg: 0, reviewCount: 0 };
+  }
+}
+
+async function getRecentReviews() {
+  try {
+    return await prisma.review.findMany({
+      where: { rating: { gte: 4 } },
+      include: {
+        user: { select: { name: true, image: true } },
+        course: { select: { title: true } },
+      },
+      orderBy: { createdAt: "desc" },
+      take: 6,
+    });
+  } catch {
+    return [];
   }
 }
 
@@ -57,9 +83,10 @@ export default async function HomePage() {
   const tc = await getTranslations("courses");
   const tHome = await getTranslations("home");
 
-  const [featuredCourses, stats, session] = await Promise.all([
+  const [featuredCourses, stats, reviews, session] = await Promise.all([
     getFeaturedCourses(),
     getStats(),
+    getRecentReviews(),
     auth(),
   ]);
 
@@ -76,167 +103,118 @@ export default async function HomePage() {
     }
   }
 
-  // Authentic hiring ecosystem logos / text
+  // Authentic ecosystem partners / institutional reach
   const hiringEcosystem = [
-    "Tokopedia",
-    "Gojek",
-    "Traveloka",
-    "Shopee",
-    "Bank Central Asia",
-    "Bank Mandiri",
-    "Blibli",
+    "Universitas Indonesia",
+    "Kementerian Koperasi & UKM",
+    "Komunitas UMKM Naik Kelas",
+    "Ikatan Akademisi & Peneliti",
+    "Kemenristekdikti",
+    "Jurnal Riset Matoh",
+    "Sentra Bisnis Digital",
   ];
 
-  // The 4-Pillar Modern Learning Method (Editorial & Zero Emojis)
+  // The 4-Pillar Modern Learning Method (Matoh Technologies Standard)
   const pillars = isEn
     ? [
         {
           num: "01",
-          title: "Production-Grade Projects",
-          desc: "You don't just watch static videos. Every curriculum is structured around building tested, deployable software that recruiters can inspect.",
+          title: "Applied MSME Digital Marketing",
+          desc: "Bridge the gap where only 40% of Indonesian MSMEs sell digitally. Learn battle-tested strategies proven to boost sales up to 70%.",
         },
         {
           num: "02",
-          title: "Direct Instructor Q&A",
-          desc: "Stuck on a tricky bug or concept? Get timely, constructive guidance from practicing industry leads and our dedicated peer community.",
+          title: "Scientific Decision Making (AHP & ISM)",
+          desc: "Master Analytic Hierarchy Process (AHP) and Interpretive Structural Modeling (ISM) for policy makers, researchers, and corporate leadership.",
         },
         {
           num: "03",
-          title: "Curated Career Roadmaps",
-          desc: "Clear progression paths from beginner fundamentals to advanced system design, preventing tutorial hell and decision fatigue.",
+          title: "Business Forecasting & Applied SWOT",
+          desc: "Analyze business forecasting trends, statistical modeling, and SWOT matrix to navigate market disruption and seize new opportunities.",
         },
         {
           num: "04",
-          title: "Verifiable Digital Credential",
-          desc: "Earn an authentic certificate with a unique public QR code that employers and HR teams can independently verify in seconds.",
+          title: "Verifiable Digital Credentials",
+          desc: "Earn authenticated certificates equipped with unique tamper-proof validation QR codes and permanent institutional registry.",
         },
       ]
     : [
         {
           num: "01",
-          title: "Kurikulum Berbasis Proyek Industri",
-          desc: "Bukan sekadar menonton video pasif. Anda membangun aplikasi nyata berstandar produksi yang siap diuji dan dipamerkan ke recruiter.",
+          title: "Digital Marketing Terapan UMKM",
+          desc: "Mengatasi kesenjangan digital di mana baru 40% UMKM memanfaatkan pemasaran digital. Dibimbing strategi praktis yang terbukti mendongkrak penjualan hingga 70%.",
         },
         {
           num: "02",
-          title: "Bimbingan & Diskusi Langsung",
-          desc: "Mengalami error atau stuck saat latihan koding? Dapatkan solusi langsung dari instruktur praktisi dan komunitas pelajar aktif.",
+          title: "Metodologi Keputusan Ilmiah (AHP & ISM)",
+          desc: "Kuasai Analytic Hierarchy Process (AHP) dan Interpretive Structural Modeling (ISM) untuk perumusan kebijakan publik, strategi bisnis, dan riset akademik.",
         },
         {
           num: "03",
-          title: "Roadmap Karir Terarah",
-          desc: "Jalur belajar runtut dari fundamental hingga arsitektur kompleks, dirancang agar Anda tidak terjebak dalam tutorial hell.",
+          title: "Peramalan Bisnis & Analisis SWOT",
+          desc: "Analisis peramalan tren bisnis masa depan, pemodelan statistik, dan formulasi matriks SWOT untuk menghadapi dinamika pasar dan memitigasi risiko.",
         },
         {
           num: "04",
-          title: "Sertifikat Digital Terverifikasi",
-          desc: "Setiap kelulusan disertai sertifikat resmi ber-QR code unik yang dapat divalidasi keabsahannya oleh HRD dan perusahaan.",
+          title: "Kredensial Digital Terverifikasi",
+          desc: "Setiap kelulusan diterbitkan sertifikat resmi ber-QR code unik yang dapat divalidasi keabsahannya oleh institusi, perguruan tinggi, dan korporasi.",
         },
       ];
 
-  // Real student transformation stories
-  const testimonials = isEn
-    ? [
-        {
-          name: "Rizky Pratama",
-          role: "Frontend Engineer at Tokopedia",
-          transition: "From Admin Staff ➔ Tech Industry",
-          text: "Earthy Academy changed the trajectory of my career. The projects were so close to what I now do daily at Tokopedia. Passed the tech test on my first attempt.",
-          course: "React.js Modern Development",
-        },
-        {
-          name: "Sari Dewi",
-          role: "Product Designer at Gojek",
-          transition: "From Graphic Designer ➔ Product Designer",
-          text: "The mentorship on design systems and Figma component architecture gave me the exact portfolio evidence I needed to stand out during interviews.",
-          course: "UI/UX Design Masterclass",
-        },
-        {
-          name: "Budi Santoso",
-          role: "Data Analyst at BCA",
-          transition: "From Fresh Grad ➔ Enterprise Data Analyst",
-          text: "No fluff, 100% practical SQL, Python, and statistical modeling. The investment paid for itself multiple times over within my first month of work.",
-          course: "Python for Data Science",
-        },
-      ]
-    : [
-        {
-          name: "Rizky Pratama",
-          role: "Frontend Engineer di Tokopedia",
-          transition: "Dari Staff Operasional ➔ Software Engineer",
-          text: "Earthy Academy benar-benar mengubah arah karir saya. Materi project-nya sangat relevan dengan apa yang saya kerjakan sekarang di Tokopedia. Lolos tes teknikal di kesempatan pertama.",
-          course: "React.js Modern Development",
-        },
-        {
-          name: "Sari Dewi",
-          role: "Product Designer di Gojek",
-          transition: "Dari Desainer Grafis ➔ UI/UX Designer",
-          text: "Bimbingan mengenai design system dan arsitektur komponen Figma membuat portofolio saya jauh lebih profesional dibanding kandidat lain.",
-          course: "UI/UX Design Masterclass",
-        },
-        {
-          name: "Budi Santoso",
-          role: "Data Analyst di BCA",
-          transition: "Dari Fresh Graduate ➔ Enterprise Data Analyst",
-          text: "Materi to-the-point dan studi kasus bisnis riil. Sertifikat dan portofolio proyek akhirnya langsung diapresiasi oleh user saat proses interview.",
-          course: "Python for Data Science",
-        },
-      ];
-
-  // FAQ Items tailored to eliminate buyer friction
+  // FAQ Items tailored to eliminate friction and highlight automated LMS
   const faqItems = isEn
     ? [
         {
-          question: "Can beginners with zero programming background join?",
+          question: "Can beginners and MSME owners join the programs?",
           answer:
-            "Yes, absolutely. Our beginner courses start from core fundamentals with clear, step-by-step guidance before progressing to intermediate and advanced topics.",
+            "Yes, absolutely. Our courses start from core fundamentals with clear, step-by-step guidance before progressing to intermediate and advanced topics.",
         },
         {
-          question: "Do I get lifetime access to the courses?",
+          question: "Do I get lifetime access to all learning materials?",
           answer:
-            "Yes. Once enrolled, you receive permanent lifetime access to all video lessons, resources, source code repositories, and future curriculum updates.",
+            "Yes. Once enrolled, you receive permanent 24/7 access to all video lessons, resources, practical templates, and future curriculum updates.",
         },
         {
-          question: "How does the certificate verification work?",
+          question: "How does automated enrollment and certificate verification work?",
           answer:
-            "Upon completing all course lessons and passing the requirements, an official digital certificate is generated with a unique credential ID and cryptographic QR code that recruiters can verify online anytime.",
+            "Upon instant payment via QRIS or Virtual Account, you are automatically enrolled into the classroom. After finishing the curriculum, an official digital certificate with a verifiable QR code is issued immediately.",
         },
         {
           question: "What payment methods are supported?",
           answer:
-            "We support instant automated payments via GoPay, QRIS, Virtual Accounts (BCA, Mandiri, BNI, BRI), Credit/Debit Cards, and Indomaret/Alfamart.",
+            "We support instant automated payments via QRIS, GoPay, ShopeePay, Virtual Accounts (BCA, Mandiri, BNI, BRI), and Credit/Debit Cards.",
         },
         {
-          question: "Is there a money-back guarantee?",
+          question: "Can academic institutions request in-house workshops for AHP, ISM, or research?",
           answer:
-            "Yes. We offer an unconditional 30-day money-back guarantee if you feel the course content does not meet your learning expectations.",
+            "Yes. We regularly conduct tailored workshops for universities, research centers, and government bodies. Contact our research hotline on WhatsApp.",
         },
       ]
     : [
         {
-          question: "Apakah pemula tanpa latar belakang koding bisa mengikuti?",
+          question: "Apakah pemula dan pelaku UMKM tanpa latar belakang IT bisa mengikuti?",
           answer:
-            "Tentu saja. Kelas tingkat Beginner kami dirancang khusus dari nol dengan penjelasan yang mudah dipahami, langkah demi langkah, sebelum bertahap ke konsep yang lebih tinggi.",
+            "Tentu saja. Kelas kami dirancang khusus dengan langkah-langkah praktis dan aplikatif agar langsung dapat diterapkan pada bisnis sehari-hari.",
         },
         {
           question: "Apakah akses video dan materi berlaku seumur hidup?",
           answer:
-            "Ya. Sekali mendaftar, Anda memiliki akses permanen seumur hidup (lifetime access) ke seluruh modul video, file latihan, source code, dan pembaruan materi di masa depan.",
+            "Ya. Sekali mendaftar, Anda memiliki akses permanen seumur hidup (24/7 lifetime access) ke seluruh modul video, file latihan, dan pembaruan materi.",
         },
         {
-          question: "Bagaimana cara kerja verifikasi sertifikat kelulusan?",
+          question: "Bagaimana cara kerja pendaftaran otomatis dan sertifikasi digital?",
           answer:
-            "Setelah menuntaskan seluruh materi kelas, sistem secara otomatis menerbitkan sertifikat digital resmi yang dilengkapi ID unik dan QR code publik yang dapat dicek keasliannya oleh HRD kapan saja.",
+            "Setelah pembayaran instan terverifikasi melalui QRIS atau Virtual Account, Anda langsung otomatis terdaftar di kelas. Setelah menuntaskan seluruh materi, sertifikat resmi ber-QR code diterbitkan secara otomatis.",
         },
         {
           question: "Metode pembayaran apa saja yang didukung?",
           answer:
-            "Kami mendukung pembayaran instan otomatis melalui QRIS, GoPay, ShopeePay, Virtual Account semua bank utama (BCA, Mandiri, BNI, BRI), Kartu Kredit/Debit, hingga Alfamart/Indomaret.",
+            "Kami mendukung pembayaran instan otomatis melalui QRIS, GoPay, ShopeePay, Virtual Account semua bank utama (BCA, Mandiri, BNI, BRI), hingga Kartu Kredit/Debit.",
         },
         {
-          question: "Apakah ada garansi uang kembali?",
+          question: "Apakah institusi kampus dapat mengajukan pelatihan khusus AHP, ISM, atau metodologi riset?",
           answer:
-            "Ya, kami memberikan garansi uang kembali 30 hari penuh tanpa syarat jika Anda merasa materi kelas tidak sesuai dengan kebutuhan belajar Anda.",
+            "Ya, kami secara berkala menyelenggarakan workshop in-house untuk dosen, peneliti, dan mahasiswa pascasarjana. Hubungi hotline riset kami di WhatsApp.",
         },
       ];
 
@@ -254,7 +232,7 @@ export default async function HomePage() {
               {/* Trust Badge */}
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-xs font-semibold tracking-wide">
                 <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-                <span>{isEn ? "Curated 2026 Tech Curriculums" : "Kurikulum Praktis Berstandar Industri 2026"}</span>
+                <span>PT. Matoh Technologies Indonesia • AHU-064920.AH.01.30.Tahun 2024</span>
               </div>
 
               {/* Main Headline */}
@@ -262,24 +240,15 @@ export default async function HomePage() {
                 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-[1.12] tracking-tight text-balance"
                 style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
               >
-                {isEn ? (
-                  <>
-                    Master Modern Tech Skills,{" "}
-                    <span className="text-gradient">Launch Your Next Career</span>
-                  </>
-                ) : (
-                  <>
-                    Kuasai Keahlian Digital,{" "}
-                    <span className="text-gradient">Bangun Karir Impianmu</span>
-                  </>
-                )}
+                Make You <br />
+                <span className="text-gradient">Ready Digital</span>
               </h1>
 
               {/* Subheadline with high legibility */}
               <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl text-pretty">
                 {isEn
-                  ? "Co-designed with practicing engineering leads. Learn web development, data science, and UI/UX design through project-driven curriculums, 1-on-1 feedback, and verifiable certifications."
-                  : "Belajar langsung dari praktisi industri terkemuka. Bangun portofolio nyata, kuasai keahlian yang dicari recruiter, dan raih sertifikat resmi terverifikasi."}
+                  ? "Center of excellence for digital technology adoption. Empowering MSMEs, educators, and researchers through project-driven curriculums, MCDM decision analysis, and instant verified certifications."
+                  : "Pusat pembelajaran penerapan teknologi digital terbaik bagi pelaku usaha (UMKM), akademisi, dan peserta didik. Kuasai Digital Marketing, Peramalan Bisnis, dan Analisis Keputusan Ilmiah (AHP & ISM) dengan sertifikasi otomatis."}
               </p>
 
               {/* Action Buttons */}
@@ -290,7 +259,7 @@ export default async function HomePage() {
                     className="rounded-2xl h-13 px-7 text-sm font-semibold shadow-warm hover:shadow-warm-lg bg-blue-600 hover:bg-blue-700 transition-all hover:-translate-y-0.5"
                     rightIcon={<ArrowRight size={17} />}
                   >
-                    {isEn ? "Browse Course Catalog" : "Jelajahi Semua Kelas"}
+                    {isEn ? "Explore Training Programs" : "Jelajahi Program Pelatihan"}
                   </Button>
                 </Link>
 
@@ -300,22 +269,41 @@ export default async function HomePage() {
                     variant="outline"
                     className="rounded-2xl h-13 px-6 text-sm font-semibold border-slate-200 hover:border-slate-300 bg-white/80 hover:bg-slate-50 text-slate-700 shadow-xs"
                   >
-                    {isEn ? "How Earthy Works" : "Pelajari Metode Kami"}
+                    {isEn ? "About Matoh Technologies" : "Profil & Legalitas Kami"}
                   </Button>
                 </Link>
               </div>
 
-              {/* Live Metric Strip (Clean, zero clutter) */}
+              {/* Live Metric Strip (Clean, zero clutter, real database values) */}
               <div className="pt-4 border-t border-slate-200/70 flex flex-wrap items-center gap-6 sm:gap-8 text-xs text-slate-600">
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-0.5 text-amber-500">
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <Star key={i} size={14} fill="currentColor" />
-                    ))}
+                {stats.reviewCount > 0 ? (
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-0.5 text-amber-500">
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <Star key={i} size={14} fill="currentColor" />
+                      ))}
+                    </div>
+                    <span className="font-bold text-slate-900 text-sm">
+                      {stats.reviewAvg.toFixed(1)}/5
+                    </span>
+                    <span className="text-slate-400">
+                      ({stats.reviewCount.toLocaleString(locale === "en" ? "en-US" : "id-ID")}{" "}
+                      {isEn ? "reviews" : "ulasan"})
+                    </span>
                   </div>
-                  <span className="font-bold text-slate-900 text-sm">4.9/5</span>
-                  <span className="text-slate-400">({isEn ? "10,000+ reviews" : "10.000+ ulasan"})</span>
-                </div>
+                ) : (
+                  <>
+                    <div className="flex items-center gap-2 font-medium">
+                      <span className="font-bold text-slate-900 text-sm">{stats.courses}</span>
+                      <span className="text-slate-500">{isEn ? "Curated Courses" : "Kelas Aktif"}</span>
+                    </div>
+                    <div className="h-4 w-px bg-slate-200 hidden sm:block" />
+                    <div className="flex items-center gap-2 font-medium">
+                      <span className="font-bold text-slate-900 text-sm">{stats.students}</span>
+                      <span className="text-slate-500">{isEn ? "Registered Learners" : "Siswa Terdaftar"}</span>
+                    </div>
+                  </>
+                )}
 
                 <div className="h-4 w-px bg-slate-200 hidden sm:block" />
 
@@ -328,7 +316,7 @@ export default async function HomePage() {
 
             {/* Right Column: High-fidelity Interactive Stage */}
             <div className="lg:col-span-6">
-              <HeroInteractiveShowcase isEn={isEn} />
+              <HeroInteractiveShowcase isEn={isEn} studentCount={stats.students} />
             </div>
           </div>
         </div>
@@ -361,7 +349,7 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="max-w-2xl mx-auto text-center mb-16">
             <span className="text-xs font-bold text-blue-700 uppercase tracking-wider bg-blue-50 px-3 py-1 rounded-full border border-blue-200/60 inline-block mb-3">
-              {isEn ? "The Earthy Standard" : "Standar Pembelajaran"}
+              {isEn ? "The Matoh Standard" : "Standar Matoh Technologies"}
             </span>
             <h2
               className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
@@ -397,6 +385,98 @@ export default async function HomePage() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 3.5. FOUNDER PHILOSOPHY & THREE CORE BELIEFS */}
+      <section className="py-20 lg:py-24 bg-white border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
+            {/* Left Quote Card */}
+            <div className="lg:col-span-6 bg-gradient-to-br from-blue-900 via-slate-900 to-blue-950 text-white rounded-3xl p-8 sm:p-10 shadow-xl flex flex-col justify-between relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-72 h-72 bg-blue-500/15 rounded-full blur-3xl pointer-events-none" />
+              <div>
+                <Quote className="text-blue-400 mb-6 w-10 h-10 opacity-80" />
+                <blockquote className="text-base sm:text-lg text-slate-200 leading-relaxed font-normal italic">
+                  &ldquo;Menguasai teknologi digital sama pentingnya seperti kita hidup perlu bernafas. Kalau kita masih mau tetap hidup ya kita harus selalu bisa bernafas. Begitu pula dengan bisnis dan pendidikan, pelakunya harus menguasai teknologi digital supaya bisa selalu &lsquo;hidup&rsquo; dalam setiap kerja bisnis dan pendidikannya...&rdquo;
+                </blockquote>
+              </div>
+              <div className="pt-6 mt-8 border-t border-slate-800 flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <h4 className="font-bold text-white text-base">Dr. G. Prabantoro, SE., MM., CBec.</h4>
+                  <p className="text-xs text-blue-400 font-medium">Founder &amp; RnD Director • PT. Matoh Technologies Indonesia</p>
+                </div>
+                <div className="text-right">
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 block">Slogan Resmi</span>
+                  <span className="text-xs font-bold text-white">&ldquo;Make You Ready Digital&rdquo;</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right 3 Core Beliefs Cards */}
+            <div className="lg:col-span-6 flex flex-col justify-between space-y-6">
+              <div>
+                <span className="text-xs font-bold text-blue-700 uppercase tracking-wider bg-blue-50 px-3 py-1 rounded-full border border-blue-200/60 inline-block mb-3">
+                  {isEn ? "Core Philosophy" : "3 Keyakinan Pokok Matoh"}
+                </span>
+                <h3
+                  className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight"
+                  style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                >
+                  {isEn ? "Why Digital Transformation Cannot Wait" : "Fondasi Penerapan Teknologi Digital Terarah"}
+                </h3>
+                <p className="text-slate-600 text-sm mt-2 leading-relaxed">
+                  {isEn
+                    ? "Our foundational principles built on 16+ years of empowering Indonesian SMEs and academic researchers."
+                    : "Baru 40% UMKM memanfaatkan pemasaran digital, padahal terbukti mampu menaikkan penjualan hingga 70%. Berikut komitmen kami:"}
+                </p>
+              </div>
+
+              <div className="space-y-3.5">
+                <div className="p-5 rounded-2xl border border-slate-200/80 bg-slate-50/70 hover:bg-white hover:shadow-subtle transition-all">
+                  <div className="flex items-start gap-4">
+                    <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 shadow-sm">
+                      01
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 text-sm">Optimalisasi Kinerja UMKM</h4>
+                      <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                        Literasi digital sangat dibutuhkan untuk mengoptimalkan performa penjualan, branding, dan automasi proses bisnis harian UMKM.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-5 rounded-2xl border border-slate-200/80 bg-slate-50/70 hover:bg-white hover:shadow-subtle transition-all">
+                  <div className="flex items-start gap-4">
+                    <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 shadow-sm">
+                      02
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 text-sm">Peningkatan Kinerja Akademisi &amp; Peserta Didik</h4>
+                      <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                        Penguasaan metodologi analisis keputusan (MCDM: AHP, ISM) &amp; peramalan bisnis mutlak diperlukan untuk riset dan publikasi bereputasi.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-5 rounded-2xl border border-slate-200/80 bg-slate-50/70 hover:bg-white hover:shadow-subtle transition-all">
+                  <div className="flex items-start gap-4">
+                    <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 shadow-sm">
+                      03
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 text-sm">Pendampingan &amp; Kolaborasi Berkelanjutan</h4>
+                      <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                        Meningkatkan literasi digital tidak bisa instan satu arah; membutuhkan pembelajaran mandiri terarah dan ekosistem pendampingan nyata.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -441,63 +521,111 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 5. STUDENT TRANSFORMATION STORIES (Authentic, Trust-building) */}
+      {/* 5. STUDENT REVIEWS / LEARNING COMMITMENT (Authentic, Real Data) */}
       <section className="py-20 lg:py-28 bg-slate-50/70 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="max-w-2xl mx-auto text-center mb-16">
             <span className="text-xs font-bold text-blue-700 uppercase tracking-wider bg-blue-50 px-3 py-1 rounded-full border border-blue-200/60 inline-block mb-3">
-              {isEn ? "Alumni Voices" : "Kisah Nyata Alumni"}
+              {reviews.length > 0
+                ? (isEn ? "Student Reviews" : "Ulasan Pembelajar")
+                : (isEn ? "Quality Commitment" : "Standar Kualitas")}
             </span>
             <h2
               className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
               style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
             >
-              {tHome("testimonials_title")}
+              {reviews.length > 0
+                ? tHome("testimonials_title")
+                : (isEn ? "Engineered for True Competency" : "Komitmen Keunggulan Pembelajaran")}
             </h2>
             <p className="text-slate-600 text-sm sm:text-base mt-2">
-              {tHome("testimonials_subtitle")}
+              {reviews.length > 0
+                ? tHome("testimonials_subtitle")
+                : (isEn
+                    ? "Transparent standards, industry-aligned curriculums, and lifelong guidance."
+                    : "Standar pembelajaran transparan, materi berbasis industri nyata, dan sertifikasi digital terverifikasi.")}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.map((item) => (
-              <div
-                key={item.name}
-                className="bg-white rounded-3xl p-7 border border-slate-200/90 shadow-subtle hover:shadow-warm transition-all duration-300 flex flex-col justify-between"
-              >
-                <div className="space-y-4">
-                  {/* Career Transition Pill */}
-                  <span className="inline-block px-3 py-1 rounded-full bg-blue-50 text-blue-800 text-xs font-semibold border border-blue-200/50">
-                    {item.transition}
-                  </span>
-
-                  {/* Testimonial Quote */}
-                  <p className="text-sm text-slate-700 leading-relaxed font-normal">
-                    &ldquo;{item.text}&rdquo;
-                  </p>
-                </div>
-
-                <div className="pt-6 mt-6 border-t border-slate-100">
-                  <p className="text-[11px] text-slate-400 mb-2">
-                    {isEn ? "Course Completed:" : "Kelas yang diselesaikan:"}{" "}
-                    <span className="font-semibold text-slate-700">{item.course}</span>
-                  </p>
-
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-sky-500 text-white font-bold text-sm flex items-center justify-center shrink-0">
-                      {item.name.charAt(0)}
+          {reviews.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {reviews.map((item) => (
+                <div
+                  key={item.id}
+                  className="bg-white rounded-3xl p-7 border border-slate-200/90 shadow-subtle hover:shadow-warm transition-all duration-300 flex flex-col justify-between"
+                >
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-1 text-amber-500">
+                      {Array.from({ length: item.rating }).map((_, i) => (
+                        <Star key={i} size={15} fill="currentColor" />
+                      ))}
                     </div>
-                    <div>
-                      <h4 className="text-sm font-bold text-slate-900 leading-snug">
-                        {item.name}
-                      </h4>
-                      <p className="text-xs text-slate-500">{item.role}</p>
+
+                    <p className="text-sm text-slate-700 leading-relaxed font-normal">
+                      &ldquo;{item.comment}&rdquo;
+                    </p>
+                  </div>
+
+                  <div className="pt-6 mt-6 border-t border-slate-100">
+                    <p className="text-[11px] text-slate-400 mb-2">
+                      {isEn ? "Course:" : "Kelas:"}{" "}
+                      <span className="font-semibold text-slate-700">{item.course.title}</span>
+                    </p>
+
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-sky-500 text-white font-bold text-sm flex items-center justify-center shrink-0">
+                        {item.user.name?.charAt(0) || "U"}
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-bold text-slate-900 leading-snug">
+                          {item.user.name || (isEn ? "Learner" : "Siswa")}
+                        </h4>
+                        <p className="text-xs text-slate-500">
+                          {isEn ? "Verified Learner" : "Siswa Terverifikasi"}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+              {[
+                {
+                  title: isEn ? "Curated Practical Projects" : "Kurikulum Praktis & Riil",
+                  desc: isEn
+                    ? "Every course is structured around real-world software development challenges that employers look for."
+                    : "Setiap kelas dirancang berbasis studi kasus industri nyata agar Anda menguasai keahlian yang sesungguhnya.",
+                },
+                {
+                  title: isEn ? "Permanent Lifetime Access" : "Akses Seumur Hidup",
+                  desc: isEn
+                    ? "Learn at your own pace with unrestricted permanent access to modules, exercises, and updates."
+                    : "Belajar tanpa batasan waktu dengan akses permanen ke seluruh modul video dan pembaruan materi.",
+                },
+                {
+                  title: isEn ? "Verifiable Digital Credentials" : "Sertifikasi Resmi Digital",
+                  desc: isEn
+                    ? "Earn authenticated certificates equipped with unique validation codes for your professional portfolio."
+                    : "Raih sertifikat ber-QR code unik yang dapat divalidasi keabsahannya oleh tim rekrutmen perusahaan.",
+                },
+              ].map((card, idx) => (
+                <div
+                  key={idx}
+                  className="bg-white rounded-3xl p-7 border border-slate-200/90 shadow-subtle hover:shadow-warm transition-all duration-300 flex flex-col justify-between"
+                >
+                  <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold text-sm mb-4">
+                    0{idx + 1}
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-900 text-base mb-2">{card.title}</h3>
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{card.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -529,20 +657,20 @@ export default async function HomePage() {
           <div className="bg-white rounded-3xl border border-stone-200/90 p-8 sm:p-12 shadow-warm flex flex-col lg:flex-row items-center justify-between gap-8 relative overflow-hidden">
             <div className="space-y-3 max-w-2xl text-left relative z-10">
               <span className="text-xs font-bold text-blue-700 uppercase tracking-wider bg-blue-50 px-3 py-1 rounded-full border border-blue-200/60 inline-block">
-                {isEn ? "Free Career Advisory" : "Konsultasi Karir & Kelas Gratis"}
+                {isEn ? "Free Consultation & Advisory" : "Konsultasi Pelatihan & Riset Terapan"}
               </span>
               <h3
                 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight"
                 style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
               >
                 {isEn
-                  ? "Still Deciding Which Program Fits Your Background?"
-                  : "Bingung Memilih Jalur Karir atau Kelas yang Tepat?"}
+                  ? "Need Guidance on the Best Program for Your Organization or Thesis?"
+                  : "Bingung Memilih Program Pelatihan untuk UMKM atau Riset Anda?"}
               </h3>
               <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
                 {isEn
-                  ? "Talk directly with our academic advisors. We'll map your current skills, analyze market demand, and recommend a personalized curriculum roadmap."
-                  : "Diskusikan minat dan latar belakang Anda langsung dengan tim konsultan akademik Earthy Academy. Dapatkan rekomendasi kurikulum, estimasi waktu belajar, dan gambaran portofolio kerja."}
+                  ? "Discuss your background and objectives with the Matoh Technologies academic & technical team. Get customized syllabus recommendations, methodology consultations, and practical implementation blueprints."
+                  : "Diskusikan kebutuhan usaha atau riset Anda langsung dengan tim konsultan Matoh Technologies. Dapatkan rekomendasi kurikulum, konsultasi metode (MCDM/Forecasting), dan roadmap implementasi terarah."}
               </p>
             </div>
 
@@ -553,16 +681,16 @@ export default async function HomePage() {
                   className="rounded-2xl h-12 px-6 text-sm font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-warm w-full"
                   rightIcon={<ArrowRight size={16} />}
                 >
-                  {isEn ? "Contact Admissions" : "Hubungi Tim Akademik"}
+                  {isEn ? "Contact Admissions" : "Hubungi Tim Matoh"}
                 </Button>
               </Link>
               <a
-                href="https://wa.me/6282145678901?text=Halo%20Earthy%20Academy,%20saya%20ingin%20konsultasi%20program%20belajar."
+                href="https://wa.me/6281210106680?text=Halo%20Matoh%20Technologies,%20saya%20ingin%20konsultasi%20program%20pelatihan."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-12 px-6 rounded-2xl border border-emerald-300 bg-emerald-50 hover:bg-emerald-100/70 text-emerald-800 text-sm font-bold transition-colors"
               >
-                <span>WhatsApp Hotline</span>
+                <span>WhatsApp Hotline Resmi</span>
               </a>
             </div>
           </div>

@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { getLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "My Courses — Earthy Academy" };
+export const metadata: Metadata = { title: "Pelatihan Saya — PT. Matoh Technologies Indonesia" };
 
 async function getMyCoursesData(userId: string) {
   try {
