@@ -1,7 +1,10 @@
 {
   "nav": {
-    "courses": "Courses",
-    "about": "About",
+    "home": "Home",
+    "programs": "Programs",
+    "courses": "All Courses",
+    "about": "About Us",
+    "contact": "Contact",
     "login": "Sign In",
     "register": "Sign Up",
     "register_free": "Sign Up Free",
@@ -10,7 +13,10 @@
     "my_courses": "My Courses",
     "orders": "Order History",
     "logout": "Sign Out",
-    "admin": "Admin Panel"
+    "admin": "Admin Panel",
+    "explore_all_programs": "Browse All 240+ Courses & Syllabi",
+    "career_tracks": "Career Tracks & Categories",
+    "learning_formats": "Learning Formats"
   },
   "hero": {
     "badge": "Trusted learning platform",

@@ -14,7 +14,7 @@ export function LanguageSwitcher() {
         disabled={isPending}
         className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all duration-150 ${
           locale === "id"
-            ? "bg-white text-orange-600 shadow-sm"
+            ? "bg-white text-blue-600 shadow-sm"
             : "text-stone-500 hover:text-stone-800"
         } ${isPending ? "opacity-70 cursor-wait" : ""}`}
         title="Bahasa Indonesia"
@@ -28,7 +28,7 @@ export function LanguageSwitcher() {
         disabled={isPending}
         className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all duration-150 ${
           locale === "en"
-            ? "bg-white text-orange-600 shadow-sm"
+            ? "bg-white text-blue-600 shadow-sm"
             : "text-stone-500 hover:text-stone-800"
         } ${isPending ? "opacity-70 cursor-wait" : ""}`}
         title="English"

@@ -61,7 +61,7 @@ export default function ForgotPasswordPage() {
             </p>
             <Link
               href="/login"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-colors"
             >
               <ArrowLeft size={16} />
               Kembali ke Halaman Login
@@ -78,14 +78,14 @@ export default function ForgotPasswordPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2.5 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-sky-500 flex items-center justify-center shadow-sm">
               <BookOpen size={20} className="text-white" />
             </div>
             <span
               className="font-bold text-stone-900 text-xl"
               style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
             >
-              Earthy<span className="text-orange-600">Academy</span>
+              Earthy<span className="text-blue-600">Academy</span>
             </span>
           </Link>
           <h1
@@ -101,8 +101,8 @@ export default function ForgotPasswordPage() {
 
         {/* Card */}
         <div className="bg-white rounded-2xl border border-stone-200 shadow-warm-lg p-6 sm:p-8">
-          <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-orange-50 border border-orange-200 mx-auto mb-6">
-            <Mail size={24} className="text-orange-600" />
+          <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-blue-50 border border-blue-200 mx-auto mb-6">
+            <Mail size={24} className="text-blue-600" />
           </div>
 
           {error && (

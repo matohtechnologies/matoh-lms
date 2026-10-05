@@ -190,7 +190,7 @@ export default function NewCoursePage() {
                 <select
                   value={categoryId}
                   onChange={(e) => setCategoryId(e.target.value)}
-                  className="w-full h-11 px-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                  className="w-full h-11 px-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                 >
                   {categories.length > 0 ? (
                     categories.map((c) => (
@@ -213,7 +213,7 @@ export default function NewCoursePage() {
                 <select
                   value={level}
                   onChange={(e) => setLevel(e.target.value)}
-                  className="w-full h-11 px-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                  className="w-full h-11 px-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                 >
                   <option value="BEGINNER">Pemula (Beginner)</option>
                   <option value="INTERMEDIATE">Menengah (Intermediate)</option>
@@ -249,7 +249,7 @@ export default function NewCoursePage() {
                   disabled={isFree}
                   value={isFree ? 0 : price}
                   onChange={(e) => setPrice(e.target.value)}
-                  className="w-full h-11 pl-10 pr-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 disabled:bg-stone-50 disabled:text-stone-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                  className="w-full h-11 pl-10 pr-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 disabled:bg-stone-50 disabled:text-stone-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                   placeholder="0"
                 />
               </div>
@@ -258,7 +258,7 @@ export default function NewCoursePage() {
                   type="checkbox"
                   checked={isFree}
                   onChange={(e) => setIsFree(e.target.checked)}
-                  className="rounded border-stone-300 text-orange-600 focus:ring-orange-500"
+                  className="rounded border-stone-300 text-blue-600 focus:ring-blue-500"
                 />
                 <span className="text-xs text-stone-600">Jadikan kelas ini Gratis untuk semua siswa</span>
               </label>
@@ -270,7 +270,7 @@ export default function NewCoursePage() {
                 type="number"
                 value={duration}
                 onChange={(e) => setDuration(e.target.value)}
-                className="w-full h-11 px-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                className="w-full h-11 px-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                 placeholder="10"
               />
               <p className="text-xs text-stone-400">Total estimasi waktu belajar hingga selesai</p>
@@ -291,7 +291,7 @@ export default function NewCoursePage() {
               type="checkbox"
               checked={isPublished}
               onChange={(e) => setIsPublished(e.target.checked)}
-              className="rounded border-stone-300 text-orange-600 focus:ring-orange-500"
+              className="rounded border-stone-300 text-blue-600 focus:ring-blue-500"
             />
             <span className="text-sm font-medium text-stone-700">
               Langsung Publikasikan (Tampil di Katalog)

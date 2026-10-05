@@ -35,26 +35,26 @@ export default async function DashboardLayout({
   const isAdmin = session.user?.role === "ADMIN";
 
   return (
-    <div className="min-h-screen bg-[#faf8f5] flex">
+    <div className="min-h-screen bg-[#f8fafc] flex">
       {/* ── Desktop Sidebar ─────────────────────────── */}
-      <aside className="hidden lg:flex w-64 shrink-0 bg-white border-r border-stone-200/80 flex-col fixed top-0 left-0 h-screen z-30 shadow-xs">
+      <aside className="hidden lg:flex w-64 shrink-0 bg-white border-r border-slate-200/80 flex-col fixed top-0 left-0 h-screen z-30 shadow-xs">
         {/* Logo */}
-        <div className="p-4 border-b border-stone-100 flex items-center">
+        <div className="p-4 border-b border-slate-100 flex items-center">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-2xs group-hover:scale-105 transition-transform">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-600 to-sky-600 flex items-center justify-center shadow-2xs group-hover:scale-105 transition-transform">
               <BookOpen size={16} className="text-white" />
             </div>
             <span
-              className="font-bold text-stone-900 text-base"
+              className="font-bold text-slate-900 text-base"
               style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
             >
-              Earthy<span className="text-orange-600">Academy</span>
+              Earthy<span className="text-blue-600">Academy</span>
             </span>
           </Link>
         </div>
 
         {/* User info */}
-        <div className="p-4 border-b border-stone-100">
+        <div className="p-4 border-b border-slate-100">
           <UserSidebarBadge
             initialUser={{
               name: userName,
@@ -69,25 +69,25 @@ export default async function DashboardLayout({
         {/* Navigation */}
         <nav className="flex-1 p-3.5 overflow-y-auto space-y-1">
           {isAdmin && (
-            <div className="mb-4 p-3.5 rounded-2xl bg-gradient-to-br from-orange-50 to-amber-50/80 border border-orange-200/80 shadow-2xs space-y-2">
+            <div className="mb-4 p-3.5 rounded-2xl bg-gradient-to-br from-blue-50 to-sky-50/80 border border-blue-200/80 shadow-2xs space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold text-orange-950 uppercase tracking-wider flex items-center gap-1.5">
-                  <Shield size={13} className="text-orange-600" /> Mode Administrator
+                <span className="text-[11px] font-bold text-blue-950 uppercase tracking-wider flex items-center gap-1.5">
+                  <Shield size={13} className="text-blue-600" /> Mode Administrator
                 </span>
               </div>
-              <p className="text-[11px] text-stone-600 leading-snug">
+              <p className="text-[11px] text-slate-600 leading-snug">
                 {tDash("admin_console_desc")}
               </p>
               <Link
                 href="/admin"
-                className="flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold transition-colors shadow-2xs"
+                className="flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors shadow-2xs"
               >
                 {tDash("open_admin_panel")}
               </Link>
             </div>
           )}
 
-          <p className="text-[10px] font-bold text-stone-400 uppercase tracking-wider px-3 mb-2">
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2">
             {tDash("learner_menu")}
           </p>
           <div className="space-y-1">
@@ -96,22 +96,22 @@ export default async function DashboardLayout({
             ))}
           </div>
 
-          <div className="mt-6 pt-4 border-t border-stone-100">
-            <p className="text-[10px] font-bold text-stone-400 uppercase tracking-wider px-3 mb-2">
+          <div className="mt-6 pt-4 border-t border-slate-100">
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2">
               {tDash("explore_section")}
             </p>
             <Link
               href="/courses"
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-stone-600 hover:bg-stone-50 hover:text-orange-700 transition-all border border-transparent hover:border-stone-200/60"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-700 transition-all border border-transparent hover:border-slate-200/60"
             >
-              <BookOpen size={15} className="text-stone-400" />
+              <BookOpen size={15} className="text-slate-400" />
               {tDash("browse_courses")}
             </Link>
           </div>
         </nav>
 
         {/* Logout */}
-        <div className="p-3 border-t border-stone-100">
+        <div className="p-3 border-t border-slate-100">
           <SignOutButton variant="dashboard" />
         </div>
       </aside>
@@ -119,23 +119,23 @@ export default async function DashboardLayout({
       {/* ── Main Content ─────────────────────────────── */}
       <div className="flex-1 lg:ml-64 flex flex-col min-h-screen min-w-0">
         {/* Mobile Top Header */}
-        <header className="lg:hidden bg-white/90 backdrop-blur-md border-b border-stone-200/80 px-4 h-14 flex items-center justify-between sticky top-0 z-20">
+        <header className="lg:hidden bg-white/90 backdrop-blur-md border-b border-slate-200/80 px-4 h-14 flex items-center justify-between sticky top-0 z-20">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-2xs">
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-600 to-sky-600 flex items-center justify-center shadow-2xs">
               <BookOpen size={13} className="text-white" />
             </div>
             <span
-              className="font-bold text-stone-900 text-sm"
+              className="font-bold text-slate-900 text-sm"
               style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
             >
-              Earthy<span className="text-orange-600">Academy</span>
+              Earthy<span className="text-blue-600">Academy</span>
             </span>
           </Link>
           <div className="flex items-center gap-2">
             {isAdmin && (
               <Link
                 href="/admin"
-                className="text-[10px] font-bold px-2 py-1 rounded bg-orange-100 text-orange-800 border border-orange-200/60"
+                className="text-[10px] font-bold px-2 py-1 rounded bg-blue-50 text-blue-700 border border-blue-200/60"
               >
                 Admin
               </Link>

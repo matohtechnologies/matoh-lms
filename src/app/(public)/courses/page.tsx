@@ -137,10 +137,10 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
   return (
     <div className="pt-20 bg-[#faf8f5] min-h-screen">
       {/* Header */}
-      <div className="bg-gradient-to-b from-orange-50/70 via-[#faf8f5] to-[#faf8f5] border-b border-stone-200/70 py-12 sm:py-14">
+      <div className="bg-gradient-to-b from-blue-50/70 via-[#faf8f5] to-[#faf8f5] border-b border-stone-200/70 py-12 sm:py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-100/70 text-orange-800 border border-orange-200/60 text-xs font-semibold mb-3">
-            <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100/70 text-blue-800 border border-blue-200/60 text-xs font-semibold mb-3">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
             <span>{isEn ? "Earthy Learning Catalog" : "Katalog Belajar Earthy"}</span>
           </div>
           <h1
@@ -163,12 +163,12 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                 name="q"
                 defaultValue={params.q}
                 placeholder={t("search_placeholder")}
-                className="w-full h-12 pl-10 pr-4 rounded-2xl border border-stone-200 bg-white text-sm text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 shadow-xs transition-all"
+                className="w-full h-12 pl-10 pr-4 rounded-2xl border border-stone-200 bg-white text-sm text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 shadow-xs transition-all"
               />
             </div>
             <button
               type="submit"
-              className="px-6 h-12 rounded-2xl bg-orange-600 hover:bg-orange-700 text-white font-semibold text-sm shadow-warm hover:shadow-warm-lg transition-all shrink-0"
+              className="px-6 h-12 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-warm hover:shadow-warm-lg transition-all shrink-0"
             >
               {isEn ? "Search" : "Cari Kelas"}
             </button>
@@ -187,7 +187,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                     {t("filter.category")}
                   </h3>
                   {params.category && (
-                    <a href="/courses" className="text-[11px] text-orange-600 hover:underline">
+                    <a href="/courses" className="text-[11px] text-blue-600 hover:underline">
                       Reset
                     </a>
                   )}
@@ -197,7 +197,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                     href="/courses"
                     className={`block px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
                       !params.category
-                        ? "bg-orange-50/90 text-orange-950 font-bold border border-orange-200/80 shadow-2xs"
+                        ? "bg-blue-50/90 text-blue-950 font-bold border border-blue-200/80 shadow-2xs"
                         : "text-stone-600 hover:text-stone-900 hover:bg-stone-50"
                     }`}
                   >
@@ -209,7 +209,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                       href={`/courses?category=${encodeURIComponent(cat.name)}${params.level ? `&level=${params.level}` : ""}${params.sort ? `&sort=${params.sort}` : ""}`}
                       className={`block px-3 py-2 rounded-xl text-xs font-medium transition-all ${
                         params.category === cat.name
-                          ? "bg-orange-50/90 text-orange-950 font-bold border border-orange-200/80 shadow-2xs"
+                          ? "bg-blue-50/90 text-blue-950 font-bold border border-blue-200/80 shadow-2xs"
                           : "text-stone-600 hover:text-stone-900 hover:bg-stone-50"
                       }`}
                     >
@@ -232,7 +232,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                       href={`/courses?${params.q ? `q=${params.q}&` : ""}${params.category ? `category=${params.category}&` : ""}level=${opt.value}${params.sort ? `&sort=${params.sort}` : ""}`}
                       className={`block px-3 py-2 rounded-xl text-xs font-medium transition-all ${
                         params.level === opt.value
-                          ? "bg-orange-50/90 text-orange-950 font-bold border border-orange-200/80 shadow-2xs"
+                          ? "bg-blue-50/90 text-blue-950 font-bold border border-blue-200/80 shadow-2xs"
                           : "text-stone-600 hover:text-stone-900 hover:bg-stone-50"
                       }`}
                     >
@@ -304,7 +304,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                   <div className="text-5xl mb-4">🔍</div>
                   <h3 className="text-lg font-semibold text-stone-900 mb-2">{t("not_found_title")}</h3>
                   <p className="text-stone-500">{t("not_found_desc")}</p>
-                  <a href="/courses" className="mt-4 inline-block text-orange-600 hover:underline text-sm">
+                  <a href="/courses" className="mt-4 inline-block text-blue-600 hover:underline text-sm">
                     {t("reset_filter")}
                   </a>
                 </div>
@@ -320,8 +320,8 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                     href={`/courses?${new URLSearchParams({ ...params, page: String(page) }).toString()}`}
                     className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-medium transition-colors ${
                       currentPage === page
-                        ? "bg-orange-600 text-white"
-                        : "bg-white border border-stone-300 text-stone-700 hover:border-orange-400"
+                        ? "bg-blue-600 text-white"
+                        : "bg-white border border-stone-300 text-stone-700 hover:border-blue-400"
                     }`}
                   >
                     {page}

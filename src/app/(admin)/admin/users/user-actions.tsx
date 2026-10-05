@@ -110,7 +110,7 @@ export function UserActions({ userId, userName, currentRole, isSelf }: UserActio
                 onClick={() => changeRole("ADMIN")}
                 className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-stone-700 hover:bg-stone-50 transition-colors"
               >
-                <Shield size={13} className="text-orange-500" />
+                <Shield size={13} className="text-blue-500" />
                 {t("make_admin")}
               </button>
             )}

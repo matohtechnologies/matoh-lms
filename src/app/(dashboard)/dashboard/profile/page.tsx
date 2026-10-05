@@ -250,8 +250,8 @@ export default function ProfilePage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-50 border border-orange-200/80 text-orange-800 text-xs font-semibold mb-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 border border-blue-200/80 text-blue-800 text-xs font-semibold mb-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
             {isEn ? "Account Settings" : "Pengaturan Akun"}
           </div>
           <h1
@@ -271,7 +271,7 @@ export default function ProfilePage() {
         <div className="space-y-5">
           <div className="bg-white rounded-2xl border border-stone-200/80 shadow-xs p-6 text-center relative overflow-hidden">
             {/* Ambient Top Decorative Banner */}
-            <div className="h-20 bg-gradient-to-r from-orange-100 via-amber-50 to-orange-50 -mt-6 -mx-6 mb-5 border-b border-orange-100/60" />
+            <div className="h-20 bg-gradient-to-r from-blue-100 via-sky-50 to-blue-50 -mt-6 -mx-6 mb-5 border-b border-blue-100/60" />
 
             <div className="relative inline-block -mt-14 mb-2">
               <input
@@ -282,7 +282,7 @@ export default function ProfilePage() {
                 className="hidden"
               />
 
-              <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center text-white text-3xl font-bold mx-auto ring-4 ring-white shadow-md overflow-hidden relative">
+              <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-blue-600 to-sky-600 flex items-center justify-center text-white text-3xl font-bold mx-auto ring-4 ring-white shadow-md overflow-hidden relative">
                 {isUploadingAvatar ? (
                   <div className="absolute inset-0 bg-stone-900/60 flex items-center justify-center text-white">
                     <Loader2 size={24} className="animate-spin" />
@@ -302,7 +302,7 @@ export default function ProfilePage() {
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isUploadingAvatar}
-                className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-orange-600 text-white flex items-center justify-center hover:bg-orange-700 active:scale-95 transition-all shadow-md disabled:opacity-50 ring-2 ring-white"
+                className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700 active:scale-95 transition-all shadow-md disabled:opacity-50 ring-2 ring-white"
                 title={isEn ? "Change photo" : "Ganti foto"}
               >
                 {isUploadingAvatar ? (
@@ -319,7 +319,7 @@ export default function ProfilePage() {
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isUploadingAvatar}
-                className="text-xs font-semibold text-orange-600 hover:text-orange-700 transition-colors"
+                className="text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors"
               >
                 {avatarUrl ? (isEn ? "Change photo" : "Ganti foto") : (isEn ? "Upload photo" : "Unggah foto")}
               </button>
@@ -402,7 +402,7 @@ export default function ProfilePage() {
           {/* Edit Profile Form */}
           <div className="bg-white rounded-2xl border border-stone-200/80 shadow-xs p-6 sm:p-7">
             <div className="flex items-center gap-2.5 pb-4 mb-5 border-b border-stone-100">
-              <div className="w-9 h-9 rounded-xl bg-orange-50 border border-orange-200/60 flex items-center justify-center text-orange-600 shrink-0">
+              <div className="w-9 h-9 rounded-xl bg-blue-50 border border-blue-200/60 flex items-center justify-center text-blue-600 shrink-0">
                 <User size={18} />
               </div>
               <div>
@@ -468,7 +468,7 @@ export default function ProfilePage() {
                   type="submit"
                   loading={isPending}
                   leftIcon={<Save size={15} />}
-                  className="bg-orange-600 hover:bg-orange-700 text-white font-semibold shadow-xs px-6"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-xs px-6"
                 >
                   {t("save_changes")}
                 </Button>

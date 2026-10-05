@@ -16,16 +16,16 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    "bg-orange-600 text-white hover:bg-orange-700 active:bg-orange-800 shadow-sm hover:shadow-md",
+    "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 shadow-sm hover:shadow-md",
   secondary:
-    "bg-amber-600 text-white hover:bg-amber-700 active:bg-amber-800 shadow-sm hover:shadow-md",
+    "bg-sky-600 text-white hover:bg-sky-700 active:bg-sky-800 shadow-sm hover:shadow-md",
   outline:
     "border border-slate-200 bg-white text-slate-800 hover:bg-slate-50 hover:border-slate-300 shadow-xs",
   ghost: "text-slate-700 hover:bg-slate-100 hover:text-slate-900",
   danger:
     "bg-red-600 text-white hover:bg-red-700 active:bg-red-800",
   white:
-    "bg-white text-orange-600 hover:bg-orange-50 active:bg-orange-100 shadow-md hover:shadow-lg font-semibold",
+    "bg-white text-blue-600 hover:bg-blue-50 active:bg-blue-100 shadow-md hover:shadow-lg font-semibold",
   "outline-white":
     "border border-white/70 bg-transparent text-white hover:bg-white/10 active:bg-white/20 font-semibold",
 };
@@ -58,7 +58,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <Comp
         ref={ref}
         className={cn(
-          "inline-flex items-center justify-center font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 select-none",
+          "inline-flex items-center justify-center font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 select-none",
           variantClasses[variant],
           sizeClasses[size],
           className

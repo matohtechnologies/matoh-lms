@@ -73,7 +73,7 @@ export default async function AdminUsersPage() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-xs bg-orange-50 text-orange-800 border border-orange-200/60 px-3 py-1.5 rounded-full font-bold shadow-2xs">
+          <span className="text-xs bg-blue-50 text-blue-800 border border-blue-200/60 px-3 py-1.5 rounded-full font-bold shadow-2xs">
             {t("total_registered", { count: users.length })}
           </span>
         </div>
@@ -91,7 +91,7 @@ export default async function AdminUsersPage() {
           </div>
           <div className="flex items-center gap-1.5 self-start sm:self-auto text-xs">
             <span className="text-stone-400 mr-1 text-[11px]">{t("filter_role")}:</span>
-            <button className="px-2.5 py-1 rounded-lg bg-orange-50 text-orange-950 font-bold border border-orange-200/60 text-[11px]">{t("filter_all")}</button>
+            <button className="px-2.5 py-1 rounded-lg bg-blue-50 text-blue-950 font-bold border border-blue-200/60 text-[11px]">{t("filter_all")}</button>
             <button className="px-2.5 py-1 rounded-lg hover:bg-stone-50 text-stone-600 transition-colors border border-transparent hover:border-stone-200/60 text-[11px]">{t("filter_student")}</button>
             <button className="px-2.5 py-1 rounded-lg hover:bg-stone-50 text-stone-600 transition-colors border border-transparent hover:border-stone-200/60 text-[11px]">{t("filter_instructor")}</button>
             <button className="px-2.5 py-1 rounded-lg hover:bg-stone-50 text-stone-600 transition-colors border border-transparent hover:border-stone-200/60 text-[11px]">{t("filter_admin")}</button>
@@ -116,7 +116,7 @@ export default async function AdminUsersPage() {
                 <tr key={user.id} className="hover:bg-stone-50/80 transition-colors">
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-400 to-amber-500 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-2xs">
+                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-sky-600 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-2xs">
                         {user.name[0]?.toUpperCase()}
                       </div>
                       <div>

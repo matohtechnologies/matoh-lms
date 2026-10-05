@@ -300,7 +300,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
   if (loading) {
     return (
       <div className="bg-white rounded-2xl border border-stone-200 p-12 text-center">
-        <Loader2 size={32} className="animate-spin text-orange-600 mx-auto mb-3" />
+        <Loader2 size={32} className="animate-spin text-blue-600 mx-auto mb-3" />
         <p className="text-stone-500 text-sm font-medium">Memuat pengaturan sertifikat...</p>
       </div>
     );
@@ -309,9 +309,9 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
   return (
     <div className="space-y-8">
       {/* Header bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/5 p-6 rounded-2xl border border-amber-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-blue-500/10 via-sky-500/10 to-blue-500/5 p-6 rounded-2xl border border-blue-200">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white shadow-md">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-sky-600 flex items-center justify-center text-white shadow-md">
             <Award size={24} />
           </div>
           <div>
@@ -331,7 +331,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-semibold shadow-sm transition-all disabled:opacity-50 shrink-0"
+          className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-sm transition-all disabled:opacity-50 shrink-0"
         >
           {saving ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
           Simpan Pengaturan
@@ -361,7 +361,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
           className={cn(
             "flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all",
             activeView === "settings"
-              ? "bg-orange-600 text-white shadow-sm"
+              ? "bg-blue-600 text-white shadow-sm"
               : "bg-white hover:bg-stone-100 text-stone-700 border border-stone-200"
           )}
         >
@@ -375,7 +375,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
           className={cn(
             "flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all",
             activeView === "studio"
-              ? "bg-orange-600 text-white shadow-sm"
+              ? "bg-blue-600 text-white shadow-sm"
               : "bg-white hover:bg-stone-100 text-stone-700 border border-stone-200"
           )}
         >
@@ -389,7 +389,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
           className={cn(
             "flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all",
             activeView === "recipients"
-              ? "bg-orange-600 text-white shadow-sm"
+              ? "bg-blue-600 text-white shadow-sm"
               : "bg-white hover:bg-stone-100 text-stone-700 border border-stone-200"
           )}
         >
@@ -423,7 +423,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                   : "text-stone-600 hover:text-stone-900"
               )}
             >
-              <Award size={14} className={studioTab === "front" ? "text-orange-600" : "text-stone-400"} />
+              <Award size={14} className={studioTab === "front" ? "text-blue-600" : "text-stone-400"} />
               <span>Editor Sisi Depan (Sertifikat)</span>
             </button>
             <button
@@ -452,7 +452,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                 category_name: "Teknologi & Pemrograman",
                 issue_date: format(new Date(), "d MMMM yyyy", { locale: idLocale }),
                 certificate_code: "EA-2026-CERT-DEMO",
-                issuer_name: form.issuerName || "DigiBlueCamp",
+                issuer_name: form.issuerName || "Earthy Academy",
                 signatory_name_1: form.signatoryName1 || courseInfo?.instructorName || "Ahmad Fadhil",
                 signatory_role_1: form.signatoryRole1 || "Lead Instructor",
                 signatory_name_2: form.signatoryName2 || "Dr. Santoso W.",
@@ -471,7 +471,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                 categoryName: "Teknologi & Pemrograman",
                 certificateCode: "EA-2026-CERT-DEMO",
                 issueDisplay: format(new Date(), "d MMMM yyyy", { locale: idLocale }),
-                issuerName: form.issuerName || "DigiBlueCamp",
+                issuerName: form.issuerName || "Earthy Academy",
                 instructorName: form.signatoryName1 || courseInfo?.instructorName || "Ahmad Fadhil",
                 signatoryRole1: form.signatoryRole1 || "Lead Instructor",
                 signatoryName2: form.signatoryName2 || "Dr. Santoso W.",
@@ -551,7 +551,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                   onChange={(e) => setForm({ ...form, isEnabled: e.target.checked })}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-stone-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-stone-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-600"></div>
+                <div className="w-11 h-6 bg-stone-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-stone-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
               </label>
             </div>
           </div>
@@ -559,7 +559,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
           {/* Card: Kriteria Kelulusan */}
           <div className="bg-white rounded-2xl border border-stone-200 p-6 space-y-5">
             <div className="flex items-center gap-2 pb-3 border-b border-stone-100">
-              <Sliders size={18} className="text-orange-600" />
+              <Sliders size={18} className="text-blue-600" />
               <h3 className="text-sm font-bold text-stone-900">
                 Kriteria &amp; Syarat Kelulusan Siswa
               </h3>
@@ -572,7 +572,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                   <CheckSquare size={14} className="text-stone-400" />
                   Minimal Progres Penyelesaian Materi
                 </label>
-                <span className="text-xs font-bold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-md border border-orange-200">
+                <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200">
                   {form.minProgress}% Materi
                 </span>
               </div>
@@ -583,7 +583,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                 step="5"
                 value={form.minProgress}
                 onChange={(e) => setForm({ ...form, minProgress: Number(e.target.value) })}
-                className="w-full accent-orange-600 h-2 bg-stone-100 rounded-lg cursor-pointer"
+                className="w-full accent-blue-600 h-2 bg-stone-100 rounded-lg cursor-pointer"
               />
               <p className="text-[11px] text-stone-400">
                 Siswa harus menuntaskan minimal {form.minProgress}% dari seluruh pelajaran yang ada
@@ -608,7 +608,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                     onChange={(e) => setForm({ ...form, requireQuizPassed: e.target.checked })}
                     className="sr-only peer"
                   />
-                  <div className="w-9 h-5 bg-stone-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-stone-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-orange-600"></div>
+                  <div className="w-9 h-5 bg-stone-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-stone-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
                 </label>
               </div>
             </div>
@@ -634,7 +634,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                     }
                     className="sr-only peer"
                   />
-                  <div className="w-9 h-5 bg-stone-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-stone-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-orange-600"></div>
+                  <div className="w-9 h-5 bg-stone-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-stone-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
                 </label>
               </div>
             </div>
@@ -644,7 +644,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
           <div className="bg-white rounded-2xl border border-stone-200 p-6 space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-stone-100">
               <div className="flex items-center gap-2">
-                <UploadCloud size={18} className="text-orange-600" />
+                <UploadCloud size={18} className="text-blue-600" />
                 <h3 className="text-sm font-bold text-stone-900">
                   Template Desain Sertifikat (Background)
                 </h3>
@@ -676,7 +676,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
             />
 
             {form.templateUrl ? (
-              <div className="p-4 rounded-xl bg-orange-50/50 border border-orange-200 space-y-3">
+              <div className="p-4 rounded-xl bg-blue-50/50 border border-blue-200 space-y-3">
                 <div className="flex items-center gap-3.5">
                   <div className="w-24 h-16 rounded-lg bg-stone-100 border border-stone-200 overflow-hidden shrink-0 relative shadow-xs">
                     <img
@@ -697,14 +697,14 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                       href={form.templateUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-[11px] text-orange-600 hover:text-orange-700 font-semibold mt-1"
+                      className="inline-flex items-center gap-1 text-[11px] text-blue-600 hover:text-blue-700 font-semibold mt-1"
                     >
                       Buka Gambar Penuh <ExternalLink size={10} />
                     </a>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 pt-2 border-t border-orange-200/60">
+                <div className="flex items-center gap-2 pt-2 border-t border-blue-200/60">
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
@@ -712,9 +712,9 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-stone-200 hover:bg-stone-50 text-stone-700 text-xs font-semibold transition-colors disabled:opacity-50"
                   >
                     {uploadingTemplate ? (
-                      <Loader2 size={12} className="animate-spin text-orange-600" />
+                      <Loader2 size={12} className="animate-spin text-blue-600" />
                     ) : (
-                      <UploadCloud size={12} className="text-orange-600" />
+                      <UploadCloud size={12} className="text-blue-600" />
                     )}
                     Ganti Template
                   </button>
@@ -732,9 +732,9 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
             ) : (
               <div
                 onClick={() => fileInputRef.current?.click()}
-                className="p-6 rounded-2xl border-2 border-dashed border-stone-200 hover:border-orange-400 bg-stone-50/60 hover:bg-orange-50/20 text-center cursor-pointer transition-all group"
+                className="p-6 rounded-2xl border-2 border-dashed border-stone-200 hover:border-blue-400 bg-stone-50/60 hover:bg-blue-50/20 text-center cursor-pointer transition-all group"
               >
-                <div className="w-12 h-12 rounded-xl bg-orange-100/80 text-orange-600 flex items-center justify-center mx-auto mb-2.5 group-hover:scale-105 transition-transform">
+                <div className="w-12 h-12 rounded-xl bg-blue-100/80 text-blue-600 flex items-center justify-center mx-auto mb-2.5 group-hover:scale-105 transition-transform">
                   {uploadingTemplate ? (
                     <Loader2 size={20} className="animate-spin" />
                   ) : (
@@ -754,7 +754,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
           {/* Card: Desain & Teks Sertifikat */}
           <div className="bg-white rounded-2xl border border-stone-200 p-6 space-y-4">
             <div className="flex items-center gap-2 pb-3 border-b border-stone-100">
-              <Award size={18} className="text-orange-600" />
+              <Award size={18} className="text-blue-600" />
               <h3 className="text-sm font-bold text-stone-900">Desain &amp; Teks Sertifikat</h3>
             </div>
 
@@ -768,7 +768,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                   value={form.title}
                   onChange={(e) => setForm({ ...form, title: e.target.value })}
                   placeholder="Contoh: Certificate of Completion"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-blue-500"
                 />
               </div>
 
@@ -781,7 +781,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                   value={form.issuerName}
                   onChange={(e) => setForm({ ...form, issuerName: e.target.value })}
                   placeholder="Contoh: Earthy Academy"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-blue-500"
                 />
               </div>
 
@@ -794,7 +794,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                   value={form.subtitle}
                   onChange={(e) => setForm({ ...form, subtitle: e.target.value })}
                   placeholder="Keterangan pencapaian siswa..."
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-orange-500 resize-none"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-blue-500 resize-none"
                 />
               </div>
 
@@ -812,7 +812,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                       value={form.signatoryName1}
                       onChange={(e) => setForm({ ...form, signatoryName1: e.target.value })}
                       placeholder="Nama Instruktur"
-                      className="w-full px-2.5 py-1.5 rounded-lg border border-stone-200 bg-white text-xs focus:outline-none focus:border-orange-500"
+                      className="w-full px-2.5 py-1.5 rounded-lg border border-stone-200 bg-white text-xs focus:outline-none focus:border-blue-500"
                     />
                   </div>
                   <div>
@@ -822,7 +822,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                       value={form.signatoryRole1}
                       onChange={(e) => setForm({ ...form, signatoryRole1: e.target.value })}
                       placeholder="Lead Instructor"
-                      className="w-full px-2.5 py-1.5 rounded-lg border border-stone-200 bg-white text-xs focus:outline-none focus:border-orange-500"
+                      className="w-full px-2.5 py-1.5 rounded-lg border border-stone-200 bg-white text-xs focus:outline-none focus:border-blue-500"
                     />
                   </div>
                 </div>
@@ -839,7 +839,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                       value={form.signatoryName2}
                       onChange={(e) => setForm({ ...form, signatoryName2: e.target.value })}
                       placeholder="Nama Kepala Akademik"
-                      className="w-full px-2.5 py-1.5 rounded-lg border border-stone-200 bg-white text-xs focus:outline-none focus:border-orange-500"
+                      className="w-full px-2.5 py-1.5 rounded-lg border border-stone-200 bg-white text-xs focus:outline-none focus:border-blue-500"
                     />
                   </div>
                   <div>
@@ -849,7 +849,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                       value={form.signatoryRole2}
                       onChange={(e) => setForm({ ...form, signatoryRole2: e.target.value })}
                       placeholder="Head of Curriculum"
-                      className="w-full px-2.5 py-1.5 rounded-lg border border-stone-200 bg-white text-xs focus:outline-none focus:border-orange-500"
+                      className="w-full px-2.5 py-1.5 rounded-lg border border-stone-200 bg-white text-xs focus:outline-none focus:border-blue-500"
                     />
                   </div>
                 </div>
@@ -872,7 +872,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                     : "text-stone-500 hover:text-stone-800"
                 )}
               >
-                <Award size={12} className={previewSide === "front" ? "text-orange-600" : "text-stone-400"} />
+                <Award size={12} className={previewSide === "front" ? "text-blue-600" : "text-stone-400"} />
                 <span>Sisi Depan</span>
               </button>
               <button
@@ -913,7 +913,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                     categoryName: "Kategori Kursus",
                     certificateCode: "EA-SAMPLE-2026",
                     issueDisplay: format(new Date(), "d MMMM yyyy", { locale: idLocale }),
-                    issuerName: form.issuerName || "DigiBlueCamp",
+                    issuerName: form.issuerName || "Earthy Academy",
                     instructorName: form.signatoryName1 || courseInfo?.instructorName || "Ahmad Fadhil",
                     signatoryRole1: form.signatoryRole1 || "Lead Instructor",
                     signatoryName2: form.signatoryName2 || "Dr. Santoso W.",
@@ -970,7 +970,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                     category_name: "Kategori Kursus",
                     issue_date: format(new Date(), "d MMMM yyyy", { locale: idLocale }),
                     certificate_code: "EA-SAMPLE-2026",
-                    issuer_name: form.issuerName || "DigiBlueCamp",
+                    issuer_name: form.issuerName || "Earthy Academy",
                     signatory_name_1: form.signatoryName1 || "Ahmad Fadhil",
                     signatory_role_1: form.signatoryRole1 || "Lead Instructor",
                     signatory_name_2: form.signatoryName2 || "Dr. Santoso W.",
@@ -983,7 +983,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
               <button
                 type="button"
                 onClick={() => setActiveView("studio")}
-                className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-orange-50 hover:bg-orange-100 text-orange-700 font-bold text-xs border border-orange-200 shadow-xs transition-colors"
+                className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs border border-blue-200 shadow-xs transition-colors"
               >
                 <Palette size={14} />
                 Buka &amp; Edit di Studio Desain Visual
@@ -1006,8 +1006,8 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                 />
               ) : (
                 <>
-                  <div className="absolute -right-12 -top-12 w-40 h-40 rounded-full bg-orange-100/30 pointer-events-none blur-2xl" />
-                  <div className="absolute -left-12 -bottom-12 w-40 h-40 rounded-full bg-amber-100/30 pointer-events-none blur-2xl" />
+                  <div className="absolute -right-12 -top-12 w-40 h-40 rounded-full bg-blue-100/30 pointer-events-none blur-2xl" />
+                  <div className="absolute -left-12 -bottom-12 w-40 h-40 rounded-full bg-sky-100/30 pointer-events-none blur-2xl" />
                 </>
               )}
 
@@ -1016,21 +1016,21 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                   "rounded-xl p-4 relative z-10 transition-all",
                   form.templateUrl
                     ? "bg-white/85 backdrop-blur-xs border border-white/60 shadow-xs"
-                    : "border border-dashed border-amber-600/30"
+                    : "border border-dashed border-blue-600/30"
                 )}
               >
                 {/* Header */}
                 <div className="flex flex-col items-center justify-center mb-3">
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-xs mb-1">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-sky-600 flex items-center justify-center shadow-xs mb-1">
                     <Award size={16} className="text-white" />
                   </div>
                   <h4
                     className="text-xs font-bold tracking-widest uppercase text-stone-800"
                     style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
                   >
-                    {form.issuerName || "DigiBlueCamp"}
+                    {form.issuerName || "Earthy Academy"}
                   </h4>
-                  <p className="text-[8px] uppercase tracking-widest text-amber-700 font-semibold mt-0.5">
+                  <p className="text-[8px] uppercase tracking-widest text-blue-700 font-semibold mt-0.5">
                     {form.title || "Certificate of Completion"}
                   </p>
                 </div>
@@ -1045,14 +1045,14 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                 >
                   Nama Siswa Teladan
                 </h5>
-                <div className="w-12 h-0.5 bg-gradient-to-r from-orange-500 to-amber-500 mx-auto mb-2 rounded-full" />
+                <div className="w-12 h-0.5 bg-gradient-to-r from-blue-600 to-sky-500 mx-auto mb-2 rounded-full" />
 
                 <p className="text-[9px] text-stone-500 line-clamp-2 max-w-xs mx-auto leading-relaxed mb-2.5">
                   {form.subtitle}
                 </p>
 
-                <div className="bg-orange-50/80 border border-orange-200/80 rounded-lg py-1.5 px-3 inline-block max-w-full mb-3">
-                  <p className="text-[10px] font-bold text-orange-950 truncate max-w-[200px]">
+                <div className="bg-blue-50/80 border border-blue-200/80 rounded-lg py-1.5 px-3 inline-block max-w-full mb-3">
+                  <p className="text-[10px] font-bold text-blue-950 truncate max-w-[200px]">
                     {courseInfo?.title || "Judul Kursus"}
                   </p>
                 </div>
@@ -1113,9 +1113,9 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
         <div className="bg-white rounded-2xl border border-stone-200 p-6 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Users size={18} className="text-orange-600" />
+            <Users size={18} className="text-blue-600" />
             <h3 className="text-sm font-bold text-stone-900">Daftar Penerima Sertifikat</h3>
-            <span className="px-2 py-0.5 bg-orange-100 text-orange-700 text-xs font-bold rounded-full">
+            <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-bold rounded-full">
               {recipients.length} Siswa
             </span>
           </div>
@@ -1146,7 +1146,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                   <tr key={rec.id} className="hover:bg-stone-50/80 transition-colors">
                     <td className="py-3 pl-2">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-full bg-orange-100 text-orange-700 font-bold flex items-center justify-center shrink-0">
+                        <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center shrink-0">
                           {rec.user.name?.[0]?.toUpperCase() || "S"}
                         </div>
                         <div>
@@ -1182,7 +1182,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-stone-200 bg-white hover:bg-stone-50 text-stone-700 text-xs font-semibold shadow-xs transition-colors"
                       >
-                        <Eye size={12} className="text-orange-600" />
+                        <Eye size={12} className="text-blue-600" />
                         Lihat Sertifikat
                         <ExternalLink size={10} className="text-stone-400" />
                       </a>

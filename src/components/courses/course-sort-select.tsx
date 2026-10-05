@@ -20,7 +20,7 @@ export function CourseSortSelect({ defaultValue = "popular", options }: CourseSo
 
   return (
     <select
-      className="h-9 px-3 rounded-xl border border-stone-300 bg-white text-sm text-stone-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
+      className="h-9 px-3 rounded-xl border border-slate-300 bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
       defaultValue={defaultValue}
       onChange={handleChange}
     >

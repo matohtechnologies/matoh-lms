@@ -88,14 +88,14 @@ export default async function CertificatesPage() {
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/dashboard/my-courses"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold shadow-xs transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition-colors"
             >
               <BookOpen size={14} />
               {t("view_my_courses")}
             </Link>
             <Link
               href="/courses"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-stone-200/80 bg-white text-stone-700 hover:text-orange-700 text-xs font-bold hover:bg-orange-50/60 transition-colors shadow-2xs"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-stone-200/80 bg-white text-stone-700 hover:text-blue-700 text-xs font-bold hover:bg-blue-50/60 transition-colors shadow-2xs"
             >
               <GraduationCap size={14} />
               {t("explore_courses")}
@@ -110,19 +110,19 @@ export default async function CertificatesPage() {
               className="bg-white rounded-2xl border border-stone-200/80 overflow-hidden shadow-xs hover:shadow-warm hover:-translate-y-1 transition-all duration-200 group flex flex-col justify-between"
             >
               {/* Certificate Preview Banner */}
-              <div className="h-36 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100/80 flex items-center justify-center relative border-b border-stone-100 overflow-hidden p-3">
+              <div className="h-36 bg-gradient-to-br from-blue-50 via-sky-50 to-blue-100/80 flex items-center justify-center relative border-b border-stone-100 overflow-hidden p-3">
                 {/* Decorative border */}
-                <div className="absolute inset-2.5 border border-amber-300/60 rounded-xl pointer-events-none" />
-                <div className="absolute inset-3.5 border border-dashed border-amber-300/40 rounded-lg pointer-events-none" />
+                <div className="absolute inset-2.5 border border-blue-300/60 rounded-xl pointer-events-none" />
+                <div className="absolute inset-3.5 border border-dashed border-blue-300/40 rounded-lg pointer-events-none" />
 
                 <div className="text-center relative z-10 space-y-1">
-                  <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-400/50 flex items-center justify-center mx-auto shadow-2xs">
-                    <Award size={20} className="text-amber-700" />
+                  <div className="w-10 h-10 rounded-xl bg-blue-500/15 border border-blue-400/50 flex items-center justify-center mx-auto shadow-2xs">
+                    <Award size={20} className="text-blue-700" />
                   </div>
-                  <p className="text-[10px] font-extrabold uppercase tracking-widest text-amber-950">
+                  <p className="text-[10px] font-extrabold uppercase tracking-widest text-blue-950">
                     Certificate of Completion
                   </p>
-                  <p className="text-[9px] font-mono font-bold text-amber-800 bg-amber-100/80 px-2 py-0.5 rounded-full inline-block border border-amber-200">
+                  <p className="text-[9px] font-mono font-bold text-blue-800 bg-blue-100/80 px-2 py-0.5 rounded-full inline-block border border-blue-200">
                     #{cert.certificateCode.slice(-8).toUpperCase()}
                   </p>
                 </div>
@@ -131,7 +131,7 @@ export default async function CertificatesPage() {
               {/* Info */}
               <div className="p-5 space-y-3 flex-1 flex flex-col justify-between">
                 <div>
-                  <span className="text-[10px] font-bold text-orange-800 bg-orange-50 px-2 py-0.5 rounded-md border border-orange-200/60 inline-block mb-1.5">
+                  <span className="text-[10px] font-bold text-blue-800 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200/60 inline-block mb-1.5">
                     {cert.course.category.name}
                   </span>
                   <h3
@@ -154,7 +154,7 @@ export default async function CertificatesPage() {
                 <Link
                   href={`/certificates/${cert.certificateCode}`}
                   target="_blank"
-                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold transition-all shadow-xs"
+                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-xs"
                 >
                   <ExternalLink size={13} />
                   {t("cert_view_print")}

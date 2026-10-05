@@ -120,7 +120,7 @@ export function CourseMediaPicker({
             onClick={() => setMode("link")}
             className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               mode === "link"
-                ? "bg-white text-orange-600 shadow-xs"
+                ? "bg-white text-blue-600 shadow-xs"
                 : "text-stone-600 hover:text-stone-900"
             }`}
           >
@@ -132,7 +132,7 @@ export function CourseMediaPicker({
             onClick={() => setMode("upload")}
             className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               mode === "upload"
-                ? "bg-white text-orange-600 shadow-xs"
+                ? "bg-white text-blue-600 shadow-xs"
                 : "text-stone-600 hover:text-stone-900"
             }`}
           >
@@ -184,8 +184,8 @@ export function CourseMediaPicker({
             onClick={() => !isUploading && fileInputRef.current?.click()}
             className={`border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition-all ${
               isDragging
-                ? "border-orange-500 bg-orange-50/50"
-                : "border-stone-300 hover:border-orange-400 bg-stone-50/50 hover:bg-orange-50/20"
+                ? "border-blue-500 bg-blue-50/50"
+                : "border-stone-300 hover:border-blue-400 bg-stone-50/50 hover:bg-blue-50/20"
             }`}
           >
             <input
@@ -200,7 +200,7 @@ export function CourseMediaPicker({
             />
 
             <div className="flex flex-col items-center justify-center gap-2">
-              <div className="w-12 h-12 rounded-2xl bg-orange-100/70 text-orange-600 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-2xl bg-blue-100/70 text-blue-600 flex items-center justify-center">
                 {isUploading ? (
                   <Loader2 size={24} className="animate-spin" />
                 ) : (

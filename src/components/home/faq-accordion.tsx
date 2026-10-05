@@ -25,7 +25,7 @@ export function FaqAccordion({ items }: FaqAccordionProps) {
             key={index}
             className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
               isOpen
-                ? "bg-white border-orange-200/80 shadow-sm"
+                ? "bg-white border-blue-200/80 shadow-sm"
                 : "bg-white/70 hover:bg-white border-slate-200/80"
             }`}
           >
@@ -39,7 +39,7 @@ export function FaqAccordion({ items }: FaqAccordionProps) {
               </span>
               <span
                 className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
-                  isOpen ? "bg-orange-50 text-orange-600 rotate-180" : "bg-slate-100 text-slate-500"
+                  isOpen ? "bg-blue-50 text-blue-600 rotate-180" : "bg-slate-100 text-slate-500"
                 }`}
               >
                 <ChevronDown size={16} />

@@ -160,7 +160,7 @@ export function DiscussionManager({ courseId }: { courseId: string }) {
   if (loading) {
     return (
       <div className="flex items-center justify-center p-12 bg-white rounded-2xl border border-stone-200">
-        <Loader2 className="animate-spin text-orange-500 mr-2" size={20} />
+        <Loader2 className="animate-spin text-blue-600 mr-2" size={20} />
         <span className="text-sm text-stone-500 font-medium">Memuat diskusi kelas...</span>
       </div>
     );
@@ -172,7 +172,7 @@ export function DiscussionManager({ courseId }: { courseId: string }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 bg-white rounded-2xl border border-stone-200 shadow-xs">
         <div>
           <h2 className="text-base font-bold text-stone-900 flex items-center gap-2">
-            <MessageSquare size={18} className="text-orange-600" />
+            <MessageSquare size={18} className="text-blue-600" />
             Forum Diskusi & Tanya Jawab Kelas
           </h2>
           <p className="text-xs text-stone-500 mt-1">
@@ -183,7 +183,7 @@ export function DiscussionManager({ courseId }: { courseId: string }) {
         <Button
           type="button"
           onClick={() => setIsCreatingThread(!isCreatingThread)}
-          className="bg-orange-600 hover:bg-orange-700 text-white shrink-0"
+          className="bg-blue-600 hover:bg-blue-700 text-white shrink-0"
           leftIcon={<Plus size={16} />}
         >
           {isCreatingThread ? "Tutup Form" : "Buat Topik Baru"}
@@ -210,7 +210,7 @@ export function DiscussionManager({ courseId }: { courseId: string }) {
               placeholder="Tuliskan pertanyaan pengantar atau topik diskusi untuk siswa kelas ini..."
               value={newTopicContent}
               onChange={(e) => setNewTopicContent(e.target.value)}
-              className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-orange-500"
+              className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
             />
             <div className="flex justify-end gap-2">
               <Button
@@ -225,7 +225,7 @@ export function DiscussionManager({ courseId }: { courseId: string }) {
                 type="submit"
                 size="sm"
                 loading={sendingTopic}
-                className="bg-orange-600 hover:bg-orange-700 text-white"
+                className="bg-blue-600 hover:bg-blue-700 text-white"
                 leftIcon={<Send size={13} />}
               >
                 Kirim Topik
@@ -238,7 +238,7 @@ export function DiscussionManager({ courseId }: { courseId: string }) {
       {/* Discussion List */}
       {discussions.length === 0 ? (
         <div className="text-center py-16 px-4 bg-white rounded-2xl border border-dashed border-stone-300">
-          <div className="w-14 h-14 mx-auto rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center mb-3">
+          <div className="w-14 h-14 mx-auto rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-3">
             <MessageSquare size={28} />
           </div>
           <h3 className="text-sm font-bold text-stone-900 mb-1">Belum Ada Diskusi</h3>
@@ -283,7 +283,7 @@ export function DiscussionManager({ courseId }: { courseId: string }) {
                           {d.user?.name || "Pengguna"}
                         </span>
                         {d.user?.role === "ADMIN" && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-orange-100 text-orange-800 border border-orange-200">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200">
                             <ShieldCheck size={11} />
                             Admin
                           </span>
@@ -326,7 +326,7 @@ export function DiscussionManager({ courseId }: { courseId: string }) {
                           key={reply.id}
                           className={`p-3 rounded-xl border flex items-start gap-3 transition-colors ${
                             isAdmin
-                              ? "bg-orange-50/40 border-orange-200/80"
+                              ? "bg-blue-50/40 border-blue-200/80"
                               : "bg-white border-stone-200"
                           }`}
                         >
@@ -352,7 +352,7 @@ export function DiscussionManager({ courseId }: { courseId: string }) {
                                 {reply.user?.name || "Pengguna"}
                               </span>
                               {isAdmin && (
-                                <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-orange-600 text-white">
+                                <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-blue-600 text-white">
                                   Instruktur / Admin
                                 </span>
                               )}
@@ -390,14 +390,14 @@ export function DiscussionManager({ courseId }: { courseId: string }) {
                         handleSendReply(d.id);
                       }
                     }}
-                    className="flex-1 text-xs px-3 py-2 rounded-xl bg-white border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-orange-500"
+                    className="flex-1 text-xs px-3 py-2 rounded-xl bg-white border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   />
                   <Button
                     type="button"
                     size="sm"
                     loading={sendingReplyId === d.id}
                     onClick={() => handleSendReply(d.id)}
-                    className="bg-orange-600 hover:bg-orange-700 text-white shrink-0 text-xs"
+                    className="bg-blue-600 hover:bg-blue-700 text-white shrink-0 text-xs"
                     leftIcon={<Send size={12} />}
                   >
                     Kirim Balasan

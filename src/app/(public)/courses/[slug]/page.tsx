@@ -157,7 +157,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
           <div className="lg:col-span-2 space-y-8">
             {/* Breadcrumb */}
             <div className="flex items-center gap-2 text-sm text-stone-500">
-              <Link href="/courses" className="hover:text-orange-600 transition-colors">
+              <Link href="/courses" className="hover:text-blue-600 transition-colors">
                 {tDetail("breadcrumb_courses")}
               </Link>
               <span>/</span>
@@ -167,7 +167,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
             {/* Course header */}
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <Badge variant="orange">{displayCourse.category.name}</Badge>
+                <Badge variant="info">{displayCourse.category.name}</Badge>
                 <LevelBadge level={displayCourse.level} locale={locale} />
                 {isEnrolled && (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-xs">
@@ -210,12 +210,12 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
 
               {/* Instructor */}
               <div className="flex items-center gap-3 mt-5">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white font-bold text-sm">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-sky-500 flex items-center justify-center text-white font-bold text-sm">
                   {displayCourse.instructor.name?.[0]?.toUpperCase()}
                 </div>
                 <div>
                   <p className="text-xs text-stone-500">{tDetail("instructor")}</p>
-                  <p className="text-sm font-semibold text-orange-600">{displayCourse.instructor.name}</p>
+                  <p className="text-sm font-semibold text-blue-600">{displayCourse.instructor.name}</p>
                 </div>
               </div>
             </div>
@@ -244,14 +244,14 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
             />
 
             {/* What You'll Learn */}
-            <div className="bg-orange-50 border border-orange-200 rounded-2xl p-6">
+            <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6">
               <h2 className="text-lg font-bold text-stone-900 mb-4" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
                 {tDetail("what_learn")}
               </h2>
               <div className="grid sm:grid-cols-2 gap-3">
                 {whatYouLearn.map((item, i) => (
                   <div key={i} className="flex items-start gap-2.5">
-                    <CheckCircle size={16} className="text-orange-500 mt-0.5 shrink-0" />
+                    <CheckCircle size={16} className="text-blue-500 mt-0.5 shrink-0" />
                     <span className="text-sm text-stone-700">{item}</span>
                   </div>
                 ))}
@@ -314,7 +314,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                 {isEn ? "About the Instructor" : "Tentang Instruktur"}
               </h2>
               <div className="flex items-start gap-4">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white text-2xl font-bold shrink-0 overflow-hidden ring-1 ring-stone-200/80">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-sky-500 flex items-center justify-center text-white text-2xl font-bold shrink-0 overflow-hidden ring-1 ring-stone-200/80">
                   {displayCourse.instructor.image ? (
                     <img
                       src={displayCourse.instructor.image}
@@ -327,7 +327,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                 </div>
                 <div>
                   <h3 className="font-bold text-stone-900">{displayCourse.instructor.name}</h3>
-                  <p className="text-sm text-orange-600 mb-2">{isEn ? "Senior Instructor" : "Instruktur Senior"}</p>
+                  <p className="text-sm text-blue-600 mb-2">{isEn ? "Senior Instructor" : "Instruktur Senior"}</p>
                   <p className="text-sm text-stone-600 leading-relaxed">
                     {displayCourse.instructor.bio ??
                       (isEn
@@ -348,7 +348,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                   {displayCourse.reviews.map((review) => (
                     <div key={review.id} className="bg-white rounded-xl border border-stone-200 p-4">
                       <div className="flex items-start gap-3">
-                        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-orange-300 to-amber-400 flex items-center justify-center text-white text-sm font-bold shrink-0">
+                        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-sky-400 flex items-center justify-center text-white text-sm font-bold shrink-0">
                           {review.user.name?.[0]?.toUpperCase()}
                         </div>
                         <div className="flex-1">
@@ -476,7 +476,7 @@ function PriceCard({
           { icon: CheckCircle, text: isEn ? "30-day money-back guarantee" : "Garansi uang kembali 30 hari" },
         ].map(({ icon: Icon, text }) => (
           <div key={text} className="flex items-center gap-2.5 text-sm text-stone-600">
-            <Icon size={15} className="text-orange-500 shrink-0" />
+            <Icon size={15} className="text-blue-500 shrink-0" />
             {text}
           </div>
         ))}

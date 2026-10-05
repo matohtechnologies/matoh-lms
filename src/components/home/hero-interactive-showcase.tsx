@@ -17,7 +17,7 @@ export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) 
   return (
     <div className="relative w-full max-w-xl mx-auto lg:max-w-none">
       {/* Decorative ambient backlight - clean daylight warmth */}
-      <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-orange-400/20 via-amber-300/20 to-orange-500/20 blur-2xl opacity-70 pointer-events-none" />
+      <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-400/20 via-sky-300/20 to-blue-500/20 blur-2xl opacity-70 pointer-events-none" />
 
       {/* Main Container */}
       <div className="relative bg-white rounded-3xl border border-slate-200/90 shadow-2xl overflow-hidden backdrop-blur-xl">
@@ -45,7 +45,7 @@ export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) 
             onClick={() => setActiveTab("video")}
             className={`pb-2.5 px-3 text-xs font-semibold transition-all border-b-2 ${
               activeTab === "video"
-                ? "border-orange-500 text-orange-600"
+                ? "border-blue-600 text-blue-600"
                 : "border-transparent text-slate-500 hover:text-slate-900"
             }`}
           >
@@ -59,7 +59,7 @@ export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) 
             }}
             className={`pb-2.5 px-3 text-xs font-semibold transition-all border-b-2 ${
               activeTab === "project"
-                ? "border-orange-500 text-orange-600"
+                ? "border-blue-600 text-blue-600"
                 : "border-transparent text-slate-500 hover:text-slate-900"
             }`}
           >
@@ -73,7 +73,7 @@ export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) 
             }}
             className={`pb-2.5 px-3 text-xs font-semibold transition-all border-b-2 ${
               activeTab === "certificate"
-                ? "border-orange-500 text-orange-600"
+                ? "border-blue-600 text-blue-600"
                 : "border-transparent text-slate-500 hover:text-slate-900"
             }`}
           >
@@ -136,14 +136,14 @@ export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) 
                   {/* Play Button & Center Pulse */}
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="relative flex items-center justify-center">
-                      <span className="absolute w-20 h-20 rounded-full bg-orange-500/30 animate-ping pointer-events-none" />
+                      <span className="absolute w-20 h-20 rounded-full bg-blue-500/30 animate-ping pointer-events-none" />
                       <button
                         type="button"
                         onClick={(e) => {
                           e.stopPropagation();
                           setIsPlaying(true);
                         }}
-                        className="relative w-16 h-16 rounded-full bg-white text-orange-600 flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all group-hover:bg-orange-600 group-hover:text-white"
+                        className="relative w-16 h-16 rounded-full bg-white text-blue-600 flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all group-hover:bg-blue-600 group-hover:text-white"
                         aria-label={isEn ? "Play video preview" : "Putar video pratinjau"}
                       >
                         <Play size={24} className="ml-1 fill-currentColor" />
@@ -154,7 +154,7 @@ export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) 
                   {/* Bottom Video Controls Bar */}
                   <div className="absolute bottom-0 inset-x-0 p-3.5 flex items-center justify-between text-white text-xs">
                     <div className="flex items-center gap-2 min-w-0">
-                      <span className="font-semibold text-[11px] bg-orange-600 px-2 py-0.5 rounded shrink-0">
+                      <span className="font-semibold text-[11px] bg-blue-600 px-2 py-0.5 rounded shrink-0">
                         Modul 04
                       </span>
                       <span className="text-slate-200 text-xs truncate max-w-[200px] sm:max-w-xs font-medium">
@@ -181,7 +181,7 @@ export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) 
 
                   {/* Progress Line */}
                   <div className="absolute bottom-0 inset-x-0 h-1 bg-white/20">
-                    <div className="h-full bg-orange-500 w-[74%] transition-all duration-300" />
+                    <div className="h-full bg-blue-500 w-[74%] transition-all duration-300" />
                   </div>
                 </div>
               )}
@@ -190,7 +190,7 @@ export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) 
             {/* Lesson Info & Instructor */}
             <div className="flex items-center justify-between pt-1">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-white font-bold text-sm shadow-sm">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-sky-500 flex items-center justify-center text-white font-bold text-sm shadow-sm">
                   AR
                 </div>
                 <div>
@@ -205,8 +205,8 @@ export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) 
 
               <div className="text-right">
                 {isPlaying ? (
-                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-orange-600 bg-orange-50 px-2.5 py-1 rounded-full border border-orange-200/60">
-                    <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
+                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200/60">
+                    <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
                     {isEn ? "Now Playing Preview" : "Sedang Memutar"}
                   </span>
                 ) : (
@@ -228,7 +228,7 @@ export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) 
                 <span className="text-xs font-bold text-slate-900 uppercase tracking-wider">
                   {isEn ? "Industry-Standard Capstone" : "Tugas Akhir Berstandar Industri"}
                 </span>
-                <span className="text-[11px] px-2 py-0.5 rounded-full bg-orange-100 text-orange-800 font-semibold">
+                <span className="text-[11px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 font-semibold">
                   Portfolio-Ready
                 </span>
               </div>
@@ -270,8 +270,8 @@ export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) 
         {/* Tab Content 3: Certificate */}
         {activeTab === "certificate" && (
           <div className="p-5 space-y-4">
-            <div className="rounded-2xl border-2 border-dashed border-amber-300 bg-amber-50/50 p-5 text-center space-y-2.5">
-              <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 mx-auto flex items-center justify-center shadow-xs">
+            <div className="rounded-2xl border-2 border-dashed border-blue-200 bg-blue-50/40 p-5 text-center space-y-2.5">
+              <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 mx-auto flex items-center justify-center shadow-xs">
                 <Award size={24} />
               </div>
               <div>
@@ -286,7 +286,7 @@ export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) 
                     : "Dapat disematkan langsung ke profil LinkedIn & CV dengan URL verifikasi permanen dan QR code unik."}
                 </p>
               </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-amber-200 text-[11px] font-mono text-slate-700 font-semibold shadow-2xs">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-blue-200 text-[11px] font-mono text-slate-700 font-semibold shadow-2xs">
                 <ShieldCheck size={13} className="text-emerald-600" />
                 <span>{isEn ? "CODE: EA-CERT-2026-X99" : "KODE: EA-CERT-2026-X99"}</span>
               </div>
@@ -298,7 +298,7 @@ export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) 
         <div className="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="flex -space-x-1.5">
-              {["bg-blue-500", "bg-purple-500", "bg-emerald-500", "bg-amber-500"].map((bg, idx) => (
+              {["bg-blue-500", "bg-purple-500", "bg-emerald-500", "bg-sky-500"].map((bg, idx) => (
                 <div
                   key={idx}
                   className={`w-6 h-6 rounded-full border-2 border-white ${bg} text-white text-[9px] font-bold flex items-center justify-center shadow-2xs`}
@@ -315,7 +315,7 @@ export function HeroInteractiveShowcase({ isEn }: HeroInteractiveShowcaseProps) 
             </span>
           </div>
 
-          <span className="text-[11px] font-semibold text-orange-700 bg-orange-100/70 border border-orange-200/60 px-2.5 py-1 rounded-lg">
+          <span className="text-[11px] font-semibold text-blue-700 bg-blue-50 border border-blue-200/60 px-2.5 py-1 rounded-lg">
             {isEn ? "Accredited" : "Terakreditasi"}
           </span>
         </div>

@@ -160,7 +160,7 @@ export default async function DashboardPage({
       label: t("enrolled_courses"),
       value: enrollments.length,
       icon: BookOpen,
-      color: "orange",
+      color: "blue",
       href: "/dashboard/my-courses",
     },
     {
@@ -181,7 +181,7 @@ export default async function DashboardPage({
       label: t("orders_stat"),
       value: paidOrders,
       icon: ShoppingBag,
-      color: "blue",
+      color: "sky",
       href: "/dashboard/orders",
     },
   ];
@@ -212,13 +212,13 @@ export default async function DashboardPage({
     <div className="space-y-7">
       {/* Admin Preview Banner (if admin) */}
       {session.user?.role === "ADMIN" && (
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-gradient-to-r from-orange-50 via-amber-50 to-orange-50/70 border border-orange-200/80 text-stone-900 shadow-2xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-gradient-to-r from-blue-50 via-sky-50 to-blue-50/70 border border-blue-200/80 text-stone-900 shadow-2xs">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-orange-600 text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-2xs">
+            <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-2xs">
               👑
             </div>
             <div>
-              <p className="text-xs font-bold text-orange-950">
+              <p className="text-xs font-bold text-blue-950">
                 {t("admin_preview_mode")}
               </p>
               <p className="text-[11px] text-stone-600">
@@ -228,7 +228,7 @@ export default async function DashboardPage({
           </div>
           <Link
             href="/admin"
-            className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold transition-colors shadow-2xs shrink-0"
+            className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors shadow-2xs shrink-0"
           >
             {t("return_admin")}
           </Link>
@@ -236,17 +236,17 @@ export default async function DashboardPage({
       )}
 
       {/* Welcome Hero Banner */}
-      <div className="bg-gradient-to-br from-orange-600 via-orange-500 to-amber-600 rounded-3xl p-6 sm:p-8 text-white relative overflow-hidden shadow-warm">
+      <div className="bg-gradient-to-br from-blue-600 via-blue-700 to-sky-600 rounded-3xl p-6 sm:p-8 text-white relative overflow-hidden shadow-warm">
         {/* Subtle Decorative Aura */}
         <div className="absolute -right-16 -top-16 w-56 h-56 rounded-full bg-white/10 pointer-events-none blur-xl" />
-        <div className="absolute -left-10 -bottom-10 w-44 h-44 rounded-full bg-amber-400/20 pointer-events-none blur-2xl" />
+        <div className="absolute -left-10 -bottom-10 w-44 h-44 rounded-full bg-sky-400/20 pointer-events-none blur-2xl" />
 
         <div className="relative z-10 space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-amber-950 bg-white/90 backdrop-blur-xs px-3 py-1 rounded-full shadow-2xs">
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-blue-950 bg-white/90 backdrop-blur-xs px-3 py-1 rounded-full shadow-2xs">
               <span>👋</span> {greeting}, {firstName}!
             </span>
-            <span className="text-[11px] text-orange-100/90 font-medium">
+            <span className="text-[11px] text-blue-100/90 font-medium">
               Earthy Learning Hub
             </span>
           </div>
@@ -258,7 +258,7 @@ export default async function DashboardPage({
             >
               {headlineText}
             </h1>
-            <p className="text-orange-100 text-xs sm:text-sm mt-1 max-w-lg leading-relaxed">
+            <p className="text-blue-100 text-xs sm:text-sm mt-1 max-w-lg leading-relaxed">
               Tingkatkan keahlian Anda setiap hari melalui kurikulum terstruktur, proyek praktis, dan sertifikasi resmi.
             </p>
           </div>
@@ -281,7 +281,7 @@ export default async function DashboardPage({
                   </div>
                 )}
                 <div className="min-w-0">
-                  <span className="text-[10px] uppercase tracking-wider font-extrabold text-orange-200 block">
+                  <span className="text-[10px] uppercase tracking-wider font-extrabold text-blue-200 block">
                     {t("continue_label")}
                   </span>
                   <p className="text-sm font-bold text-white truncate max-w-xs sm:max-w-md">
@@ -303,9 +303,9 @@ export default async function DashboardPage({
 
               <Link
                 href={`/learn/${lastEnrollment.courseId}`}
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-white text-orange-700 text-xs font-bold hover:bg-orange-50 hover:scale-102 transition-all shrink-0 shadow-xs"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-white text-blue-700 text-xs font-bold hover:bg-blue-50 hover:scale-102 transition-all shrink-0 shadow-xs"
               >
-                <PlayCircle size={15} className="text-orange-600" />
+                <PlayCircle size={15} className="text-blue-600" />
                 {t("continue_btn")}
               </Link>
             </div>
@@ -313,7 +313,7 @@ export default async function DashboardPage({
             <div className="pt-2">
               <Link
                 href="/courses"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-orange-700 text-xs font-bold hover:bg-orange-50 transition-all shadow-xs"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-blue-700 text-xs font-bold hover:bg-blue-50 transition-all shadow-xs"
               >
                 <GraduationCap size={15} />
                 {t("explore_courses")}
@@ -333,13 +333,13 @@ export default async function DashboardPage({
           >
             <div
               className={`w-11 h-11 rounded-xl flex items-center justify-center mb-3 transition-transform group-hover:scale-105 ${
-                color === "orange"
-                  ? "bg-orange-50 text-orange-600"
+                color === "blue"
+                  ? "bg-blue-50 text-blue-600"
                   : color === "green"
                   ? "bg-emerald-50 text-emerald-600"
                   : color === "amber"
                   ? "bg-amber-50 text-amber-600"
-                  : "bg-blue-50 text-blue-600"
+                  : "bg-sky-50 text-sky-600"
               }`}
             >
               <Icon size={20} />
@@ -372,7 +372,7 @@ export default async function DashboardPage({
               </div>
               <Link
                 href="/dashboard/my-courses"
-                className="inline-flex items-center gap-1 text-xs font-semibold text-orange-600 hover:text-orange-700 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded-lg transition-colors border border-orange-200/60"
+                className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors border border-blue-200/60"
               >
                 {t("view_all")} <ArrowRight size={12} />
               </Link>
@@ -395,7 +395,7 @@ export default async function DashboardPage({
                           />
                         </div>
                       ) : (
-                        <div className="w-16 h-12 rounded-xl bg-orange-50 border border-orange-200/60 flex items-center justify-center text-orange-600 shrink-0">
+                        <div className="w-16 h-12 rounded-xl bg-blue-50 border border-blue-200/60 flex items-center justify-center text-blue-600 shrink-0">
                           <BookOpen size={20} />
                         </div>
                       )}
@@ -417,7 +417,7 @@ export default async function DashboardPage({
                         <div className="flex items-center gap-3 mt-2 max-w-sm">
                           <div className="flex-1 h-2 rounded-full bg-stone-100 overflow-hidden">
                             <div
-                              className="h-full bg-orange-600 rounded-full transition-all duration-300"
+                              className="h-full bg-blue-600 rounded-full transition-all duration-300"
                               style={{ width: `${enrollment.progressPct}%` }}
                             />
                           </div>
@@ -430,7 +430,7 @@ export default async function DashboardPage({
 
                     <Link
                       href={`/learn/${enrollment.courseId}`}
-                      className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-orange-50 hover:bg-orange-600 text-orange-700 hover:text-white text-xs font-bold border border-orange-200/80 hover:border-transparent transition-all shrink-0 shadow-2xs"
+                      className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white text-xs font-bold border border-blue-200/80 hover:border-transparent transition-all shrink-0 shadow-2xs"
                     >
                       <PlayCircle size={14} />
                       {enrollment.progressPct === 0
@@ -444,7 +444,7 @@ export default async function DashboardPage({
               </div>
             ) : (
               <div className="text-center py-16 px-4">
-                <div className="w-14 h-14 rounded-2xl bg-orange-50 text-orange-500 flex items-center justify-center mx-auto mb-3.5">
+                <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center mx-auto mb-3.5">
                   <BookOpen size={24} />
                 </div>
                 <p className="text-stone-900 font-bold text-sm mb-1">{t("no_courses_title")}</p>
@@ -453,7 +453,7 @@ export default async function DashboardPage({
                 </p>
                 <Link
                   href="/courses"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold shadow-xs transition-colors"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition-colors"
                 >
                   <Zap size={14} />
                   {t("explore_courses")}
@@ -522,9 +522,9 @@ export default async function DashboardPage({
             </h2>
             <div className="space-y-1.5">
               {[
-                { href: "/courses", labelKey: "browse_new_courses" as const, icon: GraduationCap, color: "orange" },
+                { href: "/courses", labelKey: "browse_new_courses" as const, icon: GraduationCap, color: "blue" },
                 { href: "/dashboard/certificates", labelKey: "view_certificates" as const, icon: Award, color: "amber" },
-                { href: "/dashboard/orders", labelKey: "order_history" as const, icon: ShoppingBag, color: "blue" },
+                { href: "/dashboard/orders", labelKey: "order_history" as const, icon: ShoppingBag, color: "sky" },
                 { href: "/dashboard/profile", labelKey: "edit_profile" as const, icon: TrendingUp, color: "green" },
               ].map(({ href, labelKey, icon: Icon, color }) => (
                 <Link
@@ -534,12 +534,12 @@ export default async function DashboardPage({
                 >
                   <div
                     className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
-                      color === "orange"
-                        ? "bg-orange-50 text-orange-600"
+                      color === "blue"
+                        ? "bg-blue-50 text-blue-600"
                         : color === "amber"
                         ? "bg-amber-50 text-amber-600"
-                        : color === "blue"
-                        ? "bg-blue-50 text-blue-600"
+                        : color === "sky"
+                        ? "bg-sky-50 text-sky-600"
                         : "bg-emerald-50 text-emerald-600"
                     }`}
                   >
@@ -548,7 +548,7 @@ export default async function DashboardPage({
                   <span className="truncate">{t(labelKey)}</span>
                   <ArrowRight
                     size={13}
-                    className="ml-auto text-stone-300 group-hover:text-orange-600 transition-colors"
+                    className="ml-auto text-stone-300 group-hover:text-blue-600 transition-colors"
                   />
                 </Link>
               ))}

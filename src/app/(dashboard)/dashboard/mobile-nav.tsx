@@ -35,13 +35,13 @@ export default function MobileNav() {
               href={href}
               className={cn(
                 "flex-1 flex flex-col items-center justify-center gap-1 text-[10px] font-medium transition-colors",
-                isActive ? "text-orange-600" : "text-stone-400 hover:text-stone-600"
+                isActive ? "text-blue-600" : "text-slate-400 hover:text-slate-600"
               )}
             >
               <div
                 className={cn(
                   "w-9 h-6 rounded-full flex items-center justify-center transition-all",
-                  isActive ? "bg-orange-100" : ""
+                  isActive ? "bg-blue-100 text-blue-700" : ""
                 )}
               >
                 <Icon size={18} />

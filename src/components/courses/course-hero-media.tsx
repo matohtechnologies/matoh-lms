@@ -104,8 +104,8 @@ export function CourseHeroMedia({
               preload="metadata"
             />
           ) : (
-            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-orange-100 to-amber-100">
-              <BookOpen size={60} className="text-orange-300" />
+            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-blue-50 to-sky-100">
+              <BookOpen size={60} className="text-blue-300" />
             </div>
           )}
 
@@ -115,10 +115,10 @@ export function CourseHeroMedia({
               <button
                 type="button"
                 onClick={() => setIsPlaying(true)}
-                className="group/btn flex flex-col items-center gap-2.5 focus:outline-none focus-visible:ring-4 focus-visible:ring-orange-400 rounded-full"
+                className="group/btn flex flex-col items-center gap-2.5 focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-400 rounded-full"
                 aria-label="Putar Video Pratinjau"
               >
-                <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/95 text-orange-600 flex items-center justify-center shadow-2xl transition-all duration-300 group-hover/btn:scale-110 group-hover/btn:bg-orange-600 group-hover/btn:text-white">
+                <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/95 text-blue-600 flex items-center justify-center shadow-2xl transition-all duration-300 group-hover/btn:scale-110 group-hover/btn:bg-blue-600 group-hover/btn:text-white">
                   {/* Subtle pulsing ripple rings */}
                   <span className="absolute inset-0 rounded-full bg-white/40 animate-ping opacity-40 pointer-events-none" />
                   <Play

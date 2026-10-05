@@ -11,8 +11,8 @@ const variantClasses = {
   warning: "bg-yellow-50 text-yellow-700 border-yellow-200",
   danger: "bg-red-50 text-red-700 border-red-200",
   info: "bg-blue-50 text-blue-700 border-blue-200",
-  orange: "bg-orange-50 text-orange-700 border-orange-200",
-  amber: "bg-amber-50 text-amber-700 border-amber-200",
+  orange: "bg-blue-50 text-blue-700 border-blue-200",
+  amber: "bg-sky-50 text-sky-700 border-sky-200",
 };
 
 export function Badge({ className, variant = "default", ...props }: BadgeProps) {

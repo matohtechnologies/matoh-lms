@@ -90,8 +90,8 @@ export function CourseCard({
               />
             )
           ) : (
-            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-orange-100 to-amber-100">
-              <BookOpen size={40} className="text-orange-300" />
+            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-blue-50 to-sky-100">
+              <BookOpen size={40} className="text-blue-300" />
             </div>
           )}
           {/* Enrolled badge */}
@@ -122,20 +122,20 @@ export function CourseCard({
         <div className="flex flex-col flex-1 p-4 gap-3">
           {/* Category & Level */}
           <div className="flex items-center gap-2">
-            <Badge variant="orange" className="text-[11px]">
+            <Badge variant="info" className="text-[11px]">
               {category.name}
             </Badge>
             <LevelBadge level={level} locale={locale} className="text-[11px]" />
           </div>
 
           {/* Title */}
-          <h3 className="font-semibold text-stone-900 text-sm leading-snug line-clamp-2 group-hover:text-orange-700 transition-colors">
+          <h3 className="font-semibold text-stone-900 text-sm leading-snug line-clamp-2 group-hover:text-blue-600 transition-colors">
             {title}
           </h3>
 
           {/* Instructor */}
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-orange-300 to-amber-400 flex items-center justify-center text-white text-[10px] font-bold shrink-0">
+            <div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-sky-500 flex items-center justify-center text-white text-[10px] font-bold shrink-0">
               {instructor.name?.[0]?.toUpperCase()}
             </div>
             <span className="text-xs text-stone-500 truncate">{instructor.name}</span>

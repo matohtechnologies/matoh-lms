@@ -237,7 +237,7 @@ export function CertificateDesigner({
       {/* Top Controls Toolbar */}
       <div className="bg-white rounded-2xl border border-stone-200 p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xs">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
             <Palette size={20} />
           </div>
           <div>
@@ -280,7 +280,7 @@ export function CertificateDesigner({
             type="button"
             onClick={handleSaveDesign}
             disabled={saving}
-            className="flex items-center gap-2 px-5 py-2 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-semibold shadow-sm transition-all disabled:opacity-50"
+            className="flex items-center gap-2 px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-sm transition-all disabled:opacity-50"
           >
             {saving ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle2 size={14} />}
             Simpan Desain
@@ -304,7 +304,7 @@ export function CertificateDesigner({
             <div className="flex flex-wrap items-center justify-between gap-3 pb-3 mb-3 border-b border-stone-800 text-xs">
               {/* Left: Document Dimension & Aspect Ratio Selector */}
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-stone-800/80 text-amber-300 font-mono text-[11px] border border-stone-700/60 shadow-2xs">
+                <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-stone-800/80 text-sky-300 font-mono text-[11px] border border-stone-700/60 shadow-2xs">
                   📐 {getRatioDimensionText()}
                 </span>
 
@@ -313,7 +313,7 @@ export function CertificateDesigner({
                     type="button"
                     onClick={() => setConfig((prev) => ({ ...prev, aspectRatio: "a4" }))}
                     className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-all ${
-                      currentRatio === "a4" ? "bg-amber-500 text-stone-950 font-bold" : "text-stone-400 hover:text-stone-200"
+                      currentRatio === "a4" ? "bg-blue-600 text-white font-bold" : "text-stone-400 hover:text-stone-200"
                     }`}
                   >
                     A4 Landscape
@@ -322,7 +322,7 @@ export function CertificateDesigner({
                     type="button"
                     onClick={() => setConfig((prev) => ({ ...prev, aspectRatio: "16:10" }))}
                     className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-all ${
-                      currentRatio === "16:10" ? "bg-amber-500 text-stone-950 font-bold" : "text-stone-400 hover:text-stone-200"
+                      currentRatio === "16:10" ? "bg-blue-600 text-white font-bold" : "text-stone-400 hover:text-stone-200"
                     }`}
                   >
                     16:10
@@ -331,7 +331,7 @@ export function CertificateDesigner({
                     type="button"
                     onClick={() => setConfig((prev) => ({ ...prev, aspectRatio: "16:9" }))}
                     className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-all ${
-                      currentRatio === "16:9" ? "bg-amber-500 text-stone-950 font-bold" : "text-stone-400 hover:text-stone-200"
+                      currentRatio === "16:9" ? "bg-blue-600 text-white font-bold" : "text-stone-400 hover:text-stone-200"
                     }`}
                   >
                     16:9
@@ -374,7 +374,7 @@ export function CertificateDesigner({
                     type="button"
                     onClick={() => setZoomScale("100")}
                     className={`px-2.5 py-0.5 rounded text-[11px] font-bold transition-all ${
-                      zoomScale === "100" ? "bg-orange-600 text-white shadow-xs" : "text-amber-400 hover:text-amber-300"
+                      zoomScale === "100" ? "bg-blue-600 text-white shadow-xs" : "text-blue-400 hover:text-blue-300"
                     }`}
                     title="Ukuran Nyata Dokumen (1050px)"
                   >
@@ -406,7 +406,7 @@ export function CertificateDesigner({
                   onClick={() => setIsWideStudio(!isWideStudio)}
                   className={`p-1.5 rounded-lg border transition-all ${
                     isWideStudio
-                      ? "bg-amber-500/20 text-amber-300 border-amber-500/40"
+                      ? "bg-blue-500/20 text-blue-300 border-blue-500/40"
                       : "bg-stone-800 text-stone-300 border-stone-700 hover:bg-stone-700"
                   }`}
                   title={isWideStudio ? "Kembalikan Tampilan Split" : "Perluas Studio Kanvas Penuh"}
@@ -448,14 +448,14 @@ export function CertificateDesigner({
 
             <p className="text-[11px] text-stone-400 mt-3 text-center">
               💡 <span className="font-semibold text-stone-300">Tips:</span> Kanvas dirender pada{" "}
-              <strong className="text-amber-300">Ukuran Sebenarnya (1050px)</strong> sehingga proporsi huruf dan tata letak persis sama dengan hasil cetak. Klik dan geser elemen teks untuk mengubah posisi.
+              <strong className="text-sky-300">Ukuran Sebenarnya (1050px)</strong> sehingga proporsi huruf dan tata letak persis sama dengan hasil cetak. Klik dan geser elemen teks untuk mengubah posisi.
             </p>
           </div>
 
           {/* Quick Add Placeholder Bar */}
           <div className="bg-white rounded-2xl border border-stone-200 p-4 space-y-3">
             <p className="text-xs font-bold text-stone-800 flex items-center gap-1.5">
-              <Plus size={14} className="text-orange-600" />
+              <Plus size={14} className="text-blue-600" />
               Tambah Placeholder Data Cepat ke Kanvas:
             </p>
             <div className="flex flex-wrap gap-1.5">
@@ -464,7 +464,7 @@ export function CertificateDesigner({
                   key={opt.key}
                   type="button"
                   onClick={() => handleAddElement("placeholder", opt.key)}
-                  className="px-2.5 py-1 rounded-lg border border-stone-200 bg-stone-50 hover:bg-orange-50 hover:border-orange-300 text-stone-700 hover:text-orange-700 text-[11px] font-medium transition-colors"
+                  className="px-2.5 py-1 rounded-lg border border-stone-200 bg-stone-50 hover:bg-blue-50 hover:border-blue-300 text-stone-700 hover:text-blue-700 text-[11px] font-medium transition-colors"
                 >
                   + {opt.label}
                 </button>
@@ -500,7 +500,7 @@ export function CertificateDesigner({
               <Type size={14} />
               Elemen
               {selectedElement && (
-                <span className="w-1.5 h-1.5 rounded-full bg-orange-600"></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
               )}
             </button>
             <button
@@ -548,7 +548,7 @@ export function CertificateDesigner({
                 <>
                   <div className="flex items-center justify-between pb-3 border-b border-stone-100">
                     <div>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-orange-600 bg-orange-50 px-2 py-0.5 rounded">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
                         {selectedElement.type === "placeholder" ? "Placeholder Sistem" : "Teks Kustom"}
                       </span>
                       <h4 className="text-sm font-bold text-stone-900 mt-1">{selectedElement.name}</h4>
@@ -578,7 +578,7 @@ export function CertificateDesigner({
                             name: opt?.label || "Placeholder",
                           });
                         }}
-                        className="w-full px-3 py-2 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-orange-500 bg-white"
+                        className="w-full px-3 py-2 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-blue-500 bg-white"
                       >
                         {PLACEHOLDER_OPTIONS.map((p) => (
                           <option key={p.key} value={p.key}>
@@ -596,7 +596,7 @@ export function CertificateDesigner({
                         rows={2}
                         value={selectedElement.customText || ""}
                         onChange={(e) => updateSelectedElement({ customText: e.target.value })}
-                        className="w-full px-3 py-2 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-orange-500 resize-none"
+                        className="w-full px-3 py-2 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-blue-500 resize-none"
                       />
                     </div>
                   )}
@@ -654,7 +654,7 @@ export function CertificateDesigner({
                         max="48"
                         value={selectedElement.fontSize}
                         onChange={(e) => updateSelectedElement({ fontSize: Number(e.target.value) })}
-                        className="w-full accent-orange-600 h-1.5 bg-stone-100 rounded-lg cursor-pointer"
+                        className="w-full accent-blue-600 h-1.5 bg-stone-100 rounded-lg cursor-pointer"
                       />
                     </div>
 
@@ -691,7 +691,7 @@ export function CertificateDesigner({
                           onClick={() => updateSelectedElement({ textAlign: "left" })}
                           className={`p-1.5 rounded ${
                             selectedElement.textAlign === "left"
-                              ? "bg-orange-100 text-orange-700"
+                              ? "bg-blue-100 text-blue-700"
                               : "text-stone-400 hover:text-stone-700"
                           }`}
                         >
@@ -702,7 +702,7 @@ export function CertificateDesigner({
                           onClick={() => updateSelectedElement({ textAlign: "center" })}
                           className={`p-1.5 rounded ${
                             selectedElement.textAlign === "center"
-                              ? "bg-orange-100 text-orange-700"
+                              ? "bg-blue-100 text-blue-700"
                               : "text-stone-400 hover:text-stone-700"
                           }`}
                         >
@@ -713,7 +713,7 @@ export function CertificateDesigner({
                           onClick={() => updateSelectedElement({ textAlign: "right" })}
                           className={`p-1.5 rounded ${
                             selectedElement.textAlign === "right"
-                              ? "bg-orange-100 text-orange-700"
+                              ? "bg-blue-100 text-blue-700"
                               : "text-stone-400 hover:text-stone-700"
                           }`}
                         >
@@ -732,7 +732,7 @@ export function CertificateDesigner({
                               fontStyle: e.target.checked ? "italic" : "normal",
                             })
                           }
-                          className="rounded text-orange-600 focus:ring-orange-500"
+                          className="rounded text-blue-600 focus:ring-blue-500"
                         />
                         <span>Miring</span>
                       </label>
@@ -741,7 +741,7 @@ export function CertificateDesigner({
                           type="checkbox"
                           checked={selectedElement.uppercase || false}
                           onChange={(e) => updateSelectedElement({ uppercase: e.target.checked })}
-                          className="rounded text-orange-600 focus:ring-orange-500"
+                          className="rounded text-blue-600 focus:ring-blue-500"
                         />
                         <span>KAPITAL</span>
                       </label>
@@ -804,7 +804,7 @@ export function CertificateDesigner({
               {/* Format & Rasio Aspek Kanvas */}
               <div className="p-4 rounded-xl border border-stone-200 bg-stone-50 space-y-2.5">
                 <span className="text-xs font-bold text-stone-800 flex items-center gap-1.5">
-                  <Sliders size={14} className="text-orange-600" />
+                  <Sliders size={14} className="text-blue-600" />
                   Format Dokumen &amp; Rasio Aspek
                 </span>
                 <p className="text-[11px] text-stone-500">
@@ -816,7 +816,7 @@ export function CertificateDesigner({
                     onClick={() => setConfig((prev) => ({ ...prev, aspectRatio: "a4" }))}
                     className={`flex items-center justify-between p-2.5 rounded-xl border text-left text-xs transition-all ${
                       currentRatio === "a4"
-                        ? "border-orange-500 bg-orange-50/70 text-orange-950 font-bold"
+                        ? "border-blue-500 bg-blue-50/70 text-blue-950 font-bold"
                         : "border-stone-200 bg-white text-stone-700 hover:bg-stone-100"
                     }`}
                   >
@@ -826,7 +826,7 @@ export function CertificateDesigner({
                         Standar resmi ijazah &amp; sertifikat kelulusan (Resolusi 1050 × 742 px)
                       </p>
                     </div>
-                    {currentRatio === "a4" && <CheckCircle2 size={16} className="text-orange-600 shrink-0" />}
+                    {currentRatio === "a4" && <CheckCircle2 size={16} className="text-blue-600 shrink-0" />}
                   </button>
 
                   <button
@@ -834,7 +834,7 @@ export function CertificateDesigner({
                     onClick={() => setConfig((prev) => ({ ...prev, aspectRatio: "16:10" }))}
                     className={`flex items-center justify-between p-2.5 rounded-xl border text-left text-xs transition-all ${
                       currentRatio === "16:10"
-                        ? "border-orange-500 bg-orange-50/70 text-orange-950 font-bold"
+                        ? "border-blue-500 bg-blue-50/70 text-blue-950 font-bold"
                         : "border-stone-200 bg-white text-stone-700 hover:bg-stone-100"
                     }`}
                   >
@@ -844,7 +844,7 @@ export function CertificateDesigner({
                         Format modern proporsional laptop &amp; tablet (Resolusi 1050 × 656 px)
                       </p>
                     </div>
-                    {currentRatio === "16:10" && <CheckCircle2 size={16} className="text-orange-600 shrink-0" />}
+                    {currentRatio === "16:10" && <CheckCircle2 size={16} className="text-blue-600 shrink-0" />}
                   </button>
 
                   <button
@@ -852,7 +852,7 @@ export function CertificateDesigner({
                     onClick={() => setConfig((prev) => ({ ...prev, aspectRatio: "16:9" }))}
                     className={`flex items-center justify-between p-2.5 rounded-xl border text-left text-xs transition-all ${
                       currentRatio === "16:9"
-                        ? "border-orange-500 bg-orange-50/70 text-orange-950 font-bold"
+                        ? "border-blue-500 bg-blue-50/70 text-blue-950 font-bold"
                         : "border-stone-200 bg-white text-stone-700 hover:bg-stone-100"
                     }`}
                   >
@@ -862,7 +862,7 @@ export function CertificateDesigner({
                         Format presentasi video &amp; monitor lebar (Resolusi 1050 × 590 px)
                       </p>
                     </div>
-                    {currentRatio === "16:9" && <CheckCircle2 size={16} className="text-orange-600 shrink-0" />}
+                    {currentRatio === "16:9" && <CheckCircle2 size={16} className="text-blue-600 shrink-0" />}
                   </button>
                 </div>
               </div>
@@ -871,7 +871,7 @@ export function CertificateDesigner({
               <div className="p-4 rounded-xl border border-stone-200 bg-stone-50 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-stone-800 flex items-center gap-1.5">
-                    <UploadCloud size={14} className="text-orange-600" />
+                    <UploadCloud size={14} className="text-blue-600" />
                     Gambar Template Latar Belakang
                   </span>
                   {config.backgroundUrl && (
@@ -908,7 +908,7 @@ export function CertificateDesigner({
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
                         disabled={uploadingBg}
-                        className="text-[10px] text-orange-600 hover:underline mt-0.5 font-medium"
+                        className="text-[10px] text-blue-600 hover:underline mt-0.5 font-medium"
                       >
                         Ganti File Gambar...
                       </button>
@@ -919,7 +919,7 @@ export function CertificateDesigner({
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
                     disabled={uploadingBg}
-                    className="w-full py-2 px-3 border border-dashed border-stone-300 rounded-xl hover:border-orange-500 hover:bg-orange-50/20 text-stone-600 text-xs font-medium transition-colors flex items-center justify-center gap-2"
+                    className="w-full py-2 px-3 border border-dashed border-stone-300 rounded-xl hover:border-blue-500 hover:bg-blue-50/20 text-stone-600 text-xs font-medium transition-colors flex items-center justify-center gap-2"
                   >
                     {uploadingBg ? <Loader2 size={13} className="animate-spin" /> : <UploadCloud size={13} />}
                     Unggah Template Gambar Sendiri
@@ -988,22 +988,6 @@ export function CertificateDesigner({
                 </div>
               </div>
 
-              {/* Seal Badge Toggle */}
-              <div className="pt-2 border-t border-stone-100 flex items-center justify-between">
-                <div>
-                  <p className="text-xs font-semibold text-stone-800">Lencana Segel Terverifikasi</p>
-                  <p className="text-[10px] text-stone-400">Tampilkan seal badge emas resmi di kanvas</p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={config.showSealBadge ?? true}
-                    onChange={(e) => setConfig((prev) => ({ ...prev, showSealBadge: e.target.checked }))}
-                    className="sr-only peer"
-                  />
-                  <div className="w-9 h-5 bg-stone-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-stone-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-orange-600"></div>
-                </label>
-              </div>
             </div>
           )}
 
@@ -1018,17 +1002,17 @@ export function CertificateDesigner({
                   <div
                     key={p.id}
                     onClick={() => handleApplyPreset(p)}
-                    className="p-3.5 rounded-xl border border-stone-200 hover:border-orange-500 hover:bg-orange-50/30 cursor-pointer transition-all flex items-start justify-between gap-3 group"
+                    className="p-3.5 rounded-xl border border-stone-200 hover:border-blue-500 hover:bg-blue-50/30 cursor-pointer transition-all flex items-start justify-between gap-3 group"
                   >
                     <div>
-                      <h5 className="text-xs font-bold text-stone-900 group-hover:text-orange-700">
+                      <h5 className="text-xs font-bold text-stone-900 group-hover:text-blue-700">
                         {p.name}
                       </h5>
                       <p className="text-[11px] text-stone-500 mt-0.5 leading-relaxed">
                         {p.description}
                       </p>
                     </div>
-                    <span className="text-[10px] font-semibold text-orange-600 bg-orange-100/60 px-2 py-0.5 rounded shrink-0">
+                    <span className="text-[10px] font-semibold text-blue-600 bg-blue-100/60 px-2 py-0.5 rounded shrink-0">
                       Terapkan
                     </span>
                   </div>
@@ -1054,7 +1038,7 @@ export function CertificateDesigner({
                     }}
                     className={`p-2.5 rounded-xl border cursor-pointer flex items-center justify-between text-xs transition-colors ${
                       selectedElementId === el.id
-                        ? "bg-orange-50 border-orange-300 text-orange-950 font-bold"
+                        ? "bg-blue-50 border-blue-300 text-blue-950 font-bold"
                         : "bg-white border-stone-200 hover:bg-stone-50 text-stone-700"
                     }`}
                   >

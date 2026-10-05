@@ -275,7 +275,7 @@ export function CurriculumManager({
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-stone-200 bg-stone-50 hover:bg-stone-100 text-stone-700 text-xs font-semibold transition-colors"
           >
-            <PlayCircle size={14} className="text-orange-600" />
+            <PlayCircle size={14} className="text-blue-600" />
             {t("student_preview")}
             <ExternalLink size={12} className="text-stone-400" />
           </a>
@@ -311,8 +311,8 @@ export function CurriculumManager({
       {/* Section List */}
       {sections.length === 0 ? (
         <div className="bg-white rounded-2xl border border-dashed border-stone-300 p-12 text-center">
-          <div className="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center mx-auto mb-3">
-            <FolderPlus size={24} className="text-orange-500" />
+          <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto mb-3">
+            <FolderPlus size={24} className="text-blue-500" />
           </div>
           <h3 className="font-semibold text-stone-900 mb-1">{t("no_lessons_title")}</h3>
           <p className="text-sm text-stone-500 max-w-sm mx-auto mb-4">
@@ -343,7 +343,7 @@ export function CurriculumManager({
                     >
                       {isExpanded ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
                     </button>
-                    <span className="w-6 h-6 rounded-lg bg-orange-100 text-orange-700 text-xs font-bold flex items-center justify-center shrink-0">
+                    <span className="w-6 h-6 rounded-lg bg-blue-100 text-blue-700 text-xs font-bold flex items-center justify-center shrink-0">
                       {index + 1}
                     </span>
                     <div className="min-w-0">
@@ -361,7 +361,7 @@ export function CurriculumManager({
                     <button
                       type="button"
                       onClick={() => handleOpenAddLesson(section.id)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-orange-50 hover:bg-orange-100 text-orange-700 text-xs font-semibold transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-semibold transition-colors"
                     >
                       <Plus size={14} />
                       <span className="hidden sm:inline">{t("add_lesson")}</span>
@@ -404,7 +404,7 @@ export function CurriculumManager({
                             </span>
                             <div className="w-8 h-8 rounded-xl bg-stone-100 text-stone-600 flex items-center justify-center shrink-0">
                               {lesson.videoUrl ? (
-                                <Video size={15} className="text-orange-600" />
+                                <Video size={15} className="text-blue-600" />
                               ) : (
                                 <FileText size={15} className="text-stone-500" />
                               )}
@@ -538,7 +538,7 @@ export function CurriculumManager({
                       type="checkbox"
                       checked={lessonIsFree}
                       onChange={(e) => setLessonIsFree(e.target.checked)}
-                      className="w-4 h-4 rounded text-orange-600 focus:ring-orange-500 accent-orange-600"
+                      className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 accent-blue-600"
                     />
                     <span className="text-sm font-medium text-stone-800">
                       {t("free_preview_label")}

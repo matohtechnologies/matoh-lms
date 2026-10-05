@@ -214,7 +214,7 @@ export const DEFAULT_DESIGN_PRESETS: { id: string; name: string; description: st
       borderStyle: "gold-frame",
       borderColor: "#d97706",
       borderWidth: 6,
-      showSealBadge: true,
+      showSealBadge: false,
       sealPosition: { x: 50, y: 78 },
       elements: [
         {
@@ -382,7 +382,7 @@ export const DEFAULT_DESIGN_PRESETS: { id: string; name: string; description: st
       borderStyle: "solid",
       borderColor: "#e2e8f0",
       borderWidth: 3,
-      showSealBadge: true,
+      showSealBadge: false,
       sealPosition: { x: 50, y: 77 },
       elements: [
         {
@@ -546,7 +546,7 @@ export const DEFAULT_DESIGN_PRESETS: { id: string; name: string; description: st
       borderStyle: "double",
       borderColor: "#1e3a8a",
       borderWidth: 6,
-      showSealBadge: true,
+      showSealBadge: false,
       sealPosition: { x: 50, y: 78 },
       elements: [
         {

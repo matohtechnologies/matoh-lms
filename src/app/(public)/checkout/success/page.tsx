@@ -67,12 +67,12 @@ export default function CheckoutSuccessPage() {
         {/* Course Card Preview */}
         {loading ? (
           <div className="p-5 rounded-2xl bg-stone-50 border border-stone-100 flex items-center justify-center gap-3 text-stone-400 text-sm mb-6">
-            <Loader2 size={18} className="animate-spin text-orange-500" />
+            <Loader2 size={18} className="animate-spin text-blue-500" />
             <span>Menyiapkan ruang belajarmu...</span>
           </div>
         ) : course ? (
-          <div className="mb-8 p-4 rounded-2xl bg-orange-50/70 border border-orange-200/80 text-left flex items-center gap-4">
-            <div className="w-16 h-16 rounded-xl bg-orange-200 overflow-hidden shrink-0 flex items-center justify-center">
+          <div className="mb-8 p-4 rounded-2xl bg-blue-50/70 border border-blue-200/80 text-left flex items-center gap-4">
+            <div className="w-16 h-16 rounded-xl bg-blue-100 overflow-hidden shrink-0 flex items-center justify-center">
               {course.thumbnail ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -81,11 +81,11 @@ export default function CheckoutSuccessPage() {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <BookOpen size={24} className="text-orange-600" />
+                <BookOpen size={24} className="text-blue-600" />
               )}
             </div>
             <div className="min-w-0 flex-1">
-              <span className="text-[10px] font-bold text-orange-700 uppercase tracking-wider bg-orange-100 px-2 py-0.5 rounded-full inline-block mb-1">
+              <span className="text-[10px] font-bold text-blue-700 uppercase tracking-wider bg-blue-100 px-2 py-0.5 rounded-full inline-block mb-1">
                 Akses Aktif
               </span>
               <h3 className="font-bold text-stone-900 text-sm line-clamp-2 leading-snug">
@@ -100,7 +100,7 @@ export default function CheckoutSuccessPage() {
           {course ? (
             <Link
               href={`/learn/${course.id}`}
-              className="w-full flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-semibold text-sm transition-all shadow-md shadow-orange-600/20"
+              className="w-full flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition-all shadow-md shadow-blue-600/20"
             >
               <PlayCircle size={18} />
               Mulai Belajar Sekarang
@@ -108,7 +108,7 @@ export default function CheckoutSuccessPage() {
           ) : (
             <Link
               href="/dashboard/my-courses"
-              className="w-full flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-semibold text-sm transition-all shadow-md shadow-orange-600/20"
+              className="w-full flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition-all shadow-md shadow-blue-600/20"
             >
               <PlayCircle size={18} />
               Buka Kelas Saya

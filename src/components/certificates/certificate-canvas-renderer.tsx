@@ -7,7 +7,6 @@ import {
   CertificateDataValues,
   resolveElementText,
 } from "@/lib/certificate-templates";
-import { ShieldCheck } from "lucide-react";
 
 interface CertificateCanvasRendererProps {
   config: CertificateDesignConfig;
@@ -176,38 +175,6 @@ export function CertificateCanvasRenderer({
         <div className="absolute inset-3 border-2 border-dashed border-amber-600/30 rounded-xl pointer-events-none z-1" />
       )}
 
-      {/* Seal Badge if enabled */}
-      {config.showSealBadge && (
-        <div
-          className="absolute z-10 flex flex-col items-center justify-center pointer-events-none"
-          style={{
-            left: `${config.sealPosition?.x ?? 50}%`,
-            top: `${config.sealPosition?.y ?? 78}%`,
-            transform: "translate(-50%, -50%)",
-          }}
-        >
-          <div
-            className="rounded-full border-3 border-amber-500/30 bg-amber-50/90 flex items-center justify-center text-amber-700 shadow-md"
-            style={{
-              width: "calc((56 / 1050) * 100cqw)",
-              height: "calc((56 / 1050) * 100cqw)",
-              minWidth: "32px",
-              minHeight: "32px",
-            }}
-          >
-            <ShieldCheck className="w-1/2 h-1/2 text-amber-600" />
-          </div>
-          <span
-            className="font-bold text-amber-800 uppercase tracking-wider bg-amber-100/90 rounded-full mt-1"
-            style={{
-              fontSize: "calc((8.5 / 1050) * 100cqw)",
-              padding: "calc((2 / 1050) * 100cqw) calc((8 / 1050) * 100cqw)",
-            }}
-          >
-            VERIFIED
-          </span>
-        </div>
-      )}
 
       {/* Canvas Elements */}
       {config.elements.map((el) => {
@@ -228,10 +195,10 @@ export function CertificateCanvasRenderer({
             className={`absolute cursor-pointer transition-all select-none p-1.5 -m-1.5 ${
               isSelected ? "z-30" : "z-20 hover:z-25"
             } ${
-              isInteractive ? "hover:outline hover:outline-1 hover:outline-orange-400 hover:bg-orange-50/20 rounded-md" : ""
+              isInteractive ? "hover:outline hover:outline-1 hover:outline-blue-400 hover:bg-blue-50/20 rounded-md" : ""
             } ${
               isSelected
-                ? "outline-2 outline-orange-600 ring-2 ring-orange-400/50 bg-orange-50/30 rounded-md shadow-xs"
+                ? "outline-2 outline-blue-600 ring-2 ring-blue-400/50 bg-blue-50/30 rounded-md shadow-xs"
                 : ""
             } ${isDragging ? "opacity-75 cursor-grabbing" : ""}`}
             style={{
@@ -270,7 +237,7 @@ export function CertificateCanvasRenderer({
 
             {/* Position coordinate badge when selected in editor */}
             {isSelected && isInteractive && (
-              <div className="absolute -top-6 left-1/2 -translate-x-1/2 px-1.5 py-0.5 bg-orange-600 text-white text-[9px] font-mono rounded shadow-xs whitespace-nowrap pointer-events-none">
+              <div className="absolute -top-6 left-1/2 -translate-x-1/2 px-1.5 py-0.5 bg-blue-600 text-white text-[9px] font-mono rounded shadow-xs whitespace-nowrap pointer-events-none">
                 {el.name} ({el.x}%, {el.y}%)
               </div>
             )}

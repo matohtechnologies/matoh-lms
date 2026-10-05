@@ -39,11 +39,11 @@ export function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-2.5 mb-4 group">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-600 to-sky-500 flex items-center justify-center">
                 <BookOpen size={16} className="text-white" />
               </div>
               <span className="font-bold text-white text-lg" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-                Earthy<span className="text-orange-400">Academy</span>
+                Earthy<span className="text-blue-400">Academy</span>
               </span>
             </Link>
             <p className="text-sm leading-relaxed text-stone-400 mb-5">
@@ -59,7 +59,7 @@ export function Footer() {
                   key={label}
                   href={href}
                   aria-label={label}
-                  className="w-9 h-9 rounded-xl bg-stone-800 hover:bg-orange-600 flex items-center justify-center transition-colors duration-200"
+                  className="w-9 h-9 rounded-xl bg-stone-800 hover:bg-blue-600 flex items-center justify-center transition-colors duration-200"
                 >
                   <Icon className="text-stone-300 hover:text-white" />
                 </a>
@@ -82,7 +82,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-stone-400 hover:text-orange-400 transition-colors"
+                    className="text-sm text-stone-400 hover:text-blue-400 transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -106,7 +106,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-stone-400 hover:text-orange-400 transition-colors"
+                    className="text-sm text-stone-400 hover:text-blue-400 transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -127,11 +127,11 @@ export function Footer() {
               <input
                 type="email"
                 placeholder={t("email_placeholder")}
-                className="h-10 px-3 rounded-xl bg-stone-800 border border-stone-700 text-sm text-white placeholder:text-stone-500 focus:outline-none focus:border-orange-500 transition-colors"
+                className="h-10 px-3 rounded-xl bg-stone-800 border border-stone-700 text-sm text-white placeholder:text-stone-500 focus:outline-none focus:border-blue-500 transition-colors"
               />
               <button
                 type="submit"
-                className="h-10 px-4 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium transition-colors"
+                className="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-colors"
               >
                 {t("subscribe")}
               </button>
@@ -145,7 +145,7 @@ export function Footer() {
           </p>
           <div className="flex items-center gap-1 text-sm text-stone-500">
             <span>{t("made_with")}</span>
-            <span className="text-orange-500">♥</span>
+            <span className="text-red-500">♥</span>
             <span>{t("in_indonesia")}</span>
           </div>
         </div>

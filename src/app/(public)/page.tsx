@@ -241,19 +241,19 @@ export default async function HomePage() {
       ];
 
   return (
-    <div className="bg-white text-slate-900 selection:bg-orange-100 selection:text-orange-900">
+    <div className="bg-white text-slate-900 selection:bg-blue-100 selection:text-blue-900">
       {/* 1. HERO SECTION (Luminous, Airy, Human-Crafted) */}
       <section className="relative pt-28 pb-20 lg:pt-36 lg:pb-28 overflow-hidden gradient-hero border-b border-slate-100">
         {/* Subtle luminous ambient accents */}
-        <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[1000px] h-[450px] bg-gradient-to-b from-orange-100/50 via-amber-50/30 to-transparent blur-3xl pointer-events-none rounded-full" />
+        <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[1000px] h-[450px] bg-gradient-to-b from-blue-100/50 via-sky-50/30 to-transparent blur-3xl pointer-events-none rounded-full" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             {/* Left Column: Compelling Editorial Pitch */}
             <div className="lg:col-span-6 space-y-6 text-left">
               {/* Trust Badge */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-50 border border-orange-200/80 text-orange-700 text-xs font-semibold tracking-wide">
-                <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-xs font-semibold tracking-wide">
+                <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
                 <span>{isEn ? "Curated 2026 Tech Curriculums" : "Kurikulum Praktis Berstandar Industri 2026"}</span>
               </div>
 
@@ -287,7 +287,7 @@ export default async function HomePage() {
                 <Link href="/courses">
                   <Button
                     size="lg"
-                    className="rounded-2xl h-13 px-7 text-sm font-semibold shadow-warm hover:shadow-warm-lg bg-orange-600 hover:bg-orange-700 transition-all hover:-translate-y-0.5"
+                    className="rounded-2xl h-13 px-7 text-sm font-semibold shadow-warm hover:shadow-warm-lg bg-blue-600 hover:bg-blue-700 transition-all hover:-translate-y-0.5"
                     rightIcon={<ArrowRight size={17} />}
                   >
                     {isEn ? "Browse Course Catalog" : "Jelajahi Semua Kelas"}
@@ -357,10 +357,10 @@ export default async function HomePage() {
       </section>
 
       {/* 3. THE 4-PILLAR MODERN LEARNING METHOD (Human-designed, No Emojis) */}
-      <section className="py-20 lg:py-28 bg-slate-50/70 border-b border-slate-100">
+      <section id="tentang-kami" className="py-20 lg:py-28 bg-slate-50/70 border-b border-slate-100 scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="max-w-2xl mx-auto text-center mb-16">
-            <span className="text-xs font-bold text-orange-600 uppercase tracking-wider bg-orange-50 px-3 py-1 rounded-full border border-orange-200/60 inline-block mb-3">
+            <span className="text-xs font-bold text-blue-700 uppercase tracking-wider bg-blue-50 px-3 py-1 rounded-full border border-blue-200/60 inline-block mb-3">
               {isEn ? "The Earthy Standard" : "Standar Pembelajaran"}
             </span>
             <h2
@@ -385,7 +385,7 @@ export default async function HomePage() {
                 className="bg-white rounded-3xl p-7 border border-slate-200/90 shadow-subtle hover:shadow-warm transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between group"
               >
                 <div>
-                  <span className="font-mono text-2xl font-black text-orange-500/80 block mb-4 group-hover:text-orange-600 transition-colors">
+                  <span className="font-mono text-2xl font-black text-blue-600/80 block mb-4 group-hover:text-blue-700 transition-colors">
                     {pillar.num}
                   </span>
                   <h3 className="font-bold text-slate-900 text-lg mb-2 leading-snug">
@@ -402,11 +402,11 @@ export default async function HomePage() {
       </section>
 
       {/* 4. FEATURED POPULAR COURSES SHOWCASE (Interactive Category Tabs) */}
-      <section className="py-20 lg:py-28 bg-white border-b border-slate-100">
+      <section id="program" className="py-20 lg:py-28 bg-white border-b border-slate-100 scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
             <div>
-              <span className="text-xs font-bold text-orange-600 uppercase tracking-wider bg-orange-50 px-3 py-1 rounded-full border border-orange-200/60 inline-block mb-3">
+              <span className="text-xs font-bold text-blue-700 uppercase tracking-wider bg-blue-50 px-3 py-1 rounded-full border border-blue-200/60 inline-block mb-3">
                 {isEn ? "Curated Programs" : "Program Pilihan"}
               </span>
               <h2
@@ -445,7 +445,7 @@ export default async function HomePage() {
       <section className="py-20 lg:py-28 bg-slate-50/70 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="max-w-2xl mx-auto text-center mb-16">
-            <span className="text-xs font-bold text-orange-600 uppercase tracking-wider bg-orange-50 px-3 py-1 rounded-full border border-orange-200/60 inline-block mb-3">
+            <span className="text-xs font-bold text-blue-700 uppercase tracking-wider bg-blue-50 px-3 py-1 rounded-full border border-blue-200/60 inline-block mb-3">
               {isEn ? "Alumni Voices" : "Kisah Nyata Alumni"}
             </span>
             <h2
@@ -467,7 +467,7 @@ export default async function HomePage() {
               >
                 <div className="space-y-4">
                   {/* Career Transition Pill */}
-                  <span className="inline-block px-3 py-1 rounded-full bg-orange-50 text-orange-800 text-xs font-semibold border border-orange-200/50">
+                  <span className="inline-block px-3 py-1 rounded-full bg-blue-50 text-blue-800 text-xs font-semibold border border-blue-200/50">
                     {item.transition}
                   </span>
 
@@ -484,7 +484,7 @@ export default async function HomePage() {
                   </p>
 
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 text-white font-bold text-sm flex items-center justify-center shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-sky-500 text-white font-bold text-sm flex items-center justify-center shrink-0">
                       {item.name.charAt(0)}
                     </div>
                     <div>
@@ -505,7 +505,7 @@ export default async function HomePage() {
       <section className="py-20 lg:py-28 bg-white border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="max-w-2xl mx-auto text-center mb-14">
-            <span className="text-xs font-bold text-orange-600 uppercase tracking-wider bg-orange-50 px-3 py-1 rounded-full border border-orange-200/60 inline-block mb-3">
+            <span className="text-xs font-bold text-blue-700 uppercase tracking-wider bg-blue-50 px-3 py-1 rounded-full border border-blue-200/60 inline-block mb-3">
               {tHome("faq_badge")}
             </span>
             <h2
@@ -523,8 +523,54 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* 6.5. DIRECT CAREER ADVISORY & CONTACT BANNER */}
+      <section id="kontak" className="py-16 bg-[#f8fafc] border-b border-slate-100 scroll-mt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="bg-white rounded-3xl border border-stone-200/90 p-8 sm:p-12 shadow-warm flex flex-col lg:flex-row items-center justify-between gap-8 relative overflow-hidden">
+            <div className="space-y-3 max-w-2xl text-left relative z-10">
+              <span className="text-xs font-bold text-blue-700 uppercase tracking-wider bg-blue-50 px-3 py-1 rounded-full border border-blue-200/60 inline-block">
+                {isEn ? "Free Career Advisory" : "Konsultasi Karir & Kelas Gratis"}
+              </span>
+              <h3
+                className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight"
+                style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              >
+                {isEn
+                  ? "Still Deciding Which Program Fits Your Background?"
+                  : "Bingung Memilih Jalur Karir atau Kelas yang Tepat?"}
+              </h3>
+              <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                {isEn
+                  ? "Talk directly with our academic advisors. We'll map your current skills, analyze market demand, and recommend a personalized curriculum roadmap."
+                  : "Diskusikan minat dan latar belakang Anda langsung dengan tim konsultan akademik Earthy Academy. Dapatkan rekomendasi kurikulum, estimasi waktu belajar, dan gambaran portofolio kerja."}
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0 relative z-10 w-full lg:w-auto">
+              <Link href="/contact" className="w-full sm:w-auto">
+                <Button
+                  size="lg"
+                  className="rounded-2xl h-12 px-6 text-sm font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-warm w-full"
+                  rightIcon={<ArrowRight size={16} />}
+                >
+                  {isEn ? "Contact Admissions" : "Hubungi Tim Akademik"}
+                </Button>
+              </Link>
+              <a
+                href="https://wa.me/6282145678901?text=Halo%20Earthy%20Academy,%20saya%20ingin%20konsultasi%20program%20belajar."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-12 px-6 rounded-2xl border border-emerald-300 bg-emerald-50 hover:bg-emerald-100/70 text-emerald-800 text-sm font-bold transition-colors"
+              >
+                <span>WhatsApp Hotline</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* 7. HIGH-CONVERTING CLOSING CTA */}
-      <section className="py-20 lg:py-28 bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600 relative overflow-hidden text-white">
+      <section className="py-20 lg:py-28 bg-gradient-to-br from-blue-600 via-blue-700 to-sky-600 relative overflow-hidden text-white">
         {/* Soft background light */}
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-black/10 rounded-full blur-3xl pointer-events-none" />
@@ -537,7 +583,7 @@ export default async function HomePage() {
             {tHome("cta_title")}
           </h2>
 
-          <p className="text-orange-100 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+          <p className="text-blue-100 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
             {tHome("cta_subtitle")}
           </p>
 
@@ -564,13 +610,13 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          <div className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs text-orange-100 font-medium">
+          <div className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs text-blue-100 font-medium">
             {(isEn
               ? ["No credit card required to explore", "Full lifetime access", "30-day money-back guarantee"]
               : ["Tanpa kartu kredit saat daftar", "Akses materi seumur hidup", "30 hari garansi uang kembali"]
             ).map((item) => (
               <span key={item} className="flex items-center gap-2">
-                <CheckCircle size={15} className="text-orange-200" />
+                <CheckCircle size={15} className="text-sky-200" />
                 <span>{item}</span>
               </span>
             ))}

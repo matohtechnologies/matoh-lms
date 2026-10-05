@@ -142,7 +142,7 @@ export default async function OrdersPage() {
 
       {orders.length === 0 ? (
         <div className="bg-white rounded-3xl border border-stone-200/80 p-16 text-center shadow-xs">
-          <div className="w-16 h-16 rounded-2xl bg-orange-50 text-orange-500 flex items-center justify-center mx-auto mb-4 border border-orange-200/60 shadow-2xs">
+          <div className="w-16 h-16 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center mx-auto mb-4 border border-blue-200/60 shadow-2xs">
             <ShoppingBag size={28} />
           </div>
           <h3
@@ -156,7 +156,7 @@ export default async function OrdersPage() {
           </p>
           <Link
             href="/courses"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold shadow-xs transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition-colors"
           >
             <GraduationCap size={15} />
             {t("explore_courses")}

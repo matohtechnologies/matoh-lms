@@ -41,7 +41,7 @@ export default async function AdminCoursesPage() {
         </div>
         <Link
           href="/admin/courses/new"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-semibold shadow-xs transition-colors shrink-0"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition-colors shrink-0"
         >
           <Plus size={15} />
           {t("add_class")}
@@ -61,7 +61,7 @@ export default async function AdminCoursesPage() {
           </div>
 
           <div className="flex items-center gap-2 text-xs">
-            <span className="px-2.5 py-1 rounded-lg bg-orange-50 text-orange-800 font-bold border border-orange-200/60">
+            <span className="px-2.5 py-1 rounded-lg bg-blue-50 text-blue-800 font-bold border border-blue-200/60">
               Total: {courses.length}
             </span>
             <span className="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200/60">
@@ -75,7 +75,7 @@ export default async function AdminCoursesPage() {
 
         {courses.length === 0 ? (
           <div className="p-16 text-center">
-            <div className="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center mx-auto mb-3">
+            <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-3">
               <BookOpen size={22} />
             </div>
             <p className="text-stone-700 font-bold text-sm mb-1">{t("no_courses")}</p>
@@ -109,7 +109,7 @@ export default async function AdminCoursesPage() {
                             />
                           </div>
                         ) : (
-                          <div className="w-12 h-8 rounded-lg bg-orange-50 border border-orange-200/60 flex items-center justify-center text-orange-600 shrink-0">
+                          <div className="w-12 h-8 rounded-lg bg-blue-50 border border-blue-200/60 flex items-center justify-center text-blue-600 shrink-0">
                             <BookOpen size={16} />
                           </div>
                         )}
@@ -150,7 +150,7 @@ export default async function AdminCoursesPage() {
                       <div className="inline-flex items-center gap-1.5">
                         <Link
                           href={`/admin/courses/${course.id}?tab=curriculum`}
-                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-orange-50 hover:bg-orange-100 text-orange-700 font-bold transition-colors border border-orange-200/60 text-[11px]"
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold transition-colors border border-blue-200/60 text-[11px]"
                           title="Kelola Materi Kurikulum"
                         >
                           <BookOpen size={13} />
@@ -158,7 +158,7 @@ export default async function AdminCoursesPage() {
                         </Link>
                         <Link
                           href={`/admin/courses/${course.id}?tab=certificates`}
-                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 font-bold transition-colors border border-amber-200/60 text-[11px]"
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-sky-50 hover:bg-sky-100 text-sky-800 font-bold transition-colors border border-sky-200/60 text-[11px]"
                           title="Studio Sertifikat"
                         >
                           <span>Sertifikat</span>

@@ -67,7 +67,7 @@ export default async function AdminDashboardPage() {
       label: t("active_courses"),
       value: stats.totalCourses.toLocaleString(),
       icon: BookOpen,
-      color: "orange",
+      color: "sky",
       change: t("this_month", { n: 3 }),
     },
     {
@@ -109,7 +109,7 @@ export default async function AdminDashboardPage() {
         <div className="flex items-center gap-2.5">
           <a
             href="/admin/courses/new"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-semibold shadow-xs transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition-colors"
           >
             <BookOpen size={14} />
             {t("add_course")}
@@ -129,11 +129,11 @@ export default async function AdminDashboardPage() {
                 className={`w-11 h-11 rounded-xl flex items-center justify-center transition-transform group-hover:scale-105 ${
                   color === "blue"
                     ? "bg-blue-50 text-blue-600"
-                    : color === "orange"
-                    ? "bg-orange-50 text-orange-600"
+                    : color === "sky"
+                    ? "bg-sky-50 text-sky-600"
                     : color === "green"
                     ? "bg-emerald-50 text-emerald-600"
-                    : "bg-amber-50 text-amber-600"
+                    : "bg-indigo-50 text-indigo-600"
                 }`}
               >
                 <Icon size={20} />
@@ -169,7 +169,7 @@ export default async function AdminDashboardPage() {
             </div>
             <a
               href="/admin/orders"
-              className="inline-flex items-center gap-1 text-xs font-semibold text-orange-600 hover:text-orange-700 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded-lg transition-colors border border-orange-200/60"
+              className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors border border-blue-200/60"
             >
               {t("view_all")}
             </a>
@@ -190,7 +190,7 @@ export default async function AdminDashboardPage() {
                     <tr key={order.id} className="hover:bg-stone-50/80 transition-colors">
                       <td className="py-3">
                         <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 rounded-lg bg-orange-100 text-orange-700 font-bold text-[11px] flex items-center justify-center shrink-0">
+                          <div className="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 font-bold text-[11px] flex items-center justify-center shrink-0">
                             {order.user.name?.[0]?.toUpperCase() || "U"}
                           </div>
                           <div>
@@ -236,9 +236,9 @@ export default async function AdminDashboardPage() {
             <div className="space-y-2">
               <a
                 href="/admin/courses/new"
-                className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-orange-50 hover:bg-orange-100/80 text-orange-950 text-xs font-bold border border-orange-200/80 transition-all shadow-2xs"
+                className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-blue-50 hover:bg-blue-100/80 text-blue-950 text-xs font-bold border border-blue-200/80 transition-all shadow-2xs"
               >
-                <div className="w-6 h-6 rounded-lg bg-orange-600 text-white flex items-center justify-center shrink-0">
+                <div className="w-6 h-6 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0">
                   <BookOpen size={13} />
                 </div>
                 <span>{t("add_course")}</span>
@@ -276,8 +276,8 @@ export default async function AdminDashboardPage() {
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-amber-50 to-orange-50/60 rounded-2xl border border-amber-200/60 p-4.5 text-xs space-y-1.5">
-            <p className="font-bold text-amber-950 flex items-center gap-1.5">
+          <div className="bg-gradient-to-br from-blue-50 via-sky-50/60 to-blue-50/40 rounded-2xl border border-blue-200/60 p-4.5 text-xs space-y-1.5">
+            <p className="font-bold text-blue-950 flex items-center gap-1.5">
               <span>💡</span> Tips Pengelolaan
             </p>
             <p className="text-stone-600 leading-relaxed text-[11px]">

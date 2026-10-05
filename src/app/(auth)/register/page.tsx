@@ -89,11 +89,11 @@ export default function RegisterPage() {
         {/* Top bar */}
         <div className="flex items-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-sm">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-sky-500 flex items-center justify-center shadow-sm">
               <BookOpen size={18} className="text-white" />
             </div>
             <span className="font-bold text-stone-900 text-lg" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-              Earthy<span className="text-orange-600">Academy</span>
+              Earthy<span className="text-blue-600">Academy</span>
             </span>
           </Link>
         </div>
@@ -191,9 +191,9 @@ export default function RegisterPage() {
 
             <p className="text-xs text-stone-500">
               {t("agree_terms")}{" "}
-              <Link href="/terms" className="text-orange-600 hover:underline">{t("terms")}</Link>
+              <Link href="/terms" className="text-blue-600 hover:underline">{t("terms")}</Link>
               {" "}{t("and")}{" "}
-              <Link href="/privacy" className="text-orange-600 hover:underline">{t("privacy")}</Link>
+              <Link href="/privacy" className="text-blue-600 hover:underline">{t("privacy")}</Link>
             </p>
 
             <Button
@@ -208,7 +208,7 @@ export default function RegisterPage() {
 
           <p className="text-center text-sm text-stone-500 mt-5">
             {t("have_account")}{" "}
-            <Link href="/login" className="text-orange-600 font-medium hover:underline">
+            <Link href="/login" className="text-blue-600 font-medium hover:underline">
               {t("login")}
             </Link>
           </p>

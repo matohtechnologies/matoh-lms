@@ -203,7 +203,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
     return (
       <div className="min-h-screen bg-stone-50 pt-20 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-2 border-orange-600 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+          <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
           <p className="text-stone-500 text-sm">{isEn ? "Loading..." : "Memuat..."}</p>
         </div>
       </div>
@@ -222,7 +222,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
           </p>
           <Link
             href="/courses"
-            className="inline-block px-4 py-2 bg-orange-600 text-white text-xs font-semibold rounded-xl hover:bg-orange-700 transition-colors"
+            className="inline-block px-4 py-2 bg-blue-600 text-white text-xs font-semibold rounded-xl hover:bg-blue-700 transition-colors"
           >
             {isEn ? "Back to Catalog" : "Kembali ke Katalog"}
           </Link>
@@ -308,8 +308,8 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
                       className="object-cover w-full h-full"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-100 to-amber-100">
-                      <BookOpen size={24} className="text-orange-300" />
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-sky-100">
+                      <BookOpen size={24} className="text-blue-200" />
                     </div>
                   )}
                 </div>
@@ -329,7 +329,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
             <div className="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-xs">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-sm font-bold text-stone-900 flex items-center gap-1.5">
-                  <Tag size={16} className="text-orange-600" />
+                  <Tag size={16} className="text-blue-600" />
                   {isEn ? "Have a Promo Code?" : "Punya Kode Promo / Kupon?"}
                 </span>
                 {appliedCoupon && (
@@ -340,16 +340,16 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
               </div>
 
               {appliedCoupon ? (
-                <div className="flex items-center justify-between p-3 rounded-xl bg-orange-50/80 border border-orange-200/80">
+                <div className="flex items-center justify-between p-3 rounded-xl bg-blue-50/80 border border-blue-200/80">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-lg bg-orange-500 text-white flex items-center justify-center font-bold text-xs shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-xs shrink-0">
                       %
                     </div>
                     <div>
-                      <span className="font-mono font-bold text-sm text-orange-950 uppercase">
+                      <span className="font-mono font-bold text-sm text-blue-950 uppercase">
                         {appliedCoupon.code}
                       </span>
-                      <p className="text-xs text-orange-700">
+                      <p className="text-xs text-blue-700">
                         {isEn ? "Discount of" : "Potongan hemat"} {formatCurrency(appliedCoupon.discountAmount, locale)}
                       </p>
                     </div>
@@ -374,7 +374,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
                         setCouponError("");
                       }}
                       placeholder="CONTOH: EARTHY50"
-                      className="flex-1 px-3.5 py-2.5 rounded-xl border border-stone-200 text-sm uppercase font-mono tracking-wider focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                      className="flex-1 px-3.5 py-2.5 rounded-xl border border-stone-200 text-sm uppercase font-mono tracking-wider focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                     />
                     <Button
                       type="submit"
@@ -397,7 +397,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
                     <button
                       type="button"
                       onClick={() => setCouponInput("EARTHY50")}
-                      className="font-mono text-orange-600 hover:underline font-bold"
+                      className="font-mono text-blue-600 hover:underline font-bold"
                     >
                       EARTHY50
                     </button>
@@ -471,7 +471,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
                         </div>
                       )}
                       {appliedCoupon && (
-                        <div className="flex justify-between text-sm font-semibold text-orange-600 bg-orange-50/80 px-2 py-1.5 rounded-lg border border-orange-200/60">
+                        <div className="flex justify-between text-sm font-semibold text-blue-600 bg-blue-50/80 px-2 py-1.5 rounded-lg border border-blue-200/60">
                           <span className="flex items-center gap-1 font-mono uppercase text-xs">
                             <Tag size={12} /> {appliedCoupon.code}
                           </span>
@@ -482,7 +482,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
 
                     <div className="flex justify-between items-center py-4">
                       <span className="font-bold text-stone-900">Total</span>
-                      <span className="text-2xl font-extrabold text-orange-600">
+                      <span className="text-2xl font-extrabold text-blue-600">
                         {finalPrice === 0 ? (
                           <span className="text-emerald-600 uppercase font-black tracking-wide text-xl">
                             {isEn ? "FREE" : "GRATIS"}

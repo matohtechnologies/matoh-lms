@@ -225,7 +225,7 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
   if (loading) {
     return (
       <div className="flex items-center justify-center p-12 bg-white rounded-2xl border border-stone-200">
-        <Loader2 className="animate-spin text-orange-500 mr-2" size={20} />
+        <Loader2 className="animate-spin text-blue-600 mr-2" size={20} />
         <span className="text-sm text-stone-500 font-medium">Memuat data tugas submission...</span>
       </div>
     );
@@ -237,7 +237,7 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 bg-white rounded-2xl border border-stone-200 shadow-xs">
         <div>
           <h2 className="text-base font-bold text-stone-900 flex items-center gap-2">
-            <FileCode2 size={18} className="text-orange-600" />
+            <FileCode2 size={18} className="text-blue-600" />
             Tugas Proyek & Submission Siswa
           </h2>
           <p className="text-xs text-stone-500 mt-1">
@@ -254,7 +254,7 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
             setAttachedFileUrl("");
             setAttachedFileName("");
           }}
-          className="bg-orange-600 hover:bg-orange-700 text-white shrink-0"
+          className="bg-blue-600 hover:bg-blue-700 text-white shrink-0"
           leftIcon={<Plus size={16} />}
         >
           Buat Tugas Baru
@@ -270,7 +270,7 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
 
       {assignments.length === 0 ? (
         <div className="text-center py-16 px-4 bg-white rounded-2xl border border-dashed border-stone-300">
-          <div className="w-14 h-14 mx-auto rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center mb-3">
+          <div className="w-14 h-14 mx-auto rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-3">
             <FileCode2 size={28} />
           </div>
           <h3 className="text-sm font-bold text-stone-900 mb-1">Belum Ada Tugas Proyek</h3>
@@ -298,7 +298,7 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
                 {/* Assignment Top Header */}
                 <div className="p-5 border-b border-stone-200 bg-stone-50/60 flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                   <div className="flex items-start gap-3">
-                    <span className="w-8 h-8 rounded-xl bg-orange-100 text-orange-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
                       {aIdx + 1}
                     </span>
                     <div className="space-y-2">
@@ -315,9 +315,9 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
                             download={assignment.fileName || "lampiran"}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-50 border border-orange-200 text-orange-800 text-xs font-semibold hover:bg-orange-100 transition-colors"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 border border-blue-200 text-blue-800 text-xs font-semibold hover:bg-blue-100 transition-colors"
                           >
-                            <Download size={13} className="text-orange-600" />
+                            <Download size={13} className="text-blue-600" />
                             <span>Berkas Tugas: {assignment.fileName || "Unduh Lampiran"}</span>
                           </a>
                         </div>
@@ -410,7 +410,7 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
                                       href={sub.content}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="text-orange-600 hover:text-orange-700 font-semibold underline flex items-center gap-1 break-all"
+                                      className="text-blue-600 hover:text-blue-700 font-semibold underline flex items-center gap-1 break-all"
                                     >
                                       {sub.content}
                                       <ExternalLink size={12} className="shrink-0" />
@@ -502,7 +502,7 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
                   placeholder="Contoh: Submission Proyek Akhir: Landing Page Responsif"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-orange-500"
+                  className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
@@ -516,7 +516,7 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
                   placeholder="Jelaskan kriteria tugas, apa saja yang harus dikerjakan, dan format pengumpulan (file ZIP/PDF atau link GitHub/Figma)..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-orange-500"
+                  className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
@@ -526,10 +526,10 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
                   Lampirkan Berkas Starter / Panduan (Opsional)
                 </label>
                 {attachedFileUrl ? (
-                  <div className="flex items-center justify-between p-2.5 rounded-xl bg-orange-50 border border-orange-200 text-xs">
+                  <div className="flex items-center justify-between p-2.5 rounded-xl bg-blue-50 border border-blue-200 text-xs">
                     <div className="flex items-center gap-2 truncate">
-                      <Paperclip size={14} className="text-orange-600 shrink-0" />
-                      <span className="font-semibold text-orange-950 truncate">
+                      <Paperclip size={14} className="text-blue-600 shrink-0" />
+                      <span className="font-semibold text-blue-950 truncate">
                         {attachedFileName || "File terlampir"}
                       </span>
                     </div>
@@ -547,7 +547,7 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
                 ) : (
                   <label className="flex flex-col items-center justify-center p-4 border border-dashed border-stone-300 rounded-xl hover:bg-stone-50 cursor-pointer transition-colors">
                     {uploadingFile ? (
-                      <div className="flex items-center gap-2 text-xs text-orange-600 font-semibold">
+                      <div className="flex items-center gap-2 text-xs text-blue-600 font-semibold">
                         <Loader2 size={16} className="animate-spin" />
                         Mengunggah berkas...
                       </div>
@@ -585,7 +585,7 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
                   type="submit"
                   size="sm"
                   loading={savingAssignment || uploadingFile}
-                  className="bg-orange-600 hover:bg-orange-700 text-white"
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
                   Simpan Tugas
                 </Button>
@@ -621,7 +621,7 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
                       href={selectedSubmission.submission.content}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-orange-600 hover:underline font-semibold"
+                      className="text-blue-600 hover:underline font-semibold"
                     >
                       Buka Tautan &rarr;
                     </a>
@@ -694,7 +694,7 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
                   required
                   value={reviewScore}
                   onChange={(e) => setReviewScore(Number(e.target.value))}
-                  className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-orange-500"
+                  className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
@@ -707,7 +707,7 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
                   placeholder="Misal: Bagus sekali! Desain responsif berjalan baik. Saran sedikit pada struktur semantic HTML..."
                   value={reviewFeedback}
                   onChange={(e) => setReviewFeedback(e.target.value)}
-                  className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-orange-500"
+                  className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
@@ -724,7 +724,7 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
                   type="submit"
                   size="sm"
                   loading={savingReview}
-                  className="bg-orange-600 hover:bg-orange-700 text-white"
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
                   Simpan Nilai
                 </Button>

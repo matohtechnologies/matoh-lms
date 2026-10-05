@@ -76,11 +76,11 @@ export default function LoginPage() {
         {/* Top bar */}
         <div className="flex items-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-sm">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-sky-500 flex items-center justify-center shadow-sm">
               <BookOpen size={18} className="text-white" />
             </div>
             <span className="font-bold text-stone-900 text-lg" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-              Earthy<span className="text-orange-600">Academy</span>
+              Earthy<span className="text-blue-600">Academy</span>
             </span>
           </Link>
         </div>
@@ -127,8 +127,8 @@ export default function LoginPage() {
           )}
 
           {/* Quick Account Selector */}
-          <div className="mb-5 p-3 rounded-xl bg-orange-50/80 border border-orange-200/80">
-            <p className="text-xs font-semibold text-orange-950 mb-2">
+          <div className="mb-5 p-3 rounded-xl bg-blue-50/80 border border-blue-200/80">
+            <p className="text-xs font-semibold text-blue-950 mb-2">
               💡 Demo Accounts (Quick Fill):
             </p>
             <div className="grid grid-cols-2 gap-2">
@@ -138,9 +138,9 @@ export default function LoginPage() {
                   setValue("email", "user@earthyacademy.com", { shouldValidate: true });
                   setValue("password", "User@123456", { shouldValidate: true });
                 }}
-                className="text-xs py-1.5 px-2.5 rounded-lg bg-white border border-orange-200 text-stone-700 hover:bg-orange-100/60 transition-colors text-left flex flex-col shadow-xs"
+                className="text-xs py-1.5 px-2.5 rounded-lg bg-white border border-blue-200 text-stone-700 hover:bg-blue-100/60 transition-colors text-left flex flex-col shadow-xs"
               >
-                <span className="font-semibold text-orange-700">Student</span>
+                <span className="font-semibold text-blue-700">Student</span>
                 <span className="text-[10px] text-stone-500">user@earthyacademy.com</span>
               </button>
               <button
@@ -149,9 +149,9 @@ export default function LoginPage() {
                   setValue("email", "admin@earthyacademy.com", { shouldValidate: true });
                   setValue("password", "Admin@123456", { shouldValidate: true });
                 }}
-                className="text-xs py-1.5 px-2.5 rounded-lg bg-white border border-orange-200 text-stone-700 hover:bg-orange-100/60 transition-colors text-left flex flex-col shadow-xs"
+                className="text-xs py-1.5 px-2.5 rounded-lg bg-white border border-blue-200 text-stone-700 hover:bg-blue-100/60 transition-colors text-left flex flex-col shadow-xs"
               >
-                <span className="font-semibold text-orange-700">Admin</span>
+                <span className="font-semibold text-blue-700">Admin</span>
                 <span className="text-[10px] text-stone-500">admin@earthyacademy.com</span>
               </button>
             </div>
@@ -184,7 +184,7 @@ export default function LoginPage() {
             />
 
             <div className="flex items-center justify-end">
-              <Link href="/forgot-password" className="text-sm text-orange-600 hover:underline">
+              <Link href="/forgot-password" className="text-sm text-blue-600 hover:underline">
                 {t("forgot_password")}
               </Link>
             </div>
@@ -201,7 +201,7 @@ export default function LoginPage() {
 
           <p className="text-center text-sm text-stone-500 mt-5">
             {t("no_account")}{" "}
-            <Link href="/register" className="text-orange-600 font-medium hover:underline">
+            <Link href="/register" className="text-blue-600 font-medium hover:underline">
               {t("register")}
             </Link>
           </p>

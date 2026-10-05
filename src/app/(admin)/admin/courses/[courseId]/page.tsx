@@ -189,7 +189,7 @@ export default function EditCoursePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 size={24} className="animate-spin text-orange-500" />
+        <Loader2 size={24} className="animate-spin text-blue-600" />
       </div>
     );
   }
@@ -236,7 +236,7 @@ export default function EditCoursePage() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-stone-200 bg-white hover:bg-stone-50 text-stone-700 text-xs font-semibold transition-colors"
           >
-            <PlayCircle size={14} className="text-orange-600" />
+            <PlayCircle size={14} className="text-blue-600" />
             <span className="hidden sm:inline">{t("student_preview")}</span>
             <ExternalLink size={12} className="text-stone-400" />
           </a>
@@ -259,13 +259,13 @@ export default function EditCoursePage() {
           onClick={() => setActiveTab("curriculum")}
           className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-t-xl text-xs sm:text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
             activeTab === "curriculum"
-              ? "border-orange-600 text-orange-600 bg-white shadow-xs"
+              ? "border-blue-600 text-blue-600 bg-white shadow-xs"
               : "border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-100/60"
           }`}
         >
           <BookOpen size={15} />
           <span>{t("tab_curriculum")}</span>
-          <span className="px-1.5 py-0.2 rounded-full bg-orange-100 text-orange-700 text-[10px] font-bold">
+          <span className="px-1.5 py-0.2 rounded-full bg-blue-100 text-blue-700 text-[10px] font-bold">
             {sections.reduce((acc, s) => acc + s.lessons.length, 0)}
           </span>
         </button>
@@ -275,7 +275,7 @@ export default function EditCoursePage() {
           onClick={() => setActiveTab("quizzes")}
           className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-t-xl text-xs sm:text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
             activeTab === "quizzes"
-              ? "border-orange-600 text-orange-600 bg-white shadow-xs"
+              ? "border-blue-600 text-blue-600 bg-white shadow-xs"
               : "border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-100/60"
           }`}
         >
@@ -288,7 +288,7 @@ export default function EditCoursePage() {
           onClick={() => setActiveTab("assignments")}
           className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-t-xl text-xs sm:text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
             activeTab === "assignments"
-              ? "border-orange-600 text-orange-600 bg-white shadow-xs"
+              ? "border-blue-600 text-blue-600 bg-white shadow-xs"
               : "border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-100/60"
           }`}
         >
@@ -301,7 +301,7 @@ export default function EditCoursePage() {
           onClick={() => setActiveTab("discussions")}
           className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-t-xl text-xs sm:text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
             activeTab === "discussions"
-              ? "border-orange-600 text-orange-600 bg-white shadow-xs"
+              ? "border-blue-600 text-blue-600 bg-white shadow-xs"
               : "border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-100/60"
           }`}
         >
@@ -314,7 +314,7 @@ export default function EditCoursePage() {
           onClick={() => setActiveTab("certificates")}
           className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-t-xl text-xs sm:text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
             activeTab === "certificates"
-              ? "border-orange-600 text-orange-600 bg-white shadow-xs"
+              ? "border-blue-600 text-blue-600 bg-white shadow-xs"
               : "border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-100/60"
           }`}
         >
@@ -327,7 +327,7 @@ export default function EditCoursePage() {
           onClick={() => setActiveTab("settings")}
           className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-t-xl text-xs sm:text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
             activeTab === "settings"
-              ? "border-orange-600 text-orange-600 bg-white shadow-xs"
+              ? "border-blue-600 text-blue-600 bg-white shadow-xs"
               : "border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-100/60"
           }`}
         >
@@ -414,7 +414,7 @@ export default function EditCoursePage() {
                 <select
                   value={categoryId}
                   onChange={(e) => setCategoryId(e.target.value)}
-                  className="w-full h-11 px-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                  className="w-full h-11 px-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                 >
                   {categories.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -429,7 +429,7 @@ export default function EditCoursePage() {
                 <select
                   value={level}
                   onChange={(e) => setLevel(e.target.value as typeof level)}
-                  className="w-full h-11 px-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                  className="w-full h-11 px-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                 >
                   <option value="BEGINNER">Pemula (Beginner)</option>
                   <option value="INTERMEDIATE">Menengah (Intermediate)</option>
@@ -463,7 +463,7 @@ export default function EditCoursePage() {
                     type="number"
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
-                    className="w-full h-11 pl-10 pr-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                    className="w-full h-11 pl-10 pr-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                   />
                 </div>
               </div>
@@ -481,7 +481,7 @@ export default function EditCoursePage() {
                     value={discountPrice}
                     onChange={(e) => setDiscountPrice(e.target.value)}
                     placeholder="Kosongkan jika tidak ada"
-                    className="w-full h-11 pl-10 pr-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                    className="w-full h-11 pl-10 pr-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                   />
                 </div>
               </div>
@@ -492,7 +492,7 @@ export default function EditCoursePage() {
                   type="number"
                   value={duration}
                   onChange={(e) => setDuration(e.target.value)}
-                  className="w-full h-11 px-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500"
+                  className="w-full h-11 px-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                 />
               </div>
             </div>
@@ -516,7 +516,7 @@ export default function EditCoursePage() {
                   type="checkbox"
                   checked={published}
                   onChange={(e) => setPublished(e.target.checked)}
-                  className="w-4 h-4 rounded border-stone-300 text-orange-600 focus:ring-orange-500 accent-orange-600"
+                  className="w-4 h-4 rounded border-stone-300 text-blue-600 focus:ring-blue-500 accent-blue-600"
                 />
                 <div>
                   <span className="text-sm font-medium text-stone-700">Publikasikan Kelas</span>
@@ -528,7 +528,7 @@ export default function EditCoursePage() {
                   type="checkbox"
                   checked={featured}
                   onChange={(e) => setFeatured(e.target.checked)}
-                  className="w-4 h-4 rounded border-stone-300 text-orange-600 focus:ring-orange-500 accent-orange-600"
+                  className="w-4 h-4 rounded border-stone-300 text-blue-600 focus:ring-blue-500 accent-blue-600"
                 />
                 <div>
                   <span className="text-sm font-medium text-stone-700">

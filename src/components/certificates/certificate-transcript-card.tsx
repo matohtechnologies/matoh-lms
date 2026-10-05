@@ -191,7 +191,7 @@ export function CertificateTranscriptCard({
             </p>
             <p className="text-sm font-bold text-stone-900 truncate mt-0.5">{courseTitle}</p>
             {categoryName && (
-              <p className="text-[10px] text-orange-600 font-medium truncate">{categoryName}</p>
+              <p className="text-[10px] text-blue-600 font-medium truncate">{categoryName}</p>
             )}
           </div>
           <div className="p-3.5 rounded-xl bg-stone-50 border border-stone-200/60">

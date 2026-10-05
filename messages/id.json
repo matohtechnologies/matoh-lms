@@ -1,7 +1,10 @@
 {
   "nav": {
-    "courses": "Kelas",
-    "about": "Tentang",
+    "home": "Beranda",
+    "programs": "Program",
+    "courses": "Semua Kelas",
+    "about": "Tentang Kami",
+    "contact": "Kontak",
     "login": "Masuk",
     "register": "Daftar",
     "register_free": "Daftar Gratis",
@@ -10,7 +13,10 @@
     "my_courses": "Kelas Saya",
     "orders": "Riwayat Pembelian",
     "logout": "Keluar",
-    "admin": "Panel Admin"
+    "admin": "Panel Admin",
+    "explore_all_programs": "Lihat Semua 240+ Kelas & Silabus",
+    "career_tracks": "Jalur Karir & Kategori",
+    "learning_formats": "Format Belajar"
   },
   "hero": {
     "badge": "Platform belajar terpercaya",

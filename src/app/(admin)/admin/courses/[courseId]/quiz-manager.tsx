@@ -220,7 +220,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
   if (loading) {
     return (
       <div className="flex items-center justify-center p-12 bg-white rounded-2xl border border-stone-200">
-        <Loader2 className="animate-spin text-orange-500 mr-2" size={20} />
+        <Loader2 className="animate-spin text-blue-600 mr-2" size={20} />
         <span className="text-sm text-stone-500 font-medium">Memuat kuis kelas...</span>
       </div>
     );
@@ -232,7 +232,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 bg-white rounded-2xl border border-stone-200 shadow-xs">
         <div>
           <h2 className="text-base font-bold text-stone-900 flex items-center gap-2">
-            <HelpCircle size={18} className="text-orange-600" />
+            <HelpCircle size={18} className="text-blue-600" />
             Manajemen Kuis & Latihan
           </h2>
           <p className="text-xs text-stone-500 mt-1">
@@ -243,7 +243,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
         <Button
           type="button"
           onClick={() => setIsCreatingQuiz(true)}
-          className="bg-orange-600 hover:bg-orange-700 text-white shrink-0"
+          className="bg-blue-600 hover:bg-blue-700 text-white shrink-0"
           leftIcon={<Plus size={16} />}
         >
           Buat Kuis Baru
@@ -260,7 +260,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
       {/* Quizzes List */}
       {quizzes.length === 0 ? (
         <div className="text-center py-16 px-4 bg-white rounded-2xl border border-dashed border-stone-300">
-          <div className="w-14 h-14 mx-auto rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center mb-3">
+          <div className="w-14 h-14 mx-auto rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-3">
             <HelpCircle size={28} />
           </div>
           <h3 className="text-sm font-bold text-stone-900 mb-1">Belum Ada Kuis</h3>
@@ -288,7 +288,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
                 {/* Quiz Header Item */}
                 <div className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-100 bg-stone-50/50">
                   <div className="flex items-start gap-3">
-                    <span className="w-8 h-8 rounded-xl bg-orange-100 text-orange-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
                       {qIdx + 1}
                     </span>
                     <div>
@@ -321,7 +321,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
                         setCorrectAnswer(0);
                         setExplanation("");
                       }}
-                      className="bg-orange-50 hover:bg-orange-100 text-orange-700 border border-orange-200 text-xs py-1.5 h-auto"
+                      className="bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-xs py-1.5 h-auto"
                       leftIcon={<Plus size={13} />}
                     >
                       Tambah Soal
@@ -354,7 +354,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
                         <button
                           type="button"
                           onClick={() => setSelectedQuizIdForQuestion(quiz.id)}
-                          className="mt-2 text-xs font-bold text-orange-600 hover:underline"
+                          className="mt-2 text-xs font-bold text-blue-600 hover:underline"
                         >
                           + Tambah Soal Pertama
                         </button>
@@ -363,7 +363,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
                       quiz.questions.map((q, idx) => (
                         <div
                           key={q.id}
-                          className="p-4 rounded-xl border border-stone-200 hover:border-orange-200 transition-colors bg-white relative group"
+                          className="p-4 rounded-xl border border-stone-200 hover:border-blue-200 transition-colors bg-white relative group"
                         >
                           <div className="flex items-start justify-between gap-3">
                             <div className="flex items-start gap-2.5">
@@ -456,7 +456,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
                   placeholder="Contoh: Kuis Akhir Modul 1: Dasar TypeScript"
                   value={quizTitle}
                   onChange={(e) => setQuizTitle(e.target.value)}
-                  className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-orange-500"
+                  className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
@@ -469,7 +469,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
                   placeholder="Petunjuk singkat sebelum mengerjakan kuis..."
                   value={quizDescription}
                   onChange={(e) => setQuizDescription(e.target.value)}
-                  className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-orange-500"
+                  className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
@@ -483,7 +483,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
                   max={100}
                   value={passingScore}
                   onChange={(e) => setPassingScore(Number(e.target.value))}
-                  className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-orange-500"
+                  className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
@@ -500,7 +500,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
                   type="submit"
                   size="sm"
                   loading={savingQuiz}
-                  className="bg-orange-600 hover:bg-orange-700 text-white"
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
                   Simpan Kuis
                 </Button>
@@ -530,7 +530,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
                   placeholder="Tuliskan soal pertanyaan di sini..."
                   value={questionText}
                   onChange={(e) => setQuestionText(e.target.value)}
-                  className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-orange-500"
+                  className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
@@ -543,7 +543,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
                     <button
                       type="button"
                       onClick={() => setOptions([...options, ""])}
-                      className="text-xs text-orange-600 font-semibold hover:underline"
+                      className="text-xs text-blue-600 font-semibold hover:underline"
                     >
                       + Tambah Pilihan
                     </button>
@@ -562,7 +562,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
                             name="correctAnswerRadio"
                             checked={isCorrect}
                             onChange={() => setCorrectAnswer(idx)}
-                            className="text-orange-600 focus:ring-orange-500 accent-orange-600"
+                            className="text-blue-600 focus:ring-blue-500 accent-blue-600"
                           />
                           <span
                             className={`w-6 h-6 rounded flex items-center justify-center text-xs font-bold ${
@@ -584,7 +584,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
                             newOpts[idx] = e.target.value;
                             setOptions(newOpts);
                           }}
-                          className={`flex-1 text-xs px-3 py-2 rounded-xl border focus:outline-hidden focus:ring-2 focus:ring-orange-500 ${
+                          className={`flex-1 text-xs px-3 py-2 rounded-xl border focus:outline-hidden focus:ring-2 focus:ring-blue-500 ${
                             isCorrect
                               ? "border-emerald-300 bg-emerald-50/30"
                               : "border-stone-300"
@@ -620,7 +620,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
                   placeholder="Mengapa opsi ini benar? Jelaskan konsepnya kepada siswa..."
                   value={explanation}
                   onChange={(e) => setExplanation(e.target.value)}
-                  className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-orange-500"
+                  className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
@@ -637,7 +637,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
                   type="submit"
                   size="sm"
                   loading={savingQuestion}
-                  className="bg-orange-600 hover:bg-orange-700 text-white"
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
                   Simpan Soal
                 </Button>

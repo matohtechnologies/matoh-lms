@@ -143,7 +143,7 @@ export function CertificateBackDesigner({
             type="button"
             onClick={handleSave}
             disabled={saving}
-            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold transition-all shadow-xs disabled:opacity-50"
+            className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-xs disabled:opacity-50"
           >
             {saving ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle2 size={14} />}
             Simpan Desain Sisi Belakang
@@ -159,7 +159,7 @@ export function CertificateBackDesigner({
             {/* Workbench Header Toolbar */}
             <div className="flex flex-wrap items-center justify-between gap-3 pb-3 mb-3 border-b border-stone-800 text-xs">
               <div className="flex items-center gap-2">
-                <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-stone-800/80 text-amber-300 font-mono text-[11px] border border-stone-700/60 shadow-2xs">
+                <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-stone-800/80 text-sky-300 font-mono text-[11px] border border-stone-700/60 shadow-2xs">
                   📐 A4 Landscape (297 × 210 mm) • 1050 × 742 px
                 </span>
                 <span className="text-xs font-bold text-stone-300 flex items-center gap-1.5">
@@ -183,7 +183,7 @@ export function CertificateBackDesigner({
                     type="button"
                     onClick={() => setZoomScale("100")}
                     className={`px-2.5 py-1 rounded text-[11px] font-bold transition-all ${
-                      zoomScale === "100" ? "bg-orange-600 text-white shadow-xs" : "text-amber-400 hover:text-amber-300"
+                      zoomScale === "100" ? "bg-blue-600 text-white shadow-xs" : "text-blue-400 hover:text-blue-300"
                     }`}
                   >
                     100% (Ukuran Sebenarnya)
@@ -195,7 +195,7 @@ export function CertificateBackDesigner({
                   onClick={() => setIsWideStudio(!isWideStudio)}
                   className={`p-1.5 rounded-lg border transition-all ${
                     isWideStudio
-                      ? "bg-amber-500/20 text-amber-300 border-amber-500/40"
+                      ? "bg-blue-500/20 text-blue-300 border-blue-500/40"
                       : "bg-stone-800 text-stone-300 border-stone-700 hover:bg-stone-700"
                   }`}
                   title={isWideStudio ? "Kembalikan Tampilan Split" : "Perluas Studio Penuh"}
@@ -225,7 +225,7 @@ export function CertificateBackDesigner({
 
             <p className="text-[11px] text-stone-400 mt-3 text-center">
               💡 <span className="font-semibold text-stone-300">Tips:</span> Desain transkrip di atas ditampilkan dalam{" "}
-              <strong className="text-amber-300">Ukuran Sebenarnya (1050px)</strong> sesuai dokumen asli.
+              <strong className="text-sky-300">Ukuran Sebenarnya (1050px)</strong> sesuai dokumen asli.
             </p>
           </div>
         </div>
@@ -346,9 +346,9 @@ export function CertificateBackDesigner({
                 ) : (
                   <div
                     onClick={() => fileInputRef.current?.click()}
-                    className="p-5 rounded-xl border-2 border-dashed border-stone-200 hover:border-orange-400 bg-stone-50/50 hover:bg-orange-50/20 text-center cursor-pointer transition-all"
+                    className="p-5 rounded-xl border-2 border-dashed border-stone-200 hover:border-blue-400 bg-stone-50/50 hover:bg-blue-50/20 text-center cursor-pointer transition-all"
                   >
-                    <UploadCloud size={20} className="mx-auto text-orange-600 mb-1.5" />
+                    <UploadCloud size={20} className="mx-auto text-blue-600 mb-1.5" />
                     <p className="text-xs font-bold text-stone-800">
                       {uploadingBg ? "Mengunggah..." : "Unggah Gambar Template Belakang"}
                     </p>
@@ -377,7 +377,7 @@ export function CertificateBackDesigner({
                       className={cn(
                         "p-2.5 rounded-xl text-left text-xs font-semibold border transition-all",
                         config.borderStyle === b.id
-                          ? "bg-orange-50 border-orange-500 text-orange-950 font-bold shadow-2xs"
+                          ? "bg-blue-50 border-blue-500 text-blue-950 font-bold shadow-2xs"
                           : "bg-white border-stone-200 text-stone-700 hover:bg-stone-50"
                       )}
                     >
@@ -406,7 +406,7 @@ export function CertificateBackDesigner({
                       className={cn(
                         "flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all",
                         config.backgroundColor === c.color
-                          ? "border-orange-500 ring-2 ring-orange-200"
+                          ? "border-blue-500 ring-2 ring-blue-200"
                           : "border-stone-200"
                       )}
                     >
@@ -434,7 +434,7 @@ export function CertificateBackDesigner({
                   value={config.headerTitle}
                   onChange={(e) => setConfig({ ...config, headerTitle: e.target.value })}
                   placeholder="Transkrip Nilai & Capaian Kompetensi"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-blue-500"
                 />
               </div>
 
@@ -447,7 +447,7 @@ export function CertificateBackDesigner({
                   value={config.headerSubtitle}
                   onChange={(e) => setConfig({ ...config, headerSubtitle: e.target.value })}
                   placeholder="Official Academic Transcript & Competency Assessment"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-blue-500"
                 />
               </div>
             </div>
@@ -475,7 +475,7 @@ export function CertificateBackDesigner({
                       className={cn(
                         "flex items-center gap-2 p-2.5 rounded-xl text-left text-xs font-semibold border transition-all",
                         config.tableTheme === t.id
-                          ? "bg-orange-50 border-orange-500 text-orange-950 font-bold shadow-2xs"
+                          ? "bg-blue-50 border-blue-500 text-blue-950 font-bold shadow-2xs"
                           : "bg-white border-stone-200 text-stone-700 hover:bg-stone-50"
                       )}
                     >
@@ -496,7 +496,7 @@ export function CertificateBackDesigner({
                     type="checkbox"
                     checked={config.showCategoryColumn}
                     onChange={(e) => setConfig({ ...config, showCategoryColumn: e.target.checked })}
-                    className="w-4 h-4 accent-orange-600 rounded cursor-pointer"
+                    className="w-4 h-4 accent-blue-600 rounded cursor-pointer"
                   />
                 </div>
 
@@ -506,7 +506,7 @@ export function CertificateBackDesigner({
                     type="checkbox"
                     checked={config.showWorkloadColumn}
                     onChange={(e) => setConfig({ ...config, showWorkloadColumn: e.target.checked })}
-                    className="w-4 h-4 accent-orange-600 rounded cursor-pointer"
+                    className="w-4 h-4 accent-blue-600 rounded cursor-pointer"
                   />
                 </div>
 
@@ -516,7 +516,7 @@ export function CertificateBackDesigner({
                     type="checkbox"
                     checked={config.showGradeColumn}
                     onChange={(e) => setConfig({ ...config, showGradeColumn: e.target.checked })}
-                    className="w-4 h-4 accent-orange-600 rounded cursor-pointer"
+                    className="w-4 h-4 accent-blue-600 rounded cursor-pointer"
                   />
                 </div>
 
@@ -526,7 +526,7 @@ export function CertificateBackDesigner({
                     type="checkbox"
                     checked={config.showStatusBadge}
                     onChange={(e) => setConfig({ ...config, showStatusBadge: e.target.checked })}
-                    className="w-4 h-4 accent-orange-600 rounded cursor-pointer"
+                    className="w-4 h-4 accent-blue-600 rounded cursor-pointer"
                   />
                 </div>
               </div>
@@ -547,7 +547,7 @@ export function CertificateBackDesigner({
                   type="checkbox"
                   checked={config.showScoreSummary}
                   onChange={(e) => setConfig({ ...config, showScoreSummary: e.target.checked })}
-                  className="w-4 h-4 accent-orange-600 rounded cursor-pointer"
+                  className="w-4 h-4 accent-blue-600 rounded cursor-pointer"
                 />
               </div>
 
@@ -560,7 +560,7 @@ export function CertificateBackDesigner({
                   type="checkbox"
                   checked={config.showPredicate}
                   onChange={(e) => setConfig({ ...config, showPredicate: e.target.checked })}
-                  className="w-4 h-4 accent-orange-600 rounded cursor-pointer"
+                  className="w-4 h-4 accent-blue-600 rounded cursor-pointer"
                 />
               </div>
 
@@ -573,7 +573,7 @@ export function CertificateBackDesigner({
                   type="checkbox"
                   checked={config.showScaleLegend}
                   onChange={(e) => setConfig({ ...config, showScaleLegend: e.target.checked })}
-                  className="w-4 h-4 accent-orange-600 rounded cursor-pointer"
+                  className="w-4 h-4 accent-blue-600 rounded cursor-pointer"
                 />
               </div>
 
@@ -586,7 +586,7 @@ export function CertificateBackDesigner({
                   type="checkbox"
                   checked={config.showQrCode}
                   onChange={(e) => setConfig({ ...config, showQrCode: e.target.checked })}
-                  className="w-4 h-4 accent-orange-600 rounded cursor-pointer"
+                  className="w-4 h-4 accent-blue-600 rounded cursor-pointer"
                 />
               </div>
             </div>
@@ -601,14 +601,14 @@ export function CertificateBackDesigner({
                   key={p.id}
                   onClick={() => handleApplyPreset(p.config)}
                   className={cn(
-                    "p-3.5 rounded-xl border text-left cursor-pointer transition-all hover:border-orange-400 group",
+                    "p-3.5 rounded-xl border text-left cursor-pointer transition-all hover:border-blue-400 group",
                     config.presetId === p.id
-                      ? "bg-orange-50/70 border-orange-500 shadow-2xs"
+                      ? "bg-blue-50/70 border-blue-500 shadow-2xs"
                       : "bg-white border-stone-200"
                   )}
                 >
                   <div className="flex items-center justify-between">
-                    <p className="text-xs font-bold text-stone-900 group-hover:text-orange-600 transition-colors">
+                    <p className="text-xs font-bold text-stone-900 group-hover:text-blue-600 transition-colors">
                       {p.name}
                     </p>
                     <span className="text-[10px] px-2 py-0.5 rounded-md bg-stone-100 font-semibold text-stone-600">

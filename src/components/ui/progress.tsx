@@ -19,14 +19,14 @@ export function Progress({ value, className, showLabel = false, size = "md" }: P
       {showLabel && (
         <div className="flex justify-between items-center mb-1.5">
           <span className="text-xs text-stone-500">Progress</span>
-          <span className="text-xs font-medium text-orange-600">{Math.round(value)}%</span>
+          <span className="text-xs font-medium text-blue-600">{Math.round(value)}%</span>
         </div>
       )}
       <div className={cn("w-full bg-stone-200 rounded-full overflow-hidden", heightClass)}>
         <div
           className={cn(
             "h-full rounded-full transition-all duration-500 ease-out",
-            "bg-gradient-to-r from-orange-500 to-amber-500"
+            "bg-gradient-to-r from-blue-600 to-sky-500"
           )}
           style={{ width: `${Math.min(100, Math.max(0, value))}%` }}
         />

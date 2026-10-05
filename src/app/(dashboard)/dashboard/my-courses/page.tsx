@@ -92,9 +92,9 @@ export default async function MyCoursesPage() {
         </div>
         <Link
           href="/courses"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-stone-200/80 bg-white text-stone-700 hover:text-orange-700 text-xs font-semibold hover:bg-orange-50/60 transition-colors shadow-2xs shrink-0"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-stone-200/80 bg-white text-stone-700 hover:text-blue-700 text-xs font-semibold hover:bg-blue-50/60 transition-colors shadow-2xs shrink-0"
         >
-          <GraduationCap size={15} className="text-orange-600" />
+          <GraduationCap size={15} className="text-blue-600" />
           {t("find_new_course")}
         </Link>
       </div>
@@ -105,7 +105,7 @@ export default async function MyCoursesPage() {
           {[
             { label: t("all"), value: enrollments.length, bg: "bg-stone-100 text-stone-800 border-stone-200" },
             { label: t("completed"), value: completed, bg: "bg-emerald-50 text-emerald-800 border-emerald-200" },
-            { label: t("in_progress"), value: inProgress, bg: "bg-orange-50 text-orange-800 border-orange-200" },
+            { label: t("in_progress"), value: inProgress, bg: "bg-blue-50 text-blue-800 border-blue-200" },
             { label: t("not_started"), value: notStarted, bg: "bg-amber-50 text-amber-800 border-amber-200" },
           ].map(({ label, value, bg }) => (
             <div
@@ -122,7 +122,7 @@ export default async function MyCoursesPage() {
       {/* Empty State */}
       {enrollments.length === 0 ? (
         <div className="bg-white rounded-3xl border border-stone-200/80 p-16 text-center shadow-xs">
-          <div className="w-16 h-16 rounded-2xl bg-orange-50 text-orange-500 flex items-center justify-center mx-auto mb-4 border border-orange-200/60 shadow-2xs">
+          <div className="w-16 h-16 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center mx-auto mb-4 border border-blue-200/60 shadow-2xs">
             <BookOpen size={28} />
           </div>
           <h3
@@ -136,7 +136,7 @@ export default async function MyCoursesPage() {
           </p>
           <Link
             href="/courses"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold shadow-xs transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition-colors"
           >
             {t("explore_courses")}
           </Link>
@@ -157,7 +157,7 @@ export default async function MyCoursesPage() {
                     className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
                   />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-orange-100 to-amber-100 flex items-center justify-center text-orange-500">
+                  <div className="w-full h-full bg-gradient-to-br from-blue-50 to-sky-100 flex items-center justify-center text-blue-400">
                     <BookOpen size={36} />
                   </div>
                 )}
@@ -193,7 +193,7 @@ export default async function MyCoursesPage() {
               <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-bold text-orange-800 bg-orange-50 px-2 py-0.5 rounded-md border border-orange-200/60">
+                    <span className="text-[10px] font-bold text-blue-800 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200/60">
                       {enrollment.course.category.name}
                     </span>
                   </div>
@@ -232,7 +232,7 @@ export default async function MyCoursesPage() {
                   {/* CTA Button */}
                   <Link
                     href={`/learn/${enrollment.courseId}`}
-                    className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold transition-all shadow-xs"
+                    className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-xs"
                   >
                     <PlayCircle size={14} />
                     {enrollment.progressPct === 0

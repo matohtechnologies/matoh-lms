@@ -147,7 +147,7 @@ export default async function AdminOrdersPage() {
           </div>
           <div className="flex items-center gap-1.5 self-start sm:self-auto text-xs">
             <span className="text-stone-400 mr-1 text-[11px]">{t("filter_status")}:</span>
-            <button className="px-2.5 py-1 rounded-lg bg-orange-50 text-orange-950 font-bold border border-orange-200/60 text-[11px]">{t("status_all")}</button>
+            <button className="px-2.5 py-1 rounded-lg bg-blue-50 text-blue-950 font-bold border border-blue-200/60 text-[11px]">{t("status_all")}</button>
             <button className="px-2.5 py-1 rounded-lg hover:bg-stone-50 text-stone-600 transition-colors border border-transparent hover:border-stone-200/60 text-[11px]">{t("status_success")}</button>
             <button className="px-2.5 py-1 rounded-lg hover:bg-stone-50 text-stone-600 transition-colors border border-transparent hover:border-stone-200/60 text-[11px]">{t("status_pending")}</button>
             <button className="px-2.5 py-1 rounded-lg hover:bg-stone-50 text-stone-600 transition-colors border border-transparent hover:border-stone-200/60 text-[11px]">{t("status_failed")}</button>
@@ -177,7 +177,7 @@ export default async function AdminOrdersPage() {
                   </td>
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-7 h-7 rounded-lg bg-orange-100 text-orange-700 font-bold text-[11px] flex items-center justify-center shrink-0">
+                      <div className="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 font-bold text-[11px] flex items-center justify-center shrink-0">
                         {order.user.name?.[0]?.toUpperCase() || "U"}
                       </div>
                       <div>

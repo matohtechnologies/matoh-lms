@@ -73,7 +73,7 @@ export async function generateMetadata({ params }: CertificatePageProps): Promis
   if (!cert) return { title: "Sertifikat Tidak Ditemukan" };
   return {
     title: `Sertifikat: ${cert.course.title} — ${cert.user.name}`,
-    description: `Sertifikat kelulusan resmi dari DigiBlueCamp untuk kelas ${cert.course.title}`,
+    description: `Sertifikat kelulusan resmi dari Earthy Academy untuk kelas ${cert.course.title}`,
   };
 }
 
@@ -274,7 +274,7 @@ export default async function CertificateViewPage({ params, searchParams }: Cert
       categoryName: certificate.course.category.name,
       certificateCode: certificate.certificateCode,
       issueDisplay,
-      issuerName: certificate.issuerName || setting?.issuerName || "DigiBlueCamp",
+      issuerName: certificate.issuerName || setting?.issuerName || "Earthy Academy",
       instructorName:
         certificate.signatoryName1 ||
         setting?.signatoryName1 ||
@@ -308,7 +308,7 @@ export default async function CertificateViewPage({ params, searchParams }: Cert
           setting?.subtitle ||
           "Atas keberhasilannya dalam menyelesaikan seluruh modul kurikulum, evaluasi kuis, dan pemenuhan seluruh kriteria kelulusan."
         }
-        issuerName={certificate.issuerName || setting?.issuerName || "DigiBlueCamp"}
+        issuerName={certificate.issuerName || setting?.issuerName || "Earthy Academy"}
         instructorName={
           certificate.signatoryName1 ||
           setting?.signatoryName1 ||

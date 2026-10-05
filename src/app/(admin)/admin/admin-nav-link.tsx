@@ -29,16 +29,16 @@ export default function AdminNavLink({ item }: { item: AdminNavItem }) {
       className={cn(
         "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 group",
         isActive
-          ? "bg-orange-50/90 text-orange-950 font-semibold shadow-2xs border border-orange-200/80"
-          : "text-stone-600 hover:bg-stone-100/80 hover:text-stone-900"
+          ? "bg-blue-50/90 text-blue-950 font-semibold shadow-2xs border border-blue-200/80"
+          : "text-slate-600 hover:bg-slate-100/80 hover:text-slate-900"
       )}
     >
       <div
         className={cn(
           "w-7 h-7 rounded-lg flex items-center justify-center transition-colors shrink-0",
           isActive
-            ? "bg-orange-600 text-white shadow-2xs"
-            : "bg-stone-100 text-stone-500 group-hover:bg-stone-200/80 group-hover:text-stone-700"
+            ? "bg-blue-600 text-white shadow-2xs"
+            : "bg-slate-100 text-slate-500 group-hover:bg-slate-200/80 group-hover:text-slate-700"
         )}
       >
         <Icon size={14} />

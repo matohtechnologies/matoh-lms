@@ -8,7 +8,6 @@ import {
   Copy,
   Check,
   ArrowLeft,
-  ShieldCheck,
   Lock,
   FileText,
   RotateCw,
@@ -50,12 +49,12 @@ export function CertificateView({
   code,
   isLocked,
   studentName = "Pelajar",
-  courseTitle = "Kelas DigiBlueCamp",
+  courseTitle = "Kelas Earthy Academy",
   instructorName = "Ahmad Fadhil",
   signatoryRole1 = "Lead Instructor",
   signatoryName2 = "Dr. Santoso W.",
   signatoryRole2 = "Head of Curriculum",
-  issuerName = "DigiBlueCamp",
+  issuerName = "Earthy Academy",
   certificateTitle = "Certificate of Completion",
   subtitle = "Atas keberhasilannya dalam menyelesaikan seluruh modul kurikulum, kuis evaluasi, studi kasus komprehensif, dan pemenuhan seluruh kriteria kelulusan.",
   categoryName,
@@ -171,7 +170,7 @@ export function CertificateView({
           <div className="space-y-3">
             <Link
               href="/dashboard/my-courses"
-              className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium transition-colors shadow-xs"
+              className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-colors shadow-xs"
             >
               {t("continue_learning")}
             </Link>
@@ -238,7 +237,7 @@ export function CertificateView({
                 : "text-stone-600 hover:text-stone-900"
             )}
           >
-            <Award size={14} className={activeSide === "front" ? "text-orange-600" : "text-stone-400"} />
+            <Award size={14} className={activeSide === "front" ? "text-blue-600" : "text-stone-400"} />
             <span>Sertifikat (Depan)</span>
           </button>
           <button
@@ -319,7 +318,7 @@ export function CertificateView({
                 />
               ) : (
                 <>
-                  <div className="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-orange-100/40 pointer-events-none blur-3xl print:hidden" />
+                  <div className="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-blue-100/40 pointer-events-none blur-3xl print:hidden" />
                   <div className="absolute -left-20 -bottom-20 w-80 h-80 rounded-full bg-amber-100/40 pointer-events-none blur-3xl print:hidden" />
                 </>
               )}
@@ -335,7 +334,7 @@ export function CertificateView({
               >
                 {/* Header Brand */}
                 <div className="flex flex-col items-center justify-center mb-6 print:mb-3">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-md mb-3 print:mb-1.5 print:w-11 print:h-11">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 to-sky-600 flex items-center justify-center shadow-md mb-3 print:mb-1.5 print:w-11 print:h-11">
                     <Award size={28} className="text-white print:w-5 print:h-5" />
                   </div>
                   <h2
@@ -359,29 +358,29 @@ export function CertificateView({
                   >
                     {studentName}
                   </h1>
-                  <div className="w-24 h-1 bg-gradient-to-r from-orange-500 to-amber-500 mx-auto my-3 rounded-full print:my-1.5" />
+                  <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-sky-500 mx-auto my-3 rounded-full print:my-1.5" />
                 </div>
 
                 <p className="text-sm text-stone-600 max-w-xl mx-auto leading-relaxed mb-6 print:text-xs print:mb-3 print:max-w-2xl">
                   {subtitle}
                 </p>
 
-                <div className="bg-orange-50/70 border border-orange-200/80 rounded-2xl py-4 px-6 inline-block max-w-2xl mb-8 print:py-2 print:px-5 print:mb-3">
+                <div className="bg-blue-50/70 border border-blue-200/80 rounded-2xl py-4 px-6 inline-block max-w-2xl mb-8 print:py-2 print:px-5 print:mb-3">
                   {categoryName && (
-                    <p className="text-xs text-orange-500 font-medium mb-1 uppercase tracking-wider print:text-[10px]">
+                    <p className="text-xs text-blue-600 font-medium mb-1 uppercase tracking-wider print:text-[10px]">
                       {categoryName}
                     </p>
                   )}
                   <h3
-                    className="text-xl sm:text-2xl font-bold text-orange-950 print:text-lg"
+                    className="text-xl sm:text-2xl font-bold text-blue-950 print:text-lg"
                     style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
                   >
                     {courseTitle}
                   </h3>
                 </div>
 
-                {/* Signatures & Verification Row */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-6 border-t border-stone-200 items-end print:grid-cols-3 print:gap-4 print:pt-3">
+                {/* Signatures Row */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-6 border-t border-stone-200 items-end print:grid-cols-2 print:gap-4 print:pt-3">
                   <div className="text-center sm:text-left print:text-left">
                     <p className="font-serif italic text-lg text-stone-800 mb-1 print:text-base">
                       {instructorName}
@@ -391,15 +390,6 @@ export function CertificateView({
                       {signatoryRole1}
                     </p>
                     <p className="text-[11px] text-stone-400 print:text-[10px]">{issuerName}</p>
-                  </div>
-
-                  <div className="flex flex-col items-center justify-center">
-                    <div className="w-16 h-16 rounded-full border-4 border-amber-500/30 bg-amber-50 flex items-center justify-center text-amber-700 shadow-inner mb-2 print:w-11 print:h-11 print:mb-1">
-                      <ShieldCheck size={28} className="text-amber-600 print:w-5 print:h-5" />
-                    </div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800 bg-amber-100/80 px-2 py-0.5 rounded-full print:text-[9px]">
-                      VERIFIED CREDENTIAL
-                    </span>
                   </div>
 
                   <div className="text-center sm:text-right print:text-right">
@@ -455,7 +445,7 @@ export function CertificateView({
             onClick={() => setActiveSide(activeSide === "front" ? "back" : "front")}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white hover:bg-stone-50 text-stone-700 hover:text-stone-900 text-xs font-bold border border-stone-200 shadow-2xs hover:shadow-xs transition-all"
           >
-            <RotateCw size={13} className="text-orange-600" />
+            <RotateCw size={13} className="text-blue-600" />
             <span>
               {activeSide === "front"
                 ? "Balik ke Transkrip Nilai (Sisi Belakang) ↷"

@@ -1,13 +1,35 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Search, Menu, X, BookOpen, User, LogOut, LayoutDashboard, Shield } from "lucide-react";
+import {
+  Menu,
+  X,
+  BookOpen,
+  User,
+  LayoutDashboard,
+  Shield,
+  ChevronDown,
+  ChevronRight,
+  Code2,
+  Database,
+  Palette,
+  Smartphone,
+  Cloud,
+  TrendingUp,
+  GraduationCap,
+  Sparkles,
+  Building2,
+  Compass,
+  ArrowRight,
+  CheckCircle2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "./language-switcher";
+import { useAppLocale } from "@/components/providers/locale-provider";
 import { useSession } from "next-auth/react";
 import SignOutButton from "@/components/auth/signout-button";
 
@@ -23,6 +45,9 @@ interface NavbarProps {
 
 export function Navbar({ user }: NavbarProps) {
   const { data: session } = useSession();
+  const { locale } = useAppLocale();
+  const isEn = locale === "en";
+
   const currentUser = session?.user
     ? {
         ...user,
@@ -36,6 +61,9 @@ export function Navbar({ user }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isProgramDropdownOpen, setIsProgramDropdownOpen] = useState(false);
+  const [isMobileProgramOpen, setIsMobileProgramOpen] = useState(false);
+  const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -43,9 +71,113 @@ export function Navbar({ user }: NavbarProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navLinks = [
-    { href: "/courses", label: t("courses") },
-    { href: "/about", label: t("about") },
+  // Close menus on route change
+  useEffect(() => {
+    setIsMobileOpen(false);
+    setIsProgramDropdownOpen(false);
+    setIsUserMenuOpen(false);
+  }, [pathname]);
+
+  const handleMouseEnterProgram = () => {
+    if (dropdownTimeoutRef.current) {
+      clearTimeout(dropdownTimeoutRef.current);
+    }
+    setIsProgramDropdownOpen(true);
+  };
+
+  const handleMouseLeaveProgram = () => {
+    dropdownTimeoutRef.current = setTimeout(() => {
+      setIsProgramDropdownOpen(false);
+    }, 150);
+  };
+
+  const programCategories = [
+    {
+      icon: Code2,
+      color: "text-blue-600 bg-blue-50 border-blue-200/60",
+      name: isEn ? "Web & Software Engineering" : "Pengembangan Web & Software",
+      desc: isEn
+        ? "Modern Fullstack, React/Next.js Frontend & Scalable Node.js Backend"
+        : "Fullstack modern, Frontend React/Next.js & Backend Node.js scalable",
+      href: "/courses?category=Web+Development",
+      badge: isEn ? "Most Popular" : "Paling Populer",
+    },
+    {
+      icon: Database,
+      color: "text-emerald-600 bg-emerald-50 border-emerald-200/60",
+      name: isEn ? "Data Science & AI Engineering" : "Sains Data & AI Engineering",
+      desc: isEn
+        ? "Python analytics, applied Machine Learning & Generative AI"
+        : "Python analytics, Machine Learning terapan & Generative AI",
+      href: "/courses?category=Data+Science",
+      badge: isEn ? "Career Trend" : "Tren Karir",
+    },
+    {
+      icon: Palette,
+      color: "text-purple-600 bg-purple-50 border-purple-200/60",
+      name: isEn ? "UI/UX & Product Design" : "Desain UI/UX & Produk",
+      desc: isEn
+        ? "Figma mastery, empirical user research & industry design systems"
+        : "Figma mastery, riset pengguna empiris & Design System industri",
+      href: "/courses?category=UI%2FUX+Design",
+    },
+    {
+      icon: Smartphone,
+      color: "text-amber-600 bg-amber-50 border-amber-200/60",
+      name: isEn ? "Mobile App Development" : "Pengembangan Aplikasi Mobile",
+      desc: isEn
+        ? "Cross-platform iOS & Android apps with Flutter & React Native"
+        : "Multi-platform iOS & Android dengan Flutter & React Native",
+      href: "/courses?category=Mobile+Dev",
+    },
+    {
+      icon: Cloud,
+      color: "text-sky-600 bg-sky-50 border-sky-200/60",
+      name: isEn ? "Cloud Computing & DevOps" : "Komputasi Cloud & DevOps",
+      desc: isEn
+        ? "Docker containers, Kubernetes clusters & production AWS deployments"
+        : "Docker container, Kubernetes cluster & deployment AWS production",
+      href: "/courses?category=Cloud+Computing",
+    },
+    {
+      icon: TrendingUp,
+      color: "text-rose-600 bg-rose-50 border-rose-200/60",
+      name: isEn ? "Digital Marketing & Growth" : "Pemasaran Digital & Growth",
+      desc: isEn
+        ? "Acquisition strategy, organic SEO, and digital conversion optimization"
+        : "Strategi akuisisi, SEO organik, dan optimasi konversi digital",
+      href: "/courses?category=Digital+Marketing",
+    },
+  ];
+
+  const programFormats = [
+    {
+      icon: GraduationCap,
+      title: isEn ? "Intensive Career Bootcamp" : "Bootcamp Karir Intensif",
+      desc: isEn
+        ? "12-16 week structured curriculum with 1-on-1 mentorship and recruiter-ready production portfolio."
+        : "Kurikulum 12-16 minggu dengan bimbingan mentor 1-on-1 dan portofolio produksi siap uji recruiter.",
+      tag: isEn ? "Full-Time / Part-Time" : "Penuh Waktu / Paruh Waktu",
+      href: "/courses?level=INTERMEDIATE",
+    },
+    {
+      icon: Sparkles,
+      title: isEn ? "Self-Paced Masterclass" : "Masterclass Belajar Mandiri",
+      desc: isEn
+        ? "Flexible self-paced learning with 4K video, periodic evaluation quizzes, and QR-verified certificates."
+        : "Belajar mandiri fleksibel dengan video resolusi tinggi, kuis evaluasi berkala, dan sertifikat ber-QR.",
+      tag: isEn ? "Lifetime Access" : "Akses Selamanya",
+      href: "/courses",
+    },
+    {
+      icon: Building2,
+      title: isEn ? "Corporate & B2B Upskilling" : "Pelatihan Perusahaan & B2B",
+      desc: isEn
+        ? "Custom structured training to elevate your company's software and digital engineering teams."
+        : "Pelatihan kustom terstruktur untuk meningkatkan kapabilitas tim teknologi dan digital perusahaan.",
+      tag: isEn ? "Enterprise Solution" : "Solusi Perusahaan",
+      href: "/contact",
+    },
   ];
 
   return (
@@ -53,40 +185,229 @@ export function Navbar({ user }: NavbarProps) {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         isScrolled
-          ? "bg-white/90 backdrop-blur-md border-b border-stone-200 shadow-warm"
-          : "bg-transparent"
+          ? "bg-white/95 backdrop-blur-md border-b border-stone-200/80 shadow-warm"
+          : "bg-white/80 backdrop-blur-xs border-b border-stone-100/60 sm:bg-transparent sm:border-transparent"
       )}
     >
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between gap-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
-            <BookOpen size={16} className="text-white" />
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-sky-500 flex items-center justify-center shadow-xs group-hover:shadow-md transition-shadow">
+            <BookOpen size={18} className="text-white" />
           </div>
-          <span className="font-bold text-stone-900 text-lg tracking-tight" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
-            Earthy<span className="text-orange-600">Academy</span>
+          <span
+            className="font-bold text-stone-900 text-lg sm:text-xl tracking-tight"
+            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+          >
+            Earthy<span className="text-blue-600">Academy</span>
           </span>
         </Link>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-1">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
+        {/* Desktop Nav Links */}
+        <div className="hidden md:flex items-center gap-1.5">
+          {/* 1. Beranda */}
+          <Link
+            href="/"
+            className={cn(
+              "px-3.5 py-2 rounded-xl text-sm font-semibold transition-colors",
+              pathname === "/"
+                ? "bg-blue-50 text-blue-700 font-bold"
+                : "text-stone-600 hover:text-stone-900 hover:bg-stone-100/80"
+            )}
+          >
+            {t("home")}
+          </Link>
+
+          {/* 2. Dropdown Program */}
+          <div
+            className="relative"
+            onMouseEnter={handleMouseEnterProgram}
+            onMouseLeave={handleMouseLeaveProgram}
+          >
+            <button
+              type="button"
+              onClick={() => setIsProgramDropdownOpen(!isProgramDropdownOpen)}
               className={cn(
-                "px-4 py-2 rounded-xl text-sm font-medium transition-colors",
-                pathname === link.href || pathname.startsWith(link.href + "/")
-                  ? "bg-orange-50 text-orange-700"
-                  : "text-stone-600 hover:text-stone-900 hover:bg-stone-100"
+                "flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold transition-colors",
+                pathname.startsWith("/courses") || isProgramDropdownOpen
+                  ? "bg-blue-50 text-blue-700 font-bold"
+                  : "text-stone-600 hover:text-stone-900 hover:bg-stone-100/80"
               )}
             >
-              {link.label}
-            </Link>
-          ))}
+              <span>{t("programs")}</span>
+              <ChevronDown
+                size={14}
+                className={cn(
+                  "transition-transform duration-200",
+                  isProgramDropdownOpen && "rotate-180"
+                )}
+              />
+            </button>
+
+            {/* Mega Dropdown Menu */}
+            {isProgramDropdownOpen && (
+              <div
+                className="absolute top-full -left-20 w-[780px] bg-white rounded-3xl border border-stone-200/90 shadow-warm-xl p-6 z-50 animate-in fade-in slide-in-from-top-2 duration-200"
+                onMouseEnter={handleMouseEnterProgram}
+                onMouseLeave={handleMouseLeaveProgram}
+              >
+                {/* Header within dropdown */}
+                <div className="flex items-center justify-between pb-4 mb-4 border-b border-stone-100">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200/60">
+                      {isEn ? "Industry Standard Curricula" : "Kurikulum Standar Industri"}
+                    </span>
+                    <span className="text-xs text-stone-500 font-medium">
+                      {isEn ? "Choose your dream course category & career path" : "Pilih kategori kelas & jalur karir impian Anda"}
+                    </span>
+                  </div>
+                  <Link
+                    href="/courses"
+                    className="text-xs font-bold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1 group"
+                    onClick={() => setIsProgramDropdownOpen(false)}
+                  >
+                    <span>{isEn ? "Browse All Courses" : "Katalog Semua Kelas"}</span>
+                    <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
+                  </Link>
+                </div>
+
+                <div className="grid grid-cols-12 gap-6">
+                  {/* Left Column: Categories (7 cols) */}
+                  <div className="col-span-7 space-y-2 border-r border-stone-100 pr-5">
+                    <p className="text-[11px] font-extrabold uppercase tracking-wider text-stone-400 mb-2">
+                      {t("career_tracks")}
+                    </p>
+                    <div className="grid grid-cols-1 gap-1.5">
+                      {programCategories.map((cat) => {
+                        const Icon = cat.icon;
+                        return (
+                          <Link
+                            key={cat.name}
+                            href={cat.href}
+                            className="flex items-start gap-3 p-2.5 rounded-2xl hover:bg-stone-50 transition-colors group"
+                            onClick={() => setIsProgramDropdownOpen(false)}
+                          >
+                            <div
+                              className={cn(
+                                "w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform",
+                                cat.color
+                              )}
+                            >
+                              <Icon size={17} />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <p className="text-xs font-bold text-stone-900 group-hover:text-blue-600 transition-colors">
+                                  {cat.name}
+                                </p>
+                                {cat.badge && (
+                                  <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-sky-100 text-sky-800">
+                                    {cat.badge}
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-[11px] text-stone-500 line-clamp-1 mt-0.5">
+                                {cat.desc}
+                              </p>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Right Column: Learning Formats (5 cols) */}
+                  <div className="col-span-5 space-y-3">
+                    <p className="text-[11px] font-extrabold uppercase tracking-wider text-stone-400 mb-2">
+                      {t("learning_formats")}
+                    </p>
+                    <div className="space-y-2">
+                      {programFormats.map((fmt) => {
+                        const Icon = fmt.icon;
+                        return (
+                          <Link
+                            key={fmt.title}
+                            href={fmt.href}
+                            className="block p-3 rounded-2xl border border-stone-200/70 hover:border-blue-200 hover:bg-blue-50/30 transition-all group shadow-2xs"
+                            onClick={() => setIsProgramDropdownOpen(false)}
+                          >
+                            <div className="flex items-center gap-2 mb-1">
+                              <Icon size={15} className="text-blue-600" />
+                              <h4 className="text-xs font-bold text-stone-900 group-hover:text-blue-600 transition-colors">
+                                {fmt.title}
+                              </h4>
+                            </div>
+                            <p className="text-[11px] text-stone-500 line-clamp-2 leading-relaxed mb-2">
+                              {fmt.desc}
+                            </p>
+                            <span className="text-[10px] font-bold text-stone-600 bg-stone-100 px-2 py-0.5 rounded-md">
+                              {fmt.tag}
+                            </span>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Dropdown Bottom Banner */}
+                <div className="mt-5 pt-3 border-t border-stone-100 flex items-center justify-between text-xs text-stone-500 bg-stone-50/80 -mx-6 -mb-6 p-4 rounded-b-3xl">
+                  <div className="flex items-center gap-4">
+                    <span className="flex items-center gap-1.5 font-medium text-stone-700">
+                      <CheckCircle2 size={13} className="text-emerald-600" />
+                      {isEn ? "QR-Verified Certificate" : "Sertifikat Terverifikasi QR"}
+                    </span>
+                    <span className="flex items-center gap-1.5 font-medium text-stone-700">
+                      <CheckCircle2 size={13} className="text-emerald-600" />
+                      {isEn ? "1-on-1 Portfolio Review" : "Review Portofolio 1-on-1"}
+                    </span>
+                    <span className="flex items-center gap-1.5 font-medium text-stone-700">
+                      <CheckCircle2 size={13} className="text-emerald-600" />
+                      {isEn ? "Lifetime Access" : "Akses Selamanya"}
+                    </span>
+                  </div>
+
+                  <Link
+                    href="/courses"
+                    className="font-bold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1"
+                    onClick={() => setIsProgramDropdownOpen(false)}
+                  >
+                    <span>{t("explore_all_programs")}</span>
+                    <ChevronRight size={13} />
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* 3. Tentang Kami */}
+          <Link
+            href="/about"
+            className={cn(
+              "px-3.5 py-2 rounded-xl text-sm font-semibold transition-colors",
+              pathname === "/about"
+                ? "bg-blue-50 text-blue-700 font-bold"
+                : "text-stone-600 hover:text-stone-900 hover:bg-stone-100/80"
+            )}
+          >
+            {t("about")}
+          </Link>
+
+          {/* 4. Kontak */}
+          <Link
+            href="/contact"
+            className={cn(
+              "px-3.5 py-2 rounded-xl text-sm font-semibold transition-colors",
+              pathname === "/contact"
+                ? "bg-blue-50 text-blue-700 font-bold"
+                : "text-stone-600 hover:text-stone-900 hover:bg-stone-100/80"
+            )}
+          >
+            {t("contact")}
+          </Link>
         </div>
 
-        {/* Right side */}
+        {/* Right side: Language Switcher & Auth */}
         <div className="flex items-center gap-2">
           <LanguageSwitcher />
 
@@ -97,7 +418,7 @@ export function Navbar({ user }: NavbarProps) {
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                 className="flex items-center gap-2 px-3 py-1.5 rounded-xl hover:bg-stone-100 transition-colors"
               >
-                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center text-white text-xs font-bold overflow-hidden ring-1 ring-orange-200/60 shadow-2xs">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-sky-500 flex items-center justify-center text-white text-xs font-bold overflow-hidden ring-1 ring-blue-200/60 shadow-2xs">
                   {currentUser?.image ? (
                     <img
                       src={currentUser.image}
@@ -111,6 +432,7 @@ export function Navbar({ user }: NavbarProps) {
                 <span className="hidden sm:block text-sm font-medium text-stone-700 max-w-[100px] truncate">
                   {currentUser?.name}
                 </span>
+                <ChevronDown size={14} className="text-stone-400 hidden sm:block" />
               </button>
 
               {isUserMenuOpen && (
@@ -119,12 +441,14 @@ export function Navbar({ user }: NavbarProps) {
                     className="fixed inset-0 z-10"
                     onClick={() => setIsUserMenuOpen(false)}
                   />
-                  <div className="absolute right-0 top-full mt-2 w-52 bg-white rounded-2xl border border-stone-200 shadow-warm-lg py-1.5 z-20">
+                  <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-2xl border border-stone-200 shadow-warm-lg py-1.5 z-20 animate-in fade-in zoom-in-95 duration-150">
                     <div className="px-4 py-2.5 border-b border-stone-100">
                       <div className="flex items-center gap-1.5">
-                        <p className="text-sm font-semibold text-stone-900 truncate">{currentUser?.name}</p>
+                        <p className="text-sm font-semibold text-stone-900 truncate">
+                          {currentUser?.name}
+                        </p>
                         {currentUser?.role === "ADMIN" && (
-                          <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-orange-100 text-orange-700">
+                          <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700">
                             ADMIN
                           </span>
                         )}
@@ -136,7 +460,7 @@ export function Navbar({ user }: NavbarProps) {
                       <>
                         <Link
                           href="/admin"
-                          className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-orange-600 bg-orange-50/70 hover:bg-orange-100/70 transition-colors"
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-blue-600 bg-blue-50/70 hover:bg-blue-100/70 transition-colors"
                           onClick={() => setIsUserMenuOpen(false)}
                         >
                           <Shield size={16} />
@@ -148,7 +472,7 @@ export function Navbar({ user }: NavbarProps) {
                           onClick={() => setIsUserMenuOpen(false)}
                         >
                           <BookOpen size={16} className="text-stone-400" />
-                          Kelola Kelas
+                          {isEn ? "Manage Courses" : "Kelola Kelas"}
                         </Link>
                         <Link
                           href="/dashboard?view=student"
@@ -156,7 +480,7 @@ export function Navbar({ user }: NavbarProps) {
                           onClick={() => setIsUserMenuOpen(false)}
                         >
                           <LayoutDashboard size={16} className="text-stone-400" />
-                          Mode Siswa
+                          {isEn ? "Student Mode" : "Mode Siswa"}
                         </Link>
                       </>
                     ) : (
@@ -188,10 +512,14 @@ export function Navbar({ user }: NavbarProps) {
           ) : (
             <div className="hidden sm:flex items-center gap-2">
               <Link href="/login">
-                <Button variant="ghost" size="sm">{t("login")}</Button>
+                <Button variant="ghost" size="sm" className="font-semibold text-stone-700">
+                  {t("login")}
+                </Button>
               </Link>
               <Link href="/register">
-                <Button size="sm">{t("register")}</Button>
+                <Button size="sm" className="bg-blue-600 hover:bg-blue-700 font-semibold shadow-xs">
+                  {t("register")}
+                </Button>
               </Link>
             </div>
           )}
@@ -199,56 +527,135 @@ export function Navbar({ user }: NavbarProps) {
           {/* Mobile menu button */}
           <button
             id="mobile-menu-button"
-            className="md:hidden p-2 rounded-xl hover:bg-stone-100 text-stone-600"
+            className="md:hidden p-2 rounded-xl hover:bg-stone-100 text-stone-700 transition-colors"
             onClick={() => setIsMobileOpen(!isMobileOpen)}
+            aria-label="Buka Menu"
           >
-            {isMobileOpen ? <X size={20} /> : <Menu size={20} />}
+            {isMobileOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </nav>
 
-      {/* Mobile Menu */}
+      {/* Mobile Drawer Menu */}
       {isMobileOpen && (
-        <div className="md:hidden bg-white border-t border-stone-200 px-4 py-4 space-y-1">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                "block px-4 py-3 rounded-xl text-sm font-medium transition-colors",
-                pathname === link.href
-                  ? "bg-orange-50 text-orange-700"
-                  : "text-stone-700 hover:bg-stone-50"
-              )}
-              onClick={() => setIsMobileOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
+        <div className="md:hidden bg-white border-t border-stone-200 px-4 py-5 space-y-2 shadow-warm-xl max-h-[calc(100vh-4rem)] overflow-y-auto">
+          {/* 1. Beranda */}
+          <Link
+            href="/"
+            className={cn(
+              "block px-4 py-2.5 rounded-xl text-sm font-bold transition-colors",
+              pathname === "/" ? "bg-blue-50 text-blue-700" : "text-stone-800 hover:bg-stone-50"
+            )}
+            onClick={() => setIsMobileOpen(false)}
+          >
+            {t("home")}
+          </Link>
 
+          {/* 2. Program Accordion */}
+          <div className="rounded-xl border border-stone-200/80 overflow-hidden bg-stone-50/50">
+            <button
+              type="button"
+              onClick={() => setIsMobileProgramOpen(!isMobileProgramOpen)}
+              className="w-full flex items-center justify-between px-4 py-3 text-sm font-bold text-stone-800 hover:bg-stone-100/70 transition-colors"
+            >
+              <span className="flex items-center gap-2">
+                <Compass size={16} className="text-blue-600" />
+                <span>{t("programs")}</span>
+              </span>
+              <ChevronDown
+                size={16}
+                className={cn(
+                  "text-stone-500 transition-transform duration-200",
+                  isMobileProgramOpen && "rotate-180"
+                )}
+              />
+            </button>
+
+            {isMobileProgramOpen && (
+              <div className="px-3 pb-3 pt-1 space-y-1 bg-white border-t border-stone-200/70">
+                <p className="px-3 pt-2 text-[10px] font-extrabold uppercase tracking-wider text-stone-400">
+                  {isEn ? "Main Categories" : "Kategori Utama"}
+                </p>
+                {programCategories.map((cat) => {
+                  const Icon = cat.icon;
+                  return (
+                    <Link
+                      key={cat.name}
+                      href={cat.href}
+                      className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-stone-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                      onClick={() => setIsMobileOpen(false)}
+                    >
+                      <Icon size={14} className="text-blue-600 shrink-0" />
+                      <span className="truncate">{cat.name}</span>
+                    </Link>
+                  );
+                })}
+
+                <div className="pt-2 border-t border-stone-100">
+                  <Link
+                    href="/courses"
+                    className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-blue-600 bg-blue-50/80"
+                    onClick={() => setIsMobileOpen(false)}
+                  >
+                    <span>{isEn ? "Browse All Courses Catalog" : "Lihat Semua Katalog Kelas"}</span>
+                    <ArrowRight size={13} />
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* 3. Tentang Kami */}
+          <Link
+            href="/about"
+            className={cn(
+              "block px-4 py-2.5 rounded-xl text-sm font-bold transition-colors",
+              pathname === "/about" ? "bg-blue-50 text-blue-700" : "text-stone-800 hover:bg-stone-50"
+            )}
+            onClick={() => setIsMobileOpen(false)}
+          >
+            {t("about")}
+          </Link>
+
+          {/* 4. Kontak */}
+          <Link
+            href="/contact"
+            className={cn(
+              "block px-4 py-2.5 rounded-xl text-sm font-bold transition-colors",
+              pathname === "/contact" ? "bg-blue-50 text-blue-700" : "text-stone-800 hover:bg-stone-50"
+            )}
+            onClick={() => setIsMobileOpen(false)}
+          >
+            {t("contact")}
+          </Link>
+
+          {/* Language Switcher in Mobile */}
           <div className="pt-3 pb-1 px-4 flex items-center justify-between border-t border-stone-100">
-            <span className="text-xs text-stone-500 font-medium">Pilih Bahasa / Language</span>
+            <span className="text-xs text-stone-500 font-medium">
+              {isEn ? "Select Language" : "Pilih Bahasa / Language"}
+            </span>
             <LanguageSwitcher />
           </div>
 
+          {/* Auth options in Mobile */}
           {user ? (
             <div className="pt-2 border-t border-stone-100 space-y-1">
               {user.role === "ADMIN" ? (
                 <>
                   <Link
                     href="/admin"
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold bg-orange-50 text-orange-700 hover:bg-orange-100 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors"
                     onClick={() => setIsMobileOpen(false)}
                   >
                     <Shield size={16} />
-                    Admin Console (Kelola Platform)
+                    Admin Console
                   </Link>
                   <Link
                     href="/dashboard?view=student"
                     className="block px-4 py-2 rounded-xl text-sm font-medium text-stone-600 hover:bg-stone-50 transition-colors"
                     onClick={() => setIsMobileOpen(false)}
                   >
-                    Mode Pratinjau Siswa
+                    {isEn ? "Student Preview Mode" : "Mode Pratinjau Siswa"}
                   </Link>
                 </>
               ) : (
@@ -265,12 +672,16 @@ export function Navbar({ user }: NavbarProps) {
               </SignOutButton>
             </div>
           ) : (
-            <div className="flex gap-2 pt-2">
+            <div className="flex gap-2 pt-3">
               <Link href="/login" className="flex-1" onClick={() => setIsMobileOpen(false)}>
-                <Button variant="outline" size="sm" className="w-full">{t("login")}</Button>
+                <Button variant="outline" size="sm" className="w-full font-semibold">
+                  {t("login")}
+                </Button>
               </Link>
               <Link href="/register" className="flex-1" onClick={() => setIsMobileOpen(false)}>
-                <Button size="sm" className="w-full">{t("register")}</Button>
+                <Button size="sm" className="w-full bg-blue-600 hover:bg-blue-700 font-semibold shadow-xs">
+                  {t("register")}
+                </Button>
               </Link>
             </div>
           )}

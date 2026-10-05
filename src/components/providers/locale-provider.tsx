@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useTransition } from "react";
+import React, { createContext, useContext, useState, useEffect, useTransition } from "react";
 import { NextIntlClientProvider } from "next-intl";
 import { useRouter } from "next/navigation";
 import idMessages from "../../../messages/id.json";
@@ -40,6 +40,12 @@ export default function LocaleProvider({
   );
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+
+  useEffect(() => {
+    if (initialLocale === "en" || initialLocale === "id") {
+      setLocale(initialLocale);
+    }
+  }, [initialLocale]);
 
   const switchLocale = (newLocale: "id" | "en") => {
     if (newLocale === locale) return;
