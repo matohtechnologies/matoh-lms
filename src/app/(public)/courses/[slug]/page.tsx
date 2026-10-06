@@ -166,7 +166,9 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
   };
 
   return (
-    <div className="pt-20 bg-[#faf8f5] min-h-screen pb-16">
+    <div className="pt-20 bg-[#f8fafc] min-h-screen pb-16 relative">
+      {/* Ambient subtle top glow (matching landing, about & contact) */}
+      <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-blue-50/70 via-sky-50/20 to-transparent pointer-events-none" />
       {/* Schema.org Course JSON-LD for Google Rich Results */}
       <script
         type="application/ld+json"
@@ -177,12 +179,12 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
             {/* Breadcrumb */}
-            <div className="flex items-center gap-2 text-sm text-stone-500">
+            <div className="flex items-center gap-2 text-sm text-slate-500">
               <Link href="/courses" className="hover:text-blue-600 transition-colors">
                 {tDetail("breadcrumb_courses")}
               </Link>
               <span>/</span>
-              <span className="text-stone-700 truncate">{displayCourse.category.name}</span>
+              <span className="text-slate-700 truncate">{displayCourse.category.name}</span>
             </div>
 
             {/* Course header */}
@@ -197,33 +199,33 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                   </span>
                 )}
               </div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 leading-tight mb-4" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
+              <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight mb-4" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
                 {displayCourse.title}
               </h1>
-              <p className="text-stone-600 leading-relaxed mb-5">{displayCourse.description}</p>
+              <p className="text-slate-600 leading-relaxed mb-5">{displayCourse.description}</p>
 
               {/* Stats row */}
-              <div className="flex flex-wrap items-center gap-4 text-sm text-stone-600">
+              <div className="flex flex-wrap items-center gap-4 text-sm text-slate-600">
                 {displayCourse.rating != null && displayCourse.rating > 0 && (
                   <div className="flex items-center gap-1.5">
                     <StarRating rating={displayCourse.rating} size={15} />
                     <span className="font-semibold text-amber-600">{displayCourse.rating.toFixed(1)}</span>
-                    <span className="text-stone-400">({displayCourse.reviewCount} {isEn ? "reviews" : "ulasan"})</span>
+                    <span className="text-slate-400">({displayCourse.reviewCount} {isEn ? "reviews" : "ulasan"})</span>
                   </div>
                 )}
                 <span className="flex items-center gap-1.5">
-                  <Users size={15} className="text-stone-400" />
+                  <Users size={15} className="text-slate-400" />
                   {(displayCourse.enrollCount ?? 0).toLocaleString()} {isEn ? "students" : "pelajar"}
                 </span>
                 {displayCourse.duration && (
                   <span className="flex items-center gap-1.5">
-                    <Clock size={15} className="text-stone-400" />
+                    <Clock size={15} className="text-slate-400" />
                     {formatDuration(displayCourse.duration)}
                   </span>
                 )}
                 {displayCourse.totalLessons && (
                   <span className="flex items-center gap-1.5">
-                    <BookOpen size={15} className="text-stone-400" />
+                    <BookOpen size={15} className="text-slate-400" />
                     {displayCourse.totalLessons} {isEn ? "lessons" : "materi"}
                   </span>
                 )}
@@ -235,14 +237,14 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                   {displayCourse.instructor.name?.[0]?.toUpperCase()}
                 </div>
                 <div>
-                  <p className="text-xs text-stone-500">{tDetail("instructor")}</p>
+                  <p className="text-xs text-slate-500">{tDetail("instructor")}</p>
                   <p className="text-sm font-semibold text-blue-600">{displayCourse.instructor.name}</p>
                 </div>
               </div>
             </div>
 
             {/* Mobile price card */}
-            <div className="lg:hidden bg-white rounded-2xl border border-stone-200 p-5 shadow-warm">
+            <div className="lg:hidden bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm">
               <PriceCard
                 course={displayCourse}
                 isFree={isFree}
@@ -266,14 +268,14 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
 
             {/* What You'll Learn */}
             <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6">
-              <h2 className="text-lg font-bold text-stone-900 mb-4" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
+              <h2 className="text-lg font-bold text-slate-900 mb-4" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
                 {tDetail("what_learn")}
               </h2>
               <div className="grid sm:grid-cols-2 gap-3">
                 {whatYouLearn.map((item, i) => (
                   <div key={i} className="flex items-start gap-2.5">
                     <CheckCircle size={16} className="text-blue-500 mt-0.5 shrink-0" />
-                    <span className="text-sm text-stone-700">{item}</span>
+                    <span className="text-sm text-slate-700">{item}</span>
                   </div>
                 ))}
               </div>
@@ -281,40 +283,40 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
 
             {/* Curriculum */}
             <div>
-              <h2 className="text-lg font-bold text-stone-900 mb-4" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
+              <h2 className="text-lg font-bold text-slate-900 mb-4" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
                 {tDetail("curriculum")}
               </h2>
               {displayCourse.sections && displayCourse.sections.length > 0 ? (
                 <div className="space-y-3">
                   {displayCourse.sections.map((section, idx) => (
-                    <details key={section.id} className="group rounded-xl border border-stone-200 overflow-hidden" open={idx === 0}>
-                      <summary className="flex items-center justify-between p-4 bg-stone-50 cursor-pointer hover:bg-stone-100 transition-colors list-none">
+                    <details key={section.id} className="group rounded-xl border border-slate-200/80 overflow-hidden" open={idx === 0}>
+                      <summary className="flex items-center justify-between p-4 bg-slate-50 cursor-pointer hover:bg-slate-100 transition-colors list-none">
                         <div>
-                          <span className="font-semibold text-stone-900 text-sm">{section.title}</span>
-                          <span className="ml-2 text-xs text-stone-500">
+                          <span className="font-semibold text-slate-900 text-sm">{section.title}</span>
+                          <span className="ml-2 text-xs text-slate-500">
                             {section.lessons.length} {isEn ? "lessons" : "materi"}
                           </span>
                         </div>
-                        <ChevronDown size={16} className="text-stone-400 group-open:rotate-180 transition-transform" />
+                        <ChevronDown size={16} className="text-slate-400 group-open:rotate-180 transition-transform" />
                       </summary>
-                      <div className="divide-y divide-stone-100">
+                      <div className="divide-y divide-slate-100">
                         {section.lessons.map((lesson) => (
                           <div key={lesson.id} className="flex items-center gap-3 px-4 py-3">
-                            <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${lesson.isFree ? "bg-green-50" : "bg-stone-100"}`}>
+                            <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${lesson.isFree ? "bg-green-50" : "bg-slate-100"}`}>
                               {lesson.isFree ? (
                                 <Play size={12} className="text-green-600 ml-0.5" />
                               ) : (
-                                <Lock size={12} className="text-stone-400" />
+                                <Lock size={12} className="text-slate-400" />
                               )}
                             </div>
-                            <span className="text-sm text-stone-700 flex-1">{lesson.title}</span>
+                            <span className="text-sm text-slate-700 flex-1">{lesson.title}</span>
                             {lesson.isFree && (
                               <span className="text-xs text-green-600 font-medium">
                                 {tDetail("preview_lesson")}
                               </span>
                             )}
                             {lesson.duration && (
-                              <span className="text-xs text-stone-400">{lesson.duration}m</span>
+                              <span className="text-xs text-slate-400">{lesson.duration}m</span>
                             )}
                           </div>
                         ))}
@@ -323,19 +325,19 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                   ))}
                 </div>
               ) : (
-                <div className="p-4 rounded-xl bg-stone-50 border border-stone-200 text-stone-500 text-sm">
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 text-slate-500 text-sm">
                   {isEn ? "Course curriculum is being prepared by the instructor." : "Kurikulum kelas sedang dipersiapkan oleh instruktur."}
                 </div>
               )}
             </div>
 
             {/* Instructor */}
-            <div className="bg-white rounded-2xl border border-stone-200 p-6">
-              <h2 className="text-lg font-bold text-stone-900 mb-4" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
+            <div className="bg-white rounded-2xl border border-slate-200/80 p-6">
+              <h2 className="text-lg font-bold text-slate-900 mb-4" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
                 {isEn ? "About the Instructor" : "Tentang Instruktur"}
               </h2>
               <div className="flex items-start gap-4">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-sky-500 flex items-center justify-center text-white text-2xl font-bold shrink-0 overflow-hidden ring-1 ring-stone-200/80">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-sky-500 flex items-center justify-center text-white text-2xl font-bold shrink-0 overflow-hidden ring-1 ring-slate-200/80">
                   {displayCourse.instructor.image ? (
                     <img
                       src={displayCourse.instructor.image}
@@ -347,13 +349,13 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                   )}
                 </div>
                 <div>
-                  <h3 className="font-bold text-stone-900">{displayCourse.instructor.name}</h3>
+                  <h3 className="font-bold text-slate-900">{displayCourse.instructor.name}</h3>
                   <p className="text-sm font-semibold text-blue-600 mb-2">
                     {displayCourse.instructorHeadline ||
                       displayCourse.instructor.headline ||
                       (isEn ? "Lead Instructor" : "Dewan Instruktur")}
                   </p>
-                  <p className="text-sm text-stone-600 leading-relaxed whitespace-pre-line">
+                  <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line">
                     {displayCourse.instructorBio ||
                       displayCourse.instructor.bio ||
                       (isEn
@@ -367,23 +369,23 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
             {/* Reviews */}
             {displayCourse.reviews && displayCourse.reviews.length > 0 && (
               <div>
-                <h2 className="text-lg font-bold text-stone-900 mb-4" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
+                <h2 className="text-lg font-bold text-slate-900 mb-4" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
                   {tDetail("reviews")}
                 </h2>
                 <div className="space-y-4">
                   {displayCourse.reviews.map((review) => (
-                    <div key={review.id} className="bg-white rounded-xl border border-stone-200 p-4">
+                    <div key={review.id} className="bg-white rounded-xl border border-slate-200/80 p-4">
                       <div className="flex items-start gap-3">
                         <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-sky-400 flex items-center justify-center text-white text-sm font-bold shrink-0">
                           {review.user.name?.[0]?.toUpperCase()}
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
-                            <span className="font-semibold text-sm text-stone-900">{review.user.name}</span>
+                            <span className="font-semibold text-sm text-slate-900">{review.user.name}</span>
                             <StarRating rating={review.rating} size={13} />
                           </div>
                           {review.comment && (
-                            <p className="text-sm text-stone-600 mt-1 leading-relaxed">{review.comment}</p>
+                            <p className="text-sm text-slate-600 mt-1 leading-relaxed">{review.comment}</p>
                           )}
                         </div>
                       </div>
@@ -397,7 +399,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
           {/* Sticky Price Card */}
           <div className="hidden lg:block">
             <div className="sticky top-24">
-              <div className="bg-white rounded-2xl border border-stone-200 p-6 shadow-warm-lg">
+              <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm">
                 <PriceCard
                   course={displayCourse}
                   isFree={isFree}
@@ -453,12 +455,12 @@ function PriceCard({
           <p className="text-3xl font-bold text-green-600">{isEn ? "Free" : "Gratis"}</p>
         ) : (
           <div>
-            <p className="text-3xl font-extrabold text-stone-900">
+            <p className="text-3xl font-extrabold text-slate-900">
               {formatCurrency(finalPrice, locale)}
             </p>
             {hasDiscount && (
               <div className="flex items-center gap-2 mt-1">
-                <span className="text-stone-400 line-through text-sm">
+                <span className="text-slate-400 line-through text-sm">
                   {formatCurrency(course.price, locale)}
                 </span>
                 <span className="text-xs font-medium text-red-600 bg-red-50 px-2 py-0.5 rounded-full">
@@ -493,15 +495,15 @@ function PriceCard({
       )}
 
       {/* Includes */}
-      <div className="space-y-2.5 pt-2 border-t border-stone-100">
-        <p className="text-sm font-semibold text-stone-700">{isEn ? "This course includes:" : "Termasuk:"}</p>
+      <div className="space-y-2.5 pt-2 border-t border-slate-100">
+        <p className="text-sm font-semibold text-slate-700">{isEn ? "This course includes:" : "Termasuk:"}</p>
         {[
           { icon: Clock, text: isEn ? "Lifetime access" : "Akses seumur hidup" },
           { icon: BookOpen, text: `${(course as { totalLessons?: number | null }).totalLessons ?? 50}+ ${isEn ? "video lessons" : "materi video"}` },
           { icon: Award, text: isEn ? "Certificate of completion" : "Sertifikat kelulusan" },
           { icon: CheckCircle, text: isEn ? "30-day money-back guarantee" : "Garansi uang kembali 30 hari" },
         ].map(({ icon: Icon, text }) => (
-          <div key={text} className="flex items-center gap-2.5 text-sm text-stone-600">
+          <div key={text} className="flex items-center gap-2.5 text-sm text-slate-600">
             <Icon size={15} className="text-blue-500 shrink-0" />
             {text}
           </div>

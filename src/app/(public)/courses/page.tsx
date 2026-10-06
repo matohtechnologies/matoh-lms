@@ -135,21 +135,21 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
   ];
 
   return (
-    <div className="pt-20 bg-[#faf8f5] min-h-screen">
+    <div className="pt-20 bg-[#f8fafc] min-h-screen">
       {/* Header */}
-      <div className="bg-gradient-to-b from-blue-50/70 via-[#faf8f5] to-[#faf8f5] border-b border-stone-200/70 py-12 sm:py-14">
+      <div className="bg-gradient-to-b from-blue-50/70 via-[#f8fafc] to-[#f8fafc] border-b border-slate-200/70 py-12 sm:py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100/70 text-blue-800 border border-blue-200/60 text-xs font-semibold mb-3">
             <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
             <span>{isEn ? "Matoh Learning Catalog" : "Katalog Pelatihan Matoh"}</span>
           </div>
           <h1
-            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-stone-900 mb-3 tracking-tight"
+            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 mb-3 tracking-tight"
             style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {t("catalog_title")}
           </h1>
-          <p className="text-stone-500 mb-6 text-sm sm:text-base max-w-2xl leading-relaxed">
+          <p className="text-slate-500 mb-6 text-sm sm:text-base max-w-2xl leading-relaxed">
             {isEn
               ? `Explore ${total} curated, industry-aligned courses crafted by leading tech practitioners.`
               : `${total} kelas terstruktur dan kurikulum industri siap membantumu menguasai skill masa depan.`}
@@ -158,17 +158,17 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
           {/* Search bar */}
           <form method="GET" action="/courses" className="flex flex-col sm:flex-row gap-3 max-w-2xl">
             <div className="relative flex-1">
-              <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
+              <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 name="q"
                 defaultValue={params.q}
                 placeholder={t("search_placeholder")}
-                className="w-full h-12 pl-10 pr-4 rounded-2xl border border-stone-200 bg-white text-sm text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 shadow-xs transition-all"
+                className="w-full h-12 pl-10 pr-4 rounded-2xl border border-slate-200/80 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 shadow-xs transition-all"
               />
             </div>
             <button
               type="submit"
-              className="px-6 h-12 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-warm hover:shadow-warm-lg transition-all shrink-0"
+              className="px-6 h-12 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-sm hover:shadow-md transition-all shrink-0"
             >
               {isEn ? "Search" : "Cari Kelas"}
             </button>
@@ -180,10 +180,10 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
         <div className="flex flex-col lg:flex-row gap-8 items-start">
           {/* Sidebar Filters */}
           <aside className="lg:w-64 shrink-0 w-full">
-            <div className="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-xs sticky top-24 space-y-6">
+            <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs sticky top-24 space-y-6">
               <div>
-                <div className="flex items-center justify-between mb-3 pb-2 border-b border-stone-100">
-                  <h3 className="text-xs font-bold text-stone-900 uppercase tracking-wider">
+                <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
+                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
                     {t("filter.category")}
                   </h3>
                   {params.category && (
@@ -198,7 +198,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                     className={`block px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
                       !params.category
                         ? "bg-blue-50/90 text-blue-950 font-bold border border-blue-200/80 shadow-2xs"
-                        : "text-stone-600 hover:text-stone-900 hover:bg-stone-50"
+                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                     }`}
                   >
                     {isEn ? "All Categories" : "Semua Kategori"}
@@ -210,7 +210,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                       className={`block px-3 py-2 rounded-xl text-xs font-medium transition-all ${
                         params.category === cat.name
                           ? "bg-blue-50/90 text-blue-950 font-bold border border-blue-200/80 shadow-2xs"
-                          : "text-stone-600 hover:text-stone-900 hover:bg-stone-50"
+                          : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                       }`}
                     >
                       {cat.name}
@@ -220,8 +220,8 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
               </div>
 
               <div>
-                <div className="flex items-center justify-between mb-3 pb-2 border-b border-stone-100">
-                  <h3 className="text-xs font-bold text-stone-900 uppercase tracking-wider">
+                <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
+                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
                     {t("filter.level")}
                   </h3>
                 </div>
@@ -233,7 +233,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                       className={`block px-3 py-2 rounded-xl text-xs font-medium transition-all ${
                         params.level === opt.value
                           ? "bg-blue-50/90 text-blue-950 font-bold border border-blue-200/80 shadow-2xs"
-                          : "text-stone-600 hover:text-stone-900 hover:bg-stone-50"
+                          : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                       }`}
                     >
                       {opt.label}
@@ -248,19 +248,19 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
           <div className="flex-1 min-w-0">
             {/* Sort bar */}
             <div className="flex items-center justify-between mb-6">
-              <p className="text-sm text-stone-500">
+              <p className="text-sm text-slate-500">
                 {isEn ? (
                   <>
-                    Showing <span className="font-medium text-stone-900">{courses.length}</span> of <span className="font-medium text-stone-900">{total}</span> courses
+                    Showing <span className="font-medium text-slate-900">{courses.length}</span> of <span className="font-medium text-slate-900">{total}</span> courses
                   </>
                 ) : (
                   <>
-                    Menampilkan <span className="font-medium text-stone-900">{courses.length}</span> dari <span className="font-medium text-stone-900">{total}</span> kelas
+                    Menampilkan <span className="font-medium text-slate-900">{courses.length}</span> dari <span className="font-medium text-slate-900">{total}</span> kelas
                   </>
                 )}
               </p>
               <div className="flex items-center gap-2">
-                <label className="text-sm text-stone-500 hidden sm:block">{t("sort_label")}</label>
+                <label className="text-sm text-slate-500 hidden sm:block">{t("sort_label")}</label>
                 <CourseSortSelect defaultValue={params.sort ?? "popular"} options={sortOptions} />
               </div>
             </div>
@@ -302,8 +302,8 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
               ) : (
                 <div className="text-center py-16">
                   <div className="text-5xl mb-4">🔍</div>
-                  <h3 className="text-lg font-semibold text-stone-900 mb-2">{t("not_found_title")}</h3>
-                  <p className="text-stone-500">{t("not_found_desc")}</p>
+                  <h3 className="text-lg font-semibold text-slate-900 mb-2">{t("not_found_title")}</h3>
+                  <p className="text-slate-500">{t("not_found_desc")}</p>
                   <a href="/courses" className="mt-4 inline-block text-blue-600 hover:underline text-sm">
                     {t("reset_filter")}
                   </a>
@@ -321,7 +321,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                     className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-medium transition-colors ${
                       currentPage === page
                         ? "bg-blue-600 text-white"
-                        : "bg-white border border-stone-300 text-stone-700 hover:border-blue-400"
+                        : "bg-white border border-slate-300 text-slate-700 hover:border-blue-400"
                     }`}
                   >
                     {page}

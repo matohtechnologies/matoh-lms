@@ -66,7 +66,7 @@ export function CourseCard({
     <Link href={targetHref}>
       <Card hover className="group flex flex-col h-full">
         {/* Thumbnail */}
-        <div className="relative aspect-video w-full overflow-hidden bg-stone-100 rounded-t-2xl">
+        <div className="relative aspect-video w-full overflow-hidden bg-slate-100 rounded-t-2xl">
           {safeThumbnail ? (
             isVideoUrl(safeThumbnail) ? (
               <video
@@ -129,7 +129,7 @@ export function CourseCard({
           </div>
 
           {/* Title */}
-          <h3 className="font-semibold text-stone-900 text-sm leading-snug line-clamp-2 group-hover:text-blue-600 transition-colors">
+          <h3 className="font-semibold text-slate-900 text-sm leading-snug line-clamp-2 group-hover:text-blue-600 transition-colors">
             {title}
           </h3>
 
@@ -138,21 +138,21 @@ export function CourseCard({
             <div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-sky-500 flex items-center justify-center text-white text-[10px] font-bold shrink-0">
               {instructor.name?.[0]?.toUpperCase()}
             </div>
-            <span className="text-xs text-stone-500 truncate">{instructor.name}</span>
+            <span className="text-xs text-slate-500 truncate">{instructor.name}</span>
           </div>
 
           {/* Stats */}
-          <div className="flex items-center gap-3 text-xs text-stone-500">
+          <div className="flex items-center gap-3 text-xs text-slate-500">
             {rating != null && rating > 0 && (
               <div className="flex items-center gap-1">
                 <StarRating rating={rating} size={12} />
-                <span className="font-medium text-stone-700">{rating.toFixed(1)}</span>
+                <span className="font-medium text-slate-700">{rating.toFixed(1)}</span>
                 {reviewCount > 0 && <span>({reviewCount})</span>}
               </div>
             )}
           </div>
 
-          <div className="flex items-center gap-4 text-xs text-stone-500">
+          <div className="flex items-center gap-4 text-xs text-slate-500">
             {totalLessons && (
               <span className="flex items-center gap-1">
                 <BookOpen size={12} />
@@ -174,7 +174,7 @@ export function CourseCard({
           </div>
 
           {/* Price / Enrolled Status */}
-          <div className="flex items-center justify-between gap-2 mt-auto pt-2 border-t border-stone-100">
+          <div className="flex items-center justify-between gap-2 mt-auto pt-2 border-t border-slate-100">
             {isEnrolled ? (
               <span className="inline-flex items-center gap-1 font-bold text-emerald-600 text-xs">
                 <CheckCircle size={13} /> {isEn ? "Go to Course →" : "Masuk ke Kelas →"}
@@ -183,11 +183,11 @@ export function CourseCard({
               <span className="font-bold text-green-600">{isEn ? "Free" : "Gratis"}</span>
             ) : (
               <>
-                <span className="font-bold text-stone-900 text-base">
+                <span className="font-bold text-slate-900 text-base">
                   {formatCurrency(finalPrice, locale)}
                 </span>
                 {hasDiscount && (
-                  <span className="text-xs text-stone-400 line-through">
+                  <span className="text-xs text-slate-400 line-through">
                     {formatCurrency(price, locale)}
                   </span>
                 )}

@@ -85,6 +85,7 @@ export default async function AboutPage() {
   ];
 
   const leadership = dbInstructors.map((user) => ({
+    id: user.id,
     name: user.name || (user.role === "ADMIN" ? "Admin Matoh Technologies" : "Instruktur"),
     role: user.role === "ADMIN" ? (isEn ? "Platform Administrator" : "Administrator Platform") : (isEn ? "Expert Instructor" : "Dewan Pengajar & Peneliti"),
     experience: isEn ? "Certified Expert" : "Praktisi & Akademisi Terverifikasi",
@@ -234,7 +235,7 @@ export default async function AboutPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {leadership.map((person) => (
                 <div
-                  key={person.name}
+                  key={person.id}
                   className="bg-[#f8fafc] rounded-3xl border border-slate-200/80 p-6 flex flex-col justify-between hover:border-blue-200 hover:bg-blue-50/20 transition-all"
                 >
                   <div>
