@@ -5,6 +5,7 @@ import {
   HelpCircle,
   Plus,
   Trash2,
+  Edit2,
   CheckCircle2,
   ChevronDown,
   ChevronUp,
@@ -44,22 +45,31 @@ export function QuizManager({ courseId }: { courseId: string }) {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [notification, setNotification] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [expandedQuizId, setExpandedQuizId] = useState<string | null>(null);
 
-  // Create Quiz Modal State
+  // Quiz Modal State (Create / Edit)
   const [isCreatingQuiz, setIsCreatingQuiz] = useState(false);
+  const [editingQuiz, setEditingQuiz] = useState<Quiz | null>(null);
   const [quizTitle, setQuizTitle] = useState("");
   const [quizDescription, setQuizDescription] = useState("");
   const [passingScore, setPassingScore] = useState(70);
   const [savingQuiz, setSavingQuiz] = useState(false);
 
-  // Add Question Modal State
+  // Question Modal State (Add / Edit)
+  const [questionModalOpen, setQuestionModalOpen] = useState(false);
+  const [editingQuestion, setEditingQuestion] = useState<QuizQuestion | null>(null);
   const [selectedQuizIdForQuestion, setSelectedQuizIdForQuestion] = useState<string | null>(null);
   const [questionText, setQuestionText] = useState("");
   const [options, setOptions] = useState<string[]>(["", "", "", ""]);
   const [correctAnswer, setCorrectAnswer] = useState(0);
   const [explanation, setExplanation] = useState("");
   const [savingQuestion, setSavingQuestion] = useState(false);
+
+  const showNotification = (type: "success" | "error", text: string) => {
+    setNotification({ type, text });
+    setTimeout(() => setNotification(null), 4000);
+  };
 
   const fetchQuizzes = useCallback(async () => {
     try {
@@ -112,8 +122,55 @@ export function QuizManager({ courseId }: { courseId: string }) {
       setQuizTitle("");
       setQuizDescription("");
       setPassingScore(70);
+      showNotification("success", "Kuis baru berhasil dibuat");
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Gagal membuat kuis");
+      showNotification("error", err instanceof Error ? err.message : "Gagal membuat kuis");
+    } finally {
+      setSavingQuiz(false);
+    }
+  };
+
+  // Open Edit Quiz Modal
+  const handleOpenEditQuiz = (quiz: Quiz) => {
+    setEditingQuiz(quiz);
+    setQuizTitle(quiz.title);
+    setQuizDescription(quiz.description || "");
+    setPassingScore(quiz.passingScore);
+  };
+
+  // Save Edit Quiz handler
+  const handleSaveEditQuiz = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingQuiz || !quizTitle.trim()) return;
+
+    try {
+      setSavingQuiz(true);
+      const res = await fetch(`/api/admin/courses/${courseId}/quizzes/${editingQuiz.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: quizTitle.trim(),
+          description: quizDescription.trim() || null,
+          passingScore: Number(passingScore) || 70,
+        }),
+      });
+
+      if (!res.ok) {
+        const d = await res.json();
+        throw new Error(d.error || "Gagal memperbarui kuis");
+      }
+
+      const { quiz: updatedQuiz } = await res.json();
+      setQuizzes((prev) =>
+        prev.map((q) => (q.id === editingQuiz.id ? { ...q, ...updatedQuiz } : q))
+      );
+      setEditingQuiz(null);
+      setQuizTitle("");
+      setQuizDescription("");
+      setPassingScore(70);
+      showNotification("success", "Pengaturan kuis berhasil disimpan");
+    } catch (err: unknown) {
+      showNotification("error", err instanceof Error ? err.message : "Gagal memperbarui kuis");
     } finally {
       setSavingQuiz(false);
     }
@@ -130,63 +187,131 @@ export function QuizManager({ courseId }: { courseId: string }) {
 
       if (!res.ok) throw new Error("Gagal menghapus kuis");
       setQuizzes((prev) => prev.filter((q) => q.id !== quizId));
+      showNotification("success", `Kuis "${title}" berhasil dihapus`);
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Gagal menghapus kuis");
+      showNotification("error", err instanceof Error ? err.message : "Gagal menghapus kuis");
     }
   };
 
-  // Add question handler
-  const handleAddQuestion = async (e: React.FormEvent) => {
+  // Open Add Question Modal
+  const handleOpenAddQuestion = (quizId: string) => {
+    setSelectedQuizIdForQuestion(quizId);
+    setEditingQuestion(null);
+    setQuestionText("");
+    setOptions(["", "", "", ""]);
+    setCorrectAnswer(0);
+    setExplanation("");
+    setQuestionModalOpen(true);
+  };
+
+  // Open Edit Question Modal
+  const handleOpenEditQuestion = (quizId: string, q: QuizQuestion) => {
+    setSelectedQuizIdForQuestion(quizId);
+    setEditingQuestion(q);
+    setQuestionText(q.question);
+    setOptions(q.options.length > 0 ? [...q.options] : ["", "", "", ""]);
+    setCorrectAnswer(q.correctAnswer);
+    setExplanation(q.explanation || "");
+    setQuestionModalOpen(true);
+  };
+
+  // Save Question handler (both Add & Edit)
+  const handleSaveQuestion = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedQuizIdForQuestion) return;
 
     const filteredOptions = options.map((o) => o.trim()).filter(Boolean);
     if (filteredOptions.length < 2) {
-      alert("Harap isi minimal 2 pilihan jawaban");
+      showNotification("error", "Harap isi minimal 2 pilihan jawaban");
       return;
     }
     if (correctAnswer >= filteredOptions.length) {
-      alert("Pilihan jawaban benar tidak valid");
+      showNotification("error", "Pilihan jawaban benar tidak valid");
       return;
     }
 
     try {
       setSavingQuestion(true);
-      const res = await fetch(
-        `/api/admin/courses/${courseId}/quizzes/${selectedQuizIdForQuestion}/questions`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            question: questionText.trim(),
-            options: filteredOptions,
-            correctAnswer,
-            explanation: explanation.trim() || undefined,
-          }),
-        }
-      );
 
-      if (!res.ok) {
-        const d = await res.json();
-        throw new Error(d.error || "Gagal menambahkan soal");
+      if (editingQuestion) {
+        // Edit existing question
+        const res = await fetch(
+          `/api/admin/courses/${courseId}/quizzes/${selectedQuizIdForQuestion}/questions/${editingQuestion.id}`,
+          {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              question: questionText.trim(),
+              options: filteredOptions,
+              correctAnswer,
+              explanation: explanation.trim() || null,
+            }),
+          }
+        );
+
+        if (!res.ok) {
+          const d = await res.json();
+          throw new Error(d.error || "Gagal memperbarui soal kuis");
+        }
+
+        const { question: updatedQuestion } = await res.json();
+
+        setQuizzes((prev) =>
+          prev.map((q) =>
+            q.id === selectedQuizIdForQuestion
+              ? {
+                  ...q,
+                  questions: q.questions.map((item) =>
+                    item.id === editingQuestion.id ? updatedQuestion : item
+                  ),
+                }
+              : q
+          )
+        );
+
+        showNotification("success", "Soal kuis berhasil diperbarui");
+      } else {
+        // Add new question
+        const res = await fetch(
+          `/api/admin/courses/${courseId}/quizzes/${selectedQuizIdForQuestion}/questions`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              question: questionText.trim(),
+              options: filteredOptions,
+              correctAnswer,
+              explanation: explanation.trim() || undefined,
+            }),
+          }
+        );
+
+        if (!res.ok) {
+          const d = await res.json();
+          throw new Error(d.error || "Gagal menambahkan soal kuis");
+        }
+
+        const { question } = await res.json();
+        setQuizzes((prev) =>
+          prev.map((q) =>
+            q.id === selectedQuizIdForQuestion
+              ? { ...q, questions: [...q.questions, question] }
+              : q
+          )
+        );
+
+        showNotification("success", "Soal baru berhasil ditambahkan");
       }
 
-      const { question } = await res.json();
-      setQuizzes((prev) =>
-        prev.map((q) =>
-          q.id === selectedQuizIdForQuestion
-            ? { ...q, questions: [...q.questions, question] }
-            : q
-        )
-      );
-
+      setQuestionModalOpen(false);
+      setEditingQuestion(null);
       setSelectedQuizIdForQuestion(null);
       setQuestionText("");
       setOptions(["", "", "", ""]);
       setCorrectAnswer(0);
       setExplanation("");
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Gagal menambahkan soal");
+      showNotification("error", err instanceof Error ? err.message : "Gagal memproses soal kuis");
     } finally {
       setSavingQuestion(false);
     }
@@ -212,8 +337,9 @@ export function QuizManager({ courseId }: { courseId: string }) {
             : q
         )
       );
+      showNotification("success", "Soal kuis berhasil dihapus");
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Gagal menghapus soal");
+      showNotification("error", err instanceof Error ? err.message : "Gagal menghapus soal");
     }
   };
 
@@ -242,13 +368,36 @@ export function QuizManager({ courseId }: { courseId: string }) {
 
         <Button
           type="button"
-          onClick={() => setIsCreatingQuiz(true)}
+          onClick={() => {
+            setQuizTitle("");
+            setQuizDescription("");
+            setPassingScore(70);
+            setIsCreatingQuiz(true);
+          }}
           className="bg-blue-600 hover:bg-blue-700 text-white shrink-0"
           leftIcon={<Plus size={16} />}
         >
           Buat Kuis Baru
         </Button>
       </div>
+
+      {/* Notifications */}
+      {notification && (
+        <div
+          className={`p-4 rounded-xl border text-sm flex items-center gap-2.5 transition-all ${
+            notification.type === "success"
+              ? "bg-emerald-50 border-emerald-200 text-emerald-800"
+              : "bg-red-50 border-red-200 text-red-800"
+          }`}
+        >
+          {notification.type === "success" ? (
+            <CheckCircle2 size={16} className="text-emerald-600 shrink-0" />
+          ) : (
+            <AlertCircle size={16} className="text-red-600 shrink-0" />
+          )}
+          <span className="font-medium">{notification.text}</span>
+        </div>
+      )}
 
       {error && (
         <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm flex items-center gap-2">
@@ -270,7 +419,12 @@ export function QuizManager({ courseId }: { courseId: string }) {
           <Button
             type="button"
             variant="outline"
-            onClick={() => setIsCreatingQuiz(true)}
+            onClick={() => {
+              setQuizTitle("");
+              setQuizDescription("");
+              setPassingScore(70);
+              setIsCreatingQuiz(true);
+            }}
             leftIcon={<Plus size={14} />}
           >
             Tambah Kuis Pertama
@@ -314,18 +468,20 @@ export function QuizManager({ courseId }: { courseId: string }) {
                     <Button
                       type="button"
                       size="sm"
-                      onClick={() => {
-                        setSelectedQuizIdForQuestion(quiz.id);
-                        setQuestionText("");
-                        setOptions(["", "", "", ""]);
-                        setCorrectAnswer(0);
-                        setExplanation("");
-                      }}
+                      onClick={() => handleOpenAddQuestion(quiz.id)}
                       className="bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-xs py-1.5 h-auto"
                       leftIcon={<Plus size={13} />}
                     >
                       Tambah Soal
                     </Button>
+                    <button
+                      type="button"
+                      onClick={() => handleOpenEditQuiz(quiz)}
+                      className="p-1.5 text-stone-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      title="Edit Pengaturan Kuis"
+                    >
+                      <Edit2 size={16} />
+                    </button>
                     <button
                       type="button"
                       onClick={() => handleDeleteQuiz(quiz.id, quiz.title)}
@@ -353,7 +509,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
                         <p className="text-xs text-stone-500 font-medium">Belum ada soal pada kuis ini</p>
                         <button
                           type="button"
-                          onClick={() => setSelectedQuizIdForQuestion(quiz.id)}
+                          onClick={() => handleOpenAddQuestion(quiz.id)}
                           className="mt-2 text-xs font-bold text-blue-600 hover:underline"
                         >
                           + Tambah Soal Pertama
@@ -366,12 +522,12 @@ export function QuizManager({ courseId }: { courseId: string }) {
                           className="p-4 rounded-xl border border-stone-200 hover:border-blue-200 transition-colors bg-white relative group"
                         >
                           <div className="flex items-start justify-between gap-3">
-                            <div className="flex items-start gap-2.5">
+                            <div className="flex items-start gap-2.5 flex-1 min-w-0">
                               <span className="w-5 h-5 rounded bg-stone-100 text-stone-700 text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">
                                 {idx + 1}
                               </span>
-                              <div className="space-y-2.5">
-                                <h4 className="text-sm font-semibold text-stone-800 leading-snug">
+                              <div className="space-y-2.5 flex-1 min-w-0">
+                                <h4 className="text-sm font-semibold text-stone-800 leading-snug whitespace-pre-line">
                                   {q.question}
                                 </h4>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -383,12 +539,12 @@ export function QuizManager({ courseId }: { courseId: string }) {
                                         key={optIdx}
                                         className={`flex items-center gap-2 p-2 rounded-lg text-xs font-medium border ${
                                           isCorrect
-                                            ? "bg-emerald-50 border-emerald-200 text-emerald-900"
+                                            ? "bg-emerald-50 border-emerald-200 text-emerald-900 ring-1 ring-emerald-300"
                                             : "bg-stone-50 border-stone-200 text-stone-600"
                                         }`}
                                       >
                                         <span
-                                          className={`w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold ${
+                                          className={`w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold shrink-0 ${
                                             isCorrect
                                               ? "bg-emerald-600 text-white"
                                               : "bg-stone-200 text-stone-600"
@@ -416,14 +572,25 @@ export function QuizManager({ courseId }: { courseId: string }) {
                               </div>
                             </div>
 
-                            <button
-                              type="button"
-                              onClick={() => handleDeleteQuestion(quiz.id, q.id)}
-                              className="text-stone-300 hover:text-red-600 p-1 rounded transition-colors group-hover:opacity-100"
-                              title="Hapus Soal"
-                            >
-                              <Trash2 size={15} />
-                            </button>
+                            {/* Action Buttons: Edit & Delete */}
+                            <div className="flex items-center gap-1 shrink-0 pt-0.5">
+                              <button
+                                type="button"
+                                onClick={() => handleOpenEditQuestion(quiz.id, q)}
+                                className="p-1.5 rounded-lg text-stone-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                                title="Edit Soal Kuis"
+                              >
+                                <Edit2 size={15} />
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteQuestion(quiz.id, q.id)}
+                                className="p-1.5 rounded-lg text-stone-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                                title="Hapus Soal"
+                              >
+                                <Trash2 size={15} />
+                              </button>
+                            </div>
                           </div>
                         </div>
                       ))
@@ -436,16 +603,20 @@ export function QuizManager({ courseId }: { courseId: string }) {
         </div>
       )}
 
-      {/* Modal / Dialog: Buat Kuis Baru */}
-      {isCreatingQuiz && (
+      {/* Modal / Dialog: Buat / Edit Kuis */}
+      {(isCreatingQuiz || editingQuiz) && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/50 backdrop-blur-xs">
           <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-stone-200 animate-in fade-in zoom-in-95 duration-150">
-            <h3 className="text-base font-bold text-stone-900 mb-1">Tambah Kuis Baru</h3>
+            <h3 className="text-base font-bold text-stone-900 mb-1">
+              {editingQuiz ? "Edit Informasi Kuis" : "Tambah Kuis Baru"}
+            </h3>
             <p className="text-xs text-stone-500 mb-4">
-              Tentukan judul kuis dan nilai ambang batas kelulusan siswa.
+              {editingQuiz
+                ? "Perbarui judul kuis, deskripsi instruksi, atau batas nilai KKM."
+                : "Tentukan judul kuis dan nilai ambang batas kelulusan siswa."}
             </p>
 
-            <form onSubmit={handleCreateQuiz} className="space-y-4">
+            <form onSubmit={editingQuiz ? handleSaveEditQuiz : handleCreateQuiz} className="space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-stone-700 mb-1">
                   Judul Kuis <span className="text-red-500">*</span>
@@ -492,7 +663,10 @@ export function QuizManager({ courseId }: { courseId: string }) {
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={() => setIsCreatingQuiz(false)}
+                  onClick={() => {
+                    setIsCreatingQuiz(false);
+                    setEditingQuiz(null);
+                  }}
                 >
                   Batal
                 </Button>
@@ -502,7 +676,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
                   loading={savingQuiz}
                   className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
-                  Simpan Kuis
+                  {editingQuiz ? "Simpan Perubahan" : "Simpan Kuis"}
                 </Button>
               </div>
             </form>
@@ -510,16 +684,27 @@ export function QuizManager({ courseId }: { courseId: string }) {
         </div>
       )}
 
-      {/* Modal / Dialog: Tambah Soal Kuis */}
-      {selectedQuizIdForQuestion && (
+      {/* Modal / Dialog: Tambah / Edit Soal Kuis */}
+      {questionModalOpen && selectedQuizIdForQuestion && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/50 backdrop-blur-xs">
           <div className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-xl border border-stone-200 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
-            <h3 className="text-base font-bold text-stone-900 mb-1">Tambah Soal Pilihan Ganda</h3>
-            <p className="text-xs text-stone-500 mb-4">
-              Masukkan pertanyaan, beberapa opsi jawaban, dan pilih opsi yang benar.
-            </p>
+            <div className="flex items-start justify-between gap-3 mb-4">
+              <div>
+                <h3 className="text-base font-bold text-stone-900">
+                  {editingQuestion ? "Edit Soal Kuis" : "Tambah Soal Pilihan Ganda"}
+                </h3>
+                <p className="text-xs text-stone-500 mt-0.5">
+                  {editingQuestion
+                    ? "Perbarui pertanyaan, pilihan jawaban, atau kunci jawaban benar."
+                    : "Masukkan pertanyaan, beberapa opsi jawaban, dan pilih opsi yang benar."}
+                </p>
+              </div>
+              <span className="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-100">
+                {editingQuestion ? "Mode Edit" : "Soal Baru"}
+              </span>
+            </div>
 
-            <form onSubmit={handleAddQuestion} className="space-y-4">
+            <form onSubmit={handleSaveQuestion} className="space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-stone-700 mb-1">
                   Pertanyaan <span className="text-red-500">*</span>
@@ -527,7 +712,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
                 <textarea
                   rows={3}
                   required
-                  placeholder="Tuliskan soal pertanyaan di sini..."
+                  placeholder="Tuliskan teks pertanyaan di sini..."
                   value={questionText}
                   onChange={(e) => setQuestionText(e.target.value)}
                   className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
@@ -537,7 +722,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className="text-xs font-semibold text-stone-700">
-                    Pilihan Jawaban (Tandai yang benar) <span className="text-red-500">*</span>
+                    Pilihan Jawaban (Tandai lingkaran untuk jawaban yang benar) <span className="text-red-500">*</span>
                   </label>
                   {options.length < 5 && (
                     <button
@@ -556,13 +741,13 @@ export function QuizManager({ courseId }: { courseId: string }) {
                     const isCorrect = correctAnswer === idx;
                     return (
                       <div key={idx} className="flex items-center gap-2">
-                        <label className="flex items-center gap-1.5 cursor-pointer shrink-0">
+                        <label className="flex items-center gap-1.5 cursor-pointer shrink-0" title={`Pilih ${label} sebagai jawaban benar`}>
                           <input
                             type="radio"
                             name="correctAnswerRadio"
                             checked={isCorrect}
                             onChange={() => setCorrectAnswer(idx)}
-                            className="text-blue-600 focus:ring-blue-500 accent-blue-600"
+                            className="text-blue-600 focus:ring-blue-500 accent-blue-600 w-4 h-4 cursor-pointer"
                           />
                           <span
                             className={`w-6 h-6 rounded flex items-center justify-center text-xs font-bold ${
@@ -586,7 +771,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
                           }}
                           className={`flex-1 text-xs px-3 py-2 rounded-xl border focus:outline-hidden focus:ring-2 focus:ring-blue-500 ${
                             isCorrect
-                              ? "border-emerald-300 bg-emerald-50/30"
+                              ? "border-emerald-300 bg-emerald-50/30 font-medium"
                               : "border-stone-300"
                           }`}
                         />
@@ -601,6 +786,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
                               }
                             }}
                             className="text-stone-300 hover:text-red-500 p-1"
+                            title="Hapus opsi ini"
                           >
                             <Trash2 size={14} />
                           </button>
@@ -629,7 +815,11 @@ export function QuizManager({ courseId }: { courseId: string }) {
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={() => setSelectedQuizIdForQuestion(null)}
+                  onClick={() => {
+                    setQuestionModalOpen(false);
+                    setEditingQuestion(null);
+                    setSelectedQuizIdForQuestion(null);
+                  }}
                 >
                   Batal
                 </Button>
@@ -639,7 +829,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
                   loading={savingQuestion}
                   className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
-                  Simpan Soal
+                  {editingQuestion ? "Simpan Perubahan Soal" : "Simpan Soal"}
                 </Button>
               </div>
             </form>

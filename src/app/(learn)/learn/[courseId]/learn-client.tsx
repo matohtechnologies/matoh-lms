@@ -35,6 +35,8 @@ import {
   Bookmark,
   FolderDown,
   Trash2,
+  Globe,
+  Layers,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { Progress } from "@/components/ui/progress";
@@ -173,6 +175,7 @@ interface StudyNoteItem {
 interface CourseResourceItem {
   id: string;
   courseId: string;
+  sectionId?: string | null;
   title: string;
   description?: string | null;
   fileUrl: string;
@@ -180,6 +183,11 @@ interface CourseResourceItem {
   fileSize?: number | null;
   type: string;
   createdAt: string;
+  section?: {
+    id: string;
+    title: string;
+    order?: number;
+  } | null;
 }
 
 function getEmbedUrl(url?: string | null): string | null {
@@ -257,6 +265,7 @@ export default function LearnPageClient({
   // Course Resources State
   const [resources, setResources] = useState<CourseResourceItem[]>([]);
   const [loadingResources, setLoadingResources] = useState(false);
+  const [resourceFilter, setResourceFilter] = useState<"CHAPTER" | "GENERAL">("CHAPTER");
 
   // Quizzes State
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
@@ -287,6 +296,21 @@ export default function LearnPageClient({
   const prevLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : null;
   const nextLesson = currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null;
   const progress = Math.round((completedLessons.size / Math.max(1, allLessons.length)) * 100);
+
+  // Reliable Active Section Resolution (matches sectionId or checks lessons array)
+  const currentSection = sections.find(
+    (s) =>
+      (currentLesson?.sectionId && s.id === currentLesson.sectionId) ||
+      s.lessons?.some((l) => l.id === currentLesson?.id)
+  );
+  const currentSectionId = currentSection?.id;
+
+  // Chapter-Scoped & General Resources
+  const currentChapterResources = currentSectionId
+    ? resources.filter((r) => r.sectionId === currentSectionId)
+    : [];
+  const generalResources = resources.filter((r) => !r.sectionId);
+  const relevantResourcesCount = currentChapterResources.length + generalResources.length;
 
   const [submittingQuiz, setSubmittingQuiz] = useState(false);
 
@@ -801,65 +825,155 @@ export default function LearnPageClient({
 
         {/* Sections & Lessons Playlist */}
         <div className="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar">
-          {sections.map((section) => (
+          {sections.map((section) => {
+            const secResources = resources.filter((r) => r.sectionId === section.id);
+            return (
+              <details
+                key={section.id}
+                open
+                className="group rounded-xl border border-stone-800/70 overflow-hidden bg-stone-950/40"
+              >
+                <summary className="flex items-center justify-between px-3.5 py-2.5 cursor-pointer hover:bg-stone-800/60 list-none select-none transition-colors">
+                  <span className="text-xs font-bold text-stone-300 uppercase tracking-wider">
+                    {section.title}
+                  </span>
+                  <ChevronDown size={14} className="text-stone-500 group-open:rotate-180 transition-transform" />
+                </summary>
+                <div className="divide-y divide-stone-800/40">
+                  {section.lessons.map((lesson) => {
+                    const isActive = lesson.id === currentLesson.id;
+                    const isCompleted = completedLessons.has(lesson.id);
+                    return (
+                      <div
+                        key={lesson.id}
+                        className={`w-full flex items-center gap-3 px-3.5 py-2.5 text-left transition-all ${
+                          isActive
+                            ? "bg-blue-600/20 text-blue-300 font-semibold border-l-2 border-blue-500"
+                            : "hover:bg-stone-800/40 text-stone-300 border-l-2 border-transparent"
+                        }`}
+                      >
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleLessonComplete(lesson.id);
+                          }}
+                          className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-transform hover:scale-110 ${
+                            isCompleted
+                              ? "bg-green-600 text-white"
+                              : isActive
+                              ? "border-2 border-blue-500 text-blue-400"
+                              : "border border-stone-600 text-stone-500"
+                          }`}
+                          title={
+                            isCompleted
+                              ? t("toggle_complete")
+                              : t("toggle_incomplete")
+                          }
+                        >
+                          {isCompleted ? <CheckCircle size={12} /> : <Play size={8} />}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setCurrentLesson(lesson)}
+                          className="text-xs truncate flex-1 text-left hover:text-white transition-colors"
+                        >
+                          {lesson.title}
+                        </button>
+                      </div>
+                    );
+                  })}
+
+                  {/* Specific Learning Materials for this Section */}
+                  {secResources.length > 0 && (
+                    <div className="p-2.5 bg-stone-900/70 border-t border-stone-800/60 space-y-1.5">
+                      <div className="flex items-center justify-between text-[11px] font-semibold text-stone-400 px-1">
+                        <span className="flex items-center gap-1.5 text-blue-400">
+                          <FolderDown size={12} />
+                          <span>Bahan Bab Ini ({secResources.length})</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setActiveTab("resources");
+                            setResourceFilter("CHAPTER");
+                          }}
+                          className="text-[10px] text-blue-400 hover:text-blue-300 transition-colors"
+                        >
+                          Buka Tab &rarr;
+                        </button>
+                      </div>
+                      <div className="space-y-1">
+                        {secResources.map((res) => (
+                          <a
+                            key={res.id}
+                            href={res.fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-between p-1.5 rounded-lg bg-stone-950/70 hover:bg-stone-800 border border-stone-800/80 text-[11px] text-stone-300 hover:text-white transition-colors group"
+                            title={res.title}
+                          >
+                            <span className="truncate flex items-center gap-1.5">
+                              <Paperclip size={11} className="text-stone-500 group-hover:text-blue-400 shrink-0" />
+                              <span className="truncate">{res.title}</span>
+                            </span>
+                            <Download size={11} className="text-stone-500 group-hover:text-blue-400 shrink-0 ml-1.5" />
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </details>
+            );
+          })}
+
+          {/* General Course Materials in Sidebar */}
+          {generalResources.length > 0 && (
             <details
-              key={section.id}
               open
               className="group rounded-xl border border-stone-800/70 overflow-hidden bg-stone-950/40"
             >
               <summary className="flex items-center justify-between px-3.5 py-2.5 cursor-pointer hover:bg-stone-800/60 list-none select-none transition-colors">
-                <span className="text-xs font-bold text-stone-300 uppercase tracking-wider">
-                  {section.title}
+                <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <Globe size={13} />
+                  Bahan Belajar Umum ({generalResources.length})
                 </span>
-                <ChevronDown size={14} className="text-stone-500 group-open:rotate-180 transition-transform" />
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveTab("resources");
+                      setResourceFilter("GENERAL");
+                    }}
+                    className="text-[10px] text-emerald-400 hover:text-emerald-300 transition-colors"
+                  >
+                    Buka Tab &rarr;
+                  </button>
+                  <ChevronDown size={14} className="text-stone-500 group-open:rotate-180 transition-transform" />
+                </div>
               </summary>
-              <div className="divide-y divide-stone-800/40">
-                {section.lessons.map((lesson) => {
-                  const isActive = lesson.id === currentLesson.id;
-                  const isCompleted = completedLessons.has(lesson.id);
-                  return (
-                    <div
-                      key={lesson.id}
-                      className={`w-full flex items-center gap-3 px-3.5 py-2.5 text-left transition-all ${
-                        isActive
-                          ? "bg-blue-600/20 text-blue-300 font-semibold border-l-2 border-blue-500"
-                          : "hover:bg-stone-800/40 text-stone-300 border-l-2 border-transparent"
-                      }`}
-                    >
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleLessonComplete(lesson.id);
-                        }}
-                        className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-transform hover:scale-110 ${
-                          isCompleted
-                            ? "bg-green-600 text-white"
-                            : isActive
-                            ? "border-2 border-blue-500 text-blue-400"
-                            : "border border-stone-600 text-stone-500"
-                        }`}
-                        title={
-                          isCompleted
-                            ? t("toggle_complete")
-                            : t("toggle_incomplete")
-                        }
-                      >
-                        {isCompleted ? <CheckCircle size={12} /> : <Play size={8} />}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setCurrentLesson(lesson)}
-                        className="text-xs truncate flex-1 text-left hover:text-white transition-colors"
-                      >
-                        {lesson.title}
-                      </button>
-                    </div>
-                  );
-                })}
+              <div className="p-2 space-y-1 bg-stone-900/60">
+                {generalResources.map((res) => (
+                  <a
+                    key={res.id}
+                    href={res.fileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between p-1.5 rounded-lg bg-stone-950/70 hover:bg-stone-800 border border-stone-800/80 text-[11px] text-stone-300 hover:text-white transition-colors group"
+                    title={res.title}
+                  >
+                    <span className="truncate flex items-center gap-1.5">
+                      <Paperclip size={11} className="text-stone-500 group-hover:text-emerald-400 shrink-0" />
+                      <span className="truncate">{res.title}</span>
+                    </span>
+                    <Download size={11} className="text-stone-500 group-hover:text-emerald-400 shrink-0 ml-1.5" />
+                  </a>
+                ))}
               </div>
             </details>
-          ))}
+          )}
         </div>
 
         {/* Certificate Section at Sidebar Bottom */}
@@ -1107,7 +1221,10 @@ export default function LearnPageClient({
                 },
                 {
                   key: "resources",
-                  label: locale === "en" ? `Resources (${resources.length})` : `Bahan Belajar (${resources.length})`,
+                  label:
+                    locale === "en"
+                      ? `Resources (${relevantResourcesCount})`
+                      : `Bahan Belajar (${relevantResourcesCount})`,
                   icon: FolderDown,
                 },
                 {
@@ -1287,77 +1404,212 @@ export default function LearnPageClient({
             )}
 
             {/* TAB 3: RESOURCE VAULT / BAHAN BELAJAR */}
-            {activeTab === "resources" && (
-              <div className="space-y-6">
-                <div className="p-5 bg-stone-900 border border-stone-800 rounded-2xl">
-                  <h3 className="text-base font-bold text-stone-100 flex items-center gap-2">
-                    <FolderDown size={18} className="text-blue-400" />
-                    {locale === "en" ? "Course Resources & Starter Files" : "Bahan Belajar & Source Code"}
-                  </h3>
-                  <p className="text-xs text-stone-400 mt-1">
-                    {locale === "en"
-                      ? "Download official project templates, Figma design kits, cheatsheets, and slides provided for this course."
-                      : "Unduh file proyek, template Figma, slide materi, dan cheatsheet resmi untuk kelas ini."}
-                  </p>
-                </div>
+            {activeTab === "resources" && (() => {
+              const formatFileSize = (bytes?: number | null) => {
+                if (!bytes || bytes === 0) return null;
+                const k = 1024;
+                const sizes = ["Bytes", "KB", "MB", "GB"];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + " " + sizes[i];
+              };
 
-                {loadingResources ? (
-                  <div className="p-8 text-center bg-stone-900 rounded-2xl border border-stone-800">
-                    <Loader2 className="animate-spin text-blue-500 mx-auto mb-2" size={24} />
-                    <span className="text-xs text-stone-400">{locale === "en" ? "Loading resources..." : "Memuat bahan belajar..."}</span>
-                  </div>
-                ) : resources.length === 0 ? (
-                  <div className="bg-stone-900/60 border border-stone-800 rounded-2xl p-8 text-center space-y-2">
-                    <FolderDown className="mx-auto text-stone-600 mb-2" size={32} />
-                    <h4 className="text-sm font-bold text-stone-300">
-                      {locale === "en" ? "No resources available yet" : "Bahan belajar belum tersedia"}
-                    </h4>
-                    <p className="text-xs text-stone-500 max-w-sm mx-auto">
-                      {locale === "en"
-                        ? "The instructor will upload supplementary assets and project files here."
-                        : "Instruktur akan mengunggah aset tambahan dan file proyek di bagian ini."}
-                    </p>
-                  </div>
-                ) : (
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    {resources.map((item) => (
-                      <div
-                        key={item.id}
-                        className="p-5 rounded-2xl bg-stone-900 border border-stone-800 flex flex-col justify-between hover:border-stone-700 transition-colors"
-                      >
-                        <div className="space-y-2 mb-4">
-                          <div className="flex items-center justify-between">
-                            <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-blue-950/60 text-blue-400 border border-blue-800/40">
-                              {item.type}
+              const renderResourceCard = (item: CourseResourceItem) => {
+                const isCurrentChapter = !!(currentSectionId && item.sectionId === currentSectionId);
+                const sectionName = item.section?.title || sections.find((s) => s.id === item.sectionId)?.title;
+
+                return (
+                  <div
+                    key={item.id}
+                    className={`p-5 rounded-2xl bg-stone-900 border flex flex-col justify-between transition-colors ${
+                      isCurrentChapter
+                        ? "border-blue-600/60 ring-1 ring-blue-500/20"
+                        : "border-stone-800 hover:border-stone-700"
+                    }`}
+                  >
+                    <div className="space-y-2.5 mb-4">
+                      <div className="flex items-center justify-between gap-2 flex-wrap">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-blue-950/60 text-blue-400 border border-blue-800/40">
+                          {item.type}
+                        </span>
+
+                        {/* Chapter Scope Badge */}
+                        {item.sectionId ? (
+                          <span
+                            className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold truncate max-w-[190px] ${
+                              isCurrentChapter
+                                ? "bg-blue-900/60 text-blue-300 border border-blue-700/60"
+                                : "bg-stone-800 text-stone-400 border border-stone-700"
+                            }`}
+                            title={sectionName || ""}
+                          >
+                            <Layers size={10} className="shrink-0" />
+                            <span className="truncate">
+                              {isCurrentChapter
+                                ? `Khusus Bab Ini (${sectionName || "Bab Ini"})`
+                                : sectionName || "Chapter"}
                             </span>
-                            {item.fileName && (
-                              <span className="text-[11px] text-stone-500 font-mono truncate max-w-[140px]">
-                                {item.fileName}
-                              </span>
-                            )}
-                          </div>
-                          <h4 className="text-sm font-bold text-stone-100">{item.title}</h4>
-                          {item.description && (
-                            <p className="text-xs text-stone-400 leading-relaxed">{item.description}</p>
-                          )}
-                        </div>
-
-                        <a
-                          href={item.fileUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-semibold transition-colors w-full border border-stone-700"
-                        >
-                          <Download size={14} />
-                          <span>{locale === "en" ? "Download / Open Link" : "Unduh / Buka Tautan"}</span>
-                          <ExternalLink size={12} className="opacity-60" />
-                        </a>
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-950/60 text-emerald-400 border border-emerald-800/40">
+                            <Globe size={10} />
+                            {locale === "en" ? "General (All Chapters)" : "Bahan Umum (Semua Bab)"}
+                          </span>
+                        )}
                       </div>
-                    ))}
+
+                      <h4 className="text-sm font-bold text-stone-100 leading-snug">{item.title}</h4>
+                      {item.description && (
+                        <p className="text-xs text-stone-400 leading-relaxed">{item.description}</p>
+                      )}
+
+                      {(item.fileName || item.fileSize) && (
+                        <div className="pt-2 border-t border-stone-800/60 flex items-center justify-between text-[11px] text-stone-500 font-mono">
+                          <span className="truncate max-w-[180px]" title={item.fileName || ""}>
+                            📄 {item.fileName || "Berkas Terlampir"}
+                          </span>
+                          {item.fileSize && <span>{formatFileSize(item.fileSize)}</span>}
+                        </div>
+                      )}
+                    </div>
+
+                    <a
+                      href={item.fileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-semibold transition-colors w-full border border-stone-700"
+                    >
+                      <Download size={14} />
+                      <span>{locale === "en" ? "Download / Open Link" : "Unduh / Akses Berkas"}</span>
+                      <ExternalLink size={12} className="opacity-60" />
+                    </a>
                   </div>
-                )}
-              </div>
-            )}
+                );
+              };
+
+              return (
+                <div className="space-y-6">
+                  {/* Banner & Scoped Header */}
+                  <div className="p-5 bg-stone-900 border border-stone-800 rounded-2xl">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <div>
+                        <h3 className="text-base font-bold text-stone-100 flex items-center gap-2">
+                          <FolderDown size={18} className="text-blue-400" />
+                          {locale === "en" ? "Course Resources & Starter Files" : "Bahan Belajar & Source Code"}
+                        </h3>
+                        <p className="text-xs text-stone-400 mt-1">
+                          {locale === "en"
+                            ? "Files follow each chapter configuration so you only see materials relevant to your study."
+                            : "Bahan ajar otomatis menyesuaikan dengan bab/section yang sedang Anda pelajari."}
+                        </p>
+                      </div>
+
+                      {/* Current Chapter Indicator */}
+                      {currentSection && (
+                        <div className="px-3 py-1.5 rounded-xl bg-stone-800/80 border border-stone-700/60 shrink-0 flex items-center gap-2">
+                          <Layers size={13} className="text-blue-400 shrink-0" />
+                          <div className="text-[11px] leading-tight">
+                            <span className="text-stone-400 block text-[10px]">
+                              {locale === "en" ? "Active Chapter:" : "Bab yang Dipelajari:"}
+                            </span>
+                            <span className="text-blue-300 font-semibold truncate max-w-[160px] block" title={currentSection.title}>
+                              {currentSection.title}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Filter Mode Switcher: Only 2 options, no redundancy */}
+                    {resources.length > 0 && (
+                      <div className="flex items-center gap-2 mt-4 pt-4 border-t border-stone-800/80 flex-wrap">
+                        <button
+                          type="button"
+                          onClick={() => setResourceFilter("CHAPTER")}
+                          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                            resourceFilter === "CHAPTER"
+                              ? "bg-blue-600 text-white shadow-xs"
+                              : "bg-stone-800 text-stone-400 hover:text-stone-200 hover:bg-stone-700/80"
+                          }`}
+                        >
+                          <Layers size={13} />
+                          <span>{locale === "en" ? "This Chapter" : "Khusus Bab Ini"} ({currentChapterResources.length})</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => setResourceFilter("GENERAL")}
+                          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                            resourceFilter === "GENERAL"
+                              ? "bg-blue-600 text-white shadow-xs"
+                              : "bg-stone-800 text-stone-400 hover:text-stone-200 hover:bg-stone-700/80"
+                          }`}
+                        >
+                          <Globe size={13} />
+                          <span>{locale === "en" ? "General Files" : "Bahan Umum"} ({generalResources.length})</span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {loadingResources ? (
+                    <div className="p-8 text-center bg-stone-900 rounded-2xl border border-stone-800">
+                      <Loader2 className="animate-spin text-blue-500 mx-auto mb-2" size={24} />
+                      <span className="text-xs text-stone-400">
+                        {locale === "en" ? "Loading resources..." : "Memuat bahan belajar..."}
+                      </span>
+                    </div>
+                  ) : resources.length === 0 ? (
+                    <div className="bg-stone-900/60 border border-stone-800 rounded-2xl p-8 text-center space-y-2">
+                      <FolderDown className="mx-auto text-stone-600 mb-2" size={32} />
+                      <h4 className="text-sm font-bold text-stone-300">
+                        {locale === "en" ? "No resources available yet" : "Bahan belajar belum tersedia"}
+                      </h4>
+                      <p className="text-xs text-stone-500 max-w-sm mx-auto">
+                        {locale === "en"
+                          ? "The instructor will upload supplementary assets and project files here."
+                          : "Instruktur akan mengunggah aset tambahan dan file proyek di bagian ini."}
+                      </p>
+                    </div>
+                  ) : resourceFilter === "CHAPTER" ? (
+                    currentChapterResources.length === 0 ? (
+                      <div className="bg-stone-900/60 border border-stone-800 rounded-2xl p-8 text-center space-y-2">
+                        <Layers className="mx-auto text-stone-600 mb-2" size={32} />
+                        <h4 className="text-sm font-bold text-stone-300">
+                          {locale === "en" ? "No specific files for this chapter" : "Belum Ada Bahan Ajar Khusus Bab Ini"}
+                        </h4>
+                        <p className="text-xs text-stone-500 max-w-sm mx-auto">
+                          {locale === "en"
+                            ? `No files attached specifically for "${currentSection?.title || 'this chapter'}". Check the General Files tab above.`
+                            : `Bab "${currentSection?.title || 'Bab ini'}" belum memiliki berkas khusus. Anda dapat memeriksa tab "Bahan Umum".`}
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="grid sm:grid-cols-2 gap-4">
+                        {currentChapterResources.map(renderResourceCard)}
+                      </div>
+                    )
+                  ) : (
+                    generalResources.length === 0 ? (
+                      <div className="bg-stone-900/60 border border-stone-800 rounded-2xl p-8 text-center space-y-2">
+                        <Globe className="mx-auto text-stone-600 mb-2" size={32} />
+                        <h4 className="text-sm font-bold text-stone-300">
+                          {locale === "en" ? "No general course files" : "Tidak Ada Bahan Belajar Umum"}
+                        </h4>
+                        <p className="text-xs text-stone-500 max-w-sm mx-auto">
+                          {locale === "en"
+                            ? "All course materials are assigned directly to their specific chapters."
+                            : "Semua bahan belajar untuk kelas ini telah dikelompokkan ke dalam bab masing-masing."}
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="grid sm:grid-cols-2 gap-4">
+                        {generalResources.map(renderResourceCard)}
+                      </div>
+                    )
+                  )}
+                </div>
+              );
+            })()}
 
             {/* TAB 4: INTERACTIVE QUIZZES */}
             {activeTab === "quiz" && (

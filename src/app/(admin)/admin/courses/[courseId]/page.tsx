@@ -20,10 +20,12 @@ import {
   Award,
   Video,
   Sparkles,
+  FolderDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/input";
 import { CurriculumManager, type SectionData } from "./curriculum-manager";
+import { ResourceManager } from "./resource-manager";
 import { QuizManager } from "./quiz-manager";
 import { AssignmentManager } from "./assignment-manager";
 import { DiscussionManager } from "./discussion-manager";
@@ -78,7 +80,7 @@ export default function EditCoursePage() {
   const courseId = params.courseId;
   const t = useTranslations("admin");
 
-  const VALID_TABS = ["curriculum", "quizzes", "assignments", "discussions", "certificates", "settings"] as const;
+  const VALID_TABS = ["curriculum", "resources", "quizzes", "assignments", "discussions", "certificates", "settings"] as const;
   type AdminTab = typeof VALID_TABS[number];
   const tabParam = searchParams.get("tab");
   const initialTab: AdminTab = VALID_TABS.includes(tabParam as AdminTab) ? (tabParam as AdminTab) : "curriculum";
@@ -321,6 +323,19 @@ export default function EditCoursePage() {
 
         <button
           type="button"
+          onClick={() => setActiveTab("resources")}
+          className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-t-xl text-xs sm:text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
+            activeTab === "resources"
+              ? "border-blue-600 text-blue-600 bg-white shadow-xs"
+              : "border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-100/60"
+          }`}
+        >
+          <FolderDown size={15} />
+          <span>{t("tab_resources")}</span>
+        </button>
+
+        <button
+          type="button"
           onClick={() => setActiveTab("quizzes")}
           className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-t-xl text-xs sm:text-sm font-semibold transition-all border-b-2 -mb-px shrink-0 ${
             activeTab === "quizzes"
@@ -405,6 +420,14 @@ export default function EditCoursePage() {
           courseId={courseId}
           sections={sections}
           onRefresh={loadData}
+        />
+      )}
+
+      {/* Tab: Resource Manager / Bahan Belajar */}
+      {activeTab === "resources" && (
+        <ResourceManager
+          courseId={courseId}
+          sections={sections}
         />
       )}
 

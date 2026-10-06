@@ -170,6 +170,7 @@ model Section {
 
   course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   lessons  Lesson[]
+  resources CourseResource[]
 
   @@map("sections")
 }
@@ -457,18 +458,21 @@ model Coupon {
 model CourseResource {
   id          String   @id @default(cuid())
   courseId    String
+  sectionId   String?  // Optional: null means general / all chapters
   title       String
-  description String?
-  fileUrl     String
+  description String?  @db.Text
+  fileUrl     String   @db.Text
   fileName    String?
   fileSize    Int?     // bytes
-  type        String   @default("FILE") // FILE, GITHUB, FIGMA, SLIDE
+  type        String   @default("FILE") // FILE, PDF, GITHUB, FIGMA, SLIDE, ZIP, VIDEO, LINK
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  section     Section? @relation(fields: [sectionId], references: [id], onDelete: SetNull)
 
   @@index([courseId])
+  @@index([sectionId])
   @@map("course_resources")
 }
 
