@@ -102,6 +102,12 @@ interface QuizAttempt {
 interface Quiz {
   id: string;
   courseId: string;
+  sectionId?: string | null;
+  section?: {
+    id: string;
+    title: string;
+    order?: number;
+  } | null;
   title: string;
   description?: string | null;
   passingScore: number;
@@ -127,6 +133,12 @@ interface UserSubmission {
 interface Assignment {
   id: string;
   courseId: string;
+  sectionId?: string | null;
+  section?: {
+    id: string;
+    title: string;
+    order?: number;
+  } | null;
   title: string;
   description: string;
   fileUrl?: string | null;
@@ -827,6 +839,11 @@ export default function LearnPageClient({
         <div className="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar">
           {sections.map((section) => {
             const secResources = resources.filter((r) => r.sectionId === section.id);
+            const secLessons = section.lessons || [];
+            const isSecCompleted = secLessons.length > 0 && secLessons.every((l) => completedLessons.has(l.id));
+            const completedSecCount = secLessons.filter((l) => completedLessons.has(l.id)).length;
+            const secQuizzes = quizzes.filter((q) => q.sectionId === section.id);
+            const secAssignments = assignments.filter((a) => a.sectionId === section.id);
             return (
               <details
                 key={section.id}
@@ -920,6 +937,142 @@ export default function LearnPageClient({
                             <Download size={11} className="text-stone-500 group-hover:text-blue-400 shrink-0 ml-1.5" />
                           </a>
                         ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Quizzes specifically for this section */}
+                  {secQuizzes.length > 0 && (
+                    <div className="p-2.5 bg-stone-900/60 border-t border-stone-800/60 space-y-1.5">
+                      <div className="flex items-center justify-between text-[11px] font-semibold text-stone-400 px-1">
+                        <span className="flex items-center gap-1.5 text-amber-400">
+                          <HelpCircle size={12} />
+                          <span>Kuis Bab Ini ({secQuizzes.length})</span>
+                        </span>
+                        {!isSecCompleted && (
+                          <span className="text-[10px] text-amber-500/90 font-medium flex items-center gap-1">
+                            <Lock size={10} /> Terkunci
+                          </span>
+                        )}
+                      </div>
+                      <div className="space-y-1">
+                        {secQuizzes.map((q) => {
+                          const latestAttempt = q.attempts?.[0];
+                          const passed = latestAttempt?.passed;
+                          const qGlobalIdx = quizzes.findIndex((item) => item.id === q.id);
+
+                          return (
+                            <button
+                              key={q.id}
+                              type="button"
+                              onClick={() => {
+                                if (qGlobalIdx !== -1) setSelectedQuizIdx(qGlobalIdx);
+                                setActiveTab("quiz");
+                              }}
+                              className={`w-full flex items-center justify-between p-2 rounded-lg border text-left text-xs transition-colors group ${
+                                isSecCompleted
+                                  ? "bg-stone-950/70 hover:bg-stone-800 border-stone-800/80 text-stone-200 hover:text-white"
+                                  : "bg-stone-950/40 border-stone-800/40 text-stone-400 hover:bg-stone-900/60"
+                              }`}
+                            >
+                              <div className="flex items-center gap-2 min-w-0">
+                                {isSecCompleted ? (
+                                  passed ? (
+                                    <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
+                                  ) : (
+                                    <HelpCircle size={13} className="text-amber-400 shrink-0" />
+                                  )
+                                ) : (
+                                  <Lock size={13} className="text-stone-500 shrink-0" />
+                                )}
+                                <span className="truncate font-medium">{q.title}</span>
+                              </div>
+                              <span
+                                className={`text-[10px] px-1.5 py-0.5 rounded-full shrink-0 font-medium ${
+                                  !isSecCompleted
+                                    ? "bg-stone-800 text-stone-500"
+                                    : passed
+                                    ? "bg-emerald-500/20 text-emerald-300"
+                                    : "bg-amber-500/20 text-amber-300"
+                                }`}
+                              >
+                                {!isSecCompleted
+                                  ? `${completedSecCount}/${secLessons.length}`
+                                  : passed
+                                  ? "Lulus"
+                                  : "Kerjakan"}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Assignments specifically for this section */}
+                  {secAssignments.length > 0 && (
+                    <div className="p-2.5 bg-stone-900/60 border-t border-stone-800/60 space-y-1.5">
+                      <div className="flex items-center justify-between text-[11px] font-semibold text-stone-400 px-1">
+                        <span className="flex items-center gap-1.5 text-indigo-400">
+                          <FileCode2 size={12} />
+                          <span>Tugas Bab Ini ({secAssignments.length})</span>
+                        </span>
+                        {!isSecCompleted && (
+                          <span className="text-[10px] text-amber-500/90 font-medium flex items-center gap-1">
+                            <Lock size={10} /> Terkunci
+                          </span>
+                        )}
+                      </div>
+                      <div className="space-y-1">
+                        {secAssignments.map((a) => {
+                          const sub = a.submissions?.[0];
+                          return (
+                            <button
+                              key={a.id}
+                              type="button"
+                              onClick={() => {
+                                setActiveTab("assignment");
+                              }}
+                              className={`w-full flex items-center justify-between p-2 rounded-lg border text-left text-xs transition-colors group ${
+                                isSecCompleted
+                                  ? "bg-stone-950/70 hover:bg-stone-800 border-stone-800/80 text-stone-200 hover:text-white"
+                                  : "bg-stone-950/40 border-stone-800/40 text-stone-400 hover:bg-stone-900/60"
+                              }`}
+                            >
+                              <div className="flex items-center gap-2 min-w-0">
+                                {isSecCompleted ? (
+                                  sub?.status === "APPROVED" ? (
+                                    <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
+                                  ) : (
+                                    <FileCode2 size={13} className="text-indigo-400 shrink-0" />
+                                  )
+                                ) : (
+                                  <Lock size={13} className="text-stone-500 shrink-0" />
+                                )}
+                                <span className="truncate font-medium">{a.title}</span>
+                              </div>
+                              <span
+                                className={`text-[10px] px-1.5 py-0.5 rounded-full shrink-0 font-medium ${
+                                  !isSecCompleted
+                                    ? "bg-stone-800 text-stone-500"
+                                    : sub?.status === "APPROVED"
+                                    ? "bg-emerald-500/20 text-emerald-300"
+                                    : sub?.status === "PENDING"
+                                    ? "bg-amber-500/20 text-amber-300"
+                                    : "bg-indigo-500/20 text-indigo-300"
+                                }`}
+                              >
+                                {!isSecCompleted
+                                  ? `${completedSecCount}/${secLessons.length}`
+                                  : sub?.status === "APPROVED"
+                                  ? "Disetujui"
+                                  : sub?.status === "PENDING"
+                                  ? "Menunggu"
+                                  : "Kerjakan"}
+                              </span>
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
                   )}
@@ -1662,6 +1815,111 @@ export default function LearnPageClient({
                     {(() => {
                       const quiz = quizzes[selectedQuizIdx];
                       if (!quiz) return null;
+
+                      // Check chapter lock
+                      const quizSection = quiz.sectionId
+                        ? sections.find((s) => s.id === quiz.sectionId)
+                        : null;
+                      const isQuizLocked = quizSection
+                        ? quizSection.lessons.length > 0 &&
+                          !quizSection.lessons.every((l) => completedLessons.has(l.id))
+                        : false;
+                      const uncompletedSectionLessons = quizSection
+                        ? (quizSection.lessons || []).filter((l) => !completedLessons.has(l.id))
+                        : [];
+                      const completedSectionLessonsCount = quizSection
+                        ? (quizSection.lessons || []).filter((l) => completedLessons.has(l.id)).length
+                        : 0;
+
+                      if (isQuizLocked && quizSection) {
+                        return (
+                          <div className="space-y-6">
+                            {/* Quiz Header Banner */}
+                            <div className="p-5 rounded-2xl bg-stone-900 border border-stone-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                              <div>
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <h3 className="text-base font-bold text-stone-100">{quiz.title}</h3>
+                                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                                    📘 Bab: {quizSection.title}
+                                  </span>
+                                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1">
+                                    <Lock size={11} /> Kuis Terkunci
+                                  </span>
+                                </div>
+                                {quiz.description && (
+                                  <p className="text-xs text-stone-400 mt-1">{quiz.description}</p>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Lock Notification Card */}
+                            <div className="p-6 sm:p-8 rounded-2xl bg-gradient-to-b from-stone-900 to-stone-950 border border-amber-500/30 text-center space-y-4">
+                              <div className="w-16 h-16 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center">
+                                <Lock size={32} />
+                              </div>
+                              <div className="space-y-1.5 max-w-lg mx-auto">
+                                <h4 className="text-base font-bold text-stone-100">
+                                  Selesaikan Materi Bab Terlebih Dahulu
+                                </h4>
+                                <p className="text-xs text-stone-400 leading-relaxed">
+                                  Kuis ini dikhususkan untuk menguji pemahaman bab{" "}
+                                  <span className="text-amber-300 font-semibold">&ldquo;{quizSection.title}&rdquo;</span>.
+                                  Anda harus menyelesaikan seluruh materi di bab ini agar kuis terbuka dan dapat dikerjakan.
+                                </p>
+                              </div>
+
+                              {/* Progress in this section */}
+                              <div className="max-w-md mx-auto p-4 rounded-xl bg-stone-900 border border-stone-800 space-y-2">
+                                <div className="flex items-center justify-between text-xs">
+                                  <span className="text-stone-400">Progres Pembelajaran Bab Ini:</span>
+                                  <span className="text-amber-300 font-bold">
+                                    {completedSectionLessonsCount} / {quizSection.lessons.length} Selesai ({Math.round((completedSectionLessonsCount / quizSection.lessons.length) * 100)}%)
+                                  </span>
+                                </div>
+                                <div className="w-full bg-stone-800 h-2 rounded-full overflow-hidden">
+                                  <div
+                                    className="bg-amber-500 h-full rounded-full transition-all duration-300"
+                                    style={{
+                                      width: `${Math.round((completedSectionLessonsCount / quizSection.lessons.length) * 100)}%`,
+                                    }}
+                                  />
+                                </div>
+                              </div>
+
+                              {/* Incomplete Lessons list */}
+                              <div className="max-w-md mx-auto text-left space-y-2 pt-2">
+                                <span className="text-xs font-semibold text-stone-400 block">
+                                  Materi yang belum diselesaikan ({uncompletedSectionLessons.length}):
+                                </span>
+                                <div className="space-y-1.5 max-h-52 overflow-y-auto pr-1 custom-scrollbar">
+                                  {uncompletedSectionLessons.map((l) => (
+                                    <div
+                                      key={l.id}
+                                      className="flex items-center justify-between p-2.5 rounded-xl bg-stone-900/80 border border-stone-800 text-xs"
+                                    >
+                                      <div className="flex items-center gap-2 truncate">
+                                        <Play size={12} className="text-stone-500 shrink-0" />
+                                        <span className="truncate text-stone-200">{l.title}</span>
+                                      </div>
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          setCurrentLesson(l);
+                                          setActiveTab("notes");
+                                        }}
+                                        className="px-2.5 py-1 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 hover:text-blue-300 text-[11px] font-semibold shrink-0 transition-colors"
+                                      >
+                                        Pelajari &rarr;
+                                      </button>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      }
+
                       const questions = quiz.questions || [];
 
                       const latestAttempt = quiz.attempts?.[0];
@@ -1680,8 +1938,13 @@ export default function LearnPageClient({
                           {/* Quiz Header Banner */}
                           <div className="p-5 rounded-2xl bg-stone-900 border border-stone-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             <div>
-                              <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-2 flex-wrap">
                                 <h3 className="text-base font-bold text-stone-100">{quiz.title}</h3>
+                                {quizSection && (
+                                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                                    📘 Bab: {quizSection.title}
+                                  </span>
+                                )}
                                 <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
                                   KKM: {quiz.passingScore}%
                                 </span>
@@ -1896,6 +2159,20 @@ export default function LearnPageClient({
                       const userSub = assignment.submissions?.[0];
                       const currentFile = submissionFileInput[assignment.id];
 
+                      const assignSection = assignment.sectionId
+                        ? sections.find((s) => s.id === assignment.sectionId)
+                        : null;
+                      const isAssignLocked = assignSection
+                        ? assignSection.lessons.length > 0 &&
+                          !assignSection.lessons.every((l) => completedLessons.has(l.id))
+                        : false;
+                      const uncompletedAssignLessons = assignSection
+                        ? (assignSection.lessons || []).filter((l) => !completedLessons.has(l.id))
+                        : [];
+                      const completedAssignCount = assignSection
+                        ? (assignSection.lessons || []).filter((l) => completedLessons.has(l.id)).length
+                        : 0;
+
                       return (
                         <div
                           key={assignment.id}
@@ -1906,9 +2183,21 @@ export default function LearnPageClient({
                               {idx + 1}
                             </span>
                             <div className="space-y-2 flex-1">
-                              <h3 className="text-base font-bold text-stone-100">
-                                {assignment.title}
-                              </h3>
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <h3 className="text-base font-bold text-stone-100">
+                                  {assignment.title}
+                                </h3>
+                                {assignSection && (
+                                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                                    📘 Bab: {assignSection.title}
+                                  </span>
+                                )}
+                                {isAssignLocked && (
+                                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1">
+                                    <Lock size={11} /> Tugas Terkunci
+                                  </span>
+                                )}
+                              </div>
                               <p className="text-xs text-stone-300 whitespace-pre-line leading-relaxed">
                                 {assignment.description}
                               </p>
@@ -1932,7 +2221,71 @@ export default function LearnPageClient({
                           </div>
 
                           <div className="p-5 bg-stone-950/40">
-                            {userSub ? (
+                            {isAssignLocked && assignSection ? (
+                              <div className="p-6 rounded-xl bg-gradient-to-b from-stone-900 to-stone-950 border border-amber-500/30 text-center space-y-4">
+                                <div className="w-12 h-12 mx-auto rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center">
+                                  <Lock size={24} />
+                                </div>
+                                <div className="space-y-1.5 max-w-md mx-auto">
+                                  <h4 className="text-sm font-bold text-stone-100">
+                                    Selesaikan Seluruh Materi Bab Ini Terlebih Dahulu
+                                  </h4>
+                                  <p className="text-xs text-stone-400 leading-relaxed">
+                                    Tugas proyek ini terikat pada bab{" "}
+                                    <span className="text-amber-300 font-semibold">&ldquo;{assignSection.title}&rdquo;</span>.
+                                    Anda harus menyelesaikan seluruh materi di bab ini terlebih dahulu agar dapat mengumpulkan tugas.
+                                  </p>
+                                </div>
+
+                                {/* Progress */}
+                                <div className="max-w-sm mx-auto p-3.5 rounded-xl bg-stone-900 border border-stone-800 space-y-1.5">
+                                  <div className="flex items-center justify-between text-xs">
+                                    <span className="text-stone-400">Progres Pembelajaran Bab:</span>
+                                    <span className="text-amber-300 font-bold">
+                                      {completedAssignCount} / {assignSection.lessons.length} Selesai ({Math.round((completedAssignCount / assignSection.lessons.length) * 100)}%)
+                                    </span>
+                                  </div>
+                                  <div className="w-full bg-stone-800 h-2 rounded-full overflow-hidden">
+                                    <div
+                                      className="bg-amber-500 h-full rounded-full transition-all duration-300"
+                                      style={{
+                                        width: `${Math.round((completedAssignCount / assignSection.lessons.length) * 100)}%`,
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+
+                                {/* Incomplete Lessons list */}
+                                <div className="max-w-sm mx-auto text-left space-y-2 pt-1">
+                                  <span className="text-xs font-semibold text-stone-400 block">
+                                    Materi yang belum selesai ({uncompletedAssignLessons.length}):
+                                  </span>
+                                  <div className="space-y-1.5 max-h-44 overflow-y-auto pr-1 custom-scrollbar">
+                                    {uncompletedAssignLessons.map((l) => (
+                                      <div
+                                        key={l.id}
+                                        className="flex items-center justify-between p-2 rounded-xl bg-stone-900/80 border border-stone-800 text-xs"
+                                      >
+                                        <div className="flex items-center gap-2 truncate">
+                                          <Play size={12} className="text-stone-500 shrink-0" />
+                                          <span className="truncate text-stone-200">{l.title}</span>
+                                        </div>
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            setCurrentLesson(l);
+                                            setActiveTab("notes");
+                                          }}
+                                          className="px-2.5 py-1 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 hover:text-blue-300 text-[11px] font-semibold shrink-0 transition-colors"
+                                        >
+                                          Pelajari &rarr;
+                                        </button>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            ) : userSub ? (
                               <div className="space-y-3">
                                 <div className="flex items-center justify-between flex-wrap gap-2">
                                   <span className="text-xs font-bold text-stone-400">

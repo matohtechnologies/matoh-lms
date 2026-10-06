@@ -31,6 +31,11 @@
 
     --ring: 221.2 83.2% 53.3%;
     --radius: 0.875rem;
+
+    /* Fonts */
+    --font-inter: var(--font-inter, "Inter", system-ui, -apple-system, sans-serif);
+    --font-poppins: var(--font-poppins, "Poppins", system-ui, sans-serif);
+    --font-plus-jakarta: var(--font-poppins);
   }
 }
 
@@ -43,15 +48,28 @@
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
-    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    font-family: var(--font-inter), "Inter", system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
+  /* 1. Judul (Heading): Poppins */
   h1, h2, h3, h4, h5, h6 {
-    font-family: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+    font-family: var(--font-poppins), "Poppins", system-ui, sans-serif;
     font-weight: 700;
     letter-spacing: -0.025em;
+  }
+
+  /* 2. Navigasi & Menu: Poppins */
+  nav,
+  header nav,
+  [role="navigation"],
+  [role="menu"],
+  [role="menubar"],
+  [role="menuitem"],
+  [role="tablist"],
+  [role="tab"] {
+    font-family: var(--font-poppins), "Poppins", system-ui, sans-serif;
   }
 
   a {
@@ -86,6 +104,17 @@
 
 /* Custom utility classes */
 @layer utilities {
+  .font-poppins,
+  .font-heading {
+    font-family: var(--font-poppins), "Poppins", system-ui, sans-serif !important;
+  }
+
+  .font-inter,
+  .font-sans,
+  .font-body {
+    font-family: var(--font-inter), "Inter", system-ui, sans-serif !important;
+  }
+
   .text-balance {
     text-wrap: balance;
   }

@@ -138,7 +138,7 @@ export default function NewCoursePage() {
           <div>
             <h1
               className="text-2xl font-bold text-stone-900"
-              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               Tambah Kelas Baru
             </h1>

@@ -55,7 +55,7 @@ export default function CheckoutSuccessPage() {
 
         <h1
           className="text-2xl sm:text-3xl font-extrabold text-stone-900 mb-2"
-          style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+          style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
         >
           Pembayaran Berhasil! 🎉
         </h1>

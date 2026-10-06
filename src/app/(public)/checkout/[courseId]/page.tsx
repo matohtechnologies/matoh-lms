@@ -240,7 +240,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
           </div>
           <h2
             className="text-xl font-bold text-stone-900 mb-2"
-            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {t("already_owned_title")}
           </h2>
@@ -283,7 +283,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
           {t("back_to_course")}
         </Link>
 
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 mb-6 tracking-tight" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 mb-6 tracking-tight" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
           {t("title")}
         </h1>
 

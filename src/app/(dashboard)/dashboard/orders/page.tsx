@@ -83,7 +83,7 @@ export default async function OrdersPage() {
         <div>
           <h1
             className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight"
-            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {t("orders_title")}
           </h1>
@@ -131,7 +131,7 @@ export default async function OrdersPage() {
                     ? "text-amber-700"
                     : "text-red-600"
                 }`}
-                style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
               >
                 {value}
               </p>
@@ -147,7 +147,7 @@ export default async function OrdersPage() {
           </div>
           <h3
             className="text-lg font-bold text-stone-900 mb-1.5"
-            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {t("no_orders_title")}
           </h3>

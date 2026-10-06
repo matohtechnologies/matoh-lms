@@ -48,7 +48,7 @@ export default function ForgotPasswordPage() {
             </div>
             <h1
               className="text-2xl font-bold text-stone-900 mb-2"
-              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               Email Terkirim!
             </h1>
@@ -83,14 +83,14 @@ export default function ForgotPasswordPage() {
             </div>
             <span
               className="font-bold text-stone-900 text-xl"
-              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               Matoh<span className="text-blue-600">Technologies</span>
             </span>
           </Link>
           <h1
             className="text-2xl font-bold text-stone-900"
-            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             Lupa Password?
           </h1>

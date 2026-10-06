@@ -7,6 +7,7 @@ const updateQuizSchema = z.object({
   title: z.string().min(3, "Judul kuis minimal 3 karakter").optional(),
   description: z.string().nullable().optional(),
   passingScore: z.number().min(0).max(100).optional(),
+  sectionId: z.string().nullable().optional(),
 });
 
 export async function PATCH(
@@ -37,6 +38,10 @@ export async function PATCH(
         ...(data.title !== undefined && { title: data.title }),
         ...(data.description !== undefined && { description: data.description }),
         ...(data.passingScore !== undefined && { passingScore: data.passingScore }),
+        ...(data.sectionId !== undefined && { sectionId: data.sectionId || null }),
+      },
+      include: {
+        section: { select: { id: true, title: true, order: true } },
       },
     });
 

@@ -82,7 +82,7 @@ export default async function AdminOrdersPage() {
         <div>
           <h1
             className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight"
-            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {t("orders_title")}
           </h1>
@@ -104,7 +104,7 @@ export default async function AdminOrdersPage() {
           <p className="text-xs font-medium text-stone-500">{t("total_income")}</p>
           <p
             className="text-2xl sm:text-3xl font-extrabold text-stone-900 mt-1 tracking-tight"
-            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {formatCurrency(totalAmount)}
           </p>
@@ -117,7 +117,7 @@ export default async function AdminOrdersPage() {
           <p className="text-xs font-medium text-stone-500">{t("successful_orders")}</p>
           <p
             className="text-2xl sm:text-3xl font-extrabold text-emerald-700 mt-1 tracking-tight"
-            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {orders.filter((o) => o.status === "PAID").length}
           </p>
@@ -127,7 +127,7 @@ export default async function AdminOrdersPage() {
           <p className="text-xs font-medium text-stone-500">{t("pending_payment")}</p>
           <p
             className="text-2xl sm:text-3xl font-extrabold text-amber-700 mt-1 tracking-tight"
-            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {orders.filter((o) => o.status === "PENDING").length}
           </p>

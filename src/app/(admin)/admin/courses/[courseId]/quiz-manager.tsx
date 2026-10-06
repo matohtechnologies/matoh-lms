@@ -29,6 +29,12 @@ interface QuizQuestion {
 interface Quiz {
   id: string;
   courseId: string;
+  sectionId?: string | null;
+  section?: {
+    id: string;
+    title: string;
+    order: number;
+  } | null;
   title: string;
   description?: string | null;
   passingScore: number;
@@ -41,18 +47,32 @@ interface Quiz {
   }[];
 }
 
-export function QuizManager({ courseId }: { courseId: string }) {
+interface SectionOption {
+  id: string;
+  title: string;
+  order: number;
+}
+
+export function QuizManager({
+  courseId,
+  sections = [],
+}: {
+  courseId: string;
+  sections?: SectionOption[];
+}) {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [notification, setNotification] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [expandedQuizId, setExpandedQuizId] = useState<string | null>(null);
+  const [sectionFilter, setSectionFilter] = useState<string>("ALL");
 
   // Quiz Modal State (Create / Edit)
   const [isCreatingQuiz, setIsCreatingQuiz] = useState(false);
   const [editingQuiz, setEditingQuiz] = useState<Quiz | null>(null);
   const [quizTitle, setQuizTitle] = useState("");
   const [quizDescription, setQuizDescription] = useState("");
+  const [quizSectionId, setQuizSectionId] = useState<string>("");
   const [passingScore, setPassingScore] = useState(70);
   const [savingQuiz, setSavingQuiz] = useState(false);
 
@@ -107,6 +127,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
           title: quizTitle.trim(),
           description: quizDescription.trim() || undefined,
           passingScore: Number(passingScore) || 70,
+          sectionId: quizSectionId || null,
         }),
       });
 
@@ -121,6 +142,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
       setIsCreatingQuiz(false);
       setQuizTitle("");
       setQuizDescription("");
+      setQuizSectionId("");
       setPassingScore(70);
       showNotification("success", "Kuis baru berhasil dibuat");
     } catch (err: unknown) {
@@ -135,6 +157,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
     setEditingQuiz(quiz);
     setQuizTitle(quiz.title);
     setQuizDescription(quiz.description || "");
+    setQuizSectionId(quiz.sectionId || "");
     setPassingScore(quiz.passingScore);
   };
 
@@ -152,6 +175,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
           title: quizTitle.trim(),
           description: quizDescription.trim() || null,
           passingScore: Number(passingScore) || 70,
+          sectionId: quizSectionId || null,
         }),
       });
 
@@ -160,15 +184,16 @@ export function QuizManager({ courseId }: { courseId: string }) {
         throw new Error(d.error || "Gagal memperbarui kuis");
       }
 
-      const { quiz: updatedQuiz } = await res.json();
+      const { quiz: updated } = await res.json();
       setQuizzes((prev) =>
-        prev.map((q) => (q.id === editingQuiz.id ? { ...q, ...updatedQuiz } : q))
+        prev.map((q) => (q.id === editingQuiz.id ? { ...q, ...updated } : q))
       );
       setEditingQuiz(null);
       setQuizTitle("");
       setQuizDescription("");
+      setQuizSectionId("");
       setPassingScore(70);
-      showNotification("success", "Pengaturan kuis berhasil disimpan");
+      showNotification("success", "Informasi kuis berhasil diperbarui");
     } catch (err: unknown) {
       showNotification("error", err instanceof Error ? err.message : "Gagal memperbarui kuis");
     } finally {
@@ -406,6 +431,52 @@ export function QuizManager({ courseId }: { courseId: string }) {
         </div>
       )}
 
+      {/* Section Filter Bar */}
+      {quizzes.length > 0 && sections.length > 0 && (
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+          <span className="text-stone-500 font-semibold shrink-0">Filter Bab:</span>
+          <button
+            type="button"
+            onClick={() => setSectionFilter("ALL")}
+            className={`px-3 py-1.5 rounded-xl font-medium transition-colors shrink-0 ${
+              sectionFilter === "ALL"
+                ? "bg-blue-600 text-white"
+                : "bg-white border border-stone-200 text-stone-600 hover:bg-stone-50"
+            }`}
+          >
+            Semua ({quizzes.length})
+          </button>
+          <button
+            type="button"
+            onClick={() => setSectionFilter("GLOBAL")}
+            className={`px-3 py-1.5 rounded-xl font-medium transition-colors shrink-0 ${
+              sectionFilter === "GLOBAL"
+                ? "bg-blue-600 text-white"
+                : "bg-white border border-stone-200 text-stone-600 hover:bg-stone-50"
+            }`}
+          >
+            🌐 Kuis Umum ({quizzes.filter((q) => !q.sectionId).length})
+          </button>
+          {sections.map((sec, idx) => {
+            const count = quizzes.filter((q) => q.sectionId === sec.id).length;
+            return (
+              <button
+                key={sec.id}
+                type="button"
+                onClick={() => setSectionFilter(sec.id)}
+                className={`px-3 py-1.5 rounded-xl font-medium transition-colors shrink-0 ${
+                  sectionFilter === sec.id
+                    ? "bg-blue-600 text-white"
+                    : "bg-white border border-stone-200 text-stone-600 hover:bg-stone-50"
+                }`}
+              >
+                📘 Bab {idx + 1} ({count})
+              </button>
+            );
+          })}
+        </div>
+      )}
+
       {/* Quizzes List */}
       {quizzes.length === 0 ? (
         <div className="text-center py-16 px-4 bg-white rounded-2xl border border-dashed border-stone-300">
@@ -422,6 +493,7 @@ export function QuizManager({ courseId }: { courseId: string }) {
             onClick={() => {
               setQuizTitle("");
               setQuizDescription("");
+              setQuizSectionId("");
               setPassingScore(70);
               setIsCreatingQuiz(true);
             }}
@@ -432,7 +504,13 @@ export function QuizManager({ courseId }: { courseId: string }) {
         </div>
       ) : (
         <div className="space-y-4">
-          {quizzes.map((quiz, qIdx) => {
+          {quizzes
+            .filter((quiz) => {
+              if (sectionFilter === "ALL") return true;
+              if (sectionFilter === "GLOBAL") return !quiz.sectionId;
+              return quiz.sectionId === sectionFilter;
+            })
+            .map((quiz, qIdx) => {
             const isExpanded = expandedQuizId === quiz.id;
             return (
               <div
@@ -448,6 +526,16 @@ export function QuizManager({ courseId }: { courseId: string }) {
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
                         <h3 className="text-sm font-bold text-stone-900">{quiz.title}</h3>
+                        {quiz.section ? (
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 flex items-center gap-1">
+                            <span>📘</span>
+                            <span>Bab: {quiz.section.title}</span>
+                          </span>
+                        ) : (
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-stone-100 text-stone-600 border border-stone-200">
+                            🌐 Kuis Umum
+                          </span>
+                        )}
                         <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                           KKM: {quiz.passingScore}%
                         </span>
@@ -642,6 +730,27 @@ export function QuizManager({ courseId }: { courseId: string }) {
                   onChange={(e) => setQuizDescription(e.target.value)}
                   className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                  Target Bab / Section Pembelajaran
+                </label>
+                <select
+                  value={quizSectionId}
+                  onChange={(e) => setQuizSectionId(e.target.value)}
+                  className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">🌐 Kuis Umum (Berlaku untuk Semua Bab / Kursus)</option>
+                  {sections.map((sec, idx) => (
+                    <option key={sec.id} value={sec.id}>
+                      📘 Bab {idx + 1}: {sec.title}
+                    </option>
+                  ))}
+                </select>
+                <p className="text-[11px] text-stone-500 mt-1">
+                  Jika diatur ke bab tertentu, kuis otomatis terkunci sampai siswa menyelesaikan semua materi di bab tersebut.
+                </p>
               </div>
 
               <div>

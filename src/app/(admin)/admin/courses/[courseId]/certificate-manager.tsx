@@ -317,7 +317,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
           <div>
             <h2
               className="text-lg font-bold text-stone-900"
-              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               Pengaturan Sertifikat &amp; Kriteria Kelulusan
             </h2>
@@ -1026,7 +1026,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                   </div>
                   <h4
                     className="text-xs font-bold tracking-widest uppercase text-stone-800"
-                    style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                    style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
                   >
                     {form.issuerName || "PT. Matoh Technologies Indonesia"}
                   </h4>
@@ -1041,7 +1041,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                 </p>
                 <h5
                   className="text-base font-extrabold text-stone-900 mt-0.5 mb-1"
-                  style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                  style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
                 >
                   Nama Siswa Teladan
                 </h5>

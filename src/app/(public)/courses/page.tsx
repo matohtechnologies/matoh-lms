@@ -145,7 +145,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
           </div>
           <h1
             className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-stone-900 mb-3 tracking-tight"
-            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {t("catalog_title")}
           </h1>

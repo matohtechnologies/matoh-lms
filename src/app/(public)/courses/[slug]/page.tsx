@@ -197,7 +197,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                   </span>
                 )}
               </div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 leading-tight mb-4" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
+              <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 leading-tight mb-4" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
                 {displayCourse.title}
               </h1>
               <p className="text-stone-600 leading-relaxed mb-5">{displayCourse.description}</p>
@@ -266,7 +266,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
 
             {/* What You'll Learn */}
             <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6">
-              <h2 className="text-lg font-bold text-stone-900 mb-4" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
+              <h2 className="text-lg font-bold text-stone-900 mb-4" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
                 {tDetail("what_learn")}
               </h2>
               <div className="grid sm:grid-cols-2 gap-3">
@@ -281,7 +281,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
 
             {/* Curriculum */}
             <div>
-              <h2 className="text-lg font-bold text-stone-900 mb-4" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
+              <h2 className="text-lg font-bold text-stone-900 mb-4" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
                 {tDetail("curriculum")}
               </h2>
               {displayCourse.sections && displayCourse.sections.length > 0 ? (
@@ -331,7 +331,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
 
             {/* Instructor */}
             <div className="bg-white rounded-2xl border border-stone-200 p-6">
-              <h2 className="text-lg font-bold text-stone-900 mb-4" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
+              <h2 className="text-lg font-bold text-stone-900 mb-4" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
                 {isEn ? "About the Instructor" : "Tentang Instruktur"}
               </h2>
               <div className="flex items-start gap-4">
@@ -367,7 +367,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
             {/* Reviews */}
             {displayCourse.reviews && displayCourse.reviews.length > 0 && (
               <div>
-                <h2 className="text-lg font-bold text-stone-900 mb-4" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
+                <h2 className="text-lg font-bold text-stone-900 mb-4" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
                   {tDetail("reviews")}
                 </h2>
                 <div className="space-y-4">

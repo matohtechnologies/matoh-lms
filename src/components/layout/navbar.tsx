@@ -190,7 +190,7 @@ export function Navbar({ user, categories }: NavbarProps) {
           </div>
           <span
             className="font-bold text-stone-900 text-lg sm:text-xl tracking-tight"
-            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             Matoh<span className="text-blue-600">Technologies</span>
           </span>

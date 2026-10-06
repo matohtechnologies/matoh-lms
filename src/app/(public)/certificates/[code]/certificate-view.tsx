@@ -160,7 +160,7 @@ export function CertificateView({
           </div>
           <h1
             className="text-2xl font-bold text-stone-900 mb-2"
-            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {t("not_eligible_title")}
           </h1>
@@ -339,7 +339,7 @@ export function CertificateView({
                   </div>
                   <h2
                     className="text-lg font-bold tracking-widest uppercase text-stone-800 print:text-base"
-                    style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                    style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
                   >
                     {issuerName}
                   </h2>
@@ -354,7 +354,7 @@ export function CertificateView({
                   </p>
                   <h1
                     className="text-3xl sm:text-4xl font-extrabold text-stone-900 mt-2 mb-1 print:text-2xl print:mt-1 print:mb-0.5"
-                    style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                    style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
                   >
                     {studentName}
                   </h1>
@@ -373,7 +373,7 @@ export function CertificateView({
                   )}
                   <h3
                     className="text-xl sm:text-2xl font-bold text-blue-950 print:text-lg"
-                    style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                    style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
                   >
                     {courseTitle}
                   </h3>

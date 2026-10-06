@@ -5,6 +5,7 @@ import {
   FileCode2,
   Plus,
   Trash2,
+  Edit2,
   ExternalLink,
   CheckCircle2,
   XCircle,
@@ -41,9 +42,21 @@ interface UserSubmission {
   };
 }
 
+interface SectionOption {
+  id: string;
+  title: string;
+  order: number;
+}
+
 interface Assignment {
   id: string;
   courseId: string;
+  sectionId?: string | null;
+  section?: {
+    id: string;
+    title: string;
+    order: number;
+  } | null;
   title: string;
   description: string;
   fileUrl?: string | null;
@@ -52,15 +65,24 @@ interface Assignment {
   submissions?: UserSubmission[];
 }
 
-export function AssignmentManager({ courseId }: { courseId: string }) {
+export function AssignmentManager({
+  courseId,
+  sections = [],
+}: {
+  courseId: string;
+  sections?: SectionOption[];
+}) {
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [sectionFilter, setSectionFilter] = useState<string>("ALL");
 
-  // Create Assignment Modal
+  // Create / Edit Assignment Modal
   const [isCreating, setIsCreating] = useState(false);
+  const [editingAssignment, setEditingAssignment] = useState<Assignment | null>(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [sectionId, setSectionId] = useState<string>("");
   const [attachedFileUrl, setAttachedFileUrl] = useState("");
   const [attachedFileName, setAttachedFileName] = useState("");
   const [uploadingFile, setUploadingFile] = useState(false);
@@ -139,6 +161,7 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
           description: description.trim(),
           fileUrl: attachedFileUrl || undefined,
           fileName: attachedFileName || undefined,
+          sectionId: sectionId || null,
         }),
       });
 
@@ -152,10 +175,63 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
       setIsCreating(false);
       setTitle("");
       setDescription("");
+      setSectionId("");
       setAttachedFileUrl("");
       setAttachedFileName("");
     } catch (err: unknown) {
       alert(err instanceof Error ? err.message : "Gagal membuat tugas");
+    } finally {
+      setSavingAssignment(false);
+    }
+  };
+
+  const handleOpenEditAssignment = (assignment: Assignment) => {
+    setEditingAssignment(assignment);
+    setTitle(assignment.title);
+    setDescription(assignment.description);
+    setSectionId(assignment.sectionId || "");
+    setAttachedFileUrl(assignment.fileUrl || "");
+    setAttachedFileName(assignment.fileName || "");
+  };
+
+  const handleUpdateAssignment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingAssignment || !title.trim() || !description.trim()) return;
+
+    try {
+      setSavingAssignment(true);
+      const res = await fetch(
+        `/api/admin/courses/${courseId}/assignments/${editingAssignment.id}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: title.trim(),
+            description: description.trim(),
+            fileUrl: attachedFileUrl || null,
+            fileName: attachedFileName || null,
+            sectionId: sectionId || null,
+          }),
+        }
+      );
+
+      if (!res.ok) {
+        const d = await res.json();
+        throw new Error(d.error || "Gagal memperbarui tugas");
+      }
+
+      const { assignment: updated } = await res.json();
+      setAssignments((prev) =>
+        prev.map((a) => (a.id === editingAssignment.id ? { ...a, ...updated } : a))
+      );
+      setEditingAssignment(null);
+      setTitle("");
+      setDescription("");
+      setSectionId("");
+      setAttachedFileUrl("");
+      setAttachedFileName("");
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : "Gagal memperbarui tugas");
     } finally {
       setSavingAssignment(false);
     }
@@ -268,6 +344,52 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
         </div>
       )}
 
+      {/* Section Filter Bar */}
+      {assignments.length > 0 && sections.length > 0 && (
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+          <span className="text-stone-500 font-semibold shrink-0">Filter Bab:</span>
+          <button
+            type="button"
+            onClick={() => setSectionFilter("ALL")}
+            className={`px-3 py-1.5 rounded-xl font-medium transition-colors shrink-0 ${
+              sectionFilter === "ALL"
+                ? "bg-blue-600 text-white"
+                : "bg-white border border-stone-200 text-stone-600 hover:bg-stone-50"
+            }`}
+          >
+            Semua ({assignments.length})
+          </button>
+          <button
+            type="button"
+            onClick={() => setSectionFilter("GLOBAL")}
+            className={`px-3 py-1.5 rounded-xl font-medium transition-colors shrink-0 ${
+              sectionFilter === "GLOBAL"
+                ? "bg-blue-600 text-white"
+                : "bg-white border border-stone-200 text-stone-600 hover:bg-stone-50"
+            }`}
+          >
+            🌐 Tugas Umum ({assignments.filter((a) => !a.sectionId).length})
+          </button>
+          {sections.map((sec, idx) => {
+            const count = assignments.filter((a) => a.sectionId === sec.id).length;
+            return (
+              <button
+                key={sec.id}
+                type="button"
+                onClick={() => setSectionFilter(sec.id)}
+                className={`px-3 py-1.5 rounded-xl font-medium transition-colors shrink-0 ${
+                  sectionFilter === sec.id
+                    ? "bg-blue-600 text-white"
+                    : "bg-white border border-stone-200 text-stone-600 hover:bg-stone-50"
+                }`}
+              >
+                📘 Bab {idx + 1} ({count})
+              </button>
+            );
+          })}
+        </div>
+      )}
+
       {assignments.length === 0 ? (
         <div className="text-center py-16 px-4 bg-white rounded-2xl border border-dashed border-stone-300">
           <div className="w-14 h-14 mx-auto rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-3">
@@ -280,7 +402,15 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
           <Button
             type="button"
             variant="outline"
-            onClick={() => setIsCreating(true)}
+            onClick={() => {
+              setIsCreating(true);
+              setEditingAssignment(null);
+              setTitle("");
+              setDescription("");
+              setSectionId("");
+              setAttachedFileUrl("");
+              setAttachedFileName("");
+            }}
             leftIcon={<Plus size={14} />}
           >
             Tambah Tugas Pertama
@@ -288,7 +418,13 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
         </div>
       ) : (
         <div className="space-y-6">
-          {assignments.map((assignment, aIdx) => {
+          {assignments
+            .filter((a) => {
+              if (sectionFilter === "ALL") return true;
+              if (sectionFilter === "GLOBAL") return !a.sectionId;
+              return a.sectionId === sectionFilter;
+            })
+            .map((assignment, aIdx) => {
             const submissions = assignment.submissions || [];
             return (
               <div
@@ -302,7 +438,19 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
                       {aIdx + 1}
                     </span>
                     <div className="space-y-2">
-                      <h3 className="text-sm font-bold text-stone-900">{assignment.title}</h3>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="text-sm font-bold text-stone-900">{assignment.title}</h3>
+                        {assignment.section ? (
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 flex items-center gap-1">
+                            <span>📘</span>
+                            <span>Bab: {assignment.section.title}</span>
+                          </span>
+                        ) : (
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-stone-100 text-stone-600 border border-stone-200">
+                            🌐 Tugas Umum
+                          </span>
+                        )}
+                      </div>
                       <p className="text-xs text-stone-600 whitespace-pre-line leading-relaxed">
                         {assignment.description}
                       </p>
@@ -325,10 +473,18 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 shrink-0 self-end sm:self-start">
+                  <div className="flex items-center gap-2 shrink-0 self-end sm:self-start">
                     <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-stone-100 text-stone-700 border border-stone-200">
                       {submissions.length} Pengumpulan
                     </span>
+                    <button
+                      type="button"
+                      onClick={() => handleOpenEditAssignment(assignment)}
+                      className="p-1.5 text-stone-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      title="Edit Tugas"
+                    >
+                      <Edit2 size={15} />
+                    </button>
                     <button
                       type="button"
                       onClick={() => handleDeleteAssignment(assignment.id, assignment.title)}
@@ -482,16 +638,20 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
         </div>
       )}
 
-      {/* Modal: Buat Tugas Baru */}
-      {isCreating && (
+      {/* Modal: Buat / Edit Tugas */}
+      {(isCreating || editingAssignment) && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/50 backdrop-blur-xs">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-stone-200 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
-            <h3 className="text-base font-bold text-stone-900 mb-1">Tambah Tugas Submission</h3>
+            <h3 className="text-base font-bold text-stone-900 mb-1">
+              {editingAssignment ? "Edit Tugas Submission" : "Tambah Tugas Submission"}
+            </h3>
             <p className="text-xs text-stone-500 mb-4">
-              Instruksikan siswa untuk mengunggah proyek, melampirkan berkas referensi/starter code jika diperlukan.
+              {editingAssignment
+                ? "Perbarui informasi tugas, bab target pembelajaran, atau berkas panduan."
+                : "Instruksikan siswa untuk mengunggah proyek, melampirkan berkas referensi/starter code jika diperlukan."}
             </p>
 
-            <form onSubmit={handleCreateAssignment} className="space-y-4">
+            <form onSubmit={editingAssignment ? handleUpdateAssignment : handleCreateAssignment} className="space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-stone-700 mb-1">
                   Judul Tugas <span className="text-red-500">*</span>
@@ -504,6 +664,27 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
                   onChange={(e) => setTitle(e.target.value)}
                   className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                  Target Bab / Section Pembelajaran
+                </label>
+                <select
+                  value={sectionId}
+                  onChange={(e) => setSectionId(e.target.value)}
+                  className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">🌐 Tugas Umum (Berlaku untuk Semua Bab / Kursus)</option>
+                  {sections.map((sec, idx) => (
+                    <option key={sec.id} value={sec.id}>
+                      📘 Bab {idx + 1}: {sec.title}
+                    </option>
+                  ))}
+                </select>
+                <p className="text-[11px] text-stone-500 mt-1">
+                  Jika diatur ke bab tertentu, tugas otomatis terkunci sampai siswa menyelesaikan semua materi di bab tersebut.
+                </p>
               </div>
 
               <div>
@@ -577,7 +758,15 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={() => setIsCreating(false)}
+                  onClick={() => {
+                    setIsCreating(false);
+                    setEditingAssignment(null);
+                    setTitle("");
+                    setDescription("");
+                    setSectionId("");
+                    setAttachedFileUrl("");
+                    setAttachedFileName("");
+                  }}
                 >
                   Batal
                 </Button>
@@ -587,7 +776,7 @@ export function AssignmentManager({ courseId }: { courseId: string }) {
                   loading={savingAssignment || uploadingFile}
                   className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
-                  Simpan Tugas
+                  {editingAssignment ? "Simpan Perubahan" : "Simpan Tugas"}
                 </Button>
               </div>
             </form>

@@ -79,7 +79,7 @@ export default function LoginPage() {
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-sky-500 flex items-center justify-center shadow-sm">
               <BookOpen size={18} className="text-white" />
             </div>
-            <span className="font-bold text-stone-900 text-lg" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
+            <span className="font-bold text-stone-900 text-lg" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
               Matoh<span className="text-blue-600">Technologies</span>
             </span>
           </Link>
@@ -87,7 +87,7 @@ export default function LoginPage() {
 
         {/* Title */}
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-stone-900" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
+          <h1 className="text-2xl font-bold text-stone-900" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
             {t("login_title")}
           </h1>
           <p className="text-stone-500 text-sm mt-1">

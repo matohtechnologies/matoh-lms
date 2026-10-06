@@ -173,6 +173,8 @@ model Section {
   course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   lessons  Lesson[]
   resources CourseResource[]
+  quizzes     Quiz[]
+  assignments Assignment[]
 
   @@map("sections")
 }
@@ -325,6 +327,7 @@ model CertificateSetting {
 model Quiz {
   id           String         @id @default(cuid())
   courseId     String
+  sectionId    String?
   title        String
   description  String?        @db.Text
   passingScore Int            @default(70)
@@ -332,9 +335,12 @@ model Quiz {
   updatedAt    DateTime       @updatedAt
 
   course       Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  section      Section?       @relation(fields: [sectionId], references: [id], onDelete: SetNull)
   questions    QuizQuestion[]
   attempts     QuizAttempt[]
 
+  @@index([courseId])
+  @@index([sectionId])
   @@map("quizzes")
 }
 
@@ -372,6 +378,7 @@ model QuizQuestion {
 model Assignment {
   id          String           @id @default(cuid())
   courseId    String
+  sectionId   String?
   title       String
   description String           @db.Text
   fileUrl     String?
@@ -380,8 +387,11 @@ model Assignment {
   updatedAt   DateTime         @updatedAt
 
   course      Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  section     Section?         @relation(fields: [sectionId], references: [id], onDelete: SetNull)
   submissions UserSubmission[]
 
+  @@index([courseId])
+  @@index([sectionId])
   @@map("assignments")
 }
 

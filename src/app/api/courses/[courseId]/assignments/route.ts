@@ -17,6 +17,9 @@ export async function GET(
         },
       },
       include: {
+        section: {
+          select: { id: true, title: true, order: true },
+        },
         submissions: session?.user?.id
           ? {
               where: session.user.role === "ADMIN" ? {} : { userId: session.user.id },

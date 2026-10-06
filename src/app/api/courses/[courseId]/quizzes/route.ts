@@ -17,6 +17,9 @@ export async function GET(
         },
       },
       include: {
+        section: {
+          select: { id: true, title: true, order: true },
+        },
         questions: {
           orderBy: { order: "asc" },
         },

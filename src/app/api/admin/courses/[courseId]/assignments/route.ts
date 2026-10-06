@@ -8,6 +8,7 @@ const createAssignmentSchema = z.object({
   description: z.string().min(10, "Instruksi/deskripsi tugas minimal 10 karakter"),
   fileUrl: z.string().optional(),
   fileName: z.string().optional(),
+  sectionId: z.string().nullable().optional(),
 });
 
 export async function POST(
@@ -35,10 +36,14 @@ export async function POST(
     const assignment = await prisma.assignment.create({
       data: {
         courseId: course.id,
+        sectionId: data.sectionId || null,
         title: data.title,
         description: data.description,
         fileUrl: data.fileUrl,
         fileName: data.fileName,
+      },
+      include: {
+        section: { select: { id: true, title: true, order: true } },
       },
     });
 

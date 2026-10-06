@@ -82,7 +82,7 @@ export default async function MyCoursesPage() {
         <div>
           <h1
             className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight"
-            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {t("my_courses_title")}
           </h1>
@@ -127,7 +127,7 @@ export default async function MyCoursesPage() {
           </div>
           <h3
             className="text-lg font-bold text-stone-900 mb-1.5"
-            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {t("no_courses_empty_title")}
           </h3>
@@ -199,7 +199,7 @@ export default async function MyCoursesPage() {
                   </div>
                   <h3
                     className="font-bold text-stone-900 text-sm leading-snug line-clamp-2"
-                    style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                    style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
                   >
                     {enrollment.course.title}
                   </h3>

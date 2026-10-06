@@ -254,7 +254,7 @@ export default async function DashboardPage({
           <div>
             <h1
               className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white max-w-xl leading-tight"
-              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               {headlineText}
             </h1>
@@ -346,7 +346,7 @@ export default async function DashboardPage({
             </div>
             <p
               className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight"
-              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               {value}
             </p>
@@ -364,7 +364,7 @@ export default async function DashboardPage({
               <div>
                 <h2
                   className="font-bold text-stone-900 text-base"
-                  style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                  style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
                 >
                   {t("my_courses_section")}
                 </h2>
@@ -470,7 +470,7 @@ export default async function DashboardPage({
             <div className="px-5 py-4 border-b border-stone-100">
               <h2
                 className="font-bold text-stone-900 text-sm"
-                style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
               >
                 {t("recent_activity")}
               </h2>
@@ -516,7 +516,7 @@ export default async function DashboardPage({
           <div className="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-xs space-y-3">
             <h2
               className="font-bold text-stone-900 text-sm"
-              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               {t("quick_menu")}
             </h2>

@@ -156,7 +156,7 @@ export function CertificateTranscriptCard({
               </p>
               <h2
                 className="text-lg sm:text-xl font-bold text-stone-900 tracking-tight"
-                style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
               >
                 {headerTitle}
               </h2>

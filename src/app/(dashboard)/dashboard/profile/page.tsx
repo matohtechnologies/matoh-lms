@@ -256,7 +256,7 @@ export default function ProfilePage() {
           </div>
           <h1
             className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight"
-            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {t("profile_title")}
           </h1>
@@ -354,7 +354,7 @@ export default function ProfilePage() {
 
             <h3
               className="font-bold text-lg text-stone-900"
-              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               {session?.user?.name || "Pengguna"}
             </h3>
@@ -408,7 +408,7 @@ export default function ProfilePage() {
               <div>
                 <h3
                   className="font-bold text-stone-900 text-base"
-                  style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                  style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
                 >
                   {t("edit_profile_section")}
                 </h3>
@@ -485,7 +485,7 @@ export default function ProfilePage() {
               <div>
                 <h3
                   className="font-bold text-stone-900 text-base"
-                  style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                  style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
                 >
                   {t("change_password")}
                 </h3>

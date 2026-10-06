@@ -33,7 +33,7 @@ export default async function AdminCoursesPage() {
         <div>
           <h1
             className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight"
-            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {t("courses_title")}
           </h1>

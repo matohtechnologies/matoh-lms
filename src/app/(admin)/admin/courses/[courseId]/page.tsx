@@ -260,7 +260,7 @@ export default function EditCoursePage() {
             <div className="flex items-center gap-2">
               <h1
                 className="text-2xl font-bold text-stone-900"
-                style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
               >
                 {t("manage_course")}
               </h1>
@@ -433,12 +433,12 @@ export default function EditCoursePage() {
 
       {/* Tab 2: Quiz Manager */}
       {activeTab === "quizzes" && (
-        <QuizManager courseId={courseId} />
+        <QuizManager courseId={courseId} sections={sections} />
       )}
 
       {/* Tab 3: Assignment & Submission Manager */}
       {activeTab === "assignments" && (
-        <AssignmentManager courseId={courseId} />
+        <AssignmentManager courseId={courseId} sections={sections} />
       )}
 
       {/* Tab 4: Discussion Manager */}

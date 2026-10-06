@@ -114,7 +114,7 @@ export function ContactForm({ locale: propLocale }: ContactFormProps) {
             <div>
               <h3
                 className="text-2xl font-bold text-stone-900 mb-2"
-                style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
               >
                 {isEn
                   ? "Your Message Has Been Sent Successfully!"
@@ -193,7 +193,7 @@ export function ContactForm({ locale: propLocale }: ContactFormProps) {
               </span>
               <h3
                 className="text-xl font-bold text-stone-900 mt-2"
-                style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
               >
                 {isEn
                   ? "Send a Direct Message to Our Academic Team"

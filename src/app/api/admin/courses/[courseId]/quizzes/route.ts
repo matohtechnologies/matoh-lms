@@ -7,6 +7,7 @@ const createQuizSchema = z.object({
   title: z.string().min(3, "Judul kuis minimal 3 karakter"),
   description: z.string().optional(),
   passingScore: z.number().min(10).max(100).default(70),
+  sectionId: z.string().nullable().optional(),
 });
 
 export async function POST(
@@ -34,11 +35,13 @@ export async function POST(
     const quiz = await prisma.quiz.create({
       data: {
         courseId: course.id,
+        sectionId: data.sectionId || null,
         title: data.title,
         description: data.description,
         passingScore: data.passingScore,
       },
       include: {
+        section: { select: { id: true, title: true, order: true } },
         questions: true,
       },
     });

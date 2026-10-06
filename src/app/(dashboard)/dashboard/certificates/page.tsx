@@ -58,7 +58,7 @@ export default async function CertificatesPage() {
         <div>
           <h1
             className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight"
-            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {t("certs_title")}
           </h1>
@@ -75,7 +75,7 @@ export default async function CertificatesPage() {
           </div>
           <h3
             className="text-lg font-bold text-stone-900 mb-1.5"
-            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {t("no_certs_title")}
           </h3>
@@ -136,7 +136,7 @@ export default async function CertificatesPage() {
                   </span>
                   <h3
                     className="font-bold text-stone-900 text-sm leading-snug line-clamp-2"
-                    style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                    style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
                   >
                     {cert.course.title}
                   </h3>

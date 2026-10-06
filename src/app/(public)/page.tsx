@@ -238,7 +238,7 @@ export default async function HomePage() {
               {/* Main Headline */}
               <h1
                 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-[1.12] tracking-tight text-balance"
-                style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
               >
                 Make You <br />
                 <span className="text-gradient">Ready Digital</span>
@@ -353,7 +353,7 @@ export default async function HomePage() {
             </span>
             <h2
               className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
-              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               {isEn
                 ? "Engineered for tangible career outcomes"
@@ -422,7 +422,7 @@ export default async function HomePage() {
                 </span>
                 <h3
                   className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight"
-                  style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                  style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
                 >
                   {isEn ? "Why Digital Transformation Cannot Wait" : "Fondasi Penerapan Teknologi Digital Terarah"}
                 </h3>
@@ -491,7 +491,7 @@ export default async function HomePage() {
               </span>
               <h2
                 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
-                style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
               >
                 {tc("title")}
               </h2>
@@ -532,7 +532,7 @@ export default async function HomePage() {
             </span>
             <h2
               className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
-              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               {reviews.length > 0
                 ? tHome("testimonials_title")
@@ -638,7 +638,7 @@ export default async function HomePage() {
             </span>
             <h2
               className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
-              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               {tHome("faq_title")}
             </h2>
@@ -661,7 +661,7 @@ export default async function HomePage() {
               </span>
               <h3
                 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight"
-                style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
               >
                 {isEn
                   ? "Need Guidance on the Best Program for Your Organization or Thesis?"
@@ -706,7 +706,7 @@ export default async function HomePage() {
         <div className="max-w-4xl mx-auto px-4 text-center relative z-10 space-y-7">
           <h2
             className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight"
-            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {tHome("cta_title")}
           </h2>

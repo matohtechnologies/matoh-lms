@@ -37,7 +37,7 @@ export default async function AdminLayout({
           <div>
             <span
               className="font-bold text-slate-900 text-sm block leading-none"
-              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               Matoh<span className="text-blue-600">Admin</span>
             </span>
@@ -86,7 +86,7 @@ export default async function AdminLayout({
             <div>
               <span
                 className="font-bold text-slate-900 text-sm block leading-tight"
-                style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
               >
                 Matoh<span className="text-blue-600">Technologies</span>
               </span>

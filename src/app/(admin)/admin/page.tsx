@@ -99,7 +99,7 @@ export default async function AdminDashboardPage() {
           </div>
           <h1
             className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight"
-            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {t("overview")}
           </h1>
@@ -144,7 +144,7 @@ export default async function AdminDashboardPage() {
             </div>
             <p
               className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight"
-              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               {value}
             </p>
@@ -161,7 +161,7 @@ export default async function AdminDashboardPage() {
             <div>
               <h2
                 className="text-base font-bold text-stone-900"
-                style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
               >
                 {t("recent_transactions")}
               </h2>
@@ -229,7 +229,7 @@ export default async function AdminDashboardPage() {
           <div className="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-xs space-y-3">
             <h2
               className="text-sm font-bold text-stone-900"
-              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               {t("quick_actions")}
             </h2>

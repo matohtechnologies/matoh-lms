@@ -103,7 +103,7 @@ export default async function AboutPage() {
           </div>
           <h1
             className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 mb-6 tracking-tight"
-            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             Make You <br />
             <span className="text-gradient">Ready Digital</span>
@@ -156,7 +156,7 @@ export default async function AboutPage() {
               <div key={label} className="text-center">
                 <p
                   className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
-                  style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                  style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
                 >
                   {value}
                 </p>
@@ -176,7 +176,7 @@ export default async function AboutPage() {
             </span>
             <h2
               className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
-              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               {isEn ? "The Foundation Behind Matoh Technologies" : "Fokus Nyata untuk Hasil yang Terukur"}
             </h2>
@@ -199,7 +199,7 @@ export default async function AboutPage() {
                   </span>
                   <h3
                     className="font-bold text-slate-900 text-lg mb-3 leading-snug group-hover:text-blue-600 transition-colors"
-                    style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+                    style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
                   >
                     {p.title}
                   </h3>
@@ -219,7 +219,7 @@ export default async function AboutPage() {
             </span>
             <h2
               className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
-              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               {isEn ? "Mentored Directly by Industry Practitioners" : "Dibimbing Langsung oleh Praktisi Berpengalaman"}
             </h2>
@@ -268,7 +268,7 @@ export default async function AboutPage() {
         <div className="max-w-3xl mx-auto px-4 relative z-10 space-y-6">
           <h2
             className="text-3xl sm:text-4xl font-extrabold tracking-tight"
-            style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {isEn ? "Ready to Build Your Tech Career?" : "Siap Memulai Langkah Karir Teknologimu?"}
           </h2>

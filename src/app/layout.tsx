@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Inter, Poppins } from "next/font/google";
 import { getLocale } from "next-intl/server";
 import LocaleProvider from "@/components/providers/locale-provider";
 import SessionProvider from "@/components/providers/session-provider";
@@ -11,9 +11,10 @@ const inter = Inter({
   display: "swap",
 });
 
-const plusJakarta = Plus_Jakarta_Sans({
+const poppins = Poppins({
   subsets: ["latin"],
-  variable: "--font-plus-jakarta",
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-poppins",
   display: "swap",
 });
 
@@ -55,7 +56,7 @@ export default async function RootLayout({
   const locale = await getLocale();
 
   return (
-    <html lang={locale} className={`${inter.variable} ${plusJakarta.variable}`}>
+    <html lang={locale} className={`${inter.variable} ${poppins.variable}`}>
       <body className="font-sans antialiased">
         <LocaleProvider initialLocale={locale}>
           <SessionProvider>

@@ -25,7 +25,7 @@ export default function GlobalError({
 
         <h1
           className="text-2xl font-bold text-stone-900 mb-2"
-          style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+          style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
         >
           Terjadi Kendala Teknis
         </h1>

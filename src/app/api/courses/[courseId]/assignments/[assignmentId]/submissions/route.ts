@@ -26,6 +26,45 @@ export async function POST(
     const body = await req.json();
     const data = submitSchema.parse(body);
 
+    const assignment = await prisma.assignment.findUnique({
+      where: { id: assignmentId },
+    });
+
+    if (!assignment) {
+      return NextResponse.json({ error: "Tugas tidak ditemukan" }, { status: 404 });
+    }
+
+    // Check if assignment belongs to a specific section/chapter and if user has completed all lessons in it
+    if (assignment.sectionId) {
+      const section = await prisma.section.findUnique({
+        where: { id: assignment.sectionId },
+        include: { lessons: { select: { id: true } } },
+      });
+
+      if (section && section.lessons.length > 0) {
+        const totalSectionLessons = section.lessons.length;
+        const completedSectionLessons = await prisma.progress.count({
+          where: {
+            userId: session.user.id,
+            lessonId: { in: section.lessons.map((l) => l.id) },
+          },
+        });
+
+        if (completedSectionLessons < totalSectionLessons) {
+          return NextResponse.json(
+            {
+              error: `Tugas terkunci. Anda harus menyelesaikan semua materi pembelajaran pada bab "${section.title}" terlebih dahulu (${completedSectionLessons}/${totalSectionLessons} selesai).`,
+              locked: true,
+              sectionTitle: section.title,
+              completedCount: completedSectionLessons,
+              totalCount: totalSectionLessons,
+            },
+            { status: 403 }
+          );
+        }
+      }
+    }
+
     const submission = await prisma.userSubmission.create({
       data: {
         taskId: assignmentId,

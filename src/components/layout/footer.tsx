@@ -42,7 +42,7 @@ export function Footer() {
               <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-600 to-sky-500 flex items-center justify-center">
                 <BookOpen size={16} className="text-white" />
               </div>
-              <span className="font-bold text-white text-lg" style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}>
+              <span className="font-bold text-white text-lg" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
                 Matoh<span className="text-blue-400">Technologies</span>
               </span>
             </Link>

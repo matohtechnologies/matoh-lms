@@ -46,7 +46,7 @@ export default async function DashboardLayout({
             </div>
             <span
               className="font-bold text-slate-900 text-base"
-              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               Matoh<span className="text-blue-600">Technologies</span>
             </span>
@@ -126,7 +126,7 @@ export default async function DashboardLayout({
             </div>
             <span
               className="font-bold text-slate-900 text-sm"
-              style={{ fontFamily: "var(--font-plus-jakarta, sans-serif)" }}
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               Matoh<span className="text-blue-600">Technologies</span>
             </span>
