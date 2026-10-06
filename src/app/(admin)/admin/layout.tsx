@@ -23,6 +23,7 @@ export default async function AdminLayout({
     { href: "/admin/courses", label: tAdmin("nav_courses") },
     { href: "/admin/users", label: tAdmin("nav_users") },
     { href: "/admin/orders", label: tAdmin("nav_orders") },
+    { href: "/admin/coupons", label: tAdmin("nav_coupons") },
   ];
 
   return (

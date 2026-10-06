@@ -18,6 +18,9 @@ export async function POST(req: NextRequest) {
 
     const coupon = await prisma.coupon.findUnique({
       where: { code },
+      include: {
+        course: { select: { id: true, title: true } },
+      },
     });
 
     if (!coupon || !coupon.isActive) {
@@ -42,6 +45,62 @@ export async function POST(req: NextRequest) {
 
     if (!course) {
       return NextResponse.json({ error: "Kelas tidak ditemukan" }, { status: 404 });
+    }
+
+    // 1. Restriction: Specific Course Only
+    if (coupon.courseId && coupon.courseId !== course.id) {
+      return NextResponse.json(
+        {
+          error: `Kupon ini hanya berlaku khusus untuk kelas: "${coupon.course?.title || "Kelas Tertentu"}"`,
+        },
+        { status: 400 }
+      );
+    }
+
+    // 2. Restriction: Specific Users Only (Allowed Emails Whitelist)
+    if (coupon.allowedEmails && coupon.allowedEmails.trim().length > 0) {
+      if (!session?.user?.email) {
+        return NextResponse.json(
+          {
+            error: "Kupon ini memiliki akses terbatas. Silakan masuk (login) terlebih dahulu untuk menggunakannya.",
+          },
+          { status: 401 }
+        );
+      }
+
+      const allowedList = coupon.allowedEmails
+        .split(/[\n,;]+/)
+        .map((e) => e.trim().toLowerCase())
+        .filter(Boolean);
+
+      const userEmail = session.user.email.toLowerCase();
+      if (!allowedList.includes(userEmail)) {
+        return NextResponse.json(
+          {
+            error: `Kupon ini bersifat terbatas dan akun Anda (${session.user.email}) tidak terdaftar sebagai penerima kupon ini.`,
+          },
+          { status: 403 }
+        );
+      }
+    }
+
+    // 3. Restriction: Max Usage Per User
+    if (userId && coupon.maxUsagePerUser) {
+      const userUsageCount = await prisma.couponUsage.count({
+        where: {
+          couponId: coupon.id,
+          userId,
+        },
+      });
+
+      if (userUsageCount >= coupon.maxUsagePerUser) {
+        return NextResponse.json(
+          {
+            error: `Anda sudah mencapai batas penggunaan (${coupon.maxUsagePerUser}x) untuk kupon ini.`,
+          },
+          { status: 400 }
+        );
+      }
     }
 
     const basePrice = course.discountPrice ?? course.price;
@@ -72,6 +131,9 @@ export async function POST(req: NextRequest) {
         code: coupon.code,
         discountType: coupon.discountType,
         discountValue: coupon.discountValue,
+        courseId: coupon.courseId,
+        courseTitle: coupon.course?.title || null,
+        isExclusiveUser: !!(coupon.allowedEmails && coupon.allowedEmails.trim().length > 0),
       },
       basePrice,
       discountAmount,

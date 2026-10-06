@@ -70,7 +70,39 @@ export async function POST(req: NextRequest) {
         const isQuotaExceeded = coupon.maxUsage && coupon.usedCount >= coupon.maxUsage;
         const isMinMet = !coupon.minPurchase || baseAmount >= coupon.minPurchase;
 
-        if (!isExpired && !isQuotaExceeded && isMinMet) {
+        // Restriction check: Course-specific
+        const isCourseAllowed = !coupon.courseId || coupon.courseId === course.id;
+
+        // Restriction check: User-exclusive (allowed emails whitelist)
+        let isUserAllowed = true;
+        if (coupon.allowedEmails && coupon.allowedEmails.trim().length > 0) {
+          const userEmail = session.user.email?.toLowerCase();
+          const allowedList = coupon.allowedEmails
+            .split(/[\n,;]+/)
+            .map((e) => e.trim().toLowerCase())
+            .filter(Boolean);
+          isUserAllowed = !!(userEmail && allowedList.includes(userEmail));
+        }
+
+        // Restriction check: Max usage per user
+        let isPerUserLimitOk = true;
+        if (coupon.maxUsagePerUser) {
+          const userUsageCount = await prisma.couponUsage.count({
+            where: { couponId: coupon.id, userId: session.user.id },
+          });
+          if (userUsageCount >= coupon.maxUsagePerUser) {
+            isPerUserLimitOk = false;
+          }
+        }
+
+        if (
+          !isExpired &&
+          !isQuotaExceeded &&
+          isMinMet &&
+          isCourseAllowed &&
+          isUserAllowed &&
+          isPerUserLimitOk
+        ) {
           appliedCouponId = coupon.id;
           if (coupon.discountType === "PERCENTAGE") {
             discountAmount = (baseAmount * coupon.discountValue) / 100;
@@ -80,12 +112,6 @@ export async function POST(req: NextRequest) {
           } else {
             discountAmount = Math.min(coupon.discountValue, baseAmount);
           }
-
-          // Increment coupon usage
-          await prisma.coupon.update({
-            where: { id: coupon.id },
-            data: { usedCount: { increment: 1 } },
-          }).catch(() => null);
         }
       }
     }
@@ -118,6 +144,21 @@ export async function POST(req: NextRequest) {
         },
       }).catch(() => null);
 
+      if (appliedCouponId) {
+        await prisma.coupon.update({
+          where: { id: appliedCouponId },
+          data: { usedCount: { increment: 1 } },
+        }).catch(() => null);
+
+        await prisma.couponUsage.create({
+          data: {
+            couponId: appliedCouponId,
+            userId: session.user.id,
+            orderId,
+          },
+        }).catch(() => null);
+      }
+
       return NextResponse.json({ success: true, type: "free" });
     }
 
@@ -135,6 +176,21 @@ export async function POST(req: NextRequest) {
         status: "PENDING",
       },
     }).catch(() => null);
+
+    if (appliedCouponId) {
+      await prisma.coupon.update({
+        where: { id: appliedCouponId },
+        data: { usedCount: { increment: 1 } },
+      }).catch(() => null);
+
+      await prisma.couponUsage.create({
+        data: {
+          couponId: appliedCouponId,
+          userId: session.user.id,
+          orderId,
+        },
+      }).catch(() => null);
+    }
 
     // Get user for customer details
     const user = await prisma.user.findUnique({

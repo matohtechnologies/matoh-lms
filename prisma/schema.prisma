@@ -55,6 +55,7 @@ model User {
   discussionReplies DiscussionReply[]
   quizAttempts      QuizAttempt[]
   notes             StudyNote[]
+  couponUsages      CouponUsage[]
 
   @@map("users")
 }
@@ -153,6 +154,7 @@ model Course {
   discussions        Discussion[]
   resources          CourseResource[]
   notes              StudyNote[]
+  coupons            Coupon[]
 
   @@index([categoryId])
   @@index([instructorId])
@@ -437,22 +439,43 @@ enum DiscountType {
 }
 
 model Coupon {
-  id            String       @id @default(cuid())
-  code          String       @unique
-  discountType  DiscountType @default(PERCENTAGE)
-  discountValue Float        // Percentage (e.g. 20 for 20%) or Fixed amount in IDR
-  minPurchase   Float?       @default(0)
-  maxDiscount   Float?       // Cap for percentage discounts in IDR
-  maxUsage      Int?         // Limit total redemptions
-  usedCount     Int          @default(0)
-  expiresAt     DateTime?
-  isActive      Boolean      @default(true)
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  id              String        @id @default(cuid())
+  code            String        @unique
+  discountType    DiscountType  @default(PERCENTAGE)
+  discountValue   Float         // Percentage (e.g. 20 for 20%) or Fixed amount in IDR
+  minPurchase     Float?        @default(0)
+  maxDiscount     Float?        // Cap for percentage discounts in IDR
+  maxUsage        Int?          // Limit total redemptions
+  usedCount       Int           @default(0)
+  maxUsagePerUser Int?          @default(1) // Limit redemptions per user
+  courseId        String?       // Optional: restricted to specific course
+  allowedEmails   String?       @db.Text // Optional: comma-separated list of allowed user emails (whitelist)
+  expiresAt       DateTime?
+  isActive        Boolean       @default(true)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 
-  orders        Order[]
+  course          Course?       @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  orders          Order[]
+  usages          CouponUsage[]
 
+  @@index([code])
+  @@index([courseId])
   @@map("coupons")
+}
+
+model CouponUsage {
+  id        String   @id @default(cuid())
+  couponId  String
+  userId    String
+  orderId   String?
+  usedAt    DateTime @default(now())
+
+  coupon    Coupon   @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([couponId, userId])
+  @@map("coupon_usages")
 }
 
 model CourseResource {
