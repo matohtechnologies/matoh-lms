@@ -153,138 +153,83 @@ export default async function AdminDashboardPage() {
         ))}
       </div>
 
-      {/* Main Grid: Transactions & Quick Actions */}
-      <div className="grid lg:grid-cols-3 gap-6">
-        {/* Recent Transactions */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-stone-200/80 p-6 shadow-xs space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-stone-100">
-            <div>
-              <h2
-                className="text-base font-bold text-stone-900"
-                style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
-              >
-                {t("recent_transactions")}
-              </h2>
-              <p className="text-xs text-stone-500 mt-0.5">5 transaksi pembayaran kelas terbaru</p>
-            </div>
-            <a
-              href="/admin/orders"
-              className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors border border-blue-200/60"
-            >
-              {t("view_all")}
-            </a>
-          </div>
-
-          {stats.recentOrders.length > 0 ? (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead>
-                  <tr className="border-b border-stone-100 text-stone-400 uppercase tracking-wider text-[10px]">
-                    <th className="pb-2.5 font-bold">{t("user_col")}</th>
-                    <th className="pb-2.5 font-bold">{t("course_col")}</th>
-                    <th className="pb-2.5 font-bold text-right">{t("amount_col")}</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-stone-50">
-                  {stats.recentOrders.map((order) => (
-                    <tr key={order.id} className="hover:bg-stone-50/80 transition-colors">
-                      <td className="py-3">
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 font-bold text-[11px] flex items-center justify-center shrink-0">
-                            {order.user.name?.[0]?.toUpperCase() || "U"}
-                          </div>
-                          <div>
-                            <p className="font-semibold text-stone-900">{order.user.name}</p>
-                            <p className="text-[10px] text-stone-400 truncate max-w-[140px]">
-                              {order.user.email}
-                            </p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="py-3">
-                        <p className="font-medium text-stone-700 truncate max-w-[200px]">
-                          {order.course.title}
-                        </p>
-                      </td>
-                      <td className="py-3 text-right">
-                        <span className="font-bold text-stone-900 bg-stone-100 px-2 py-1 rounded-md">
-                          {formatCurrency(order.amount)}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <div className="text-center py-12 bg-stone-50/50 rounded-xl border border-dashed border-stone-200">
-              <ShoppingBag size={32} className="text-stone-300 mx-auto mb-2" />
-              <p className="text-xs font-medium text-stone-500">{t("no_transactions")}</p>
-            </div>
-          )}
-        </div>
-
-        {/* Quick Actions & Navigation */}
-        <div className="space-y-4">
-          <div className="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-xs space-y-3">
+      {/* Recent Transactions */}
+      <div className="bg-white rounded-2xl border border-stone-200/80 p-6 shadow-xs space-y-4">
+        <div className="flex items-center justify-between pb-3 border-b border-stone-100">
+          <div>
             <h2
-              className="text-sm font-bold text-stone-900"
+              className="text-base font-bold text-stone-900"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
-              {t("quick_actions")}
+              {t("recent_transactions")}
             </h2>
-            <div className="space-y-2">
-              <a
-                href="/admin/courses/new"
-                className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-blue-50 hover:bg-blue-100/80 text-blue-950 text-xs font-bold border border-blue-200/80 transition-all shadow-2xs"
-              >
-                <div className="w-6 h-6 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0">
-                  <BookOpen size={13} />
-                </div>
-                <span>{t("add_course")}</span>
-              </a>
-
-              <a
-                href="/admin/courses"
-                className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-stone-50 text-stone-700 text-xs font-semibold border border-stone-200/60 transition-colors"
-              >
-                <div className="w-6 h-6 rounded-lg bg-stone-100 text-stone-600 flex items-center justify-center shrink-0">
-                  <BookOpen size={13} />
-                </div>
-                <span>{t("manage_courses")}</span>
-              </a>
-
-              <a
-                href="/admin/users"
-                className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-stone-50 text-stone-700 text-xs font-semibold border border-stone-200/60 transition-colors"
-              >
-                <div className="w-6 h-6 rounded-lg bg-stone-100 text-stone-600 flex items-center justify-center shrink-0">
-                  <Users size={13} />
-                </div>
-                <span>{t("manage_users")}</span>
-              </a>
-
-              <a
-                href="/admin/orders"
-                className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-stone-50 text-stone-700 text-xs font-semibold border border-stone-200/60 transition-colors"
-              >
-                <div className="w-6 h-6 rounded-lg bg-stone-100 text-stone-600 flex items-center justify-center shrink-0">
-                  <ShoppingBag size={13} />
-                </div>
-                <span>{t("all_transactions")}</span>
-              </a>
-            </div>
+            <p className="text-xs text-stone-500 mt-0.5">5 transaksi pembayaran kelas terbaru</p>
           </div>
-
-          <div className="bg-gradient-to-br from-blue-50 via-sky-50/60 to-blue-50/40 rounded-2xl border border-blue-200/60 p-4.5 text-xs space-y-1.5">
-            <p className="font-bold text-blue-950 flex items-center gap-1.5">
-              <span>💡</span> Tips Pengelolaan
-            </p>
-            <p className="text-stone-600 leading-relaxed text-[11px]">
-              Gunakan Studio Sertifikat di dalam masing-masing halaman kelas untuk merancang tata letak dan syarat kelulusan otomatis bagi peserta didik.
-            </p>
-          </div>
+          <a
+            href="/admin/orders"
+            className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors border border-blue-200/60"
+          >
+            {t("view_all")}
+          </a>
         </div>
+
+        {stats.recentOrders.length > 0 ? (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead>
+                <tr className="border-b border-stone-100 text-stone-400 uppercase tracking-wider text-[10px]">
+                  <th className="pb-2.5 font-bold">{t("user_col")}</th>
+                  <th className="pb-2.5 font-bold">{t("course_col")}</th>
+                  <th className="pb-2.5 font-bold text-right">{t("amount_col")}</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-stone-50">
+                {stats.recentOrders.map((order) => (
+                  <tr key={order.id} className="hover:bg-stone-50/80 transition-colors">
+                    <td className="py-3">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 font-bold text-[11px] flex items-center justify-center shrink-0">
+                          {order.user.name?.[0]?.toUpperCase() || "U"}
+                        </div>
+                        <div>
+                          <p className="font-semibold text-stone-900">{order.user.name}</p>
+                          <p className="text-[10px] text-stone-400 truncate max-w-[140px]">
+                            {order.user.email}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-3">
+                      <p className="font-medium text-stone-700 truncate max-w-[200px]">
+                        {order.course.title}
+                      </p>
+                    </td>
+                    <td className="py-3 text-right">
+                      <span className="font-bold text-stone-900 bg-stone-100 px-2 py-1 rounded-md">
+                        {formatCurrency(order.amount)}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="text-center py-12 bg-stone-50/50 rounded-xl border border-dashed border-stone-200">
+            <ShoppingBag size={32} className="text-stone-300 mx-auto mb-2" />
+            <p className="text-xs font-medium text-stone-500">{t("no_transactions")}</p>
+          </div>
+        )}
+      </div>
+
+      {/* Tips Pengelolaan */}
+      <div className="bg-gradient-to-br from-blue-50 via-sky-50/60 to-blue-50/40 rounded-2xl border border-blue-200/60 p-4.5 text-xs space-y-1.5">
+        <p className="font-bold text-blue-950 flex items-center gap-1.5">
+          <span>💡</span> Tips Pengelolaan
+        </p>
+        <p className="text-stone-600 leading-relaxed text-[11px]">
+          Gunakan Studio Sertifikat di dalam masing-masing halaman kelas untuk merancang tata letak dan syarat kelulusan otomatis bagi peserta didik.
+        </p>
       </div>
     </div>
   );
