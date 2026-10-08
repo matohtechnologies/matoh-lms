@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -185,8 +186,15 @@ export function Navbar({ user, categories }: NavbarProps) {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between gap-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-sky-500 flex items-center justify-center shadow-xs group-hover:shadow-md transition-shadow">
-            <BookOpen size={18} className="text-white" />
+          <div className="w-9 h-9 rounded-xl bg-white border border-stone-200/80 shadow-2xs flex items-center justify-center p-1.5 group-hover:border-blue-400 group-hover:shadow-xs transition-all">
+            <Image
+              src="/images/matoh-logo.png"
+              alt="PT. Matoh Technologies Indonesia"
+              width={24}
+              height={24}
+              className="object-contain"
+              priority
+            />
           </div>
           <span
             className="font-bold text-stone-900 text-lg sm:text-xl tracking-tight"

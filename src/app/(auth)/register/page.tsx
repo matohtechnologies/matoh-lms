@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { BookOpen, Eye, EyeOff, CheckCircle } from "lucide-react";
+import Image from "next/image";
+import { Eye, EyeOff, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { signIn } from "next-auth/react";
@@ -88,9 +89,16 @@ export default function RegisterPage() {
       <div className="w-full max-w-md">
         {/* Top bar */}
         <div className="flex items-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-sky-500 flex items-center justify-center shadow-sm">
-              <BookOpen size={18} className="text-white" />
+          <Link href="/" className="inline-flex items-center gap-2.5 group">
+            <div className="w-9 h-9 rounded-xl bg-white border border-stone-200/80 shadow-2xs flex items-center justify-center p-1.5 group-hover:border-blue-400 group-hover:shadow-xs transition-all">
+              <Image
+                src="/images/matoh-logo.png"
+                alt="Matoh Technologies"
+                width={24}
+                height={24}
+                className="object-contain"
+                priority
+              />
             </div>
             <span className="font-bold text-stone-900 text-lg" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
               Matoh<span className="text-blue-600">Technologies</span>

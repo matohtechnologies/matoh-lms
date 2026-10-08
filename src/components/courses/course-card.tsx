@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Users, BookOpen, Clock, CheckCircle } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge, LevelBadge } from "@/components/ui/badge";
 import { StarRating } from "@/components/ui/star-rating";
@@ -97,8 +97,8 @@ export function CourseCard({
           {/* Enrolled badge */}
           {isEnrolled ? (
             <div className="absolute top-3 left-3 z-10">
-              <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-600 text-white shadow-sm flex items-center gap-1">
-                <CheckCircle size={12} /> {isEn ? "ENROLLED" : "SUDAH DIAMBIL"}
+              <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-600 text-white shadow-sm">
+                {isEn ? "ENROLLED" : "SUDAH DIAMBIL"}
               </span>
             </div>
           ) : isFree ? (
@@ -142,33 +142,32 @@ export function CourseCard({
           </div>
 
           {/* Stats */}
-          <div className="flex items-center gap-3 text-xs text-slate-500">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500">
             {rating != null && rating > 0 && (
-              <div className="flex items-center gap-1">
-                <StarRating rating={rating} size={12} />
-                <span className="font-medium text-slate-700">{rating.toFixed(1)}</span>
-                {reviewCount > 0 && <span>({reviewCount})</span>}
-              </div>
+              <>
+                <div className="flex items-center gap-1">
+                  <StarRating rating={rating} size={12} />
+                  <span className="font-medium text-slate-700">{rating.toFixed(1)}</span>
+                  {reviewCount > 0 && <span>({reviewCount})</span>}
+                </div>
+                <span className="text-slate-300">•</span>
+              </>
             )}
-          </div>
-
-          <div className="flex items-center gap-4 text-xs text-slate-500">
             {totalLessons && (
-              <span className="flex items-center gap-1">
-                <BookOpen size={12} />
+              <span>
                 {totalLessons} {isEn ? "lessons" : "materi"}
               </span>
             )}
+            {totalLessons && duration && <span className="text-slate-300">•</span>}
             {duration && (
-              <span className="flex items-center gap-1">
-                <Clock size={12} />
+              <span>
                 {formatDuration(duration)}
               </span>
             )}
+            {(totalLessons || duration) && enrollCount > 0 && <span className="text-slate-300">•</span>}
             {enrollCount > 0 && (
-              <span className="flex items-center gap-1">
-                <Users size={12} />
-                {enrollCount.toLocaleString(locale === "en" ? "en-US" : "id-ID")}
+              <span>
+                {enrollCount.toLocaleString(locale === "en" ? "en-US" : "id-ID")} {isEn ? "students" : "siswa"}
               </span>
             )}
           </div>
@@ -176,8 +175,8 @@ export function CourseCard({
           {/* Price / Enrolled Status */}
           <div className="flex items-center justify-between gap-2 mt-auto pt-2 border-t border-slate-100">
             {isEnrolled ? (
-              <span className="inline-flex items-center gap-1 font-bold text-emerald-600 text-xs">
-                <CheckCircle size={13} /> {isEn ? "Go to Course →" : "Masuk ke Kelas →"}
+              <span className="font-bold text-emerald-600 text-xs">
+                {isEn ? "Go to Course →" : "Masuk ke Kelas →"}
               </span>
             ) : isFree ? (
               <span className="font-bold text-green-600">{isEn ? "Free" : "Gratis"}</span>

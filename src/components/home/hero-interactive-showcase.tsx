@@ -191,8 +191,14 @@ export function HeroInteractiveShowcase({ isEn, studentCount = 0 }: HeroInteract
             {/* Lesson Info */}
             <div className="flex items-center justify-between pt-1">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-sky-500 flex items-center justify-center text-white font-bold text-sm shadow-sm">
-                  MT
+                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200/80 flex items-center justify-center p-1.5 shadow-2xs">
+                  <Image
+                    src="/images/matoh-logo.png"
+                    alt="Matoh Technologies"
+                    width={26}
+                    height={26}
+                    className="object-contain"
+                  />
                 </div>
                 <div>
                   <h4 className="text-sm font-bold text-slate-900 leading-snug">

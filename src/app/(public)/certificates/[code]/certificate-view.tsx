@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import {
   Award,
@@ -23,6 +24,7 @@ import {
   CertificateTranscriptData,
 } from "@/components/certificates/certificate-transcript-card";
 import { CertificateDesignConfig, CertificateDataValues } from "@/lib/certificate-templates";
+import { AddToLinkedInButton, LinkedInIcon } from "@/components/certificates/add-to-linkedin-button";
 
 interface CertificateViewProps {
   code: string;
@@ -256,7 +258,15 @@ export function CertificateView({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-2.5 self-end sm:self-center">
+        <div className="flex flex-wrap items-center gap-2.5 self-end sm:self-center">
+          <AddToLinkedInButton
+            courseTitle={courseTitle}
+            certificateCode={displayCode}
+            issuedAt={issuedAt}
+            issuerName={issuerName}
+            size="sm"
+            locale={locale}
+          />
           <Button
             variant="outline"
             size="sm"
@@ -334,8 +344,14 @@ export function CertificateView({
               >
                 {/* Header Brand */}
                 <div className="flex flex-col items-center justify-center mb-6 print:mb-3">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 to-sky-600 flex items-center justify-center shadow-md mb-3 print:mb-1.5 print:w-11 print:h-11">
-                    <Award size={28} className="text-white print:w-5 print:h-5" />
+                  <div className="w-14 h-14 rounded-2xl bg-white border border-stone-200/90 flex items-center justify-center shadow-md p-2.5 mb-3 print:mb-1.5 print:w-11 print:h-11">
+                    <Image
+                      src="/images/matoh-logo.png"
+                      alt={issuerName}
+                      width={38}
+                      height={38}
+                      className="object-contain"
+                    />
                   </div>
                   <h2
                     className="text-lg font-bold tracking-widest uppercase text-stone-800 print:text-base"
@@ -452,6 +468,34 @@ export function CertificateView({
                 : "↶ Balik ke Sertifikat (Sisi Depan)"}
             </span>
           </button>
+        </div>
+
+        {/* LinkedIn Showcase Banner */}
+        <div className="w-full max-w-4xl mx-auto mt-6 p-4 sm:p-5 rounded-2xl bg-white border border-stone-200/90 shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-4 print:hidden">
+          <div className="flex items-center gap-3.5 text-center sm:text-left">
+            <div className="w-10 h-10 rounded-xl bg-[#0A66C2]/10 border border-[#0A66C2]/20 flex items-center justify-center text-[#0A66C2] shrink-0">
+              <LinkedInIcon className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="font-bold text-stone-900 text-sm">
+                {locale === "en" ? "Showcase this credential on LinkedIn" : "Cantumkan Lisensi & Sertifikasi ini di Profil LinkedIn"}
+              </p>
+              <p className="text-xs text-stone-500">
+                {locale === "en"
+                  ? "Directly adds this verified certificate to your LinkedIn licenses & certifications section."
+                  : "Menambahkan sertifikat resmi PT. Matoh Technologies Indonesia secara otomatis ke profil Anda."}
+              </p>
+            </div>
+          </div>
+          <AddToLinkedInButton
+            courseTitle={courseTitle}
+            certificateCode={displayCode}
+            issuedAt={issuedAt}
+            issuerName={issuerName}
+            size="md"
+            locale={locale}
+            className="shrink-0 w-full sm:w-auto"
+          />
         </div>
       </div>
     </div>

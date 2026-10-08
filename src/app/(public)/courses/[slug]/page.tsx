@@ -2,7 +2,7 @@ import { cache } from "react";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Star, Users, Clock, BookOpen, Award, Play, CheckCircle, ChevronDown, Lock } from "lucide-react";
+import { ChevronDown, Play, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge, LevelBadge } from "@/components/ui/badge";
 import { StarRating } from "@/components/ui/star-rating";
@@ -193,8 +193,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                 <Badge variant="info">{displayCourse.category.name}</Badge>
                 <LevelBadge level={displayCourse.level} locale={locale} />
                 {isEnrolled && (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-xs">
-                    <CheckCircle size={13} className="text-emerald-600" />
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">
                     {tDetail("already_enrolled")}
                   </span>
                 )}
@@ -205,29 +204,31 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
               <p className="text-slate-600 leading-relaxed mb-5">{displayCourse.description}</p>
 
               {/* Stats row */}
-              <div className="flex flex-wrap items-center gap-4 text-sm text-slate-600">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-slate-600">
                 {displayCourse.rating != null && displayCourse.rating > 0 && (
-                  <div className="flex items-center gap-1.5">
-                    <StarRating rating={displayCourse.rating} size={15} />
-                    <span className="font-semibold text-amber-600">{displayCourse.rating.toFixed(1)}</span>
-                    <span className="text-slate-400">({displayCourse.reviewCount} {isEn ? "reviews" : "ulasan"})</span>
-                  </div>
+                  <>
+                    <div className="flex items-center gap-1.5">
+                      <StarRating rating={displayCourse.rating} size={15} />
+                      <span className="font-semibold text-amber-600">{displayCourse.rating.toFixed(1)}</span>
+                      <span className="text-slate-400">({displayCourse.reviewCount} {isEn ? "reviews" : "ulasan"})</span>
+                    </div>
+                    <span className="text-slate-300">•</span>
+                  </>
                 )}
-                <span className="flex items-center gap-1.5">
-                  <Users size={15} className="text-slate-400" />
+                <span>
                   {(displayCourse.enrollCount ?? 0).toLocaleString()} {isEn ? "students" : "pelajar"}
                 </span>
                 {displayCourse.duration && (
-                  <span className="flex items-center gap-1.5">
-                    <Clock size={15} className="text-slate-400" />
-                    {formatDuration(displayCourse.duration)}
-                  </span>
+                  <>
+                    <span className="text-slate-300">•</span>
+                    <span>{formatDuration(displayCourse.duration)}</span>
+                  </>
                 )}
                 {displayCourse.totalLessons && (
-                  <span className="flex items-center gap-1.5">
-                    <BookOpen size={15} className="text-slate-400" />
-                    {displayCourse.totalLessons} {isEn ? "lessons" : "materi"}
-                  </span>
+                  <>
+                    <span className="text-slate-300">•</span>
+                    <span>{displayCourse.totalLessons} {isEn ? "lessons" : "materi"}</span>
+                  </>
                 )}
               </div>
 
@@ -274,8 +275,8 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
               <div className="grid sm:grid-cols-2 gap-3">
                 {whatYouLearn.map((item, i) => (
                   <div key={i} className="flex items-start gap-2.5">
-                    <CheckCircle size={16} className="text-blue-500 mt-0.5 shrink-0" />
-                    <span className="text-sm text-slate-700">{item}</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2 shrink-0" />
+                    <span className="text-sm text-slate-700 leading-relaxed">{item}</span>
                   </div>
                 ))}
               </div>
@@ -441,9 +442,8 @@ function PriceCard({
       <div>
         {isEnrolled ? (
           <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl space-y-1">
-            <div className="flex items-center gap-2 text-emerald-800 font-bold text-sm">
-              <CheckCircle size={18} className="text-emerald-600 shrink-0" />
-              <span>{isEn ? "You Already Own This Course" : "Kelas Sudah Anda Miliki"}</span>
+            <div className="text-emerald-800 font-bold text-sm">
+              {isEn ? "You Already Own This Course" : "Kelas Sudah Anda Miliki"}
             </div>
             <p className="text-xs text-emerald-700 leading-relaxed">
               {isEn
@@ -495,19 +495,26 @@ function PriceCard({
       )}
 
       {/* Includes */}
-      <div className="space-y-2.5 pt-2 border-t border-slate-100">
+      <div className="space-y-2 pt-2 border-t border-slate-100">
         <p className="text-sm font-semibold text-slate-700">{isEn ? "This course includes:" : "Termasuk:"}</p>
-        {[
-          { icon: Clock, text: isEn ? "Lifetime access" : "Akses seumur hidup" },
-          { icon: BookOpen, text: `${(course as { totalLessons?: number | null }).totalLessons ?? 50}+ ${isEn ? "video lessons" : "materi video"}` },
-          { icon: Award, text: isEn ? "Certificate of completion" : "Sertifikat kelulusan" },
-          { icon: CheckCircle, text: isEn ? "30-day money-back guarantee" : "Garansi uang kembali 30 hari" },
-        ].map(({ icon: Icon, text }) => (
-          <div key={text} className="flex items-center gap-2.5 text-sm text-slate-600">
-            <Icon size={15} className="text-blue-500 shrink-0" />
-            {text}
-          </div>
-        ))}
+        <ul className="space-y-1.5 text-sm text-slate-600">
+          <li className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0" />
+            <span>{isEn ? "Lifetime access" : "Akses seumur hidup"}</span>
+          </li>
+          <li className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0" />
+            <span>{`${(course as { totalLessons?: number | null }).totalLessons ?? 50}+ ${isEn ? "video lessons" : "materi video"}`}</span>
+          </li>
+          <li className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0" />
+            <span>{isEn ? "Certificate of completion" : "Sertifikat kelulusan"}</span>
+          </li>
+          <li className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0" />
+            <span>{isEn ? "30-day money-back guarantee" : "Garansi uang kembali 30 hari"}</span>
+          </li>
+        </ul>
       </div>
     </div>
   );

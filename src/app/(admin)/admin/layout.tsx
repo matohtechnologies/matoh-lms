@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import { BookOpen, LogOut, Shield } from "lucide-react";
 import { auth } from "@/lib/auth";
@@ -31,8 +32,14 @@ export default async function AdminLayout({
       {/* Mobile Top Navigation */}
       <header className="lg:hidden bg-white/90 backdrop-blur-md border-b border-slate-200/80 p-4 sticky top-0 z-40 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-600 to-sky-600 flex items-center justify-center shadow-2xs">
-            <Shield size={16} className="text-white" />
+          <div className="w-8 h-8 rounded-xl bg-white border border-slate-200/80 shadow-2xs flex items-center justify-center p-1">
+            <Image
+              src="/images/matoh-logo.png"
+              alt="Matoh Technologies"
+              width={20}
+              height={20}
+              className="object-contain"
+            />
           </div>
           <div>
             <span
@@ -80,8 +87,14 @@ export default async function AdminLayout({
         {/* Brand Header */}
         <div className="p-5 border-b border-slate-100 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-sky-600 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
-              <Shield size={18} className="text-white" />
+            <div className="w-9 h-9 rounded-xl bg-white border border-slate-200/80 shadow-2xs flex items-center justify-center p-1.5 group-hover:border-blue-400 group-hover:scale-105 transition-all">
+              <Image
+                src="/images/matoh-logo.png"
+                alt="Matoh Technologies"
+                width={24}
+                height={24}
+                className="object-contain"
+              />
             </div>
             <div>
               <span

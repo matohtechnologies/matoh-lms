@@ -2,7 +2,8 @@
 
 import { useState, useTransition } from "react";
 import Link from "next/link";
-import { BookOpen, Mail, ArrowLeft, CheckCircle } from "lucide-react";
+import Image from "next/image";
+import { Mail, ArrowLeft, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { Metadata } from "next";
@@ -77,9 +78,16 @@ export default function ForgotPasswordPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2.5 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-sky-500 flex items-center justify-center shadow-sm">
-              <BookOpen size={20} className="text-white" />
+          <Link href="/" className="inline-flex items-center gap-2.5 mb-6 group">
+            <div className="w-10 h-10 rounded-xl bg-white border border-stone-200/80 shadow-2xs flex items-center justify-center p-2 group-hover:border-blue-400 group-hover:shadow-xs transition-all">
+              <Image
+                src="/images/matoh-logo.png"
+                alt="Matoh Technologies"
+                width={26}
+                height={26}
+                className="object-contain"
+                priority
+              />
             </div>
             <span
               className="font-bold text-stone-900 text-xl"

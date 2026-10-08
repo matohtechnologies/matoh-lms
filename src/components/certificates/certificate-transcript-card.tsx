@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { Award, ShieldCheck, CheckCircle2, QrCode } from "lucide-react";
+import Image from "next/image";
+import { Award, ShieldCheck, QrCode } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CertificateBackDesignConfig } from "@/lib/certificate-templates";
 
@@ -147,8 +148,14 @@ export function CertificateTranscriptCard({
         {/* Header Document */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-stone-200/80 gap-4 print:pb-3">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-stone-900 to-stone-700 flex items-center justify-center text-amber-400 shadow-xs print:w-9 print:h-9">
-              <Award size={24} className="print:w-5 print:h-5" />
+            <div className="w-12 h-12 rounded-2xl bg-white border border-stone-200/90 flex items-center justify-center p-2 shadow-xs print:w-9 print:h-9 print:p-1.5">
+              <Image
+                src="/images/matoh-logo.png"
+                alt={issuerName}
+                width={32}
+                height={32}
+                className="object-contain"
+              />
             </div>
             <div>
               <p className="text-[11px] uppercase font-extrabold tracking-widest text-stone-500">
@@ -235,11 +242,8 @@ export function CertificateTranscriptCard({
                   <td className="py-2 px-3 text-center text-stone-400 font-mono text-[11px]">
                     {index + 1}
                   </td>
-                  <td className="py-2 px-4 text-stone-800 font-medium">
-                    <div className="flex items-center gap-2">
-                      <CheckCircle2 size={13} className="text-emerald-600 shrink-0" />
-                      <span className="truncate max-w-sm sm:max-w-md">{item.title}</span>
-                    </div>
+                  <td className="py-2.5 px-4 text-stone-800 font-medium">
+                    <span className="truncate max-w-sm sm:max-w-md block">{item.title}</span>
                   </td>
                   {showCategory && (
                     <td className="py-2 px-3 text-center">

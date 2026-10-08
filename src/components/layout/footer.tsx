@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { BookOpen } from "lucide-react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 
 function TwitterIcon({ className }: { className?: string }) {
@@ -39,8 +39,14 @@ export function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-2.5 mb-4 group">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-600 to-sky-500 flex items-center justify-center">
-                <BookOpen size={16} className="text-white" />
+              <div className="w-8 h-8 rounded-xl bg-stone-800 border border-stone-700/80 flex items-center justify-center p-1.5 group-hover:border-stone-600 transition-colors">
+                <Image
+                  src="/images/matoh-logo-white.png"
+                  alt="PT. Matoh Technologies Indonesia"
+                  width={22}
+                  height={22}
+                  className="object-contain"
+                />
               </div>
               <span className="font-bold text-white text-lg" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
                 Matoh<span className="text-blue-400">Technologies</span>

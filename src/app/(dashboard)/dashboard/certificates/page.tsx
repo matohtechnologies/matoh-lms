@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Award, ExternalLink, BookOpen, GraduationCap } from "lucide-react";
+import { AddToLinkedInButton } from "@/components/certificates/add-to-linkedin-button";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import type { Metadata } from "next";
@@ -151,14 +152,25 @@ export default async function CertificatesPage() {
                   </p>
                 </div>
 
-                <Link
-                  href={`/certificates/${cert.certificateCode}`}
-                  target="_blank"
-                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-xs"
-                >
-                  <ExternalLink size={13} />
-                  {t("cert_view_print")}
-                </Link>
+                <div className="flex flex-col sm:flex-row items-center gap-2 pt-1">
+                  <Link
+                    href={`/certificates/${cert.certificateCode}`}
+                    target="_blank"
+                    className="flex-1 flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-xs"
+                  >
+                    <ExternalLink size={13} />
+                    {t("cert_view_print")}
+                  </Link>
+                  <AddToLinkedInButton
+                    courseTitle={cert.course.title}
+                    certificateCode={cert.certificateCode}
+                    issuedAt={cert.issuedAt}
+                    size="sm"
+                    variant="brand"
+                    locale={locale}
+                    className="w-full sm:w-auto py-2.5 px-3 rounded-xl font-bold"
+                  />
+                </div>
               </div>
             </div>
           ))}

@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import { BookOpen, Shield } from "lucide-react";
 import { auth } from "@/lib/auth";
@@ -41,8 +42,14 @@ export default async function DashboardLayout({
         {/* Logo */}
         <div className="p-4 border-b border-slate-100 flex items-center">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-600 to-sky-600 flex items-center justify-center shadow-2xs group-hover:scale-105 transition-transform">
-              <BookOpen size={16} className="text-white" />
+            <div className="w-8 h-8 rounded-lg bg-white border border-slate-200/80 shadow-2xs flex items-center justify-center p-1 group-hover:border-blue-400 group-hover:scale-105 transition-all">
+              <Image
+                src="/images/matoh-logo.png"
+                alt="Matoh Technologies"
+                width={22}
+                height={22}
+                className="object-contain"
+              />
             </div>
             <span
               className="font-bold text-slate-900 text-base"
@@ -121,8 +128,14 @@ export default async function DashboardLayout({
         {/* Mobile Top Header */}
         <header className="lg:hidden bg-white/90 backdrop-blur-md border-b border-slate-200/80 px-4 h-14 flex items-center justify-between sticky top-0 z-20">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-600 to-sky-600 flex items-center justify-center shadow-2xs">
-              <BookOpen size={13} className="text-white" />
+            <div className="w-7 h-7 rounded-lg bg-white border border-slate-200/80 shadow-2xs flex items-center justify-center p-0.5">
+              <Image
+                src="/images/matoh-logo.png"
+                alt="Matoh Technologies"
+                width={18}
+                height={18}
+                className="object-contain"
+              />
             </div>
             <span
               className="font-bold text-slate-900 text-sm"

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   BookOpen,
   Users,
@@ -98,8 +99,14 @@ export default async function AboutPage() {
       {/* Hero Header */}
       <section className="py-20 sm:py-24 border-b border-slate-200/70 bg-gradient-to-b from-blue-50/70 via-[#f8fafc] to-[#f8fafc]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/70 text-blue-700 text-xs font-bold mb-6 shadow-2xs">
-            <BookOpen size={14} className="text-blue-600" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200/90 text-slate-800 text-xs font-bold mb-6 shadow-2xs">
+            <Image
+              src="/images/matoh-logo.png"
+              alt="Matoh Technologies"
+              width={16}
+              height={16}
+              className="object-contain"
+            />
             {isEn ? "PT. Matoh Technologies Indonesia" : "Profil PT. Matoh Technologies Indonesia"}
           </div>
           <h1
@@ -128,10 +135,22 @@ export default async function AboutPage() {
               <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
                 {isEn ? "25+ Years of Digital Literacy Journey" : "Perjalanan Lebih dari Dua Dekade Literasi Digital"}
               </h2>
-              <div className="mt-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-600 space-y-1">
-                <p className="font-semibold text-slate-900">Badan Hukum Resmi:</p>
-                <p>PT. Matoh Technologies Indonesia</p>
-                <p className="font-mono text-blue-700 text-[11px]">AHU-064920.AH.01.30.Tahun 2024</p>
+              <div className="mt-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-600">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-white border border-slate-200/90 flex items-center justify-center p-1.5 shrink-0 shadow-2xs">
+                    <Image
+                      src="/images/matoh-logo.png"
+                      alt="Matoh Technologies"
+                      width={22}
+                      height={22}
+                      className="object-contain"
+                    />
+                  </div>
+                  <div>
+                    <p className="font-bold text-slate-900 text-sm">PT. Matoh Technologies Indonesia</p>
+                    <p className="font-mono text-blue-700 text-[11px] font-medium">AHU-064920.AH.01.30.Tahun 2024</p>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="md:col-span-8 space-y-4 text-slate-600 text-sm leading-relaxed">

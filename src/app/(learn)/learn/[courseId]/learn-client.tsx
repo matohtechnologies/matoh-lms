@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import {
   ChevronLeft,
@@ -816,8 +817,14 @@ export default function LearnPageClient({
         {/* Brand & Course Title */}
         <div className="p-4 border-b border-stone-800 bg-stone-900/90 backdrop-blur-md">
           <Link href="/" className="flex items-center gap-2 mb-3 group">
-            <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-blue-600 to-sky-500 flex items-center justify-center shadow-xs">
-              <BookOpen size={14} className="text-white" />
+            <div className="w-7 h-7 rounded-lg bg-stone-800 border border-stone-700/80 flex items-center justify-center p-1 group-hover:border-stone-600 transition-colors">
+              <Image
+                src="/images/matoh-logo-white.png"
+                alt="Matoh Technologies"
+                width={18}
+                height={18}
+                className="object-contain"
+              />
             </div>
             <span className="text-sm font-bold text-white tracking-tight">
               Matoh<span className="text-blue-400">Technologies</span>
