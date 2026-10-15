@@ -1,5 +1,29 @@
 import confetti from "canvas-confetti";
 
+// Keep a dedicated canvas-confetti instance with useWorker: false
+// to ensure 100% reliable confetti rendering in all browsers, modals, and CSP environments
+let reliableConfetti: confetti.CreateTypes | typeof confetti | null = null;
+
+function getConfettiRunner(): confetti.CreateTypes | typeof confetti {
+  if (typeof window === "undefined") return confetti;
+
+  if (!reliableConfetti) {
+    try {
+      // confetti.create(null, { useWorker: false, resize: true }) ensures main-thread canvas
+      // rendering, completely bypassing OffscreenCanvas/Blob Worker CSP restrictions
+      reliableConfetti = confetti.create(undefined, {
+        resize: true,
+        useWorker: false,
+        disableForReducedMotion: false,
+      });
+    } catch {
+      reliableConfetti = confetti;
+    }
+  }
+
+  return reliableConfetti;
+}
+
 /**
  * Triggers a multi-stage celebratory confetti explosion
  * Perfect for graduation, certificate issuance, or course completion
@@ -7,14 +31,16 @@ import confetti from "canvas-confetti";
 export function triggerCelebrationConfetti() {
   if (typeof window === "undefined") return;
 
-  const count = 200;
-  const defaults = {
-    origin: { y: 0.7 },
-    zIndex: 99999,
+  const runner = getConfettiRunner();
+  const count = 220;
+  const defaults: confetti.Options = {
+    origin: { y: 0.65 },
+    zIndex: 999999,
+    disableForReducedMotion: false,
   };
 
   function fire(particleRatio: number, opts: confetti.Options) {
-    confetti({
+    runner({
       ...defaults,
       ...opts,
       particleCount: Math.floor(count * particleRatio),
@@ -23,7 +49,7 @@ export function triggerCelebrationConfetti() {
 
   // Multi-stage explosion
   fire(0.25, {
-    spread: 26,
+    spread: 30,
     startVelocity: 55,
     colors: ["#F59E0B", "#FBBF24", "#FEF08A"],
   });
@@ -34,12 +60,12 @@ export function triggerCelebrationConfetti() {
   fire(0.35, {
     spread: 100,
     decay: 0.91,
-    scalar: 0.8,
+    scalar: 0.85,
     colors: ["#10B981", "#34D399", "#A7F3D0"],
   });
   fire(0.1, {
     spread: 120,
-    startVelocity: 25,
+    startVelocity: 30,
     decay: 0.92,
     scalar: 1.2,
     colors: ["#EC4899", "#8B5CF6", "#F43F5E"],
@@ -50,25 +76,25 @@ export function triggerCelebrationConfetti() {
     colors: ["#F59E0B", "#10B981", "#3B82F6"],
   });
 
-  // Secondary side cannons after 350ms
+  // Secondary side cannons after 300ms
   setTimeout(() => {
-    confetti({
-      particleCount: 60,
+    runner({
+      particleCount: 65,
       angle: 60,
-      spread: 55,
-      origin: { x: 0, y: 0.75 },
-      zIndex: 99999,
+      spread: 60,
+      origin: { x: 0.05, y: 0.75 },
+      zIndex: 999999,
       colors: ["#3B82F6", "#F59E0B", "#10B981"],
     });
-    confetti({
-      particleCount: 60,
+    runner({
+      particleCount: 65,
       angle: 120,
-      spread: 55,
-      origin: { x: 1, y: 0.75 },
-      zIndex: 99999,
+      spread: 60,
+      origin: { x: 0.95, y: 0.75 },
+      zIndex: 999999,
       colors: ["#8B5CF6", "#EC4899", "#F59E0B"],
     });
-  }, 350);
+  }, 300);
 }
 
 /**
@@ -78,13 +104,14 @@ export function triggerCelebrationConfetti() {
 export function triggerMicroConfetti(origin?: { x: number; y: number }) {
   if (typeof window === "undefined") return;
 
-  confetti({
-    particleCount: 35,
-    spread: 50,
+  const runner = getConfettiRunner();
+  runner({
+    particleCount: 40,
+    spread: 55,
     origin: origin || { x: 0.5, y: 0.6 },
-    scalar: 0.75,
-    ticks: 150,
-    zIndex: 99999,
+    scalar: 0.8,
+    ticks: 160,
+    zIndex: 999999,
     colors: ["#3B82F6", "#10B981", "#F59E0B", "#6366F1"],
   });
 }

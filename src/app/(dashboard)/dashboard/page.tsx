@@ -511,49 +511,6 @@ export default async function DashboardPage({
               </div>
             )}
           </div>
-
-          {/* Quick Menu */}
-          <div className="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-xs space-y-3">
-            <h2
-              className="font-bold text-stone-900 text-sm"
-              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
-            >
-              {t("quick_menu")}
-            </h2>
-            <div className="space-y-1.5">
-              {[
-                { href: "/courses", labelKey: "browse_new_courses" as const, icon: GraduationCap, color: "blue" },
-                { href: "/dashboard/certificates", labelKey: "view_certificates" as const, icon: Award, color: "amber" },
-                { href: "/dashboard/orders", labelKey: "order_history" as const, icon: ShoppingBag, color: "sky" },
-                { href: "/dashboard/profile", labelKey: "edit_profile" as const, icon: TrendingUp, color: "green" },
-              ].map(({ href, labelKey, icon: Icon, color }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-stone-50 text-stone-700 hover:text-stone-900 text-xs font-semibold transition-colors border border-transparent hover:border-stone-200/60 group"
-                >
-                  <div
-                    className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
-                      color === "blue"
-                        ? "bg-blue-50 text-blue-600"
-                        : color === "amber"
-                        ? "bg-amber-50 text-amber-600"
-                        : color === "sky"
-                        ? "bg-sky-50 text-sky-600"
-                        : "bg-emerald-50 text-emerald-600"
-                    }`}
-                  >
-                    <Icon size={14} />
-                  </div>
-                  <span className="truncate">{t(labelKey)}</span>
-                  <ArrowRight
-                    size={13}
-                    className="ml-auto text-stone-300 group-hover:text-blue-600 transition-colors"
-                  />
-                </Link>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
     </div>

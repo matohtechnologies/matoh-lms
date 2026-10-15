@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -259,6 +259,26 @@ export default function LearnPageClient({
   const [activeTab, setActiveTab] = useState<
     "notes" | "studyNotes" | "resources" | "quiz" | "assignment" | "discussion"
   >("notes");
+
+  // Tab scroll overflow state for responsive horizontal scroll navigation
+  const tabScrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const checkTabScroll = useCallback(() => {
+    const el = tabScrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 8);
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 8);
+  }, []);
+
+  useEffect(() => {
+    const el = tabScrollRef.current;
+    if (!el) return;
+    checkTabScroll();
+    window.addEventListener("resize", checkTabScroll);
+    return () => window.removeEventListener("resize", checkTabScroll);
+  }, [checkTabScroll]);
 
   // Dynamic Forensic Watermark State
   const [watermarkPos, setWatermarkPos] = useState({ x: 18, y: 18 });
@@ -1356,41 +1376,31 @@ export default function LearnPageClient({
 
         {/* Scrollable Stage: Video + Tabbed Content */}
         <div className="flex-1 overflow-y-auto custom-scrollbar">
-          {/* Video Player Stage */}
-          <div className="w-full bg-black flex items-center justify-center relative aspect-video max-h-[520px] shadow-2xl">
-            {/* Dynamic Forensic Watermark for Anti-Piracy */}
-            {session?.user && (
-              <div
-                className="absolute pointer-events-none select-none z-20 text-[10px] font-mono tracking-widest px-2.5 py-0.5 rounded-full bg-black/40 text-white/30 backdrop-blur-2xs transition-all duration-1000 ease-in-out border border-white/5"
-                style={{
-                  top: `${watermarkPos.y}%`,
-                  left: `${watermarkPos.x}%`,
-                }}
-              >
-                🔒 {session.user.email || session.user.name} • Matoh Technologies
-              </div>
-            )}
+          {/* Video Player Stage (only rendered if lesson has a video) */}
+          {Boolean(currentLesson.videoUrl?.trim()) && (
+            <div className="w-full bg-black flex items-center justify-center relative aspect-video max-h-[520px] shadow-2xl">
+              {/* Dynamic Forensic Watermark for Anti-Piracy */}
+              {session?.user && (
+                <div
+                  className="absolute pointer-events-none select-none z-20 text-[10px] font-mono tracking-widest px-2.5 py-0.5 rounded-full bg-black/40 text-white/30 backdrop-blur-2xs transition-all duration-1000 ease-in-out border border-white/5"
+                  style={{
+                    top: `${watermarkPos.y}%`,
+                    left: `${watermarkPos.x}%`,
+                  }}
+                >
+                  🔒 {session.user.email || session.user.name} • Matoh Technologies
+                </div>
+              )}
 
-            {currentLesson.videoUrl ? (
               <iframe
-                src={getEmbedUrl(currentLesson.videoUrl) || ""}
+                src={getEmbedUrl(currentLesson.videoUrl!) || ""}
                 className="w-full h-full"
                 allowFullScreen
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 title={currentLesson.title}
               />
-            ) : (
-              <div className="text-center p-8">
-                <div className="w-20 h-20 rounded-2xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center mx-auto mb-4 text-blue-400">
-                  <Play size={36} className="ml-1" />
-                </div>
-                <h3 className="text-base font-bold text-stone-200">{currentLesson.title}</h3>
-                <p className="text-xs text-stone-400 mt-1 max-w-sm mx-auto">
-                  {t("no_video_placeholder")}
-                </p>
-              </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Interactive Navigation Bar below player */}
           <div className="bg-stone-900 border-y border-stone-800 px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
@@ -1444,52 +1454,115 @@ export default function LearnPageClient({
           </div>
 
           {/* Dicoding-style Tabs: Notes, Study Notes, Resources, Quiz, Assignments, Discussion */}
-          <div className="max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
-            <div className="flex border-b border-stone-800 mb-6 gap-2 sm:gap-4 overflow-x-auto scrollbar-none">
-              {[
-                { key: "notes", label: t("tab_notes"), icon: FileText },
-                {
-                  key: "studyNotes",
-                  label: locale === "en" ? `Notes (${studyNotes.length})` : `Catatan (${studyNotes.length})`,
-                  icon: Bookmark,
-                },
-                {
-                  key: "resources",
-                  label:
-                    locale === "en"
-                      ? `Resources (${relevantResourcesCount})`
-                      : `Bahan Belajar (${relevantResourcesCount})`,
-                  icon: FolderDown,
-                },
-                {
-                  key: "quiz",
-                  label: t("tab_quiz", { count: quizzes.length }),
-                  icon: HelpCircle,
-                },
-                {
-                  key: "assignment",
-                  label: t("tab_assignment", { count: assignments.length }),
-                  icon: FileCode2,
-                },
-                {
-                  key: "discussion",
-                  label: t("tab_discussion", { count: discussions.length }),
-                  icon: MessageSquare,
-                },
-              ].map(({ key, label, icon: Icon }) => (
-                <button
-                  key={key}
-                  onClick={() => setActiveTab(key as typeof activeTab)}
-                  className={`flex items-center gap-2 pb-3 px-1 text-xs sm:text-sm font-semibold transition-colors border-b-2 whitespace-nowrap ${
-                    activeTab === key
-                      ? "text-blue-400 border-blue-500"
-                      : "text-stone-400 border-transparent hover:text-stone-200"
-                  }`}
-                >
-                  <Icon size={16} />
-                  {label}
-                </button>
-              ))}
+          <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 w-full">
+            {/* Horizontal Scrollable Tab Bar with overflow arrows and indicators */}
+            <div className="relative border-b border-stone-800 mb-6">
+              {/* Left Scroll Navigation button if overflowed */}
+              {canScrollLeft && (
+                <div className="absolute left-0 top-0 bottom-0 z-10 flex items-center pr-6 bg-gradient-to-r from-stone-950 via-stone-950/90 to-transparent">
+                  <button
+                    type="button"
+                    onClick={() => tabScrollRef.current?.scrollBy({ left: -220, behavior: "smooth" })}
+                    aria-label="Scroll tabs left"
+                    className="p-1.5 rounded-full bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white shadow-lg border border-stone-700/60 transition-all hover:scale-105"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                </div>
+              )}
+
+              {/* Scrollable container */}
+              <div
+                ref={tabScrollRef}
+                onScroll={checkTabScroll}
+                className="flex items-center gap-1.5 sm:gap-2 lg:gap-3 overflow-x-auto no-scrollbar scroll-smooth py-1"
+              >
+                {[
+                  {
+                    key: "notes",
+                    label: t("tab_notes"),
+                    icon: FileText,
+                    count: null,
+                  },
+                  {
+                    key: "studyNotes",
+                    label: locale === "en" ? "Notes" : "Catatan",
+                    icon: Bookmark,
+                    count: studyNotes.length,
+                  },
+                  {
+                    key: "resources",
+                    label: locale === "en" ? "Resources" : "Bahan Belajar",
+                    icon: FolderDown,
+                    count: relevantResourcesCount,
+                  },
+                  {
+                    key: "quiz",
+                    label: locale === "en" ? "Quiz" : "Kuis Evaluasi",
+                    icon: HelpCircle,
+                    count: quizzes.length,
+                  },
+                  {
+                    key: "assignment",
+                    label: locale === "en" ? "Assignments" : "Tugas & Submission",
+                    icon: FileCode2,
+                    count: assignments.length,
+                  },
+                  {
+                    key: "discussion",
+                    label: locale === "en" ? "Discussion" : "Forum Diskusi",
+                    icon: MessageSquare,
+                    count: discussions.length,
+                  },
+                ].map(({ key, label, icon: Icon, count }) => (
+                  <button
+                    key={key}
+                    onClick={() => {
+                      setActiveTab(key as typeof activeTab);
+                    }}
+                    className={`flex items-center gap-2 pb-3 px-2 sm:px-3 text-xs sm:text-sm font-semibold transition-all border-b-2 whitespace-nowrap shrink-0 group ${
+                      activeTab === key
+                        ? "text-blue-400 border-blue-500"
+                        : "text-stone-400 border-transparent hover:text-stone-200 hover:border-stone-700"
+                    }`}
+                  >
+                    <Icon
+                      size={16}
+                      className={
+                        activeTab === key
+                          ? "text-blue-400"
+                          : "text-stone-400 group-hover:text-stone-200 transition-colors"
+                      }
+                    />
+                    <span>{label}</span>
+                    {typeof count === "number" && (
+                      <span
+                        className={`text-[10px] sm:text-xs font-mono px-1.5 py-0.5 rounded-full transition-colors ${
+                          activeTab === key
+                            ? "bg-blue-500/20 text-blue-300 border border-blue-500/30 font-bold"
+                            : "bg-stone-800 text-stone-400 border border-stone-700/60 group-hover:text-stone-300"
+                        }`}
+                      >
+                        {count}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+
+              {/* Right Scroll Navigation button if overflowed */}
+              {canScrollRight && (
+                <div className="absolute right-0 top-0 bottom-0 z-10 flex items-center pl-6 bg-gradient-to-l from-stone-950 via-stone-950/90 to-transparent">
+                  <button
+                    type="button"
+                    onClick={() => tabScrollRef.current?.scrollBy({ left: 220, behavior: "smooth" })}
+                    aria-label="Scroll tabs right"
+                    className="p-1.5 rounded-full bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white shadow-lg border border-stone-700/60 transition-all hover:scale-105"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* TAB 1: NOTES & LESSON CONTENT */}

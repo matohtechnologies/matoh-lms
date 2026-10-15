@@ -221,10 +221,11 @@ export function GraduationCelebrationModal({
 
             {/* Re-fire Confetti Button */}
             <button
+              type="button"
               onClick={handleFireAgain}
-              className="w-full py-2 px-3 text-center text-xs font-bold text-amber-700 hover:text-amber-800 hover:bg-amber-50 rounded-xl transition-colors flex items-center justify-center gap-1.5"
+              className="w-full py-2.5 px-3 text-center text-xs font-bold text-amber-700 hover:text-amber-800 bg-amber-50/60 hover:bg-amber-100 active:scale-95 border border-amber-200/70 rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-2xs hover:shadow-xs"
             >
-              <span>🎊</span>
+              <PartyPopper size={15} className="text-amber-600" />
               <span>Ledakkan Konfeti Lagi!</span>
             </button>
           </div>
