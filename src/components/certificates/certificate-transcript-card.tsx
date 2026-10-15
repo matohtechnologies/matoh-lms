@@ -3,9 +3,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
+import Link from "next/link";
 import { Award, ShieldCheck, QrCode, Maximize2, X, FileText, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CertificateBackDesignConfig } from "@/lib/certificate-templates";
+import { useAppLocale } from "@/components/providers/locale-provider";
 
 export interface TranscriptAssessmentItem {
   id: string;
@@ -69,6 +71,9 @@ export function CertificateTranscriptCard({
     items,
   } = data;
 
+  const { locale } = useAppLocale();
+  const isEn = locale === "en";
+
   const showWorkload = backConfig?.showWorkloadColumn ?? true;
   const showCategory = backConfig?.showCategoryColumn ?? true;
   const showGrade = backConfig?.showGradeColumn ?? true;
@@ -78,9 +83,21 @@ export function CertificateTranscriptCard({
   const showScale = backConfig?.showScaleLegend ?? true;
   const showQr = backConfig?.showQrCode ?? true;
 
-  const headerTitle = backConfig?.headerTitle || "Transkrip Nilai & Capaian Kompetensi";
+  const defaultHeaderTitle = isEn
+    ? "Academic Transcript & Competency Achievements"
+    : "Transkrip Nilai & Capaian Kompetensi";
+  const headerTitle = backConfig?.headerTitle || defaultHeaderTitle;
   const headerSubtitle =
     backConfig?.headerSubtitle || "Official Academic Transcript & Competency Assessment";
+
+  const displayPredicate = (() => {
+    if (!isEn) return predicate;
+    if (predicate.includes("DISTINCTION")) return "WITH DISTINCTION";
+    if (predicate.includes("HIGH MERIT")) return "HIGH MERIT";
+    if (predicate.includes("MERIT")) return "MERIT";
+    if (predicate.includes("PASS")) return "PASS";
+    return predicate;
+  })();
 
   const getTableHeaderClass = () => {
     switch (backConfig?.tableTheme) {
@@ -174,13 +191,13 @@ export function CertificateTranscriptCard({
 
           <div className="text-left sm:text-right text-xs text-stone-500 space-y-0.5 print:text-[10px]">
             <p>
-              ID Kredensial:{" "}
+              {isEn ? "Credential ID:" : "ID Kredensial:"}{" "}
               <span className="font-mono font-bold text-stone-900">
                 {certificateCode.toUpperCase()}
               </span>
             </p>
             <p>
-              Tanggal Lulus: <span className="text-stone-800 font-medium">{issueDisplay}</span>
+              {isEn ? "Graduation Date:" : "Tanggal Lulus:"} <span className="text-stone-800 font-medium">{issueDisplay}</span>
             </p>
           </div>
         </div>
@@ -189,13 +206,13 @@ export function CertificateTranscriptCard({
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-5 print:grid-cols-3 print:gap-2 print:my-3">
           <div className="p-3.5 rounded-xl bg-stone-50 border border-stone-200/60 min-w-0">
             <p className="text-[10px] uppercase font-bold tracking-wider text-stone-400">
-              Nama Peserta
+              {isEn ? "Student Name" : "Nama Peserta"}
             </p>
             <p className="text-sm font-bold text-stone-900 truncate mt-0.5">{studentName}</p>
           </div>
           <div className="p-3.5 rounded-xl bg-stone-50 border border-stone-200/60 min-w-0">
             <p className="text-[10px] uppercase font-bold tracking-wider text-stone-400">
-              Program Kursus
+              {isEn ? "Course Program" : "Program Kursus"}
             </p>
             <p className="text-sm font-bold text-stone-900 truncate mt-0.5">{courseTitle}</p>
             {categoryName && (
@@ -204,10 +221,10 @@ export function CertificateTranscriptCard({
           </div>
           <div className="p-3.5 rounded-xl bg-stone-50 border border-stone-200/60 min-w-0">
             <p className="text-[10px] uppercase font-bold tracking-wider text-stone-400">
-              Beban Belajar
+              {isEn ? "Learning Workload" : "Beban Belajar"}
             </p>
             <p className="text-sm font-bold text-stone-900 mt-0.5 truncate">
-              {totalHours} Jam Pembelajaran (JP)
+              {isEn ? `${totalHours} Hours (JP)` : `${totalHours} Jam Pembelajaran (JP)`}
             </p>
           </div>
         </div>
@@ -218,14 +235,14 @@ export function CertificateTranscriptCard({
             <thead>
               <tr className={cn("text-[10px] uppercase tracking-wider", getTableHeaderClass())}>
                 <th className="py-2.5 px-3 font-semibold text-center w-10">No</th>
-                <th className="py-2.5 px-4 font-semibold">Unit Kompetensi / Aspek Evaluasi</th>
+                <th className="py-2.5 px-4 font-semibold">{isEn ? "Competency Unit / Assessment Aspect" : "Unit Kompetensi / Aspek Evaluasi"}</th>
                 {showCategory && (
-                  <th className="py-2.5 px-3 font-semibold text-center w-28">Kategori</th>
+                  <th className="py-2.5 px-3 font-semibold text-center w-28">{isEn ? "Category" : "Kategori"}</th>
                 )}
                 {showWorkload && (
-                  <th className="py-2.5 px-3 font-semibold text-center w-24">Beban (JP)</th>
+                  <th className="py-2.5 px-3 font-semibold text-center w-24">{isEn ? "Workload (Hours)" : "Beban (JP)"}</th>
                 )}
-                <th className="py-2.5 px-3 font-semibold text-center w-20">Skor</th>
+                <th className="py-2.5 px-3 font-semibold text-center w-20">{isEn ? "Score" : "Skor"}</th>
                 {showGrade && (
                   <th className="py-2.5 px-3 font-semibold text-center w-16">Grade</th>
                 )}
@@ -254,15 +271,15 @@ export function CertificateTranscriptCard({
                           item.type === "quiz"
                             ? "bg-blue-50 text-blue-700 border border-blue-200"
                             : item.type === "assignment"
-                            ? "bg-purple-50 text-purple-700 border border-purple-200"
-                            : "bg-stone-100 text-stone-700"
+                              ? "bg-purple-50 text-purple-700 border border-purple-200"
+                              : "bg-stone-100 text-stone-700"
                         )}
                       >
                         {item.type === "quiz"
-                          ? "Evaluasi Kuis"
+                          ? (isEn ? "Quiz Evaluation" : "Evaluasi Kuis")
                           : item.type === "assignment"
-                          ? "Tugas Proyek"
-                          : "Modul Teori"}
+                            ? (isEn ? "Project Task" : "Tugas Proyek")
+                            : (isEn ? "Theory Module" : "Modul Teori")}
                       </span>
                     </td>
                   )}
@@ -283,7 +300,13 @@ export function CertificateTranscriptCard({
                   {showStatus && (
                     <td className="py-2 px-3 text-center">
                       <span className="inline-block px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] font-bold">
-                        {item.status}
+                        {item.status === "KOMPETEN"
+                          ? (isEn ? "COMPETENT" : "KOMPETEN")
+                          : item.status === "LULUS"
+                            ? (isEn ? "PASSED" : "LULUS")
+                            : item.status === "DISETUJUI"
+                              ? (isEn ? "APPROVED" : "DISETUJUI")
+                              : item.status}
                       </span>
                     </td>
                   )}
@@ -303,7 +326,9 @@ export function CertificateTranscriptCard({
                   <span className="text-[8px] opacity-70 leading-none">/ 100</span>
                 </div>
                 <div>
-                  <p className="text-[10px] uppercase font-bold text-stone-400">Nilai Rata-rata</p>
+                  <p className="text-[10px] uppercase font-bold text-stone-400">
+                    {isEn ? "Average Score" : "Nilai Rata-rata"}
+                  </p>
                   <p className="text-xs font-bold text-stone-900">
                     {overallScore.toFixed(1)} / 100
                   </p>
@@ -318,17 +343,23 @@ export function CertificateTranscriptCard({
                 </div>
                 <div>
                   <p className="text-[10px] uppercase font-bold text-stone-400">
-                    Predikat Kelulusan
+                    {isEn ? "Graduation Predicate" : "Predikat Kelulusan"}
                   </p>
-                  <p className="text-xs font-bold text-amber-900">{predicate}</p>
+                  <p className="text-xs font-bold text-amber-900">{displayPredicate}</p>
                 </div>
               </div>
             )}
 
             {showScale && (
               <div className="text-[10px] text-stone-500 flex flex-col justify-center border-t sm:border-t-0 sm:border-l border-amber-200/60 pt-2 sm:pt-0 sm:pl-3">
-                <p className="font-bold text-stone-700 uppercase mb-0.5">Keterangan Skala:</p>
-                <p>85–100 (A) : Dengan Pujian | 75–84 (B) : Memuaskan</p>
+                <p className="font-bold text-stone-700 uppercase mb-0.5">
+                  {isEn ? "Grade Scale:" : "Keterangan Skala:"}
+                </p>
+                <p>
+                  {isEn
+                    ? "85–100 (A) : With Distinction | 75–84 (B) : Merit"
+                    : "85–100 (A) : Dengan Pujian | 75–84 (B) : Memuaskan"}
+                </p>
               </div>
             )}
           </div>
@@ -337,27 +368,45 @@ export function CertificateTranscriptCard({
         {/* Validation QR & Signatures */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-stone-200 items-end print:grid-cols-3 print:gap-2 print:pt-2">
           {/* QR Validation */}
-          <div className="flex items-center gap-3 min-w-0">
+          <div className="flex items-center gap-3.5 min-w-0">
             {showQr && (
               <>
                 {qrCodeUrl ? (
-                  <img
-                    src={qrCodeUrl}
-                    alt="QR Code Verifikasi"
-                    className="w-14 h-14 rounded-lg border border-stone-200 p-0.5 bg-white shrink-0 print:w-11 print:h-11"
-                  />
+                  <Link
+                    href={`/verify/${certificateCode}`}
+                    target="_blank"
+                    className="shrink-0 group/qr block p-1 rounded-xl bg-white border border-stone-200/90 shadow-2xs group-hover/qr:border-emerald-500 group-hover/qr:shadow-xs transition-all"
+                    title="Klik untuk membuka panel informasi verifikasi resmi"
+                  >
+                    <img
+                      src={qrCodeUrl}
+                      alt="QR Code Verifikasi"
+                      className="w-16 h-16 sm:w-20 sm:h-20 block shrink-0 object-contain print:w-14 print:h-14"
+                    />
+                  </Link>
                 ) : (
-                  <div className="w-14 h-14 rounded-lg border border-stone-200 bg-stone-50 flex items-center justify-center text-stone-400 shrink-0">
-                    <QrCode size={24} />
-                  </div>
+                  <Link
+                    href={`/verify/${certificateCode}`}
+                    target="_blank"
+                    className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl border border-stone-200 bg-stone-50 flex items-center justify-center text-stone-400 hover:text-emerald-600 hover:border-emerald-300 transition-all shrink-0 print:w-14 print:h-14"
+                    title="Klik untuk membuka panel informasi verifikasi resmi"
+                  >
+                    <QrCode size={26} />
+                  </Link>
                 )}
                 <div className="text-[10px] text-stone-500 min-w-0">
-                  <p className="font-bold text-stone-800 flex items-center gap-1">
+                  <Link
+                    href={`/verify/${certificateCode}`}
+                    target="_blank"
+                    className="font-bold text-stone-800 hover:text-emerald-700 flex items-center gap-1 transition-colors"
+                  >
                     <ShieldCheck size={13} className="text-emerald-600 shrink-0" />
-                    <span className="truncate">Terverifikasi Resmi</span>
-                  </p>
+                    <span className="truncate">{isEn ? "Officially Verified" : "Terverifikasi Resmi"}</span>
+                  </Link>
                   <p className="mt-0.5 leading-tight text-[9px] text-stone-400 break-words">
-                    Pindai QR untuk memvalidasi keaslian dokumen secara online.
+                    {isEn
+                      ? "Scan barcode to open the online verification panel."
+                      : "Pindai barcode untuk membuka panel verifikasi online."}
                   </p>
                 </div>
               </>

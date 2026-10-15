@@ -65,15 +65,23 @@ export function GraduationCelebrationModal({
     playPopSound();
   };
 
-  const shareLinkedInUrl = certificateCode
-    ? `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-        typeof window !== "undefined"
-          ? `${window.location.origin}/verify/${certificateCode}`
-          : ""
-      )}`
-    : `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-        typeof window !== "undefined" ? window.location.href : ""
-      )}`;
+  const [origin, setOrigin] = useState<string>(
+    process.env.NEXT_PUBLIC_APP_URL || "https://www.matohtechnologies.com"
+  );
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.origin) {
+      setOrigin(window.location.origin);
+    }
+  }, []);
+
+  const shareTargetUrl = certificateCode
+    ? `${origin}/verify/${certificateCode}`
+    : origin;
+
+  const shareLinkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+    shareTargetUrl
+  )}`;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
@@ -211,6 +219,7 @@ export function GraduationCelebrationModal({
                 href={shareLinkedInUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                suppressHydrationWarning
                 onClick={() => playPopSound()}
                 className="py-2.5 px-3 rounded-xl border border-sky-200 bg-sky-50/60 hover:bg-sky-100 text-sky-800 font-semibold text-xs flex items-center justify-center gap-1.5 transition-all"
               >

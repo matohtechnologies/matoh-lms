@@ -10,6 +10,7 @@ import type {
   CertificateTranscriptData,
   TranscriptAssessmentItem,
 } from "@/components/certificates/certificate-transcript-card";
+import { getAppBaseUrl } from "@/lib/app-url";
 
 interface CertificatePageProps {
   params: Promise<{ code: string }>;
@@ -247,16 +248,17 @@ export default async function CertificateViewPage({ params, searchParams }: Cert
         certificate.course.assignments.length * 4
     );
 
-    // Generate Verification QR Code
-    const appBaseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://digibluecamp.com";
+    // Generate Verification QR Code pointing directly to official verification panel
+    const appBaseUrl = await getAppBaseUrl();
     let qrCodeUrl = "";
     try {
       qrCodeUrl = await QRCode.toDataURL(
-        `${appBaseUrl}/certificates/${certificate.certificateCode}`,
+        `${appBaseUrl}/verify/${certificate.certificateCode}`,
         {
-          width: 180,
-          margin: 1,
-          color: { dark: "#1c1917", light: "#ffffff" },
+          width: 360,
+          margin: 3,
+          errorCorrectionLevel: "M",
+          color: { dark: "#000000", light: "#ffffff" },
         }
       );
     } catch {

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 interface AddToLinkedInButtonProps {
@@ -12,6 +12,7 @@ interface AddToLinkedInButtonProps {
   variant?: "brand" | "outline";
   className?: string;
   locale?: string;
+  baseUrl?: string;
 }
 
 export function LinkedInIcon({ className }: { className?: string }) {
@@ -36,6 +37,7 @@ export function AddToLinkedInButton({
   variant = "brand",
   className,
   locale = "id",
+  baseUrl,
 }: AddToLinkedInButtonProps) {
   const isEn = locale === "en";
 
@@ -43,11 +45,16 @@ export function AddToLinkedInButton({
   const year = isNaN(date.getFullYear()) ? new Date().getFullYear() : date.getFullYear();
   const month = isNaN(date.getMonth()) ? new Date().getMonth() + 1 : date.getMonth() + 1;
 
-  // Resolve base URL safely on client or fallback to domain
-  const origin =
-    typeof window !== "undefined" && window.location.origin
-      ? window.location.origin
-      : "https://www.matohtechnologies.com";
+  // Use consistent fallback during SSR to avoid hydration mismatch
+  const defaultOrigin =
+    baseUrl || process.env.NEXT_PUBLIC_APP_URL || "https://www.matohtechnologies.com";
+  const [origin, setOrigin] = useState<string>(defaultOrigin);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.origin) {
+      setOrigin(window.location.origin);
+    }
+  }, []);
 
   const certVerificationUrl = `${origin}/certificates/${encodeURIComponent(certificateCode)}`;
 
@@ -62,6 +69,23 @@ export function AddToLinkedInButton({
   });
 
   const linkedInUrl = `https://www.linkedin.com/profile/add?${params.toString()}`;
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    // Ensure the most accurate client origin upon click
+    if (typeof window !== "undefined" && window.location.origin) {
+      const liveCertUrl = `${window.location.origin}/certificates/${encodeURIComponent(certificateCode)}`;
+      const liveParams = new URLSearchParams({
+        startTask: "CERTIFICATION_NAME",
+        name: courseTitle,
+        organizationName: issuerName,
+        issueYear: String(year),
+        issueMonth: String(month),
+        certUrl: liveCertUrl,
+        certId: certificateCode.toUpperCase(),
+      });
+      e.currentTarget.href = `https://www.linkedin.com/profile/add?${liveParams.toString()}`;
+    }
+  };
 
   const sizeStyles = {
     sm: "px-3 py-1.5 text-xs gap-1.5 rounded-lg",
@@ -83,6 +107,8 @@ export function AddToLinkedInButton({
   return (
     <a
       href={linkedInUrl}
+      onClick={handleClick}
+      suppressHydrationWarning
       target="_blank"
       rel="noopener noreferrer"
       className={cn(

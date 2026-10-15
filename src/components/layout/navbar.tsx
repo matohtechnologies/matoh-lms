@@ -26,6 +26,7 @@ import {
   Compass,
   ArrowRight,
   CheckCircle2,
+  ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -34,6 +35,7 @@ import { useAppLocale } from "@/components/providers/locale-provider";
 import { useSession } from "next-auth/react";
 import SignOutButton from "@/components/auth/signout-button";
 import { LearningStreakBadge } from "@/components/gamification/learning-streak-badge";
+import { CertificateVerificationModal } from "@/components/certificates/certificate-verification-modal";
 
 interface NavbarCategoryItem {
   id: string;
@@ -62,11 +64,11 @@ export function Navbar({ user, categories }: NavbarProps) {
 
   const currentUser = session?.user
     ? {
-        ...user,
-        ...session.user,
-        image: session.user.image ?? user?.image,
-        name: session.user.name ?? user?.name,
-      }
+      ...user,
+      ...session.user,
+      image: session.user.image ?? user?.image,
+      name: session.user.name ?? user?.name,
+    }
     : user;
   const t = useTranslations("nav");
   const pathname = usePathname();
@@ -75,6 +77,7 @@ export function Navbar({ user, categories }: NavbarProps) {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isProgramDropdownOpen, setIsProgramDropdownOpen] = useState(false);
   const [isMobileProgramOpen, setIsMobileProgramOpen] = useState(false);
+  const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false);
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -125,25 +128,25 @@ export function Navbar({ user, categories }: NavbarProps) {
 
   const programCategories = (categories && categories.length > 0)
     ? categories.map((cat) => ({
-        icon: getCategoryIcon(cat.slug),
-        color: getCategoryColor(cat.slug),
-        name: isEn ? (cat.nameEn || cat.name) : cat.name,
-        desc: cat._count?.courses !== undefined
-          ? (isEn ? `${cat._count.courses} active courses available` : `${cat._count.courses} kelas tersedia`)
-          : (isEn ? "Curated learning track" : "Program belajar terstruktur"),
-        href: `/courses?category=${encodeURIComponent(cat.name)}`,
-        badge: cat._count?.courses && cat._count.courses > 0 ? (isEn ? `${cat._count.courses} Courses` : `${cat._count.courses} Kelas`) : undefined,
-      }))
+      icon: getCategoryIcon(cat.slug),
+      color: getCategoryColor(cat.slug),
+      name: isEn ? (cat.nameEn || cat.name) : cat.name,
+      desc: cat._count?.courses !== undefined
+        ? (isEn ? `${cat._count.courses} active courses available` : `${cat._count.courses} kelas tersedia`)
+        : (isEn ? "Curated learning track" : "Program belajar terstruktur"),
+      href: `/courses?category=${encodeURIComponent(cat.name)}`,
+      badge: cat._count?.courses && cat._count.courses > 0 ? (isEn ? `${cat._count.courses} Courses` : `${cat._count.courses} Kelas`) : undefined,
+    }))
     : [
-        {
-          icon: Code2,
-          color: "text-blue-600 bg-blue-50 border-blue-200/60",
-          name: isEn ? "All Programs" : "Semua Program",
-          desc: isEn ? "Browse all available courses in database" : "Jelajahi semua kelas di database",
-          href: "/courses",
-          badge: undefined,
-        },
-      ];
+      {
+        icon: Code2,
+        color: "text-blue-600 bg-blue-50 border-blue-200/60",
+        name: isEn ? "All Programs" : "Semua Program",
+        desc: isEn ? "Browse all available courses in database" : "Jelajahi semua kelas di database",
+        href: "/courses",
+        badge: undefined,
+      },
+    ];
 
   const programFormats = [
     {
@@ -184,7 +187,7 @@ export function Navbar({ user, categories }: NavbarProps) {
           : "bg-white/80 backdrop-blur-xs border-b border-stone-100/60 sm:bg-transparent sm:border-transparent"
       )}
     >
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between gap-4">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between gap-2 xl:gap-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
           <div className="w-9 h-9 rounded-xl bg-white border border-stone-200/80 shadow-2xs flex items-center justify-center p-1.5 group-hover:border-blue-400 group-hover:shadow-xs transition-all">
@@ -206,23 +209,23 @@ export function Navbar({ user, categories }: NavbarProps) {
         </Link>
 
         {/* Desktop Nav Links */}
-        <div className="hidden md:flex items-center gap-1.5">
+        <div className="hidden md:flex items-center gap-1 xl:gap-1.5 shrink-0">
           {/* 1. Beranda */}
           <Link
             href="/"
             className={cn(
-              "px-3.5 py-2 rounded-xl text-sm font-semibold transition-colors",
+              "px-2.5 xl:px-3.5 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-colors whitespace-nowrap shrink-0",
               pathname === "/"
                 ? "bg-blue-50 text-blue-700 font-bold"
                 : "text-stone-600 hover:text-stone-900 hover:bg-stone-100/80"
             )}
           >
-            {t("home")}
+            <span className="whitespace-nowrap">{t("home")}</span>
           </Link>
 
           {/* 2. Dropdown Program */}
           <div
-            className="relative"
+            className="relative shrink-0"
             onMouseEnter={handleMouseEnterProgram}
             onMouseLeave={handleMouseLeaveProgram}
           >
@@ -230,17 +233,17 @@ export function Navbar({ user, categories }: NavbarProps) {
               type="button"
               onClick={() => setIsProgramDropdownOpen(!isProgramDropdownOpen)}
               className={cn(
-                "flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold transition-colors",
+                "flex items-center gap-1 px-2.5 xl:px-3.5 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-colors whitespace-nowrap shrink-0",
                 pathname.startsWith("/courses") || isProgramDropdownOpen
                   ? "bg-blue-50 text-blue-700 font-bold"
                   : "text-stone-600 hover:text-stone-900 hover:bg-stone-100/80"
               )}
             >
-              <span>{t("programs")}</span>
+              <span className="whitespace-nowrap">{t("programs")}</span>
               <ChevronDown
                 size={14}
                 className={cn(
-                  "transition-transform duration-200",
+                  "transition-transform duration-200 shrink-0",
                   isProgramDropdownOpen && "rotate-180"
                 )}
               />
@@ -274,7 +277,7 @@ export function Navbar({ user, categories }: NavbarProps) {
                 </div>
 
                 <div className="grid grid-cols-12 gap-6">
-                  {/* Left Column: Categories (7 cols) */}
+                  {/* Left Column: Categories */}
                   <div className="col-span-7 space-y-2 border-r border-stone-100 pr-5">
                     <p className="text-[11px] font-extrabold uppercase tracking-wider text-stone-400 mb-2">
                       {t("career_tracks")}
@@ -382,35 +385,50 @@ export function Navbar({ user, categories }: NavbarProps) {
             )}
           </div>
 
-          {/* 3. Tentang Kami */}
+          {/* 3. Verifikasi Sertifikat */}
+          <button
+            type="button"
+            onClick={() => setIsVerifyModalOpen(true)}
+            className={cn(
+              "flex items-center gap-1.5 px-2.5 xl:px-3.5 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-colors cursor-pointer whitespace-nowrap shrink-0",
+              pathname.startsWith("/verify")
+                ? "bg-emerald-50 text-emerald-700 font-bold"
+                : "text-stone-600 hover:text-stone-900 hover:bg-stone-100/80"
+            )}
+            title={isEn ? "Verify certificate by serial ID" : "Verifikasi keaslian sertifikat dengan nomor seri"}
+          >
+            <span className="whitespace-nowrap">{isEn ? "Verify Certificate" : "Verifikasi Sertifikat"}</span>
+          </button>
+
+          {/* 4. Tentang Kami */}
           <Link
             href="/about"
             className={cn(
-              "px-3.5 py-2 rounded-xl text-sm font-semibold transition-colors",
+              "px-2.5 xl:px-3.5 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-colors whitespace-nowrap shrink-0",
               pathname === "/about"
                 ? "bg-blue-50 text-blue-700 font-bold"
                 : "text-stone-600 hover:text-stone-900 hover:bg-stone-100/80"
             )}
           >
-            {t("about")}
+            <span className="whitespace-nowrap">{t("about")}</span>
           </Link>
 
-          {/* 4. Kontak */}
+          {/* 5. Kontak */}
           <Link
             href="/contact"
             className={cn(
-              "px-3.5 py-2 rounded-xl text-sm font-semibold transition-colors",
+              "px-2.5 xl:px-3.5 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-colors whitespace-nowrap shrink-0",
               pathname === "/contact"
                 ? "bg-blue-50 text-blue-700 font-bold"
                 : "text-stone-600 hover:text-stone-900 hover:bg-stone-100/80"
             )}
           >
-            {t("contact")}
+            <span className="whitespace-nowrap">{t("contact")}</span>
           </Link>
         </div>
 
         {/* Right side: Language Switcher, Daily Streak & Auth */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           {user && <LearningStreakBadge />}
           <LanguageSwitcher />
 
@@ -608,7 +626,28 @@ export function Navbar({ user, categories }: NavbarProps) {
             )}
           </div>
 
-          {/* 3. Tentang Kami */}
+          {/* 3. Verifikasi Sertifikat */}
+          <button
+            type="button"
+            onClick={() => {
+              setIsMobileOpen(false);
+              setIsVerifyModalOpen(true);
+            }}
+            className={cn(
+              "w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-bold transition-colors cursor-pointer",
+              pathname.startsWith("/verify")
+                ? "bg-emerald-50 text-emerald-800"
+                : "text-stone-800 hover:bg-stone-50"
+            )}
+          >
+            <span className="flex items-center gap-2">
+              <ShieldCheck size={16} className="text-emerald-600" />
+              <span>{isEn ? "Verify Certificate" : "Verifikasi Sertifikat"}</span>
+            </span>
+            <ArrowRight size={14} className="text-stone-400" />
+          </button>
+
+          {/* 4. Tentang Kami */}
           <Link
             href="/about"
             className={cn(
@@ -620,7 +659,7 @@ export function Navbar({ user, categories }: NavbarProps) {
             {t("about")}
           </Link>
 
-          {/* 4. Kontak */}
+          {/* 5. Kontak */}
           <Link
             href="/contact"
             className={cn(
@@ -700,6 +739,13 @@ export function Navbar({ user, categories }: NavbarProps) {
           )}
         </div>
       )}
+
+      {/* Interactive Certificate Verification Modal */}
+      <CertificateVerificationModal
+        isOpen={isVerifyModalOpen}
+        onClose={() => setIsVerifyModalOpen(false)}
+        isEn={isEn}
+      />
     </header>
   );
 }

@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { enUS, id as idLocale } from "date-fns/locale";
 import { useTranslations, useLocale } from "next-intl";
+import { useAppLocale } from "@/components/providers/locale-provider";
 import { cn } from "@/lib/utils";
 import { CertificateCanvasRenderer } from "@/components/certificates/certificate-canvas-renderer";
 import {
@@ -70,8 +71,9 @@ export function CertificateView({
   const [copied, setCopied] = useState(false);
   const [activeSide, setActiveSide] = useState<"front" | "back">("front");
   const t = useTranslations("certificate");
-  const locale = useLocale();
-  const dateLocale = locale === "en" ? enUS : idLocale;
+  const { locale } = useAppLocale();
+  const isEn = locale === "en";
+  const dateLocale = isEn ? enUS : idLocale;
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -240,7 +242,7 @@ export function CertificateView({
             )}
           >
             <Award size={14} className={activeSide === "front" ? "text-blue-600" : "text-stone-400"} />
-            <span>Sertifikat (Depan)</span>
+            <span>{isEn ? "Certificate (Front)" : "Sertifikat (Depan)"}</span>
           </button>
           <button
             type="button"
@@ -253,20 +255,12 @@ export function CertificateView({
             )}
           >
             <FileText size={14} className={activeSide === "back" ? "text-blue-600" : "text-stone-400"} />
-            <span>Transkrip Nilai (Belakang)</span>
+            <span>{isEn ? "Academic Transcript (Back)" : "Transkrip Nilai (Belakang)"}</span>
           </button>
         </div>
 
         {/* Action Buttons */}
         <div className="flex flex-wrap items-center gap-2.5 self-end sm:self-center">
-          <AddToLinkedInButton
-            courseTitle={courseTitle}
-            certificateCode={displayCode}
-            issuedAt={issuedAt}
-            issuerName={issuerName}
-            size="sm"
-            locale={locale}
-          />
           <Button
             variant="outline"
             size="sm"
@@ -288,7 +282,7 @@ export function CertificateView({
             leftIcon={<Printer size={14} />}
             className="bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold shadow-xs"
           >
-            Cetak PDF (2 Halaman)
+            {isEn ? "Print PDF (2 Pages)" : "Cetak PDF (2 Halaman)"}
           </Button>
         </div>
       </div>
@@ -464,8 +458,12 @@ export function CertificateView({
             <RotateCw size={13} className="text-blue-600" />
             <span>
               {activeSide === "front"
-                ? "Balik ke Transkrip Nilai (Sisi Belakang) ↷"
-                : "↶ Balik ke Sertifikat (Sisi Depan)"}
+                ? (isEn
+                    ? "Flip to Academic Transcript (Back Page) ↷"
+                    : "Balik ke Transkrip Nilai (Sisi Belakang) ↷")
+                : (isEn
+                    ? "↶ Flip to Certificate (Front Page)"
+                    : "↶ Balik ke Sertifikat (Sisi Depan)")}
             </span>
           </button>
         </div>
