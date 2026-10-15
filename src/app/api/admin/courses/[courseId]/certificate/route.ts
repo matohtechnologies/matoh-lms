@@ -18,6 +18,10 @@ const certificateSettingSchema = z.object({
   minProgress: z.coerce.number().min(0).max(100).default(100),
   requireQuizPassed: z.boolean().default(true),
   requireAssignmentApproved: z.boolean().default(true),
+  serialPattern: z.string().optional().nullable(),
+  courseCode: z.string().optional().nullable(),
+  counterPadding: z.coerce.number().min(1).max(8).default(4),
+  nextCounter: z.coerce.number().min(1).default(1),
 });
 
 export async function GET(
@@ -53,6 +57,13 @@ export async function GET(
       orderBy: { issuedAt: "desc" },
     });
 
+    const fallbackCourseCode =
+      course.slug
+        ?.split("-")
+        .map((w) => w[0]?.toUpperCase())
+        .join("")
+        .slice(0, 6) || "CERT";
+
     const defaultSetting = {
       isEnabled: true,
       title: "Certificate of Completion",
@@ -68,6 +79,10 @@ export async function GET(
       minProgress: 100,
       requireQuizPassed: true,
       requireAssignmentApproved: true,
+      serialPattern: "MT/{COURSE_CODE}/{YEAR}/{COUNTER}",
+      courseCode: fallbackCourseCode,
+      counterPadding: 4,
+      nextCounter: recipients.length + 1,
     };
 
     const setting = course.certificateSetting
@@ -75,6 +90,13 @@ export async function GET(
           ...course.certificateSetting,
           signatoryName1:
             course.certificateSetting.signatoryName1 || course.instructor?.name || "Ahmad Fadhil",
+          serialPattern:
+            course.certificateSetting.serialPattern || "MT/{COURSE_CODE}/{YEAR}/{COUNTER}",
+          courseCode:
+            course.certificateSetting.courseCode || fallbackCourseCode,
+          counterPadding: course.certificateSetting.counterPadding ?? 4,
+          nextCounter:
+            course.certificateSetting.nextCounter ?? recipients.length + 1,
         }
       : defaultSetting;
 
@@ -143,6 +165,10 @@ export async function PUT(
         minProgress: data.minProgress,
         requireQuizPassed: data.requireQuizPassed,
         requireAssignmentApproved: data.requireAssignmentApproved,
+        serialPattern: data.serialPattern || "MT/{COURSE_CODE}/{YEAR}/{COUNTER}",
+        courseCode: data.courseCode?.trim().toUpperCase() || null,
+        counterPadding: data.counterPadding,
+        nextCounter: data.nextCounter,
       },
       update: {
         isEnabled: data.isEnabled,
@@ -158,6 +184,10 @@ export async function PUT(
         minProgress: data.minProgress,
         requireQuizPassed: data.requireQuizPassed,
         requireAssignmentApproved: data.requireAssignmentApproved,
+        serialPattern: data.serialPattern || "MT/{COURSE_CODE}/{YEAR}/{COUNTER}",
+        courseCode: data.courseCode?.trim().toUpperCase() || null,
+        counterPadding: data.counterPadding,
+        nextCounter: data.nextCounter,
       },
     });
 

@@ -10,6 +10,7 @@ import type { Metadata } from "next";
 import { DeleteCourseButton } from "./delete-course-button";
 
 export const metadata: Metadata = { title: "Manajemen Kelas — Admin" };
+export const dynamic = "force-dynamic";
 
 export default async function AdminCoursesPage() {
   const session = await auth();

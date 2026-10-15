@@ -15,6 +15,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { dynamicConfirm, dynamicAlert } from "@/components/ui/dynamic-alert-provider";
 
 interface QuizQuestion {
   id: string;
@@ -203,7 +204,15 @@ export function QuizManager({
 
   // Delete quiz handler
   const handleDeleteQuiz = async (quizId: string, title: string) => {
-    if (!confirm(`Hapus kuis "${title}" beserta semua soalnya?`)) return;
+    const confirmed = await dynamicConfirm({
+      title: "Hapus Kuis?",
+      message: `Hapus kuis "${title}" beserta seluruh soal dan data nilai siswa di dalamnya? Tindakan ini tidak dapat dibatalkan.`,
+      confirmText: "Ya, Hapus Kuis",
+      cancelText: "Batal",
+      variant: "danger",
+      icon: "trash",
+    });
+    if (!confirmed) return;
 
     try {
       const res = await fetch(`/api/admin/courses/${courseId}/quizzes/${quizId}`, {
@@ -344,7 +353,15 @@ export function QuizManager({
 
   // Delete question handler
   const handleDeleteQuestion = async (quizId: string, questionId: string) => {
-    if (!confirm("Hapus soal kuis ini?")) return;
+    const confirmed = await dynamicConfirm({
+      title: "Hapus Soal Kuis?",
+      message: "Hapus butir soal kuis ini? Tindakan ini tidak dapat dibatalkan.",
+      confirmText: "Ya, Hapus Soal",
+      cancelText: "Batal",
+      variant: "danger",
+      icon: "trash",
+    });
+    if (!confirmed) return;
 
     try {
       const res = await fetch(

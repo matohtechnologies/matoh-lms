@@ -1,10 +1,10 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Star, CheckCircle, ShieldCheck, Quote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { getTranslations, getLocale } from "next-intl/server";
-import { HeroInteractiveShowcase } from "@/components/home/hero-interactive-showcase";
 import { FeaturedCoursesShowcase } from "@/components/home/featured-courses-showcase";
 import { FaqAccordion } from "@/components/home/faq-accordion";
 
@@ -314,9 +314,52 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Right Column: High-fidelity Interactive Stage */}
-            <div className="lg:col-span-6">
-              <HeroInteractiveShowcase isEn={isEn} studentCount={stats.students} />
+            {/* Right Column: Hero Visual Illustration (gambar-heading.svg) */}
+            <div className="lg:col-span-6 relative flex items-center justify-center">
+              {/* Luminous atmospheric aura */}
+              <div className="absolute -inset-4 bg-gradient-to-tr from-blue-400/20 via-sky-300/15 to-teal-300/20 rounded-3xl blur-3xl pointer-events-none -z-10" />
+
+              <div className="relative w-full max-w-lg lg:max-w-xl mx-auto flex items-center justify-center">
+                <Image
+                  src="/gambar-heading.svg"
+                  alt="Ilustrasi Pembelajaran Digital Matoh Technologies"
+                  width={620}
+                  height={620}
+                  priority
+                  unoptimized
+                  className="w-full h-auto max-h-[500px] object-contain transition-transform duration-500 hover:scale-[1.02]"
+                />
+
+                {/* Floating Badge 1: Top Right */}
+                <div className="absolute -top-1 -right-1 sm:top-2 sm:right-2 bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-warm rounded-2xl p-3 flex items-center gap-2.5 transition-all hover:scale-105 pointer-events-none">
+                  <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs shrink-0">
+                    💡
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-bold text-slate-900 leading-tight">
+                      {isEn ? "Applied Digital Skills" : "Keahlian Digital Terapan"}
+                    </p>
+                    <p className="text-[10px] text-slate-500 leading-tight">
+                      {isEn ? "Marketing & MCDM Analysis" : "Pemasaran & Analisis MCDM"}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Floating Badge 2: Bottom Left */}
+                <div className="absolute -bottom-2 -left-1 sm:bottom-4 sm:left-2 bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-warm rounded-2xl p-3 flex items-center gap-2.5 transition-all hover:scale-105 pointer-events-none">
+                  <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-xs shrink-0">
+                    🎓
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-bold text-slate-900 leading-tight">
+                      {isEn ? "Official Certification" : "Sertifikat Kelulusan Resmi"}
+                    </p>
+                    <p className="text-[10px] text-emerald-700 font-semibold leading-tight">
+                      {isEn ? "Verifiable & LinkedIn Integrated" : "Tervalidasi Digital & LinkedIn"}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

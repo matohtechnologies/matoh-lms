@@ -8,6 +8,7 @@ import {
   DEFAULT_DESIGN_PRESETS,
   PLACEHOLDER_OPTIONS,
 } from "@/lib/certificate-templates";
+import { dynamicConfirm, dynamicAlert } from "@/components/ui/dynamic-alert-provider";
 import { CertificateCanvasRenderer } from "./certificate-canvas-renderer";
 import {
   Palette,
@@ -175,8 +176,15 @@ export function CertificateDesigner({
   };
 
   // Apply preset design
-  const handleApplyPreset = (preset: typeof DEFAULT_DESIGN_PRESETS[0]) => {
-    if (confirm(`Terapkan gaya desain "${preset.name}"? Pengaturan posisi elemen akan disesuaikan dengan template ini.`)) {
+  const handleApplyPreset = async (preset: typeof DEFAULT_DESIGN_PRESETS[0]) => {
+    const ok = await dynamicConfirm({
+      title: "Terapkan Gaya Desain?",
+      message: `Terapkan gaya desain "${preset.name}"? Pengaturan posisi elemen akan disesuaikan dengan template ini.`,
+      confirmText: "Ya, Terapkan",
+      cancelText: "Batal",
+      variant: "info",
+    });
+    if (ok) {
       setConfig({
         ...preset.config,
         backgroundUrl: config.backgroundUrl || preset.config.backgroundUrl || null,
@@ -210,7 +218,11 @@ export function CertificateDesigner({
         backgroundType: "image",
       }));
     } catch (err: any) {
-      alert(err.message || "Gagal mengunggah template latar belakang");
+      await dynamicAlert({
+        title: "Gagal Mengunggah",
+        message: err.message || "Gagal mengunggah template latar belakang",
+        variant: "danger",
+      });
     } finally {
       setUploadingBg(false);
       if (fileInputRef.current) fileInputRef.current.value = "";
@@ -226,7 +238,11 @@ export function CertificateDesigner({
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 4000);
     } catch {
-      alert("Terjadi kesalahan saat menyimpan desain sertifikat");
+      await dynamicAlert({
+        title: "Gagal Menyimpan",
+        message: "Terjadi kesalahan saat menyimpan desain sertifikat",
+        variant: "danger",
+      });
     } finally {
       setSaving(false);
     }

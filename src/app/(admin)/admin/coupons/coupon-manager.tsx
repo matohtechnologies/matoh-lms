@@ -28,6 +28,7 @@ import {
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { dynamicConfirm } from "@/components/ui/dynamic-alert-provider";
 
 export interface CourseOption {
   id: string;
@@ -291,7 +292,15 @@ export function CouponManager({
 
   // Delete Coupon
   const handleDeleteCoupon = async (item: CouponItem) => {
-    if (!confirm(`Hapus kupon "${item.code}"? Tindakan ini tidak dapat dibatalkan.`)) return;
+    const confirmed = await dynamicConfirm({
+      title: "Hapus Kupon Diskon?",
+      message: `Hapus kupon "${item.code}"? Tindakan ini tidak dapat dibatalkan.`,
+      confirmText: "Ya, Hapus Kupon",
+      cancelText: "Batal",
+      variant: "danger",
+      icon: "trash",
+    });
+    if (!confirmed) return;
 
     try {
       const res = await fetch(`/api/admin/coupons/${item.id}`, { method: "DELETE" });

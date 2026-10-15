@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
@@ -110,15 +111,34 @@ export async function DELETE(
   try {
     const session = await auth();
     if (!session || session.user?.role !== "ADMIN") {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      return NextResponse.json({ error: "Akses ditolak" }, { status: 403 });
     }
 
     const { courseId } = await params;
 
+    const existing = await prisma.course.findUnique({
+      where: { id: courseId },
+      select: { id: true, title: true, slug: true },
+    });
+
+    if (!existing) {
+      return NextResponse.json({ error: "Kelas tidak ditemukan" }, { status: 404 });
+    }
+
     await prisma.course.delete({ where: { id: courseId } });
 
-    return NextResponse.json({ message: "Course deleted" });
-  } catch {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    revalidatePath("/admin/courses");
+    revalidatePath("/admin");
+    revalidatePath("/courses");
+    if (existing.slug) {
+      revalidatePath(`/courses/${existing.slug}`);
+    }
+    revalidatePath("/");
+
+    return NextResponse.json({ success: true, message: "Kelas berhasil dihapus" });
+  } catch (error) {
+    console.error("Delete course error:", error);
+    const msg = error instanceof Error ? error.message : "Gagal menghapus kelas";
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

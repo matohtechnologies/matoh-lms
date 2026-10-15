@@ -316,6 +316,10 @@ model CertificateSetting {
   minProgress               Int      @default(100) // % minimal materi selesai
   requireQuizPassed         Boolean  @default(true) // semua kuis wajib lulus
   requireAssignmentApproved Boolean  @default(true) // semua tugas wajib approved
+  serialPattern             String?  @default("MT/{COURSE_CODE}/{YEAR}/{COUNTER}")
+  courseCode                String?
+  counterPadding            Int      @default(4)
+  nextCounter               Int      @default(1)
   createdAt                 DateTime @default(now())
   updatedAt                 DateTime @updatedAt
 

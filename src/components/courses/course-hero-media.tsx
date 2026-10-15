@@ -7,7 +7,9 @@ import {
   extractYouTubeVideoId,
   getEmbedUrl,
   isVideoUrl,
-  isYouTubeUrl,
+  isYouTubeVideoUrl,
+  isPlayableVideo,
+  isImageUrl,
   resolveThumbnailUrl,
 } from "@/lib/youtube";
 
@@ -26,18 +28,21 @@ export function CourseHeroMedia({
 }: CourseHeroMediaProps) {
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // 1. Determine playable video source (order of priority: trailerUrl -> thumbnail (if video/youtube) -> fallbackLessonVideoUrl)
+  // Condition: If thumbnail is an image (hardfile in /uploads or external image link),
+  // DO NOT show play button. The play button should only be shown if media is explicitly a playable video.
+  const isImageThumbnail = Boolean(thumbnail && isImageUrl(thumbnail));
+
   let videoSource: string | null = null;
 
-  if (trailerUrl && (isYouTubeUrl(trailerUrl) || isVideoUrl(trailerUrl))) {
+  if (trailerUrl && isPlayableVideo(trailerUrl)) {
     videoSource = trailerUrl;
-  } else if (thumbnail && (isYouTubeUrl(thumbnail) || isVideoUrl(thumbnail))) {
+  } else if (thumbnail && isPlayableVideo(thumbnail)) {
     videoSource = thumbnail;
-  } else if (fallbackLessonVideoUrl) {
+  } else if (!isImageThumbnail && fallbackLessonVideoUrl && isPlayableVideo(fallbackLessonVideoUrl)) {
     videoSource = fallbackLessonVideoUrl;
   }
 
-  const isYouTube = videoSource ? isYouTubeUrl(videoSource) : false;
+  const isYouTube = videoSource ? isYouTubeVideoUrl(videoSource) : false;
   const isDirectVideo = videoSource ? isVideoUrl(videoSource) : false;
   const youtubeEmbedUrl = isYouTube ? getEmbedUrl(videoSource, true) : null;
   const isPlayable = Boolean(youtubeEmbedUrl || isDirectVideo);
@@ -109,9 +114,9 @@ export function CourseHeroMedia({
             </div>
           )}
 
-          {/* Dark Overlay gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/30 flex items-center justify-center transition-opacity">
-            {isPlayable ? (
+          {/* Play button overlay: ONLY rendered when media is actually a playable video */}
+          {isPlayable && (
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/30 flex items-center justify-center transition-opacity">
               <button
                 type="button"
                 onClick={() => setIsPlaying(true)}
@@ -131,12 +136,8 @@ export function CourseHeroMedia({
                   Pratinjau Kelas Gratis
                 </span>
               </button>
-            ) : (
-              <div className="text-center px-4 py-2 rounded-xl bg-black/50 backdrop-blur-xs text-white/90 text-xs">
-                {title}
-              </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       )}
     </div>

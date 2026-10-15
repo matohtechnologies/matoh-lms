@@ -3,6 +3,7 @@ import { Inter, Poppins } from "next/font/google";
 import { getLocale } from "next-intl/server";
 import LocaleProvider from "@/components/providers/locale-provider";
 import SessionProvider from "@/components/providers/session-provider";
+import { DynamicAlertProvider } from "@/components/ui/dynamic-alert-provider";
 import "./globals.css";
 
 const inter = Inter({
@@ -65,7 +66,9 @@ export default async function RootLayout({
       <body className="font-sans antialiased">
         <LocaleProvider initialLocale={locale}>
           <SessionProvider>
-            {children}
+            <DynamicAlertProvider>
+              {children}
+            </DynamicAlertProvider>
           </SessionProvider>
         </LocaleProvider>
       </body>

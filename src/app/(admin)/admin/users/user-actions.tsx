@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, MoreVertical, Shield, GraduationCap, User, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { dynamicConfirm, dynamicAlert } from "@/components/ui/dynamic-alert-provider";
 
 interface UserActionsProps {
   userId: string;
@@ -32,17 +33,34 @@ export function UserActions({ userId, userName, currentRole, isSelf }: UserActio
         router.refresh();
       } else {
         const d = await res.json();
-        alert(d.error ?? "Gagal mengubah role");
+        await dynamicAlert({
+          title: "Gagal Mengubah Role",
+          message: d.error ?? "Terjadi kesalahan saat mengubah role pengguna.",
+          variant: "danger",
+        });
       }
     } catch {
-      alert("Terjadi kesalahan");
+      await dynamicAlert({
+        title: "Koneksi Terputus",
+        message: "Terjadi kesalahan koneksi.",
+        variant: "danger",
+      });
     } finally {
       setLoading(false);
     }
   };
 
   const deleteUser = async () => {
-    if (!confirm(t("delete_user_confirm", { name: userName }))) return;
+    const confirmed = await dynamicConfirm({
+      title: "Hapus Pengguna?",
+      message: `Hapus pengguna "${userName}"? Tindakan ini tidak dapat dibatalkan dan akan menghapus seluruh data terkait pengguna ini.`,
+      confirmText: "Ya, Hapus",
+      cancelText: "Batal",
+      variant: "danger",
+      icon: "trash",
+    });
+    if (!confirmed) return;
+
     setOpen(false);
     setLoading(true);
     try {
@@ -51,10 +69,18 @@ export function UserActions({ userId, userName, currentRole, isSelf }: UserActio
         router.refresh();
       } else {
         const d = await res.json();
-        alert(d.error ?? "Gagal menghapus pengguna");
+        await dynamicAlert({
+          title: "Gagal Menghapus Pengguna",
+          message: d.error ?? "Terjadi kesalahan saat menghapus pengguna.",
+          variant: "danger",
+        });
       }
     } catch {
-      alert("Terjadi kesalahan");
+      await dynamicAlert({
+        title: "Koneksi Terputus",
+        message: "Terjadi kesalahan koneksi.",
+        variant: "danger",
+      });
     } finally {
       setLoading(false);
     }

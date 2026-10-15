@@ -8,6 +8,7 @@ function generateCertificateCode(): string {
   return `EA-${timestamp}-${randomPart}`;
 }
 
+import { formatCertificateSerialNumber } from "@/lib/certificate-serial";
 import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function POST(
@@ -178,7 +179,42 @@ export async function POST(
     }
 
     // All criteria met -> Issue certificate
-    const code = generateCertificateCode();
+    const fallbackCourseCode =
+      course.slug
+        ?.split("-")
+        .map((w) => w[0]?.toUpperCase())
+        .join("")
+        .slice(0, 6) || "CERT";
+
+    const courseCode = (setting as any).courseCode || fallbackCourseCode;
+    const pattern = (setting as any).serialPattern || "MT/{COURSE_CODE}/{YEAR}/{COUNTER}";
+    const counterPadding = (setting as any).counterPadding ?? 4;
+
+    // Determine the next sequence counter
+    let currentCounter = (setting as any).nextCounter;
+    if (!currentCounter || currentCounter < 1) {
+      const existingCount = await prisma.certificate.count({
+        where: { courseId: course.id },
+      });
+      currentCounter = existingCount + 1;
+    }
+
+    let code = formatCertificateSerialNumber({
+      pattern,
+      courseCode,
+      counter: currentCounter,
+      counterPadding,
+      issueDate: new Date(),
+    });
+
+    // Check collision safety
+    const existingCodeCert = await prisma.certificate.findUnique({
+      where: { certificateCode: code },
+    });
+    if (existingCodeCert) {
+      code = `${code}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+    }
+
     const signatory1 = setting.signatoryName1 || course.instructor?.name || "Ahmad Fadhil";
 
     const certificate = await prisma.certificate.create({
@@ -197,6 +233,16 @@ export async function POST(
         templateConfig: (setting as any).templateConfig ?? undefined,
       } as any,
     });
+
+    // Increment nextCounter for next issuance if setting exists
+    if (course.certificateSetting?.id) {
+      await prisma.certificateSetting
+        .update({
+          where: { id: course.certificateSetting.id },
+          data: { nextCounter: currentCounter + 1 },
+        })
+        .catch((e) => console.warn("Failed to increment certificate counter:", e));
+    }
 
     // Mark enrollment as completed if not already marked
     await prisma.enrollment.updateMany({

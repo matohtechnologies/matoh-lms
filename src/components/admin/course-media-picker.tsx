@@ -20,7 +20,8 @@ import {
   extractYouTubeVideoId,
   getEmbedUrl,
   isVideoUrl,
-  isYouTubeUrl,
+  isYouTubeVideoUrl,
+  isImageUrl,
   resolveThumbnailUrl,
 } from "@/lib/youtube";
 
@@ -47,8 +48,8 @@ export function CourseMediaPicker({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const isVideo = isVideoUrl(value);
-  const isYouTube = isYouTubeUrl(value);
-  const isImage = value && !isVideo && !isYouTube;
+  const isYouTube = isYouTubeVideoUrl(value);
+  const isImage = isImageUrl(value);
   const youTubeEmbedUrl = isYouTube ? getEmbedUrl(value, true) : null;
   const previewThumbnail = resolveThumbnailUrl(value);
 
@@ -93,8 +94,8 @@ export function CourseMediaPicker({
 
   const handleLinkInput = (inputVal: string) => {
     const trimmed = inputVal.trim();
-    if (isYouTubeUrl(trimmed)) {
-      // If YouTube video, auto-resolve thumbnail or keep video URL
+    if (isYouTubeVideoUrl(trimmed)) {
+      // If YouTube video, keep video URL
       onChange(trimmed);
     } else {
       onChange(trimmed);

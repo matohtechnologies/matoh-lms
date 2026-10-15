@@ -13,6 +13,7 @@ import {
   CornerDownRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { dynamicConfirm, dynamicAlert } from "@/components/ui/dynamic-alert-provider";
 
 interface DiscussionUser {
   id: string;
@@ -98,7 +99,11 @@ export function DiscussionManager({ courseId }: { courseId: string }) {
       setNewTopicContent("");
       setIsCreatingThread(false);
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Gagal membuat topik");
+      await dynamicAlert({
+        title: "Gagal Membuat Topik",
+        message: err instanceof Error ? err.message : "Gagal membuat topik diskusi",
+        variant: "danger",
+      });
     } finally {
       setSendingTopic(false);
     }
@@ -135,14 +140,26 @@ export function DiscussionManager({ courseId }: { courseId: string }) {
 
       setReplyInputs((prev) => ({ ...prev, [discussionId]: "" }));
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Gagal membalas");
+      await dynamicAlert({
+        title: "Gagal Mengirim Balasan",
+        message: err instanceof Error ? err.message : "Gagal membalas pesan diskusi",
+        variant: "danger",
+      });
     } finally {
       setSendingReplyId(null);
     }
   };
 
   const handleDeleteDiscussion = async (discussionId: string) => {
-    if (!confirm("Hapus diskusi ini beserta semua balasannya?")) return;
+    const confirmed = await dynamicConfirm({
+      title: "Hapus Diskusi?",
+      message: "Hapus topik diskusi ini beserta seluruh balasannya? Tindakan ini tidak dapat dibatalkan.",
+      confirmText: "Ya, Hapus Diskusi",
+      cancelText: "Batal",
+      variant: "danger",
+      icon: "trash",
+    });
+    if (!confirmed) return;
 
     try {
       const res = await fetch(
@@ -153,7 +170,11 @@ export function DiscussionManager({ courseId }: { courseId: string }) {
       if (!res.ok) throw new Error("Gagal menghapus diskusi");
       setDiscussions((prev) => prev.filter((d) => d.id !== discussionId));
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Gagal menghapus diskusi");
+      await dynamicAlert({
+        title: "Gagal Menghapus Diskusi",
+        message: err instanceof Error ? err.message : "Terjadi kesalahan saat menghapus diskusi.",
+        variant: "danger",
+      });
     }
   };
 

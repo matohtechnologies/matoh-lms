@@ -10,6 +10,7 @@ import {
   CertificateTranscriptCard,
   CertificateTranscriptData,
 } from "./certificate-transcript-card";
+import { dynamicAlert } from "@/components/ui/dynamic-alert-provider";
 import {
   Palette,
   Type,
@@ -57,7 +58,11 @@ export function CertificateBackDesigner({
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
-      alert("Ukuran gambar maksimal 5MB");
+      await dynamicAlert({
+        title: "Ukuran Terlalu Besar",
+        message: "Ukuran file gambar maksimal adalah 5MB.",
+        variant: "warning",
+      });
       return;
     }
 
@@ -80,7 +85,11 @@ export function CertificateBackDesigner({
         backgroundUrl: data.url,
       }));
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Gagal mengunggah gambar latar");
+      await dynamicAlert({
+        title: "Gagal Mengunggah",
+        message: err instanceof Error ? err.message : "Gagal mengunggah gambar latar",
+        variant: "danger",
+      });
     } finally {
       setUploadingBg(false);
       if (fileInputRef.current) fileInputRef.current.value = "";
@@ -108,7 +117,11 @@ export function CertificateBackDesigner({
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
     } catch {
-      alert("Gagal menyimpan desain sisi belakang");
+      await dynamicAlert({
+        title: "Gagal Menyimpan",
+        message: "Gagal menyimpan desain sisi belakang sertifikat",
+        variant: "danger",
+      });
     } finally {
       setSaving(false);
     }

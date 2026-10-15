@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { BookOpen, Users, ShoppingBag, TrendingUp, DollarSign } from "lucide-react";
+import { BookOpen, ShoppingBag } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { formatCurrency } from "@/lib/utils";
@@ -59,29 +59,21 @@ export default async function AdminDashboardPage() {
     {
       label: t("total_users"),
       value: stats.totalUsers.toLocaleString(),
-      icon: Users,
-      color: "blue",
       change: "+12%",
     },
     {
       label: t("active_courses"),
       value: stats.totalCourses.toLocaleString(),
-      icon: BookOpen,
-      color: "sky",
       change: t("this_month", { n: 3 }),
     },
     {
       label: t("total_orders"),
       value: stats.totalOrders.toLocaleString(),
-      icon: ShoppingBag,
-      color: "green",
       change: "+18%",
     },
     {
       label: t("total_revenue"),
       value: formatCurrency(stats.revenue),
-      icon: DollarSign,
-      color: "amber",
       change: "+24%",
     },
   ];
@@ -92,7 +84,7 @@ export default async function AdminDashboardPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-stone-200/60">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-emerald-700 px-2 py-0.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               Sistem Aktif
             </span>
@@ -119,36 +111,25 @@ export default async function AdminDashboardPage() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {statCards.map(({ label, value, icon: Icon, color, change }) => (
+        {statCards.map(({ label, value, change }) => (
           <div
             key={label}
-            className="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-xs hover:shadow-warm transition-all duration-200 group"
+            className="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-xs hover:shadow-warm transition-all duration-200 flex flex-col justify-between"
           >
-            <div className="flex items-start justify-between mb-3.5">
-              <div
-                className={`w-11 h-11 rounded-xl flex items-center justify-center transition-transform group-hover:scale-105 ${
-                  color === "blue"
-                    ? "bg-blue-50 text-blue-600"
-                    : color === "sky"
-                    ? "bg-sky-50 text-sky-600"
-                    : color === "green"
-                    ? "bg-emerald-50 text-emerald-600"
-                    : "bg-indigo-50 text-indigo-600"
-                }`}
+            <div>
+              <p
+                className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight"
+                style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
               >
-                <Icon size={20} />
-              </div>
+                {value}
+              </p>
+              <p className="text-xs font-medium text-stone-500 mt-1">{label}</p>
+            </div>
+            <div className="flex items-center justify-end mt-4">
               <span className="text-[11px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">
                 {change}
               </span>
             </div>
-            <p
-              className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight"
-              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
-            >
-              {value}
-            </p>
-            <p className="text-xs font-medium text-stone-500 mt-1">{label}</p>
           </div>
         ))}
       </div>

@@ -22,6 +22,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/input";
 import { useTranslations } from "next-intl";
+import { dynamicConfirm } from "@/components/ui/dynamic-alert-provider";
 
 export interface LessonData {
   id: string;
@@ -144,7 +145,15 @@ export function CurriculumManager({
   };
 
   const handleDeleteSection = async (sectionId: string, sectionTitle: string) => {
-    if (!confirm(t("delete_section_confirm", { title: sectionTitle }))) return;
+    const confirmed = await dynamicConfirm({
+      title: "Hapus Seksi Kurikulum?",
+      message: `Hapus seksi "${sectionTitle}" beserta seluruh materi pelajaran di dalamnya? Tindakan ini tidak dapat dibatalkan.`,
+      confirmText: "Ya, Hapus Seksi",
+      cancelText: "Batal",
+      variant: "danger",
+      icon: "trash",
+    });
+    if (!confirmed) return;
 
     setIsPending(true);
     try {
@@ -234,7 +243,15 @@ export function CurriculumManager({
   };
 
   const handleDeleteLesson = async (lessonId: string, lessonTitle: string) => {
-    if (!confirm(t("delete_lesson_confirm", { title: lessonTitle }))) return;
+    const confirmed = await dynamicConfirm({
+      title: "Hapus Materi Pelajaran?",
+      message: `Hapus materi "${lessonTitle}"? Tindakan ini tidak dapat dibatalkan.`,
+      confirmText: "Ya, Hapus Materi",
+      cancelText: "Batal",
+      variant: "danger",
+      icon: "trash",
+    });
+    if (!confirmed) return;
 
     setIsPending(true);
     try {

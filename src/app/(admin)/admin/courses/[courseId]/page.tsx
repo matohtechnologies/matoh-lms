@@ -23,6 +23,7 @@ import {
   FolderDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { dynamicConfirm, dynamicAlert } from "@/components/ui/dynamic-alert-provider";
 import { Input, Textarea } from "@/components/ui/input";
 import { CurriculumManager, type SectionData } from "./curriculum-manager";
 import { ResourceManager } from "./resource-manager";
@@ -219,18 +220,37 @@ export default function EditCoursePage() {
   };
 
   const handleDelete = async () => {
-    if (!confirm(t("delete_course_confirm", { title }))) return;
+    const confirmed = await dynamicConfirm({
+      title: "Hapus Kelas Permanen?",
+      message: `Apakah Anda yakin ingin menghapus kelas "${title}"?\n\nTindakan ini tidak dapat dibatalkan dan akan menghapus seluruh modul kurikulum, bahan ajar, dan pengaturan kelas ini.`,
+      confirmText: "Ya, Hapus Kelas",
+      cancelText: "Batal",
+      variant: "danger",
+      icon: "trash",
+    });
+
+    if (!confirmed) return;
 
     setDeleting(true);
     try {
       const res = await fetch(`/api/admin/courses/${courseId}`, { method: "DELETE" });
       if (res.ok) {
-        router.push("/admin/courses");
+        window.location.href = "/admin/courses";
       } else {
         const d = await res.json();
+        await dynamicAlert({
+          title: "Gagal Menghapus Kelas",
+          message: d.error ?? "Terjadi kesalahan saat menghapus kelas.",
+          variant: "danger",
+        });
         setError(d.error ?? "Gagal menghapus kelas");
       }
     } catch {
+      await dynamicAlert({
+        title: "Koneksi Terputus",
+        message: "Terjadi kesalahan koneksi ke server. Silakan coba lagi.",
+        variant: "danger",
+      });
       setError("Terjadi kesalahan koneksi");
     } finally {
       setDeleting(false);

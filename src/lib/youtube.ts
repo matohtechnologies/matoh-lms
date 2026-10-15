@@ -26,6 +26,19 @@ export function extractYouTubeVideoId(url?: string | null): string | null {
 }
 
 /**
+ * Checks whether the given string is a YouTube VIDEO URL (watch, shorts, embed, youtu.be),
+ * explicitly excluding static thumbnail image hosts (img.youtube.com, i.ytimg.com).
+ */
+export function isYouTubeVideoUrl(url?: string | null): boolean {
+  if (!url) return false;
+  const trimmed = url.trim();
+  if (trimmed.includes("img.youtube.com") || trimmed.includes("i.ytimg.com")) {
+    return false;
+  }
+  return /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/|live\/))([a-zA-Z0-9_-]{11})/i.test(trimmed);
+}
+
+/**
  * Checks whether the given string is a YouTube URL or YouTube thumbnail URL.
  */
 export function isYouTubeUrl(url?: string | null): boolean {
@@ -34,11 +47,29 @@ export function isYouTubeUrl(url?: string | null): boolean {
 }
 
 /**
- * Checks if the media URL is playable (YouTube video or direct video file).
+ * Checks if the media URL is a playable video (YouTube video or direct video file).
  */
 export function isPlayableMedia(url?: string | null): boolean {
   if (!url) return false;
-  return isYouTubeUrl(url) || isVideoUrl(url);
+  return isYouTubeVideoUrl(url) || isVideoUrl(url);
+}
+
+/**
+ * Alias for isPlayableMedia for explicit clarity.
+ */
+export function isPlayableVideo(url?: string | null): boolean {
+  return isPlayableMedia(url);
+}
+
+/**
+ * Checks if the given URL is a static image (uploaded file or image link),
+ * rather than a playable video.
+ */
+export function isImageUrl(url?: string | null): boolean {
+  if (!url) return false;
+  const trimmed = url.trim();
+  if (!trimmed) return false;
+  return !isPlayableVideo(trimmed);
 }
 
 /**

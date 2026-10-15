@@ -23,6 +23,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { dynamicConfirm } from "@/components/ui/dynamic-alert-provider";
 
 export interface CourseResourceItem {
   id: string;
@@ -248,7 +249,15 @@ export function ResourceManager({ courseId, sections = [] }: ResourceManagerProp
 
   // Delete handler
   const handleDeleteResource = async (id: string, itemTitle: string) => {
-    if (!confirm(`Hapus bahan ajar "${itemTitle}"?`)) return;
+    const confirmed = await dynamicConfirm({
+      title: "Hapus Bahan Ajar?",
+      message: `Hapus bahan ajar "${itemTitle}"? Tindakan ini tidak dapat dibatalkan.`,
+      confirmText: "Ya, Hapus",
+      cancelText: "Batal",
+      variant: "danger",
+      icon: "trash",
+    });
+    if (!confirmed) return;
 
     try {
       const res = await fetch(`/api/courses/${courseId}/resources/${id}`, {

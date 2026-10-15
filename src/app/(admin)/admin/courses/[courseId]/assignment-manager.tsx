@@ -20,6 +20,7 @@ import {
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { dynamicConfirm, dynamicAlert } from "@/components/ui/dynamic-alert-provider";
 
 interface UserSubmission {
   id: string;
@@ -141,7 +142,11 @@ export function AssignmentManager({
       setAttachedFileUrl(data.url);
       setAttachedFileName(data.fileName);
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Gagal mengunggah file");
+      await dynamicAlert({
+        title: "Gagal Mengunggah Berkas",
+        message: err instanceof Error ? err.message : "Gagal mengunggah file",
+        variant: "danger",
+      });
     } finally {
       setUploadingFile(false);
     }
@@ -179,7 +184,11 @@ export function AssignmentManager({
       setAttachedFileUrl("");
       setAttachedFileName("");
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Gagal membuat tugas");
+      await dynamicAlert({
+        title: "Gagal Membuat Tugas",
+        message: err instanceof Error ? err.message : "Gagal membuat tugas",
+        variant: "danger",
+      });
     } finally {
       setSavingAssignment(false);
     }
@@ -231,14 +240,26 @@ export function AssignmentManager({
       setAttachedFileUrl("");
       setAttachedFileName("");
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Gagal memperbarui tugas");
+      await dynamicAlert({
+        title: "Gagal Memperbarui Tugas",
+        message: err instanceof Error ? err.message : "Gagal memperbarui tugas",
+        variant: "danger",
+      });
     } finally {
       setSavingAssignment(false);
     }
   };
 
   const handleDeleteAssignment = async (id: string, assignmentTitle: string) => {
-    if (!confirm(`Hapus tugas "${assignmentTitle}" beserta seluruh submission siswa?`)) return;
+    const confirmed = await dynamicConfirm({
+      title: "Hapus Tugas?",
+      message: `Hapus tugas "${assignmentTitle}" beserta seluruh submission jawaban siswa? Tindakan ini tidak dapat dibatalkan.`,
+      confirmText: "Ya, Hapus Tugas",
+      cancelText: "Batal",
+      variant: "danger",
+      icon: "trash",
+    });
+    if (!confirmed) return;
 
     try {
       const res = await fetch(`/api/admin/courses/${courseId}/assignments/${id}`, {
@@ -247,8 +268,17 @@ export function AssignmentManager({
 
       if (!res.ok) throw new Error("Gagal menghapus tugas");
       setAssignments((prev) => prev.filter((a) => a.id !== id));
+      await dynamicAlert({
+        title: "Berhasil",
+        message: `Tugas "${assignmentTitle}" berhasil dihapus.`,
+        variant: "success",
+      });
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Gagal menghapus tugas");
+      await dynamicAlert({
+        title: "Gagal Menghapus Tugas",
+        message: err instanceof Error ? err.message : "Terjadi kesalahan saat menghapus tugas.",
+        variant: "danger",
+      });
     }
   };
 
@@ -292,7 +322,11 @@ export function AssignmentManager({
 
       setSelectedSubmission(null);
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : "Gagal menyimpan penilaian");
+      await dynamicAlert({
+        title: "Gagal Menyimpan Penilaian",
+        message: err instanceof Error ? err.message : "Gagal menyimpan penilaian tugas",
+        variant: "danger",
+      });
     } finally {
       setSavingReview(false);
     }

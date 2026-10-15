@@ -13,6 +13,7 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { dynamicConfirm } from "@/components/ui/dynamic-alert-provider";
 
 interface CourseLearningOutcomesEditorProps {
   value: string[];
@@ -82,15 +83,16 @@ export function CourseLearningOutcomesEditor({
     }
   };
 
-  const handleApplySuggestions = () => {
+  const handleApplySuggestions = async () => {
     if (value.length > 0) {
-      if (
-        !confirm(
-          "Gunakan template rekomendasi standar? Poin yang sudah Anda ketik saat ini akan digantikan."
-        )
-      ) {
-        return;
-      }
+      const ok = await dynamicConfirm({
+        title: "Terapkan Template Rekomendasi?",
+        message: "Gunakan template rekomendasi standar? Poin capaian pembelajaran yang sudah Anda ketik saat ini akan digantikan.",
+        confirmText: "Ya, Terapkan",
+        cancelText: "Batal",
+        variant: "warning",
+      });
+      if (!ok) return;
     }
     onChange([...DEFAULT_SUGGESTIONS]);
   };
