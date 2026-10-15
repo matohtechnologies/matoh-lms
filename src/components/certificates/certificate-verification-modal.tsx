@@ -210,10 +210,6 @@ export function CertificateVerificationModal({
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1 text-[11px] text-stone-600 font-medium">
               <CheckCircle2 size={13} className="text-emerald-600" />
-              {isEn ? "Encrypted Database" : "Database Terenkripsi"}
-            </span>
-            <span className="flex items-center gap-1 text-[11px] text-stone-600 font-medium">
-              <CheckCircle2 size={13} className="text-emerald-600" />
               {isEn ? "Real-time Verification" : "Verifikasi Real-time"}
             </span>
           </div>

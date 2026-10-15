@@ -38,6 +38,15 @@ export function GraduationCelebrationModal({
   isQuizScore = false,
 }: GraduationCelebrationModalProps) {
   const [copied, setCopied] = useState(false);
+  const [origin, setOrigin] = useState<string>(
+    process.env.NEXT_PUBLIC_APP_URL || "https://www.matohtechnologies.com"
+  );
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.origin) {
+      setOrigin(window.location.origin);
+    }
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -64,16 +73,6 @@ export function GraduationCelebrationModal({
     triggerCelebrationConfetti();
     playPopSound();
   };
-
-  const [origin, setOrigin] = useState<string>(
-    process.env.NEXT_PUBLIC_APP_URL || "https://www.matohtechnologies.com"
-  );
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.location.origin) {
-      setOrigin(window.location.origin);
-    }
-  }, []);
 
   const shareTargetUrl = certificateCode
     ? `${origin}/verify/${certificateCode}`
