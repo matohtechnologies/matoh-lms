@@ -22,6 +22,7 @@ export default async function AdminLayout({
   const adminNavItems: AdminNavItem[] = [
     { href: "/admin", label: tAdmin("nav_overview"), exact: true },
     { href: "/admin/courses", label: tAdmin("nav_courses") },
+    { href: "/admin/categories", label: tAdmin("nav_categories") },
     { href: "/admin/users", label: tAdmin("nav_users") },
     { href: "/admin/orders", label: tAdmin("nav_orders") },
     { href: "/admin/coupons", label: tAdmin("nav_coupons") },

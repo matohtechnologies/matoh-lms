@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, BookOpen, Users, ShoppingBag, Ticket, type LucideIcon } from "lucide-react";
+import { LayoutDashboard, BookOpen, Users, ShoppingBag, Ticket, FolderTree, type LucideIcon } from "lucide-react";
 
 const ADMIN_ICON_MAP: Record<string, LucideIcon> = {
   "/admin": LayoutDashboard,
   "/admin/courses": BookOpen,
+  "/admin/categories": FolderTree,
   "/admin/users": Users,
   "/admin/orders": ShoppingBag,
   "/admin/coupons": Ticket,

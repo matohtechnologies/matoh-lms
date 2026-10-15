@@ -14,12 +14,6 @@ import {
   Shield,
   ChevronDown,
   ChevronRight,
-  Code2,
-  Database,
-  Palette,
-  Smartphone,
-  Cloud,
-  TrendingUp,
   GraduationCap,
   Sparkles,
   Building2,
@@ -106,41 +100,17 @@ export function Navbar({ user, categories }: NavbarProps) {
     }, 150);
   };
 
-  const getCategoryIcon = (slug: string) => {
-    if (slug.includes("web") || slug.includes("code")) return Code2;
-    if (slug.includes("data") || slug.includes("ai")) return Database;
-    if (slug.includes("design") || slug.includes("ui")) return Palette;
-    if (slug.includes("mobile") || slug.includes("app")) return Smartphone;
-    if (slug.includes("cloud") || slug.includes("devops")) return Cloud;
-    if (slug.includes("marketing") || slug.includes("growth")) return TrendingUp;
-    return BookOpen;
-  };
-
-  const getCategoryColor = (slug: string) => {
-    if (slug.includes("web")) return "text-blue-600 bg-blue-50 border-blue-200/60";
-    if (slug.includes("data")) return "text-emerald-600 bg-emerald-50 border-emerald-200/60";
-    if (slug.includes("design")) return "text-purple-600 bg-purple-50 border-purple-200/60";
-    if (slug.includes("mobile")) return "text-amber-600 bg-amber-50 border-amber-200/60";
-    if (slug.includes("cloud")) return "text-sky-600 bg-sky-50 border-sky-200/60";
-    if (slug.includes("marketing")) return "text-rose-600 bg-rose-50 border-rose-200/60";
-    return "text-blue-600 bg-blue-50 border-blue-200/60";
-  };
-
   const programCategories = (categories && categories.length > 0)
     ? categories.map((cat) => ({
-      icon: getCategoryIcon(cat.slug),
-      color: getCategoryColor(cat.slug),
       name: isEn ? (cat.nameEn || cat.name) : cat.name,
       desc: cat._count?.courses !== undefined
         ? (isEn ? `${cat._count.courses} active courses available` : `${cat._count.courses} kelas tersedia`)
         : (isEn ? "Curated learning track" : "Program belajar terstruktur"),
       href: `/courses?category=${encodeURIComponent(cat.name)}`,
-      badge: cat._count?.courses && cat._count.courses > 0 ? (isEn ? `${cat._count.courses} Courses` : `${cat._count.courses} Kelas`) : undefined,
+      badge: cat._count?.courses && cat._count.courses > 0 ? (isEn ? `${cat._count.courses} Kelas` : `${cat._count.courses} Kelas`) : undefined,
     }))
     : [
       {
-        icon: Code2,
-        color: "text-blue-600 bg-blue-50 border-blue-200/60",
         name: isEn ? "All Programs" : "Semua Program",
         desc: isEn ? "Browse all available courses in database" : "Jelajahi semua kelas di database",
         href: "/courses",
@@ -259,9 +229,6 @@ export function Navbar({ user, categories }: NavbarProps) {
                 {/* Header within dropdown */}
                 <div className="flex items-center justify-between pb-4 mb-4 border-b border-stone-100">
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200/60">
-                      {isEn ? "Industry Standard Curricula" : "Kurikulum Standar Industri"}
-                    </span>
                     <span className="text-xs text-stone-500 font-medium">
                       {isEn ? "Choose your dream course category & career path" : "Pilih kategori kelas & jalur karir impian Anda"}
                     </span>
@@ -277,47 +244,39 @@ export function Navbar({ user, categories }: NavbarProps) {
                 </div>
 
                 <div className="grid grid-cols-12 gap-6">
-                  {/* Left Column: Categories */}
+                  {/* Left Column: Categories (7 cols) */}
                   <div className="col-span-7 space-y-2 border-r border-stone-100 pr-5">
-                    <p className="text-[11px] font-extrabold uppercase tracking-wider text-stone-400 mb-2">
-                      {t("career_tracks")}
-                    </p>
-                    <div className="grid grid-cols-1 gap-1.5">
-                      {programCategories.map((cat) => {
-                        const Icon = cat.icon;
-                        return (
-                          <Link
-                            key={cat.name}
-                            href={cat.href}
-                            className="flex items-start gap-3 p-2.5 rounded-2xl hover:bg-stone-50 transition-colors group"
-                            onClick={() => setIsProgramDropdownOpen(false)}
-                          >
-                            <div
-                              className={cn(
-                                "w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform",
-                                cat.color
-                              )}
-                            >
-                              <Icon size={17} />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2">
-                                <p className="text-xs font-bold text-stone-900 group-hover:text-blue-600 transition-colors">
-                                  {cat.name}
-                                </p>
-                                {cat.badge && (
-                                  <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-sky-100 text-sky-800">
-                                    {cat.badge}
-                                  </span>
-                                )}
-                              </div>
-                              <p className="text-[11px] text-stone-500 line-clamp-1 mt-0.5">
-                                {cat.desc}
-                              </p>
-                            </div>
-                          </Link>
-                        );
-                      })}
+                    <div className="flex items-center justify-between mb-1">
+                      <p className="text-[11px] font-extrabold uppercase tracking-wider text-stone-400">
+                        {t("career_tracks")}
+                      </p>
+                      <span className="text-[10px] font-semibold text-stone-400">
+                        {programCategories.length} {isEn ? "Categories" : "Kategori"}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-1.5 max-h-[360px] overflow-y-auto pr-1">
+                      {programCategories.map((cat) => (
+                        <Link
+                          key={cat.name}
+                          href={cat.href}
+                          className="flex flex-col justify-center p-2.5 rounded-xl border border-stone-200/50 hover:border-blue-200 hover:bg-blue-50/40 transition-all group shadow-2xs"
+                          onClick={() => setIsProgramDropdownOpen(false)}
+                        >
+                          <div className="flex items-center justify-between gap-1">
+                            <p className="text-xs font-bold text-stone-900 group-hover:text-blue-600 transition-colors truncate">
+                              {cat.name}
+                            </p>
+                            {cat.badge && (
+                              <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-blue-50 text-blue-700 border border-blue-200/60 shrink-0">
+                                {cat.badge}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-[10px] text-stone-500 line-clamp-1 mt-0.5 group-hover:text-stone-600">
+                            {cat.desc}
+                          </p>
+                        </Link>
+                      ))}
                     </div>
                   </div>
 
@@ -597,20 +556,21 @@ export function Navbar({ user, categories }: NavbarProps) {
                 <p className="px-3 pt-2 text-[10px] font-extrabold uppercase tracking-wider text-stone-400">
                   {isEn ? "Main Categories" : "Kategori Utama"}
                 </p>
-                {programCategories.map((cat) => {
-                  const Icon = cat.icon;
-                  return (
-                    <Link
-                      key={cat.name}
-                      href={cat.href}
-                      className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-stone-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
-                      onClick={() => setIsMobileOpen(false)}
-                    >
-                      <Icon size={14} className="text-blue-600 shrink-0" />
-                      <span className="truncate">{cat.name}</span>
-                    </Link>
-                  );
-                })}
+                {programCategories.map((cat) => (
+                  <Link
+                    key={cat.name}
+                    href={cat.href}
+                    className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-stone-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                    onClick={() => setIsMobileOpen(false)}
+                  >
+                    <span className="truncate">{cat.name}</span>
+                    {cat.badge && (
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-50 text-blue-700">
+                        {cat.badge}
+                      </span>
+                    )}
+                  </Link>
+                ))}
 
                 <div className="pt-2 border-t border-stone-100">
                   <Link
