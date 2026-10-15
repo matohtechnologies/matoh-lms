@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
-import { Award, ShieldCheck, QrCode } from "lucide-react";
+import { Award, ShieldCheck, QrCode, Maximize2, X, FileText, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CertificateBackDesignConfig } from "@/lib/certificate-templates";
 
@@ -186,13 +187,13 @@ export function CertificateTranscriptCard({
 
         {/* Student & Course Info */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-5 print:grid-cols-3 print:gap-2 print:my-3">
-          <div className="p-3.5 rounded-xl bg-stone-50 border border-stone-200/60">
+          <div className="p-3.5 rounded-xl bg-stone-50 border border-stone-200/60 min-w-0">
             <p className="text-[10px] uppercase font-bold tracking-wider text-stone-400">
               Nama Peserta
             </p>
             <p className="text-sm font-bold text-stone-900 truncate mt-0.5">{studentName}</p>
           </div>
-          <div className="p-3.5 rounded-xl bg-stone-50 border border-stone-200/60">
+          <div className="p-3.5 rounded-xl bg-stone-50 border border-stone-200/60 min-w-0">
             <p className="text-[10px] uppercase font-bold tracking-wider text-stone-400">
               Program Kursus
             </p>
@@ -201,11 +202,11 @@ export function CertificateTranscriptCard({
               <p className="text-[10px] text-blue-600 font-medium truncate">{categoryName}</p>
             )}
           </div>
-          <div className="p-3.5 rounded-xl bg-stone-50 border border-stone-200/60">
+          <div className="p-3.5 rounded-xl bg-stone-50 border border-stone-200/60 min-w-0">
             <p className="text-[10px] uppercase font-bold tracking-wider text-stone-400">
               Beban Belajar
             </p>
-            <p className="text-sm font-bold text-stone-900 mt-0.5">
+            <p className="text-sm font-bold text-stone-900 mt-0.5 truncate">
               {totalHours} Jam Pembelajaran (JP)
             </p>
           </div>
@@ -336,7 +337,7 @@ export function CertificateTranscriptCard({
         {/* Validation QR & Signatures */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-stone-200 items-end print:grid-cols-3 print:gap-2 print:pt-2">
           {/* QR Validation */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0">
             {showQr && (
               <>
                 {qrCodeUrl ? (
@@ -350,12 +351,12 @@ export function CertificateTranscriptCard({
                     <QrCode size={24} />
                   </div>
                 )}
-                <div className="text-[10px] text-stone-500">
+                <div className="text-[10px] text-stone-500 min-w-0">
                   <p className="font-bold text-stone-800 flex items-center gap-1">
-                    <ShieldCheck size={13} className="text-emerald-600" />
-                    Terverifikasi Resmi
+                    <ShieldCheck size={13} className="text-emerald-600 shrink-0" />
+                    <span className="truncate">Terverifikasi Resmi</span>
                   </p>
-                  <p className="mt-0.5 leading-tight">
+                  <p className="mt-0.5 leading-tight text-[9px] text-stone-400 break-words">
                     Pindai QR untuk memvalidasi keaslian dokumen secara online.
                   </p>
                 </div>
@@ -364,26 +365,202 @@ export function CertificateTranscriptCard({
           </div>
 
           {/* Instructor Signature */}
-          <div className="text-center sm:text-right print:text-right">
-            <p className="font-serif italic text-base text-stone-800 mb-0.5 print:text-xs">
+          <div className="text-center sm:text-right print:text-right min-w-0">
+            <p className="font-serif italic text-base text-stone-800 mb-0.5 print:text-xs truncate" title={instructorName}>
               {instructorName}
             </p>
             <div className="w-24 h-px bg-stone-300 mx-auto sm:ml-auto sm:mr-0 mb-1" />
-            <p className="text-[10px] font-semibold text-stone-700">{signatoryRole1}</p>
-            <p className="text-[9px] text-stone-400">{issuerName}</p>
+            <p className="text-[10px] font-semibold text-stone-700 truncate" title={signatoryRole1}>{signatoryRole1}</p>
+            <p className="text-[9px] text-stone-400 truncate" title={issuerName}>{issuerName}</p>
           </div>
 
           {/* Academic Director Signature */}
-          <div className="text-center sm:text-right print:text-right">
-            <p className="font-serif italic text-base text-stone-800 mb-0.5 print:text-xs">
+          <div className="text-center sm:text-right print:text-right min-w-0">
+            <p className="font-serif italic text-base text-stone-800 mb-0.5 print:text-xs truncate" title={signatoryName2}>
               {signatoryName2}
             </p>
             <div className="w-24 h-px bg-stone-300 mx-auto sm:ml-auto sm:mr-0 mb-1" />
-            <p className="text-[10px] font-semibold text-stone-700">{signatoryRole2}</p>
-            <p className="text-[9px] text-stone-400">Direktorat Akademik</p>
+            <p className="text-[10px] font-semibold text-stone-700 truncate" title={signatoryRole2}>{signatoryRole2}</p>
+            <p className="text-[9px] text-stone-400 truncate">Direktorat Akademik</p>
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+interface CertificateTranscriptMiniatureProps {
+  data: CertificateTranscriptData;
+  backConfig?: CertificateBackDesignConfig | null;
+  className?: string;
+  onOpenStudio?: () => void;
+}
+
+export function CertificateTranscriptMiniature({
+  data,
+  backConfig,
+  className,
+  onOpenStudio,
+}: CertificateTranscriptMiniatureProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(0.38);
+  const [cardHeight, setCardHeight] = useState(680);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Lock body scroll when modal preview is open
+  useEffect(() => {
+    if (isModalOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+  }, [isModalOpen]);
+
+  useEffect(() => {
+    const updateDimensions = () => {
+      if (containerRef.current) {
+        const cw = containerRef.current.clientWidth;
+        const targetWidth = 1000;
+        const s = Math.max(0.1, cw / targetWidth);
+        setScale(s);
+
+        if (cardRef.current) {
+          const naturalHeight = cardRef.current.offsetHeight || 680;
+          setCardHeight(naturalHeight);
+        }
+      }
+    };
+
+    updateDimensions();
+    const ro = new ResizeObserver(updateDimensions);
+    if (containerRef.current) ro.observe(containerRef.current);
+    return () => ro.disconnect();
+  }, []);
+
+  return (
+    <div className={cn("space-y-3", className)}>
+      {/* Miniature Landscape Frame (A4 Landscape 297/210 ratio) */}
+      <div
+        ref={containerRef}
+        onClick={() => setIsModalOpen(true)}
+        className="group relative w-full rounded-2xl shadow-warm overflow-hidden bg-stone-100 border border-stone-200 select-none cursor-pointer transition-all hover:border-blue-300 hover:shadow-md"
+        style={{
+          height: Math.max(160, Math.round(cardHeight * scale)),
+        }}
+        title="Klik untuk melihat pratinjau ukuran penuh (A4)"
+      >
+        <div
+          ref={cardRef}
+          style={{
+            width: 1000,
+            transform: `scale(${scale})`,
+            transformOrigin: "top left",
+            position: "absolute",
+            top: 0,
+            left: 0,
+          }}
+          className="pointer-events-none"
+        >
+          <CertificateTranscriptCard
+            backConfig={backConfig}
+            data={data}
+            className="shadow-none rounded-none border-none max-w-none w-[1000px]"
+          />
+        </div>
+
+        {/* Hover overlay hint */}
+        <div className="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/20 backdrop-blur-[1px] opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center pointer-events-none">
+          <span className="px-3 py-1.5 rounded-full bg-white/95 text-stone-900 text-[11px] font-bold shadow-lg flex items-center gap-1.5 transform translate-y-1 group-hover:translate-y-0 transition-transform">
+            <Maximize2 size={12} className="text-blue-600" />
+            Klik untuk Pratinjau Penuh (A4)
+          </span>
+        </div>
+      </div>
+
+      {/* Action Button: Open in Studio */}
+      {onOpenStudio && (
+        <button
+          type="button"
+          onClick={onOpenStudio}
+          className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold text-xs border border-purple-200 shadow-xs transition-colors cursor-pointer"
+        >
+          <FileText size={14} />
+          Buka &amp; Edit di Studio Sisi Belakang (Transkrip)
+        </button>
+      )}
+
+      {/* Fullscreen A4 Modal Preview */}
+      {mounted && isModalOpen && createPortal(
+        <div
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsModalOpen(false);
+          }}
+          className="fixed inset-0 z-[99999] overflow-y-auto bg-stone-950/80 backdrop-blur-xs p-4 sm:p-6 animate-in fade-in duration-150"
+        >
+          <div className="min-h-full flex items-center justify-center pointer-events-none">
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-5xl bg-stone-900 rounded-3xl border border-stone-800 shadow-2xl p-4 sm:p-6 space-y-4 pointer-events-auto my-auto animate-in zoom-in-95 duration-150"
+            >
+              {/* Modal Top Bar */}
+              <div className="flex items-center justify-between pb-3 border-b border-stone-800 text-white">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center border border-purple-500/30">
+                    <FileText size={16} />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-white">Pratinjau Sisi Belakang (Transkrip Nilai)</h3>
+                    <p className="text-[11px] text-stone-400 font-mono">Format A4 Landscape (297 × 210 mm)</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {onOpenStudio && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsModalOpen(false);
+                        onOpenStudio();
+                      }}
+                      className="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition-colors cursor-pointer"
+                    >
+                      Buka di Studio
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(false)}
+                    className="p-1.5 rounded-xl text-stone-400 hover:text-white hover:bg-stone-800 transition-colors cursor-pointer"
+                    aria-label="Tutup"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Real A4 Landscape Preview Card */}
+              <div className="w-full overflow-x-auto py-2 flex justify-center">
+                <div className="w-full max-w-[1000px] shadow-2xl">
+                  <CertificateTranscriptCard
+                    backConfig={backConfig}
+                    data={data}
+                    className="shadow-2xl"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 }

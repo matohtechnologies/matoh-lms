@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/input";
+import { MarkdownEditor } from "@/components/ui/markdown-editor";
 import { useTranslations } from "next-intl";
 import { dynamicConfirm } from "@/components/ui/dynamic-alert-provider";
 
@@ -518,86 +519,91 @@ export function CurriculumManager({
 
       {/* ── Modal: Tambah / Edit Materi (Lesson) ────────────────────────── */}
       {lessonModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs overflow-y-auto">
-          <div className="bg-white rounded-2xl border border-stone-200 shadow-warm-lg max-w-lg w-full p-6 space-y-4 my-8">
-            <div className="border-b border-stone-100 pb-3">
-              <h3 className="text-base font-bold text-stone-900">
-                {editingLesson ? t("modal_edit_lesson") : t("modal_add_lesson")}
-              </h3>
-              <p className="text-xs text-stone-500 mt-0.5">
-                {t("lesson_modal_subtitle")}
-              </p>
-            </div>
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs p-3 sm:p-4">
+          <div className="min-h-full flex items-center justify-center py-6 sm:py-8">
+            <div className="bg-white rounded-3xl border border-stone-200 shadow-2xl max-w-4xl w-full p-6 sm:p-7 space-y-5 my-auto">
+              <div className="border-b border-stone-100 pb-3">
+                <h3 className="text-base sm:text-lg font-bold text-stone-900">
+                  {editingLesson ? t("modal_edit_lesson") : t("modal_add_lesson")}
+                </h3>
+                <p className="text-xs text-stone-500 mt-0.5">
+                  {t("lesson_modal_subtitle")}
+                </p>
+              </div>
 
-            <form onSubmit={handleSaveLesson} className="space-y-4">
-              <Input
-                label={t("lesson_title_label")}
-                placeholder={t("lesson_title_placeholder")}
-                value={lessonTitle}
-                onChange={(e) => setLessonTitle(e.target.value)}
-                autoFocus
-                required
-              />
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <form onSubmit={handleSaveLesson} className="space-y-4">
                 <Input
-                  label={t("duration_minutes_label")}
-                  type="number"
-                  placeholder="10"
-                  min="1"
-                  value={lessonDuration}
-                  onChange={(e) => setLessonDuration(e.target.value)}
+                  label={t("lesson_title_label")}
+                  placeholder={t("lesson_title_placeholder")}
+                  value={lessonTitle}
+                  onChange={(e) => setLessonTitle(e.target.value)}
+                  autoFocus
+                  required
                 />
 
-                <div className="space-y-1.5 flex flex-col justify-end pb-2">
-                  <label className="flex items-center gap-2 cursor-pointer select-none">
-                    <input
-                      type="checkbox"
-                      checked={lessonIsFree}
-                      onChange={(e) => setLessonIsFree(e.target.checked)}
-                      className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 accent-blue-600"
-                    />
-                    <span className="text-sm font-medium text-stone-800">
-                      {t("free_preview_label")}
-                    </span>
-                  </label>
-                  <p className="text-[11px] text-stone-400">
-                    {t("free_preview_desc")}
-                  </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <Input
+                    label={t("duration_minutes_label")}
+                    type="number"
+                    placeholder="10"
+                    min="1"
+                    value={lessonDuration}
+                    onChange={(e) => setLessonDuration(e.target.value)}
+                  />
+
+                  <div className="space-y-1.5 flex flex-col justify-end pb-2">
+                    <label className="flex items-center gap-2 cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        checked={lessonIsFree}
+                        onChange={(e) => setLessonIsFree(e.target.checked)}
+                        className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 accent-blue-600"
+                      />
+                      <span className="text-sm font-medium text-stone-800">
+                        {t("free_preview_label")}
+                      </span>
+                    </label>
+                    <p className="text-[11px] text-stone-400">
+                      {t("free_preview_desc")}
+                    </p>
+                  </div>
                 </div>
-              </div>
 
-              <Input
-                label={t("video_url_label")}
-                placeholder={t("lesson_video_placeholder")}
-                value={lessonVideoUrl}
-                onChange={(e) => setLessonVideoUrl(e.target.value)}
-                hint={t("video_url_hint")}
-              />
+                <Input
+                  label={t("video_url_label")}
+                  placeholder={t("lesson_video_placeholder")}
+                  value={lessonVideoUrl}
+                  onChange={(e) => setLessonVideoUrl(e.target.value)}
+                  hint={t("video_url_hint")}
+                />
 
-              <Textarea
-                label={t("lesson_content_label")}
-                placeholder={t("lesson_content_placeholder")}
-                rows={5}
-                value={lessonContent}
-                onChange={(e) => setLessonContent(e.target.value)}
-                hint={t("lesson_content_hint")}
-              />
+                {/* Rich Markdown Editor with formatting toolbar */}
+                <div className="space-y-1.5">
+                  <MarkdownEditor
+                    label={t("lesson_content_label")}
+                    placeholder="Tuliskan isi materi pembelajaran di sini. Gunakan tombol toolbar untuk mengubah sifat kalimat (tebal, miring, judul, daftar, blok kode, tabel, tips, dll)..."
+                    value={lessonContent}
+                    onChange={setLessonContent}
+                    hint="Format Markdown didukung penuh. Siswa akan melihat teks materi dalam format visual yang rapi dan interaktif."
+                    minHeight="280px"
+                  />
+                </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-stone-100">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setLessonModalOpen(false)}
-                  disabled={isPending}
-                >
-                  {t("cancel")}
-                </Button>
-                <Button type="submit" loading={isPending}>
-                  {editingLesson ? t("save_lesson") : t("add_lesson_submit")}
-                </Button>
-              </div>
-            </form>
+                <div className="flex items-center justify-end gap-2 pt-3 border-t border-stone-100">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setLessonModalOpen(false)}
+                    disabled={isPending}
+                  >
+                    {t("cancel")}
+                  </Button>
+                  <Button type="submit" loading={isPending}>
+                    {editingLesson ? t("save_lesson") : t("add_lesson_submit")}
+                  </Button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       )}

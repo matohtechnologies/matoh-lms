@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { createPortal } from "react-dom";
 import {
   Award,
   CheckCircle2,
@@ -23,6 +24,8 @@ import {
   Palette,
   FileText,
   Hash,
+  Maximize2,
+  X,
 } from "lucide-react";
 import { format } from "date-fns";
 import { id as idLocale } from "date-fns/locale";
@@ -30,7 +33,10 @@ import { cn } from "@/lib/utils";
 import { CertificateDesigner } from "@/components/certificates/certificate-designer";
 import { CertificateBackDesigner } from "@/components/certificates/certificate-back-designer";
 import { CertificateCanvasRenderer } from "@/components/certificates/certificate-canvas-renderer";
-import { CertificateTranscriptCard } from "@/components/certificates/certificate-transcript-card";
+import {
+  CertificateTranscriptCard,
+  CertificateTranscriptMiniature,
+} from "@/components/certificates/certificate-transcript-card";
 import {
   CertificateDesignConfig,
   CertificateBackDesignConfig,
@@ -135,6 +141,37 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
       issueDate: new Date(),
     });
   }, [form.serialPattern, form.courseCode, form.nextCounter, form.counterPadding, courseInfo]);
+
+  const [frontModalOpen, setFrontModalOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (frontModalOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+  }, [frontModalOpen]);
+
+  const frontSampleData = useMemo(() => ({
+    student_name: "Nama Siswa Teladan",
+    course_title: courseInfo?.title || "Judul Kursus",
+    category_name: "Kategori Kursus",
+    issue_date: format(new Date(), "d MMMM yyyy", { locale: idLocale }),
+    certificate_code: previewSerial,
+    issuer_name: form.issuerName || "PT. Matoh Technologies Indonesia",
+    signatory_name_1: form.signatoryName1 || courseInfo?.instructorName || "Dr. G. Prabantoro, SE., MM., CBec.",
+    signatory_role_1: form.signatoryRole1 || "Lead Instructor & RnD Director",
+    signatory_name_2: form.signatoryName2 || "Dr. E. Lovita, SE., Ak., M.Si., CA.",
+    signatory_role_2: form.signatoryRole2 || "Head of Academic Board",
+    subtitle: form.subtitle,
+  }), [courseInfo, previewSerial, form.issuerName, form.signatoryName1, form.signatoryRole1, form.signatoryName2, form.signatoryRole2, form.subtitle]);
 
   const handleUploadTemplate = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -1107,194 +1144,375 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
 
           {/* Certificate Miniature Preview */}
           {previewSide === "back" ? (
-            <div className="space-y-3">
-              <div className="w-full rounded-2xl shadow-warm overflow-hidden bg-white border border-stone-200">
-                <CertificateTranscriptCard
-                  backConfig={form.templateConfig?.backConfig}
-                  data={{
-                    studentName: "Nama Siswa Teladan",
-                    courseTitle: courseInfo?.title || "Judul Kursus",
-                    categoryName: "Kategori Kursus",
-                    certificateCode: "MT-SAMPLE-2026",
-                    issueDisplay: format(new Date(), "d MMMM yyyy", { locale: idLocale }),
-                    issuerName: form.issuerName || "PT. Matoh Technologies Indonesia",
-                    instructorName: form.signatoryName1 || courseInfo?.instructorName || "Dr. G. Prabantoro, SE., MM., CBec.",
-                    signatoryRole1: form.signatoryRole1 || "Lead Instructor & RnD Director",
-                    signatoryName2: form.signatoryName2 || "Dr. E. Lovita, SE., Ak., M.Si., CA.",
-                    signatoryRole2: form.signatoryRole2 || "Head of Academic Board",
-                    totalLessons: 10,
-                    totalHours: 16,
-                    overallScore: 92.5,
-                    finalGrade: "A",
-                    predicate: "DENGAN PUJIAN (DISTINCTION)",
-                    items: [
-                      {
-                        id: "m1",
-                        title: "Penguasaan Modul & Kurikulum Teori",
-                        type: "module",
-                        workload: "8 JP",
-                        score: 95,
-                        maxScore: 100,
-                        grade: "A",
-                        status: "KOMPETEN",
-                      },
-                      {
-                        id: "q1",
-                        title: "Evaluasi Pemahaman Materi (Kuis)",
-                        type: "quiz",
-                        workload: "Evaluasi Kuis",
-                        score: 90,
-                        maxScore: 100,
-                        grade: "A",
-                        status: "LULUS",
-                      },
-                      {
-                        id: "a1",
-                        title: "Studi Kasus & Portofolio Proyek Akhir",
-                        type: "assignment",
-                        workload: "Proyek Praktik",
-                        score: 92,
-                        maxScore: 100,
-                        grade: "A",
-                        status: "DISETUJUI",
-                      },
-                    ],
-                  }}
-                />
-              </div>
-            </div>
+            <CertificateTranscriptMiniature
+              backConfig={form.templateConfig?.backConfig}
+              data={{
+                studentName: "Nama Siswa Teladan",
+                courseTitle: courseInfo?.title || "Judul Kursus",
+                categoryName: "Kategori Kursus",
+                certificateCode: "MT-SAMPLE-2026",
+                issueDisplay: format(new Date(), "d MMMM yyyy", { locale: idLocale }),
+                issuerName: form.issuerName || "PT. Matoh Technologies Indonesia",
+                instructorName: form.signatoryName1 || courseInfo?.instructorName || "Dr. G. Prabantoro, SE., MM., CBec.",
+                signatoryRole1: form.signatoryRole1 || "Lead Instructor & RnD Director",
+                signatoryName2: form.signatoryName2 || "Dr. E. Lovita, SE., Ak., M.Si., CA.",
+                signatoryRole2: form.signatoryRole2 || "Head of Academic Board",
+                totalLessons: 10,
+                totalHours: 16,
+                overallScore: 92.5,
+                finalGrade: "A",
+                predicate: "DENGAN PUJIAN (DISTINCTION)",
+                items: [
+                  {
+                    id: "m1",
+                    title: "Penguasaan Modul & Kurikulum Teori",
+                    type: "module",
+                    workload: "8 JP",
+                    score: 95,
+                    maxScore: 100,
+                    grade: "A",
+                    status: "KOMPETEN",
+                  },
+                  {
+                    id: "q1",
+                    title: "Evaluasi Pemahaman Materi (Kuis)",
+                    type: "quiz",
+                    workload: "Evaluasi Kuis",
+                    score: 90,
+                    maxScore: 100,
+                    grade: "A",
+                    status: "LULUS",
+                  },
+                  {
+                    id: "a1",
+                    title: "Studi Kasus & Portofolio Proyek Akhir",
+                    type: "assignment",
+                    workload: "Proyek Praktik",
+                    score: 92,
+                    maxScore: 100,
+                    grade: "A",
+                    status: "DISETUJUI",
+                  },
+                ],
+              }}
+              onOpenStudio={() => {
+                setActiveView("studio");
+                setStudioTab("back");
+              }}
+            />
           ) : form.templateConfig && form.templateConfig.elements?.length > 0 ? (
             <div className="space-y-3">
-              <div className="w-full rounded-2xl shadow-warm overflow-hidden bg-white border border-stone-200">
+              <div
+                onClick={() => setFrontModalOpen(true)}
+                className="group relative w-full rounded-2xl shadow-warm overflow-hidden bg-white border border-stone-200 select-none cursor-pointer transition-all hover:border-blue-300 hover:shadow-md"
+                title="Klik untuk melihat pratinjau ukuran penuh (A4)"
+              >
                 <CertificateCanvasRenderer
                   config={form.templateConfig}
-                  data={{
-                    student_name: "Nama Siswa Teladan",
-                    course_title: courseInfo?.title || "Judul Kursus",
-                    category_name: "Kategori Kursus",
-                    issue_date: format(new Date(), "d MMMM yyyy", { locale: idLocale }),
-                    certificate_code: "MT-SAMPLE-2026",
-                    issuer_name: form.issuerName || "PT. Matoh Technologies Indonesia",
-                    signatory_name_1: form.signatoryName1 || "Dr. G. Prabantoro, SE., MM., CBec.",
-                    signatory_role_1: form.signatoryRole1 || "Lead Instructor & RnD Director",
-                    signatory_name_2: form.signatoryName2 || "Dr. E. Lovita, SE., Ak., M.Si., CA.",
-                    signatory_role_2: form.signatoryRole2 || "Head of Academic Board",
-                    subtitle: form.subtitle,
-                  }}
+                  data={frontSampleData}
                   isInteractive={false}
                 />
+                {/* Hover overlay hint */}
+                <div className="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/20 backdrop-blur-[1px] opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center pointer-events-none">
+                  <span className="px-3 py-1.5 rounded-full bg-white/95 text-stone-900 text-[11px] font-bold shadow-lg flex items-center gap-1.5 transform translate-y-1 group-hover:translate-y-0 transition-transform">
+                    <Maximize2 size={12} className="text-blue-600" />
+                    Klik untuk Pratinjau Penuh (A4)
+                  </span>
+                </div>
               </div>
               <button
                 type="button"
-                onClick={() => setActiveView("studio")}
-                className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs border border-blue-200 shadow-xs transition-colors"
+                onClick={() => {
+                  setActiveView("studio");
+                  setStudioTab("front");
+                }}
+                className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs border border-blue-200 shadow-xs transition-colors cursor-pointer"
               >
                 <Palette size={14} />
                 Buka &amp; Edit di Studio Desain Visual
               </button>
             </div>
           ) : (
-            <div
-              className={cn(
-                "w-full rounded-2xl p-5 shadow-warm relative overflow-hidden text-center select-none transition-all",
-                form.templateUrl
-                  ? "bg-stone-900 border-2 border-stone-700/60"
-                  : "bg-white border-4 border-amber-900/10"
-              )}
-            >
-              {form.templateUrl ? (
-                <img
-                  src={form.templateUrl}
-                  alt="Template Background"
-                  className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none"
-                />
-              ) : (
-                <>
-                  <div className="absolute -right-12 -top-12 w-40 h-40 rounded-full bg-blue-100/30 pointer-events-none blur-2xl" />
-                  <div className="absolute -left-12 -bottom-12 w-40 h-40 rounded-full bg-sky-100/30 pointer-events-none blur-2xl" />
-                </>
-              )}
-
+            <div className="space-y-3">
               <div
+                onClick={() => setFrontModalOpen(true)}
                 className={cn(
-                  "rounded-xl p-4 relative z-10 transition-all",
+                  "group relative w-full rounded-2xl p-5 shadow-warm overflow-hidden text-center select-none transition-all cursor-pointer hover:border-blue-300 hover:shadow-md",
                   form.templateUrl
-                    ? "bg-white/85 backdrop-blur-xs border border-white/60 shadow-xs"
-                    : "border border-dashed border-blue-600/30"
+                    ? "bg-stone-900 border-2 border-stone-700/60"
+                    : "bg-white border-4 border-amber-900/10"
                 )}
+                title="Klik untuk melihat pratinjau ukuran penuh (A4)"
               >
-                {/* Header */}
-                <div className="flex flex-col items-center justify-center mb-3">
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-sky-600 flex items-center justify-center shadow-xs mb-1">
-                    <Award size={16} className="text-white" />
+                {form.templateUrl ? (
+                  <img
+                    src={form.templateUrl}
+                    alt="Template Background"
+                    className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none"
+                  />
+                ) : (
+                  <>
+                    <div className="absolute -right-12 -top-12 w-40 h-40 rounded-full bg-blue-100/30 pointer-events-none blur-2xl" />
+                    <div className="absolute -left-12 -bottom-12 w-40 h-40 rounded-full bg-sky-100/30 pointer-events-none blur-2xl" />
+                  </>
+                )}
+
+                <div
+                  className={cn(
+                    "rounded-xl p-4 relative z-10 transition-all",
+                    form.templateUrl
+                      ? "bg-white/85 backdrop-blur-xs border border-white/60 shadow-xs"
+                      : "border border-dashed border-blue-600/30"
+                  )}
+                >
+                  {/* Header */}
+                  <div className="flex flex-col items-center justify-center mb-3">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-sky-600 flex items-center justify-center shadow-xs mb-1">
+                      <Award size={16} className="text-white" />
+                    </div>
+                    <h4
+                      className="text-xs font-bold tracking-widest uppercase text-stone-800"
+                      style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+                    >
+                      {form.issuerName || "PT. Matoh Technologies Indonesia"}
+                    </h4>
+                    <p className="text-[8px] uppercase tracking-widest text-blue-700 font-semibold mt-0.5">
+                      {form.title || "Certificate of Completion"}
+                    </p>
                   </div>
-                  <h4
-                    className="text-xs font-bold tracking-widest uppercase text-stone-800"
+
+                  {/* Recipient */}
+                  <p className="text-[8px] uppercase tracking-wider text-stone-400 font-medium">
+                    Diberikan kepada:
+                  </p>
+                  <h5
+                    className="text-base font-extrabold text-stone-900 mt-0.5 mb-1"
                     style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
                   >
-                    {form.issuerName || "PT. Matoh Technologies Indonesia"}
-                  </h4>
-                  <p className="text-[8px] uppercase tracking-widest text-blue-700 font-semibold mt-0.5">
-                    {form.title || "Certificate of Completion"}
+                    Nama Siswa Teladan
+                  </h5>
+                  <div className="w-12 h-0.5 bg-gradient-to-r from-blue-600 to-sky-500 mx-auto mb-2 rounded-full" />
+
+                  <p className="text-[9px] text-stone-500 line-clamp-2 max-w-xs mx-auto leading-relaxed mb-2.5">
+                    {form.subtitle}
                   </p>
-                </div>
 
-                {/* Recipient */}
-                <p className="text-[8px] uppercase tracking-wider text-stone-400 font-medium">
-                  Diberikan kepada:
-                </p>
-                <h5
-                  className="text-base font-extrabold text-stone-900 mt-0.5 mb-1"
-                  style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
-                >
-                  Nama Siswa Teladan
-                </h5>
-                <div className="w-12 h-0.5 bg-gradient-to-r from-blue-600 to-sky-500 mx-auto mb-2 rounded-full" />
-
-                <p className="text-[9px] text-stone-500 line-clamp-2 max-w-xs mx-auto leading-relaxed mb-2.5">
-                  {form.subtitle}
-                </p>
-
-                <div className="bg-blue-50/80 border border-blue-200/80 rounded-lg py-1.5 px-3 inline-block max-w-full mb-3">
-                  <p className="text-[10px] font-bold text-blue-950 truncate max-w-[200px]">
-                    {courseInfo?.title || "Judul Kursus"}
-                  </p>
-                </div>
-
-                {/* Signatures */}
-                <div className="grid grid-cols-3 gap-2 pt-2 border-t border-stone-200/80 items-end text-[8px]">
-                  <div className="text-left">
-                    <p className="font-serif italic text-stone-800 truncate">
-                      {form.signatoryName1 || "Ahmad Fadhil"}
+                  <div className="bg-blue-50/80 border border-blue-200/80 rounded-lg py-1.5 px-3 inline-block max-w-full mb-3">
+                    <p className="text-[10px] font-bold text-blue-950 truncate max-w-[200px]">
+                      {courseInfo?.title || "Judul Kursus"}
                     </p>
-                    <div className="w-12 h-px bg-stone-300 mb-0.5" />
-                    <p className="font-medium text-stone-600 truncate">{form.signatoryRole1}</p>
                   </div>
 
-                  <div className="flex flex-col items-center">
-                    <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 mb-0.5">
-                      <ShieldCheck size={12} />
+                  {/* Signatures */}
+                  <div className="grid grid-cols-3 gap-2 pt-2 border-t border-stone-200/80 items-end text-[8px]">
+                    <div className="text-left">
+                      <p className="font-serif italic text-stone-800 truncate">
+                        {form.signatoryName1 || "Ahmad Fadhil"}
+                      </p>
+                      <div className="w-12 h-px bg-stone-300 mb-0.5" />
+                      <p className="font-medium text-stone-600 truncate">{form.signatoryRole1}</p>
                     </div>
-                    <span className="text-[7px] font-bold text-amber-800 uppercase tracking-tighter">
-                      VERIFIED
-                    </span>
+
+                    <div className="flex flex-col items-center">
+                      <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 mb-0.5">
+                        <ShieldCheck size={12} />
+                      </div>
+                      <span className="text-[7px] font-bold text-amber-800 uppercase tracking-tighter">
+                        VERIFIED
+                      </span>
+                    </div>
+
+                    <div className="text-right">
+                      <p className="font-serif italic text-stone-800 truncate">
+                        {form.signatoryName2 || "Dr. Santoso W."}
+                      </p>
+                      <div className="w-12 h-px bg-stone-300 ml-auto mb-0.5" />
+                      <p className="font-medium text-stone-600 truncate">{form.signatoryRole2}</p>
+                    </div>
                   </div>
 
-                  <div className="text-right">
-                    <p className="font-serif italic text-stone-800 truncate">
-                      {form.signatoryName2 || "Dr. Santoso W."}
-                    </p>
-                    <div className="w-12 h-px bg-stone-300 ml-auto mb-0.5" />
-                    <p className="font-medium text-stone-600 truncate">{form.signatoryRole2}</p>
+                  <div className="mt-2 pt-1 border-t border-dashed border-stone-200 flex items-center justify-between text-[7px] text-stone-400">
+                    <span className="truncate max-w-[160px] font-mono">ID: {previewSerial}</span>
+                    <span className="text-green-600 font-semibold shrink-0">Resmi &amp; Terverifikasi</span>
                   </div>
                 </div>
 
-                <div className="mt-2 pt-1 border-t border-dashed border-stone-200 flex items-center justify-between text-[7px] text-stone-400">
-                  <span className="truncate max-w-[160px] font-mono">ID: {previewSerial}</span>
-                  <span className="text-green-600 font-semibold shrink-0">Resmi &amp; Terverifikasi</span>
+                {/* Hover overlay hint */}
+                <div className="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/20 backdrop-blur-[1px] opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center pointer-events-none z-20">
+                  <span className="px-3 py-1.5 rounded-full bg-white/95 text-stone-900 text-[11px] font-bold shadow-lg flex items-center gap-1.5 transform translate-y-1 group-hover:translate-y-0 transition-transform">
+                    <Maximize2 size={12} className="text-blue-600" />
+                    Klik untuk Pratinjau Penuh (A4)
+                  </span>
                 </div>
               </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveView("studio");
+                  setStudioTab("front");
+                }}
+                className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs border border-blue-200 shadow-xs transition-colors cursor-pointer"
+              >
+                <Palette size={14} />
+                Buka &amp; Edit di Studio Desain Visual
+              </button>
             </div>
+          )}
+
+          {/* Fullscreen A4 Modal Preview for Front Side */}
+          {mounted && frontModalOpen && createPortal(
+            <div
+              onClick={(e) => {
+                if (e.target === e.currentTarget) setFrontModalOpen(false);
+              }}
+              className="fixed inset-0 z-[99999] overflow-y-auto bg-stone-950/80 backdrop-blur-xs p-4 sm:p-6 animate-in fade-in duration-150 cursor-pointer"
+            >
+              <div className="min-h-full flex items-center justify-center pointer-events-none">
+                <div
+                  onClick={(e) => e.stopPropagation()}
+                  className="relative w-full max-w-5xl bg-stone-900 rounded-3xl border border-stone-800 shadow-2xl p-4 sm:p-6 space-y-4 pointer-events-auto my-auto animate-in zoom-in-95 duration-150 cursor-default"
+                >
+                  {/* Modal Top Bar */}
+                  <div className="flex items-center justify-between pb-3 border-b border-stone-800 text-white">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center border border-blue-500/30">
+                        <Award size={16} />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-bold text-white">Pratinjau Sisi Depan (Sertifikat)</h3>
+                        <p className="text-[11px] text-stone-400 font-mono">Format A4 Landscape (297 × 210 mm)</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFrontModalOpen(false);
+                          setActiveView("studio");
+                          setStudioTab("front");
+                        }}
+                        className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors cursor-pointer"
+                      >
+                        Buka di Studio
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setFrontModalOpen(false)}
+                        className="p-1.5 rounded-xl text-stone-400 hover:text-white hover:bg-stone-800 transition-colors cursor-pointer"
+                        aria-label="Tutup"
+                      >
+                        <X size={18} />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Real A4 Landscape Preview Card */}
+                  <div className="w-full flex justify-center py-2">
+                    <div className="w-full max-w-[1000px] shadow-2xl rounded-2xl overflow-hidden bg-white">
+                      {form.templateConfig && form.templateConfig.elements?.length > 0 ? (
+                        <CertificateCanvasRenderer
+                          config={form.templateConfig}
+                          data={frontSampleData}
+                          isInteractive={false}
+                        />
+                      ) : (
+                        <div
+                          className={cn(
+                            "w-full rounded-2xl p-8 relative overflow-hidden text-center select-none",
+                            form.templateUrl
+                              ? "bg-stone-900 border-2 border-stone-700/60"
+                              : "bg-white border-4 border-amber-900/10"
+                          )}
+                          style={{ aspectRatio: "297 / 210" }}
+                        >
+                          {form.templateUrl && (
+                            <img
+                              src={form.templateUrl}
+                              alt="Template Background"
+                              className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none"
+                            />
+                          )}
+                          <div
+                            className={cn(
+                              "rounded-2xl p-8 relative z-10 h-full flex flex-col justify-between",
+                              form.templateUrl
+                                ? "bg-white/85 backdrop-blur-xs border border-white/60 shadow-xs"
+                                : "border-2 border-dashed border-blue-600/30"
+                            )}
+                          >
+                            <div className="flex flex-col items-center justify-center">
+                              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-sky-600 flex items-center justify-center shadow-md mb-2">
+                                <Award size={24} className="text-white" />
+                              </div>
+                              <h4
+                                className="text-base font-bold tracking-widest uppercase text-stone-800"
+                                style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+                              >
+                                {form.issuerName || "PT. Matoh Technologies Indonesia"}
+                              </h4>
+                              <p className="text-xs uppercase tracking-widest text-blue-700 font-bold mt-1">
+                                {form.title || "Certificate of Completion"}
+                              </p>
+                            </div>
+
+                            <div>
+                              <p className="text-xs uppercase tracking-wider text-stone-400 font-medium">
+                                Diberikan kepada:
+                              </p>
+                              <h5
+                                className="text-2xl font-extrabold text-stone-900 mt-1 mb-2"
+                                style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+                              >
+                                Nama Siswa Teladan
+                              </h5>
+                              <div className="w-20 h-1 bg-gradient-to-r from-blue-600 to-sky-500 mx-auto mb-3 rounded-full" />
+                              <p className="text-xs text-stone-600 max-w-lg mx-auto leading-relaxed">
+                                {form.subtitle}
+                              </p>
+                              <div className="bg-blue-50/80 border border-blue-200/80 rounded-xl py-2 px-4 inline-block max-w-full mt-3">
+                                <p className="text-sm font-bold text-blue-950">
+                                  {courseInfo?.title || "Judul Kursus"}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="grid grid-cols-3 gap-4 pt-4 border-t border-stone-200/80 items-end text-xs">
+                              <div className="text-left">
+                                <p className="font-serif italic text-stone-800 text-sm">
+                                  {form.signatoryName1 || "Ahmad Fadhil"}
+                                </p>
+                                <div className="w-24 h-px bg-stone-300 my-1" />
+                                <p className="font-medium text-stone-600 text-[11px]">{form.signatoryRole1}</p>
+                              </div>
+
+                              <div className="flex flex-col items-center">
+                                <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 mb-1">
+                                  <ShieldCheck size={20} />
+                                </div>
+                                <span className="text-[10px] font-bold text-amber-800 uppercase tracking-wider">
+                                  VERIFIED OFFICIAL
+                                </span>
+                              </div>
+
+                              <div className="text-right">
+                                <p className="font-serif italic text-stone-800 text-sm">
+                                  {form.signatoryName2 || "Dr. Santoso W."}
+                                </p>
+                                <div className="w-24 h-px bg-stone-300 ml-auto my-1" />
+                                <p className="font-medium text-stone-600 text-[11px]">{form.signatoryRole2}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>,
+            document.body
           )}
 
           <div className="p-3 bg-stone-50 rounded-xl border border-stone-200/80 text-[11px] text-stone-500 space-y-1">

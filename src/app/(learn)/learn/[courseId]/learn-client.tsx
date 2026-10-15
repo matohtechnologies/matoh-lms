@@ -43,6 +43,10 @@ import { useSession } from "next-auth/react";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { useTranslations, useLocale } from "next-intl";
+import { triggerCelebrationConfetti, triggerMicroConfetti } from "@/lib/confetti";
+import { playPopSound, playSuccessChime, playFanfareSound } from "@/lib/sound-effects";
+import { GraduationCelebrationModal } from "@/components/gamification/graduation-celebration-modal";
+import { MarkdownRenderer } from "@/components/ui/markdown-renderer";
 
 export interface LearnLesson {
   id: string;
@@ -305,6 +309,20 @@ export default function LearnPageClient({
   const [replyTexts, setReplyTexts] = useState<Record<string, string>>({});
   const [sendingReplyId, setSendingReplyId] = useState<string | null>(null);
 
+  // Gamification & Graduation Celebration State
+  const [celebrationData, setCelebrationData] = useState<{
+    isOpen: boolean;
+    courseTitle: string;
+    studentName?: string;
+    certificateCode?: string | null;
+    certificateUrl?: string | null;
+    score?: number | null;
+    isQuizScore?: boolean;
+  }>({
+    isOpen: false,
+    courseTitle: course.title,
+  });
+
   const currentIndex = allLessons.findIndex((l) => l.id === currentLesson.id);
   const prevLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : null;
   const nextLesson = currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null;
@@ -388,7 +406,14 @@ export default function LearnPageClient({
         return;
       }
       await fetchCertStatus();
-      window.open(`/certificates/${data.certificate.certificateCode}`, "_blank");
+      setCelebrationData({
+        isOpen: true,
+        courseTitle: course.title,
+        studentName: session?.user?.name || undefined,
+        certificateCode: data.certificate.certificateCode,
+        certificateUrl: `/certificates/${data.certificate.certificateCode}`,
+        isQuizScore: false,
+      });
     } catch {
       alert("Terjadi kesalahan saat mengklaim sertifikat");
     } finally {
@@ -442,6 +467,25 @@ export default function LearnPageClient({
       );
       setQuizSubmitted(true);
       fetchCertStatus();
+
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new Event("lesson-completed"));
+      }
+
+      if (attempt?.score === 100) {
+        setCelebrationData({
+          isOpen: true,
+          courseTitle: course.title,
+          studentName: session?.user?.name || undefined,
+          score: 100,
+          isQuizScore: true,
+        });
+      } else if (attempt?.passed) {
+        playSuccessChime();
+        triggerMicroConfetti();
+      } else {
+        playPopSound();
+      }
     } catch (err: unknown) {
       alert(err instanceof Error ? err.message : "Gagal menyimpan hasil kuis");
     } finally {
@@ -605,6 +649,11 @@ export default function LearnPageClient({
       return next;
     });
 
+    if (newCompleted) {
+      playPopSound();
+      triggerMicroConfetti();
+    }
+
     try {
       setSavingProgress(true);
       const res = await fetch("/api/progress", {
@@ -626,8 +675,28 @@ export default function LearnPageClient({
           return next;
         });
       } else {
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new Event("lesson-completed"));
+        }
         // Immediately synchronize certificate status with DB
         await fetchCertStatus();
+
+        // Check if user completed the final lesson
+        const nextCount = completedLessons.size + (newCompleted ? 1 : 0);
+        if (newCompleted && nextCount >= allLessons.length && allLessons.length > 0) {
+          triggerCelebrationConfetti();
+          playFanfareSound();
+          setCelebrationData({
+            isOpen: true,
+            courseTitle: course.title,
+            studentName: session?.user?.name || undefined,
+            certificateCode: certStatus?.certificate?.code || null,
+            certificateUrl: certStatus?.certificate?.code
+              ? `/certificates/${certStatus.certificate.code}`
+              : null,
+            isQuizScore: false,
+          });
+        }
       }
     } catch (err) {
       console.error("Failed to update progress:", err);
@@ -723,6 +792,11 @@ export default function LearnPageClient({
 
       await fetchAssignments();
       fetchCertStatus();
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new Event("lesson-completed"));
+      }
+      playSuccessChime();
+      triggerMicroConfetti();
       setSubmissionUrlInput((prev) => ({ ...prev, [assignmentId]: "" }));
       setSubmissionFileInput((prev) => {
         const updated = { ...prev };
@@ -1423,8 +1497,8 @@ export default function LearnPageClient({
               <div className="space-y-4">
                 <h2 className="text-xl font-bold text-stone-100">{currentLesson.title}</h2>
                 {currentLesson.content ? (
-                  <div className="bg-stone-900 border border-stone-800 rounded-2xl p-6 text-sm text-stone-200 leading-relaxed whitespace-pre-wrap">
-                    {currentLesson.content}
+                  <div className="bg-stone-900 border border-stone-800 rounded-2xl p-6 sm:p-7 text-sm text-stone-200 leading-relaxed shadow-lg">
+                    <MarkdownRenderer content={currentLesson.content} dark={true} />
                   </div>
                 ) : (
                   <div className="bg-stone-900/60 border border-stone-800 rounded-2xl p-6 text-center text-sm text-stone-500">
@@ -2729,6 +2803,18 @@ export default function LearnPageClient({
           </div>
         </div>
       </div>
+
+      {/* Gamification Interactive Graduation Celebration Modal */}
+      <GraduationCelebrationModal
+        isOpen={celebrationData.isOpen}
+        onClose={() => setCelebrationData((prev) => ({ ...prev, isOpen: false }))}
+        courseTitle={celebrationData.courseTitle}
+        studentName={celebrationData.studentName}
+        certificateCode={celebrationData.certificateCode}
+        certificateUrl={celebrationData.certificateUrl}
+        score={celebrationData.score}
+        isQuizScore={celebrationData.isQuizScore}
+      />
     </div>
   );
 }
