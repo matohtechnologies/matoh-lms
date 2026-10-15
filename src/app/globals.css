@@ -202,6 +202,86 @@
   animation: fadeIn 0.4s ease forwards;
 }
 
+/* Floating Badges Levitation Animations */
+@keyframes floatGentle {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-9px) rotate(0.8deg);
+  }
+}
+
+@keyframes floatGentleReverse {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(8px) rotate(-0.8deg);
+  }
+}
+
+.animate-float-gentle {
+  animation: floatGentle 4.2s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-float-gentle-reverse {
+  animation: floatGentleReverse 5s ease-in-out infinite;
+  animation-delay: 0.6s;
+  will-change: transform;
+}
+
+/* Smooth organic ambient blob motion behind hero image */
+@keyframes blobDrift {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1) rotate(0deg);
+  }
+  33% {
+    transform: translate(16px, -14px) scale(1.06) rotate(3deg);
+  }
+  66% {
+    transform: translate(-14px, 12px) scale(0.96) rotate(-2deg);
+  }
+}
+
+@keyframes blobDriftReverse {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1) rotate(0deg);
+  }
+  33% {
+    transform: translate(-16px, 14px) scale(0.95) rotate(-3deg);
+  }
+  66% {
+    transform: translate(14px, -12px) scale(1.05) rotate(2deg);
+  }
+}
+
+@keyframes spinUltraSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-blob-drift {
+  animation: blobDrift 9s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-blob-drift-reverse {
+  animation: blobDriftReverse 11s ease-in-out infinite;
+  animation-delay: 1s;
+  will-change: transform;
+}
+
+.animate-spin-ultra-slow {
+  animation: spinUltraSlow 35s linear infinite;
+  will-change: transform;
+}
+
 .animate-shimmer {
   background: linear-gradient(90deg, 
     hsl(var(--muted)) 25%, 

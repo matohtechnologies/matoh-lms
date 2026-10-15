@@ -76,6 +76,124 @@ async function getRecentReviews() {
   }
 }
 
+function ColorfulLightbulbIcon({ className = "w-7 h-7" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="bulbGlowGrad" cx="35%" cy="35%" r="65%">
+          <stop offset="0%" stopColor="#FEF08A" />
+          <stop offset="55%" stopColor="#FBBF24" />
+          <stop offset="100%" stopColor="#F59E0B" />
+        </radialGradient>
+        <linearGradient id="bulbBaseGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#94A3B8" />
+          <stop offset="50%" stopColor="#CBD5E1" />
+          <stop offset="100%" stopColor="#64748B" />
+        </linearGradient>
+      </defs>
+
+      {/* Light Rays */}
+      <path d="M16 2V5" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" />
+      <path d="M6.5 6.5L8.6 8.6" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" />
+      <path d="M2.5 16H5.5" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" />
+      <path d="M25.5 6.5L23.4 8.6" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" />
+      <path d="M26.5 16H29.5" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" />
+
+      {/* Glass Bulb Body */}
+      <path
+        d="M16 6C11.58 6 8 9.58 8 14C8 16.92 9.57 19.48 11.91 20.87C12.59 21.27 13 22.01 13 22.8V23C13 23.55 13.45 24 14 24H18C18.55 24 19 23.55 19 23V22.8C19 22.01 19.41 21.27 20.09 20.87C22.43 19.48 24 16.92 24 14C24 9.58 20.42 6 16 6Z"
+        fill="url(#bulbGlowGrad)"
+        stroke="#D97706"
+        strokeWidth="1.2"
+      />
+
+      {/* Internal Glowing Filament */}
+      <path
+        d="M13.5 15.5L15 12.5L17 15.5L18.5 12.5"
+        stroke="#EA580C"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+
+      {/* Specular White Highlight */}
+      <path
+        d="M11 11C11.8 9.5 13.2 8.5 15 8.2"
+        stroke="#FFFFFF"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+
+      {/* Base Screw Thread Metal */}
+      <rect x="13" y="24" width="6" height="2" rx="0.5" fill="url(#bulbBaseGrad)" stroke="#475569" strokeWidth="0.5" />
+      <rect x="13.5" y="26.5" width="5" height="1.8" rx="0.5" fill="url(#bulbBaseGrad)" stroke="#475569" strokeWidth="0.5" />
+      <path d="M14 28.5C14 29.3 14.9 30 16 30C17.1 30 18 29.3 18 28.5H14Z" fill="#334155" />
+    </svg>
+  );
+}
+
+function ColorfulGraduationIcon({ className = "w-7 h-7" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="capTopGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#3B82F6" />
+          <stop offset="100%" stopColor="#1D4ED8" />
+        </linearGradient>
+        <linearGradient id="capBottomGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#1E40AF" />
+          <stop offset="100%" stopColor="#0F172A" />
+        </linearGradient>
+        <linearGradient id="goldTasselGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#FEF08A" />
+          <stop offset="50%" stopColor="#F59E0B" />
+          <stop offset="100%" stopColor="#D97706" />
+        </linearGradient>
+        <linearGradient id="diplomaGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#FFFFFF" />
+          <stop offset="100%" stopColor="#F1F5F9" />
+        </linearGradient>
+      </defs>
+
+      {/* Rolled Diploma parchment in background */}
+      <rect x="5.5" y="22" width="21" height="5.5" rx="2.75" fill="url(#diplomaGrad)" stroke="#CBD5E1" strokeWidth="1" />
+      {/* Red Ribbon on Diploma */}
+      <rect x="14" y="22" width="4" height="5.5" fill="#EF4444" />
+      <path d="M14.5 27.5L13 31L16 29.5L18.5 31L17.5 27.5" fill="#DC2626" />
+
+      {/* Skull Cap underside */}
+      <path
+        d="M10 13.5V18.5C10 20.8 12.7 22.5 16 22.5C19.3 22.5 22 20.8 22 18.5V13.5L16 16.5L10 13.5Z"
+        fill="url(#capBottomGrad)"
+      />
+
+      {/* Diamond Mortarboard Top */}
+      <path
+        d="M16 4L3 10.5L16 17L29 10.5L16 4Z"
+        fill="url(#capTopGrad)"
+        stroke="#1E40AF"
+        strokeWidth="1"
+      />
+
+      {/* 3D Highlight edge */}
+      <path d="M16 5.5L26.5 10.8L16 15.8" stroke="#93C5FD" strokeWidth="1" strokeLinecap="round" opacity="0.8" />
+
+      {/* Center Gold Button */}
+      <ellipse cx="16" cy="10.5" rx="1.5" ry="1" fill="url(#goldTasselGrad)" />
+
+      {/* Golden Tassel Cord & Fringe */}
+      <path
+        d="M16 10.5C20 10.5 24 12.5 24.5 16.5L24.5 21"
+        stroke="#F59E0B"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <circle cx="24.5" cy="20" r="1.5" fill="url(#goldTasselGrad)" />
+      <path d="M23 21.5L24 25.5H25L26 21.5" stroke="#D97706" strokeWidth="1.2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export default async function HomePage() {
   const locale = await getLocale();
   const isEn = locale === "en";
@@ -316,8 +434,18 @@ export default async function HomePage() {
 
             {/* Right Column: Hero Visual Illustration (gambar-heading.svg) */}
             <div className="lg:col-span-6 relative flex items-center justify-center">
-              {/* Luminous atmospheric aura */}
-              <div className="absolute -inset-4 bg-gradient-to-tr from-blue-400/20 via-sky-300/15 to-teal-300/20 rounded-3xl blur-3xl pointer-events-none -z-10" />
+              {/* Animated Luminous Blue Background (Gerak-gerak halus) */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 overflow-visible">
+                {/* Primary moving blue glow blob */}
+                <div className="absolute w-72 h-72 sm:w-[430px] sm:h-[430px] rounded-full bg-gradient-to-tr from-blue-500/30 via-sky-400/25 to-indigo-500/25 blur-3xl animate-blob-drift" />
+
+                {/* Secondary counter-drifting cyan/sky blob */}
+                <div className="absolute w-60 h-60 sm:w-[360px] sm:h-[360px] rounded-full bg-gradient-to-bl from-sky-400/30 via-teal-300/20 to-blue-600/25 blur-3xl animate-blob-drift-reverse" />
+
+                {/* Concentric rotating ambient decorative rings */}
+                <div className="absolute w-[340px] h-[340px] sm:w-[460px] sm:h-[460px] rounded-full border border-blue-400/25 border-dashed animate-spin-ultra-slow" />
+                <div className="absolute w-[280px] h-[280px] sm:w-[380px] sm:h-[380px] rounded-full border border-sky-300/20 pointer-events-none" />
+              </div>
 
               <div className="relative w-full max-w-lg lg:max-w-xl mx-auto flex items-center justify-center">
                 <Image
@@ -331,9 +459,9 @@ export default async function HomePage() {
                 />
 
                 {/* Floating Badge 1: Top Right */}
-                <div className="absolute -top-1 -right-1 sm:top-2 sm:right-2 bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-warm rounded-2xl p-3 flex items-center gap-2.5 transition-all hover:scale-105 pointer-events-none">
-                  <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs shrink-0">
-                    💡
+                <div className="absolute -top-1 -right-1 sm:top-2 sm:right-2 bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-warm rounded-2xl p-3 flex items-center gap-2.5 transition-all hover:scale-105 pointer-events-auto animate-float-gentle">
+                  <div className="w-8 h-8 flex items-center justify-center shrink-0">
+                    <ColorfulLightbulbIcon className="w-8 h-8 drop-shadow-xs" />
                   </div>
                   <div>
                     <p className="text-[11px] font-bold text-slate-900 leading-tight">
@@ -346,9 +474,9 @@ export default async function HomePage() {
                 </div>
 
                 {/* Floating Badge 2: Bottom Left */}
-                <div className="absolute -bottom-2 -left-1 sm:bottom-4 sm:left-2 bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-warm rounded-2xl p-3 flex items-center gap-2.5 transition-all hover:scale-105 pointer-events-none">
-                  <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-xs shrink-0">
-                    🎓
+                <div className="absolute -bottom-2 -left-1 sm:bottom-4 sm:left-2 bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-warm rounded-2xl p-3 flex items-center gap-2.5 transition-all hover:scale-105 pointer-events-auto animate-float-gentle-reverse">
+                  <div className="w-8 h-8 flex items-center justify-center shrink-0">
+                    <ColorfulGraduationIcon className="w-8 h-8 drop-shadow-xs" />
                   </div>
                   <div>
                     <p className="text-[11px] font-bold text-slate-900 leading-tight">
