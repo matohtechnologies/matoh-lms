@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { Search, SlidersHorizontal, Grid, List, X, SearchX, Sparkles, RotateCcw, MessageCircle, ArrowRight } from "lucide-react";
 import { CourseCard, CourseCardSkeleton } from "@/components/courses/course-card";
 import { CourseSortSelect } from "@/components/courses/course-sort-select";
+import { CourseSearchInput } from "@/components/courses/course-search-input";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { getTranslations, getLocale } from "next-intl/server";
@@ -137,8 +138,9 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
   return (
     <div className="pt-20 bg-[#f8fafc] min-h-screen">
       {/* Header */}
-      <div className="bg-gradient-to-b from-blue-50/70 via-[#f8fafc] to-[#f8fafc] border-b border-slate-200/70 py-12 sm:py-14">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <div className="bg-gradient-to-b from-blue-50/70 via-[#f8fafc] to-[#f8fafc] border-b border-slate-200/70 py-12 sm:py-14 bg-dot-matrix relative overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[280px] bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.12)_0%,transparent_70%)] pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100/70 text-blue-800 border border-blue-200/60 text-xs font-semibold mb-3">
             <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
             <span>{isEn ? "Matoh Learning Catalog" : "Katalog Pelatihan Matoh"}</span>
@@ -155,24 +157,12 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
               : `${total} kelas terstruktur dan kurikulum industri siap membantumu menguasai skill masa depan.`}
           </p>
 
-          {/* Search bar */}
-          <form method="GET" action="/courses" className="flex flex-col sm:flex-row gap-3 max-w-2xl">
-            <div className="relative flex-1">
-              <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input
-                name="q"
-                defaultValue={params.q}
-                placeholder={t("search_placeholder")}
-                className="w-full h-12 pl-10 pr-4 rounded-2xl border border-slate-200/80 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 shadow-xs transition-all"
-              />
-            </div>
-            <button
-              type="submit"
-              className="px-6 h-12 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-sm hover:shadow-md transition-all shrink-0"
-            >
-              {isEn ? "Search" : "Cari Kelas"}
-            </button>
-          </form>
+          {/* Real-time Debounced Search bar */}
+          <CourseSearchInput
+            defaultValue={params.q}
+            placeholder={t("search_placeholder")}
+            searchButtonLabel={isEn ? "Search" : "Cari Kelas"}
+          />
         </div>
       </div>
 

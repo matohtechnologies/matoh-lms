@@ -24,8 +24,9 @@ export function VerifyIndexClient() {
   };
 
   return (
-    <div className="min-h-screen bg-[#faf8f5] pt-24 sm:pt-28 pb-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto space-y-12">
+    <div className="min-h-screen bg-[#faf8f5] pt-24 sm:pt-28 pb-16 px-4 sm:px-6 lg:px-8 bg-dot-matrix relative overflow-hidden">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.12)_0%,transparent_70%)] pointer-events-none" />
+      <div className="max-w-3xl mx-auto space-y-12 relative z-10">
         {/* Top Header with Switch Language */}
         <div className="flex flex-col items-center text-center space-y-4">
           <div className="flex items-center gap-3">

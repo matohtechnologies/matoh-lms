@@ -98,8 +98,9 @@ export default async function AboutPage() {
   return (
     <div className="pt-20 bg-[#f8fafc] min-h-screen">
       {/* Hero Header */}
-      <section className="py-20 sm:py-24 border-b border-slate-200/70 bg-gradient-to-b from-blue-50/70 via-[#f8fafc] to-[#f8fafc]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+      <section className="py-20 sm:py-24 border-b border-slate-200/70 bg-gradient-to-b from-blue-50/70 via-[#f8fafc] to-[#f8fafc] bg-dot-matrix relative overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.12)_0%,transparent_70%)] pointer-events-none" />
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200/90 text-slate-800 text-xs font-bold mb-6 shadow-2xs">
             <Image
               src="/images/matoh-logo.png"
@@ -126,8 +127,8 @@ export default async function AboutPage() {
       </section>
 
       {/* History, Milestone Timeline & Legal Standing */}
-      <section className="py-20 bg-white border-b border-slate-200/60">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-14">
+      <section className="py-20 bg-white border-b border-slate-200/60 bg-blueprint-grid relative">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-14 relative z-10">
           {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto">
             <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded-full border border-blue-200/60 inline-block mb-3">
@@ -214,19 +215,20 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* Concrete Stats */}
-      <section className="py-14 bg-[#f8fafc] border-b border-slate-200/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
+      {/* Concrete Stats (Midnight Studio Contrast) */}
+      <section className="py-16 bg-[#0B1120] text-white border-b border-slate-800 relative overflow-hidden">
+        <div className="absolute inset-0 bg-dot-matrix opacity-15 pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 divide-y sm:divide-y-0 sm:divide-x divide-slate-800/80">
             {statsList.map(({ value, label }) => (
-              <div key={label} className="text-center">
+              <div key={label} className="text-center px-4 pt-4 sm:pt-0">
                 <p
-                  className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
+                  className="text-3xl sm:text-4xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-300 tracking-tight"
                   style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
                 >
                   {value}
                 </p>
-                <p className="text-slate-500 text-xs sm:text-sm mt-1.5 font-medium">{label}</p>
+                <p className="text-slate-400 text-xs sm:text-sm mt-2 font-medium">{label}</p>
               </div>
             ))}
           </div>
@@ -234,8 +236,8 @@ export default async function AboutPage() {
       </section>
 
       {/* 4 Pedagogical Pillars */}
-      <section className="py-20 bg-white border-b border-slate-200/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <section className="py-20 bg-white border-b border-slate-200/60 bg-dot-matrix-slate relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded-full border border-blue-200/60 inline-block mb-3">
               {isEn ? "Core Pillars" : "Keyakinan & Pilar Kami"}
@@ -257,7 +259,7 @@ export default async function AboutPage() {
             {pillars.map((p) => (
               <div
                 key={p.num}
-                className="bg-[#f8fafc] rounded-3xl border border-slate-200/80 p-7 hover:shadow-warm transition-all group flex flex-col justify-between"
+                className="bento-card bg-white rounded-3xl border border-slate-200/80 p-7 flex flex-col justify-between group"
               >
                 <div>
                   <span className="font-mono text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-200/60 inline-block mb-5">

@@ -1,9 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Poppins } from "next/font/google";
 import { getLocale } from "next-intl/server";
 import LocaleProvider from "@/components/providers/locale-provider";
 import SessionProvider from "@/components/providers/session-provider";
 import { DynamicAlertProvider } from "@/components/ui/dynamic-alert-provider";
+import { OrganizationJsonLd } from "@/components/seo/organization-json-ld";
+import { FloatingActionDock } from "@/components/ui/floating-action-dock";
 import "./globals.css";
 
 const inter = Inter({
@@ -18,6 +20,15 @@ const poppins = Poppins({
   variable: "--font-poppins",
   display: "swap",
 });
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#2563eb" },
+    { media: "(prefers-color-scheme: dark)", color: "#0B1120" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+};
 
 export const metadata: Metadata = {
   title: {
@@ -63,11 +74,15 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} className={`${inter.variable} ${poppins.variable}`}>
+      <head>
+        <OrganizationJsonLd />
+      </head>
       <body className="font-sans antialiased">
         <LocaleProvider initialLocale={locale}>
           <SessionProvider>
             <DynamicAlertProvider>
               {children}
+              <FloatingActionDock />
             </DynamicAlertProvider>
           </SessionProvider>
         </LocaleProvider>

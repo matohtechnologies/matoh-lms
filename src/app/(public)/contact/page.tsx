@@ -122,8 +122,9 @@ export default async function ContactPage() {
   return (
     <div className="pt-20 bg-[#f8fafc] min-h-screen">
       {/* Hero Header */}
-      <section className="py-16 sm:py-20 border-b border-stone-200/70 bg-gradient-to-b from-blue-50/60 via-[#f8fafc] to-[#f8fafc]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+      <section className="py-16 sm:py-20 border-b border-stone-200/70 bg-gradient-to-b from-blue-50/60 via-[#f8fafc] to-[#f8fafc] bg-dot-matrix relative overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.12)_0%,transparent_70%)] pointer-events-none" />
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/70 text-blue-700 text-xs font-bold mb-4 shadow-2xs">
             <MessageSquare size={14} className="text-blue-600" />
             {isEn ? "Student Advisory & Academic Support" : "Layanan Siswa & Konsultasi Akademik"}
@@ -165,7 +166,7 @@ export default async function ContactPage() {
                   return (
                     <div
                       key={c.title}
-                      className="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-2xs hover:shadow-warm transition-all group"
+                      className="bento-card bg-white rounded-2xl border border-stone-200/80 p-5 shadow-2xs group"
                     >
                       <div className="flex items-start justify-between gap-3 mb-2">
                         <div className="flex items-center gap-3">
@@ -265,8 +266,8 @@ export default async function ContactPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 bg-white border-t border-stone-200/70">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+      <section className="py-16 bg-white border-t border-stone-200/70 bg-blueprint-grid relative">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
           <div className="text-center mb-10">
             <span className="text-[11px] font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded-md border border-blue-200/60">
               {isEn ? "Frequently Asked Questions" : "Pertanyaan Populer"}
@@ -283,7 +284,7 @@ export default async function ContactPage() {
             {faqs.map((f, idx) => (
               <div
                 key={idx}
-                className="p-5 rounded-2xl border border-stone-200/80 bg-white hover:border-blue-200 hover:shadow-sm transition-all"
+                className="bento-card p-5 rounded-2xl border border-stone-200/80 bg-white shadow-2xs"
               >
                 <h4 className="text-sm font-bold text-stone-900 flex items-start gap-2.5 mb-2">
                   <HelpCircle size={18} className="text-blue-600 shrink-0 mt-0.5" />

@@ -162,7 +162,7 @@ export function Footer() {
               {PAYMENT_METHODS.map(({ name, component: Component }) => (
                 <div
                   key={name}
-                  className="group opacity-50 hover:opacity-100 hover:scale-105 transition-all duration-200 cursor-pointer select-none will-change-transform"
+                  className="group opacity-50 hover:opacity-100 hover:scale-105 transition-transform transition-opacity duration-200 cursor-pointer select-none"
                   title={t("payment_method_item", { name })}
                 >
                   <Component className="h-6 sm:h-7 w-auto" />
