@@ -302,6 +302,9 @@
   },
   "footer": {
     "tagline": "Trusted online learning platform to develop your skills and professional career.",
+    "brand_desc": "PT. Matoh Technologies Indonesia (Ministry of Law and Human Rights Decree: AHU-064920.AH.01.30.Year 2024). Premier applied digital technology learning center for businesses (MSMEs), academics, and students.",
+    "address_line": "Jl. RAMUSEL I/7A, Rawamangun, East Jakarta 13220",
+    "contact_line": "Hotline: 0812-1010-6680 | info@matohtechnologies.com",
     "platform": "Platform",
     "all_courses": "All Courses",
     "about_us": "About Us",
@@ -316,9 +319,14 @@
     "newsletter_desc": "Get the latest course releases and learning tips delivered straight to your inbox.",
     "email_placeholder": "your@email.com",
     "subscribe": "Subscribe",
+    "payment_methods_title": "Official Payment Methods",
+    "payment_method_item": "Official Payment Method {name}",
+    "ssl_encrypted": "256-Bit SSL Encrypted",
+    "legal_ahu": "Decree AHU-064920.2024",
     "rights": "All rights reserved.",
     "made_with": "Made with",
-    "in_indonesia": "in Indonesia"
+    "in_indonesia": "in Indonesia",
+    "country": "Indonesia"
   },
   "common": {
     "loading": "Loading...",

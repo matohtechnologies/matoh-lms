@@ -55,11 +55,11 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-xs leading-relaxed text-stone-400 mb-3">
-              PT. Matoh Technologies Indonesia (SK Kemenkumham: AHU-064920.AH.01.30.Tahun 2024). Pusat pembelajaran penerapan teknologi digital terbaik bagi pelaku usaha (UMKM), akademisi, dan peserta didik.
+              {t("brand_desc")}
             </p>
             <p className="text-xs text-stone-500 mb-5 leading-normal">
-              Jl. RAMUSEL I/7A, Rawamangun, Jakarta Timur 13220<br />
-              Hotline: 0812-1010-6680 | info@matohtechnologies.com
+              {t("address_line")}<br />
+              {t("contact_line")}
             </p>
             <div className="flex items-center gap-3">
               {[
@@ -156,15 +156,14 @@ export function Footer() {
           {/* Payment Methods */}
           <div className="space-y-2.5">
             <p className="text-[11px] font-medium uppercase tracking-wider text-stone-400 flex items-center gap-1.5">
-              <CreditCard size={13} className="text-stone-400" />
-              <span>Metode Pembayaran Resmi (Midtrans)</span>
+              <span>{t("payment_methods_title")}</span>
             </p>
             <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-1">
               {PAYMENT_METHODS.map(({ name, component: Component }) => (
                 <div
                   key={name}
-                  className="group grayscale opacity-50 hover:grayscale-0 hover:opacity-100 hover:scale-105 transition-all duration-300 cursor-pointer select-none"
-                  title={`Metode Pembayaran Resmi ${name}`}
+                  className="group opacity-50 hover:opacity-100 hover:scale-105 transition-all duration-200 cursor-pointer select-none will-change-transform"
+                  title={t("payment_method_item", { name })}
                 >
                   <Component className="h-6 sm:h-7 w-auto" />
                 </div>
@@ -176,11 +175,11 @@ export function Footer() {
           <div className="flex flex-wrap items-center lg:justify-end gap-5 text-xs text-stone-400">
             <div className="flex items-center gap-1.5 text-stone-400 hover:text-stone-200 transition-colors">
               <Lock size={13} className="text-stone-400 shrink-0" />
-              <span className="text-[11px] font-medium">256-Bit SSL Encrypted</span>
+              <span className="text-[11px] font-medium">{t("ssl_encrypted")}</span>
             </div>
             <div className="flex items-center gap-1.5 text-stone-400 hover:text-stone-200 transition-colors">
               <ShieldCheck size={13} className="text-stone-400 shrink-0" />
-              <span className="text-[11px] font-medium">SK AHU-064920.2024</span>
+              <span className="text-[11px] font-medium">{t("legal_ahu")}</span>
             </div>
           </div>
         </div>
@@ -192,7 +191,7 @@ export function Footer() {
           <div className="flex items-center gap-1 text-sm text-stone-500">
             <span>Make You Ready Digital</span>
             <span className="mx-1">•</span>
-            <span>Indonesia</span>
+            <span>{t("country")}</span>
           </div>
         </div>
       </div>

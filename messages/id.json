@@ -302,6 +302,9 @@
   },
   "footer": {
     "tagline": "Platform belajar online terpercaya untuk mengembangkan skill dan karir profesional Anda.",
+    "brand_desc": "PT. Matoh Technologies Indonesia (SK Kemenkumham: AHU-064920.AH.01.30.Tahun 2024). Pusat pembelajaran penerapan teknologi digital terbaik bagi pelaku usaha (UMKM), akademisi, dan peserta didik.",
+    "address_line": "Jl. RAMUSEL I/7A, Rawamangun, Jakarta Timur 13220",
+    "contact_line": "Hotline: 0812-1010-6680 | info@matohtechnologies.com",
     "platform": "Platform",
     "all_courses": "Semua Kelas",
     "about_us": "Tentang Kami",
@@ -316,9 +319,14 @@
     "newsletter_desc": "Dapatkan info kelas terbaru dan tips belajar langsung di inbox kamu.",
     "email_placeholder": "email@kamu.com",
     "subscribe": "Berlangganan",
+    "payment_methods_title": "Metode Pembayaran Resmi",
+    "payment_method_item": "Metode Pembayaran Resmi {name}",
+    "ssl_encrypted": "Terenkripsi SSL 256-Bit",
+    "legal_ahu": "SK AHU-064920.2024",
     "rights": "Hak cipta dilindungi.",
     "made_with": "Dibuat dengan",
-    "in_indonesia": "di Indonesia"
+    "in_indonesia": "di Indonesia",
+    "country": "Indonesia"
   },
   "common": {
     "loading": "Memuat...",
