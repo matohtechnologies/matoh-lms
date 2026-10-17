@@ -9,12 +9,16 @@ export function QrisLogo({ className = "h-6 w-auto" }: { className?: string }) {
       <img
         src="/images/qris-logo-white.png"
         alt="QRIS"
+        loading="lazy"
+        decoding="async"
         className="h-full w-auto object-contain block group-hover:hidden transition-all duration-300"
       />
       {/* Official Colored QRIS Logo (Hover) */}
       <img
         src="/images/qris-logo.png"
         alt="QRIS"
+        loading="lazy"
+        decoding="async"
         className="h-full w-auto object-contain hidden group-hover:block transition-all duration-300"
       />
     </span>
@@ -28,12 +32,16 @@ export function BcaLogo({ className = "h-6 w-auto" }: { className?: string }) {
       <img
         src="/images/bca-logo-white.png"
         alt="Bank BCA"
+        loading="lazy"
+        decoding="async"
         className="h-full w-auto object-contain block group-hover:hidden transition-all duration-300"
       />
       {/* Official Blue BCA Logo (Hover) */}
       <img
         src="/images/bca-logo.png"
         alt="Bank BCA"
+        loading="lazy"
+        decoding="async"
         className="h-full w-auto object-contain hidden group-hover:block transition-all duration-300"
       />
     </span>
@@ -47,12 +55,16 @@ export function MandiriLogo({ className = "h-6 w-auto" }: { className?: string }
       <img
         src="/images/mandiri-logo-white.png"
         alt="Bank Mandiri"
+        loading="lazy"
+        decoding="async"
         className="h-full w-auto object-contain block group-hover:hidden transition-all duration-300"
       />
       {/* Official Colored Mandiri Logo (Hover) */}
       <img
         src="/images/mandiri-logo.png"
         alt="Bank Mandiri"
+        loading="lazy"
+        decoding="async"
         className="h-full w-auto object-contain hidden group-hover:block transition-all duration-300"
       />
     </span>
@@ -66,12 +78,16 @@ export function BniLogo({ className = "h-6 w-auto" }: { className?: string }) {
       <img
         src="/images/bni-logo-white.png"
         alt="Bank BNI"
+        loading="lazy"
+        decoding="async"
         className="h-full w-auto object-contain block group-hover:hidden transition-all duration-300"
       />
       {/* Official Colored BNI Logo (Hover) */}
       <img
         src="/images/bni-logo.png"
         alt="Bank BNI"
+        loading="lazy"
+        decoding="async"
         className="h-full w-auto object-contain hidden group-hover:block transition-all duration-300"
       />
     </span>
@@ -85,12 +101,16 @@ export function BriLogo({ className = "h-6 w-auto" }: { className?: string }) {
       <img
         src="/images/bri-logo-white.png?v=2"
         alt="Bank BRI"
+        loading="lazy"
+        decoding="async"
         className="h-full w-auto object-contain block group-hover:hidden transition-all duration-300"
       />
       {/* Official Colored BRI Logo (Hover) */}
       <img
         src="/images/bri-logo.png?v=2"
         alt="Bank BRI"
+        loading="lazy"
+        decoding="async"
         className="h-full w-auto object-contain hidden group-hover:block transition-all duration-300"
       />
     </span>
@@ -104,12 +124,16 @@ export function GopayLogo({ className = "h-6 w-auto" }: { className?: string }) 
       <img
         src="/images/gopay-logo-white.png"
         alt="GoPay"
+        loading="lazy"
+        decoding="async"
         className="h-full w-auto object-contain block group-hover:hidden transition-all duration-300"
       />
       {/* Official Colored GoPay Logo (Hover) */}
       <img
         src="/images/gopay-logo.png"
         alt="GoPay"
+        loading="lazy"
+        decoding="async"
         className="h-full w-auto object-contain hidden group-hover:block transition-all duration-300"
       />
     </span>
@@ -123,12 +147,16 @@ export function OvoLogo({ className = "h-6 w-auto" }: { className?: string }) {
       <img
         src="/images/ovo-logo-white.png"
         alt="OVO"
+        loading="lazy"
+        decoding="async"
         className="h-full w-auto object-contain block group-hover:hidden transition-all duration-300"
       />
       {/* Official Colored OVO Logo (Hover) */}
       <img
         src="/images/ovo-logo.png"
         alt="OVO"
+        loading="lazy"
+        decoding="async"
         className="h-full w-auto object-contain hidden group-hover:block transition-all duration-300"
       />
     </span>
@@ -142,12 +170,16 @@ export function DanaLogo({ className = "h-6 w-auto" }: { className?: string }) {
       <img
         src="/images/dana-logo-white.png"
         alt="DANA"
+        loading="lazy"
+        decoding="async"
         className="h-full w-auto object-contain block group-hover:hidden transition-all duration-300"
       />
       {/* Official Colored DANA Logo (Hover) */}
       <img
         src="/images/dana-logo.png"
         alt="DANA"
+        loading="lazy"
+        decoding="async"
         className="h-full w-auto object-contain hidden group-hover:block transition-all duration-300"
       />
     </span>
@@ -161,12 +193,16 @@ export function VisaLogo({ className = "h-6 w-auto" }: { className?: string }) {
       <img
         src="/images/visa-logo-white.png"
         alt="Visa"
+        loading="lazy"
+        decoding="async"
         className="h-full w-auto object-contain block group-hover:hidden transition-all duration-300"
       />
       {/* Official Colored Visa Logo (Hover) */}
       <img
         src="/images/visa-logo.png"
         alt="Visa"
+        loading="lazy"
+        decoding="async"
         className="h-full w-auto object-contain hidden group-hover:block transition-all duration-300"
       />
     </span>
@@ -180,12 +216,16 @@ export function MastercardLogo({ className = "h-6 w-auto" }: { className?: strin
       <img
         src="/images/mastercard-logo-white.png"
         alt="Mastercard"
+        loading="lazy"
+        decoding="async"
         className="h-full w-auto object-contain block group-hover:hidden transition-all duration-300"
       />
       {/* Official Colored Mastercard Logo (Hover) */}
       <img
         src="/images/mastercard-logo.png"
         alt="Mastercard"
+        loading="lazy"
+        decoding="async"
         className="h-full w-auto object-contain hidden group-hover:block transition-all duration-300"
       />
     </span>
@@ -199,12 +239,16 @@ export function MidtransLogo({ className = "h-6 w-auto" }: { className?: string 
       <img
         src="/images/midtrans-logo-white.png"
         alt="Midtrans"
+        loading="lazy"
+        decoding="async"
         className="h-full w-auto object-contain block group-hover:hidden transition-all duration-300"
       />
       {/* Official Colored Midtrans Logo (Hover) */}
       <img
         src="/images/midtrans-logo.png"
         alt="Midtrans"
+        loading="lazy"
+        decoding="async"
         className="h-full w-auto object-contain hidden group-hover:block transition-all duration-300"
       />
     </span>
