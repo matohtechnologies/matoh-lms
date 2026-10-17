@@ -11,6 +11,9 @@ import { auth } from "@/lib/auth";
 import { formatCurrency, formatDuration } from "@/lib/utils";
 import { resolveThumbnailUrl } from "@/lib/youtube";
 import { CourseHeroMedia } from "@/components/courses/course-hero-media";
+import { CourseCompetencyBadges } from "@/components/courses/course-competency-badges";
+import { CourseCurriculumList } from "@/components/courses/course-curriculum-list";
+import { MobileStickyBar } from "@/components/courses/mobile-sticky-bar";
 import { getTranslations, getLocale } from "next-intl/server";
 import type { Metadata } from "next";
 
@@ -256,6 +259,14 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
               />
             </div>
 
+            {/* Competency & Career Outcomes Bar */}
+            <CourseCompetencyBadges
+              categoryName={displayCourse.category.name}
+              courseTitle={displayCourse.title}
+              whatYouLearn={whatYouLearn}
+              locale={locale}
+            />
+
             {/* Playable Course Hero Media */}
             <CourseHeroMedia
               title={displayCourse.title}
@@ -284,47 +295,26 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
 
             {/* Curriculum */}
             <div>
-              <h2 className="text-lg font-bold text-slate-900 mb-4" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
-                {tDetail("curriculum")}
-              </h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-bold text-slate-900" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
+                  {tDetail("curriculum")}
+                </h2>
+                {displayCourse.sections && displayCourse.sections.length > 0 && (
+                  <span className="text-xs text-slate-500 font-medium">
+                    {displayCourse.sections.length} {isEn ? "sections" : "bagian"} • {displayCourse.totalLessons ?? 0} {isEn ? "lessons" : "materi"}
+                  </span>
+                )}
+              </div>
               {displayCourse.sections && displayCourse.sections.length > 0 ? (
-                <div className="space-y-3">
-                  {displayCourse.sections.map((section, idx) => (
-                    <details key={section.id} className="group rounded-xl border border-slate-200/80 overflow-hidden" open={idx === 0}>
-                      <summary className="flex items-center justify-between p-4 bg-slate-50 cursor-pointer hover:bg-slate-100 transition-colors list-none">
-                        <div>
-                          <span className="font-semibold text-slate-900 text-sm">{section.title}</span>
-                          <span className="ml-2 text-xs text-slate-500">
-                            {section.lessons.length} {isEn ? "lessons" : "materi"}
-                          </span>
-                        </div>
-                        <ChevronDown size={16} className="text-slate-400 group-open:rotate-180 transition-transform" />
-                      </summary>
-                      <div className="divide-y divide-slate-100">
-                        {section.lessons.map((lesson) => (
-                          <div key={lesson.id} className="flex items-center gap-3 px-4 py-3">
-                            <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${lesson.isFree ? "bg-green-50" : "bg-slate-100"}`}>
-                              {lesson.isFree ? (
-                                <Play size={12} className="text-green-600 ml-0.5" />
-                              ) : (
-                                <Lock size={12} className="text-slate-400" />
-                              )}
-                            </div>
-                            <span className="text-sm text-slate-700 flex-1">{lesson.title}</span>
-                            {lesson.isFree && (
-                              <span className="text-xs text-green-600 font-medium">
-                                {tDetail("preview_lesson")}
-                              </span>
-                            )}
-                            {lesson.duration && (
-                              <span className="text-xs text-slate-400">{lesson.duration}m</span>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </details>
-                  ))}
-                </div>
+                <CourseCurriculumList
+                  sections={displayCourse.sections}
+                  courseId={displayCourse.id}
+                  isEnrolled={isEnrolled}
+                  isEn={isEn}
+                  finalPrice={finalPrice}
+                  isFreeCourse={isFree}
+                  userId={session?.user?.id}
+                />
               ) : (
                 <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 text-slate-500 text-sm">
                   {isEn ? "Course curriculum is being prepared by the instructor." : "Kurikulum kelas sedang dipersiapkan oleh instruktur."}
@@ -414,6 +404,18 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
           </div>
         </div>
       </div>
+
+      {/* Floating Mobile Bottom Purchase Bar */}
+      <MobileStickyBar
+        courseId={displayCourse.id}
+        courseTitle={displayCourse.title}
+        price={displayCourse.price}
+        discountPrice={displayCourse.discountPrice}
+        isFree={isFree}
+        isEnrolled={isEnrolled}
+        userId={session?.user?.id}
+        locale={locale}
+      />
     </div>
   );
 }

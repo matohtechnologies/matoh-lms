@@ -22,6 +22,8 @@ import { enUS, id as idLocale } from "date-fns/locale";
 import { useTranslations } from "next-intl";
 import { useAppLocale } from "@/components/providers/locale-provider";
 import { AddToLinkedInButton } from "@/components/certificates/add-to-linkedin-button";
+import { OfficialEmbossedSeal } from "@/components/certificates/official-embossed-seal";
+import { LinkedInCredentialPreview } from "@/components/certificates/linkedin-credential-preview";
 import type { TranscriptAssessmentItem } from "@/components/certificates/certificate-transcript-card";
 
 interface VerifyClientProps {
@@ -123,15 +125,78 @@ export function VerifyClient({
   };
 
   return (
-    <div className="space-y-8">
-      {/* 1. Official Verified Hero Banner */}
-      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-emerald-950 via-stone-900 to-slate-950 border border-emerald-500/30 shadow-2xl p-6 sm:p-10 text-white">
+    <div className="space-y-8 print-page-wrapper">
+      {/* Print Stylesheet for A4 Portrait Document Standard */}
+      <style jsx global>{`
+        @media print {
+          header, nav, footer, .no-print {
+            display: none !important;
+          }
+          body {
+            background: white !important;
+            color: black !important;
+            padding: 0 !important;
+            margin: 0 !important;
+          }
+          .print-only {
+            display: block !important;
+          }
+          .print-page-wrapper {
+            max-width: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            box-shadow: none !important;
+          }
+          @page {
+            size: A4 portrait;
+            margin: 15mm;
+          }
+        }
+        @media screen {
+          .print-only {
+            display: none !important;
+          }
+        }
+      `}</style>
+
+      {/* Formal Print Letterhead (Kop Surat Resmi - Visible only when printed) */}
+      <div className="print-only pb-6 mb-6 border-b-2 border-stone-900">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <h1 className="text-xl font-bold uppercase tracking-tight text-stone-900">
+              PT. MATOH TECHNOLOGIES INDONESIA
+            </h1>
+            <p className="text-[11px] text-stone-700 font-medium">
+              SK Kemenkumham RI: AHU-064920.AH.01.30.Tahun 2024 • NIB Terdaftar Resmi
+            </p>
+            <p className="text-[10px] text-stone-500">
+              Jl. RAMUSEL I/7A, Rawamangun, Jakarta Timur 13220 | Hotline: 0812-1010-6680 | info@matohtechnologies.com
+            </p>
+          </div>
+          <div className="text-right shrink-0">
+            <span className="inline-block px-3 py-1 border border-stone-800 text-[11px] font-mono font-bold uppercase">
+              {t("badge_status")}
+            </span>
+            <p className="text-[10px] text-stone-500 mt-1">
+              Tanggal Cetak: {new Date().toLocaleDateString(isEn ? "en-US" : "id-ID", { dateStyle: "long" })}
+            </p>
+          </div>
+        </div>
+        <div className="text-center pt-4">
+          <h2 className="text-sm font-bold uppercase tracking-wider text-stone-900 underline underline-offset-4">
+            SURAT KETERANGAN VERIFIKASI KEABSAHAN SERTIFIKAT KOMPETENSI RESMI
+          </h2>
+        </div>
+      </div>
+
+      {/* 1. Official Verified Hero Banner (Web Hero - Hidden in print) */}
+      <div className="no-print relative rounded-3xl overflow-hidden bg-gradient-to-br from-emerald-950 via-stone-900 to-slate-950 border border-emerald-500/30 shadow-2xl p-6 sm:p-10 text-white">
         {/* Glow ambient background elements */}
         <div className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-emerald-500/15 blur-3xl pointer-events-none" />
         <div className="absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-teal-500/10 blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-3">
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div className="space-y-3 flex-1">
             {/* Verification Status Pill & Language Switcher on Hero */}
             <div className="flex flex-wrap items-center gap-2.5">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-xs sm:text-sm font-bold tracking-wide shadow-sm">
@@ -152,33 +217,37 @@ export function VerifyClient({
             </p>
           </div>
 
-          {/* QR & Serial Box on Hero */}
-          <div className="shrink-0 bg-stone-900/90 border border-emerald-500/30 rounded-2xl p-4 flex items-center gap-4 shadow-xl">
-            {qrCodeUrl ? (
-              <div className="w-20 h-20 rounded-xl bg-white p-1 border border-stone-700 shadow-sm shrink-0 flex items-center justify-center">
-                <img
-                  src={qrCodeUrl}
-                  alt="Barcode Verifikasi"
-                  className="w-full h-full object-contain block"
-                />
-              </div>
-            ) : (
-              <div className="w-20 h-20 rounded-xl bg-stone-800 flex items-center justify-center text-stone-400">
-                <ShieldCheck size={32} />
-              </div>
-            )}
-            <div className="space-y-1">
-              <span className="text-[10px] uppercase font-bold text-emerald-400 tracking-wider">
-                {t("unique_credential_id")}
-              </span>
-              <p className="font-mono text-sm sm:text-base font-bold text-white tracking-wide">
-                {certificateCode}
-              </p>
-              <div className="flex items-center gap-1.5 pt-1">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-[11px] font-medium text-emerald-300">
-                  {t("active_registered")}
+          {/* Holographic Embossed Seal + QR & Serial Box on Hero */}
+          <div className="flex flex-wrap sm:flex-nowrap items-center gap-4 shrink-0">
+            <OfficialEmbossedSeal size="md" className="hidden sm:flex" />
+
+            <div className="bg-stone-900/90 border border-emerald-500/30 rounded-2xl p-4 flex items-center gap-4 shadow-xl">
+              {qrCodeUrl ? (
+                <div className="w-20 h-20 rounded-xl bg-white p-1 border border-stone-700 shadow-sm shrink-0 flex items-center justify-center">
+                  <img
+                    src={qrCodeUrl}
+                    alt="Barcode Verifikasi"
+                    className="w-full h-full object-contain block"
+                  />
+                </div>
+              ) : (
+                <div className="w-20 h-20 rounded-xl bg-stone-800 flex items-center justify-center text-stone-400">
+                  <ShieldCheck size={32} />
+                </div>
+              )}
+              <div className="space-y-1">
+                <span className="text-[10px] uppercase font-bold text-emerald-400 tracking-wider">
+                  {t("unique_credential_id")}
                 </span>
+                <p className="font-mono text-sm sm:text-base font-bold text-white tracking-wide">
+                  {certificateCode}
+                </p>
+                <div className="flex items-center gap-1.5 pt-1">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-[11px] font-medium text-emerald-300">
+                    {t("active_registered")}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -290,7 +359,7 @@ export function VerifyClient({
       </div>
 
       {/* 3. Action Toolbar with Switch Language */}
-      <div className="bg-white rounded-3xl p-5 border border-stone-200/90 shadow-warm flex flex-wrap items-center justify-between gap-4">
+      <div className="no-print bg-white rounded-3xl p-5 border border-stone-200/90 shadow-warm flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-2.5">
           {/* View Official Full Certificate */}
           <Link
@@ -451,8 +520,20 @@ export function VerifyClient({
         </div>
       </div>
 
-      {/* 5. Quick Lookup / Verify Another Certificate */}
-      <div className="bg-stone-50 rounded-3xl p-6 sm:p-8 border border-stone-200/80 space-y-4">
+      {/* 5. LinkedIn Profile Card Simulation (Web Only) */}
+      <div className="no-print">
+        <LinkedInCredentialPreview
+          courseTitle={courseTitle}
+          certificateCode={certificateCode}
+          issuerName={issuerName}
+          issuedAtFormatted={formattedDate}
+          issuedAt={issuedAt}
+          locale={locale}
+        />
+      </div>
+
+      {/* 6. Quick Lookup / Verify Another Certificate (Web Only) */}
+      <div className="no-print bg-stone-50 rounded-3xl p-6 sm:p-8 border border-stone-200/80 space-y-4">
         <div className="max-w-xl">
           <h3 className="text-base font-bold text-stone-900 flex items-center gap-2">
             <Search size={18} className="text-blue-600" />

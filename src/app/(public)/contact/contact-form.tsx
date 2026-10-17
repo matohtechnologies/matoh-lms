@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Send, CheckCircle2, Phone, ShieldCheck, Loader2 } from "lucide-react";
+import { Send, CheckCircle2, Phone, ShieldCheck, Loader2, Sparkles, Building2, ExternalLink, HelpCircle } from "lucide-react";
+import Link from "next/link";
 import { useAppLocale } from "@/components/providers/locale-provider";
 
 interface ContactFormProps {
@@ -55,6 +56,7 @@ export function ContactForm({ locale: propLocale }: ContactFormProps) {
     email: "",
     phone: "",
     category: "Konsultasi Kelas & Karir",
+    institution: "",
     message: "",
   });
 
@@ -85,6 +87,7 @@ export function ContactForm({ locale: propLocale }: ContactFormProps) {
       email: "",
       phone: "",
       category: "Konsultasi Kelas & Karir",
+      institution: "",
       message: "",
     });
     setSubmitted(false);
@@ -94,10 +97,36 @@ export function ContactForm({ locale: propLocale }: ContactFormProps) {
     categoryOptions.find((c) => c.value === formData.category)?.label ||
     formData.category;
 
+  const isCorporateOrB2B =
+    formData.category === "Pelatihan Perusahaan (Corporate Training)";
+
+  const smartHint = (() => {
+    switch (formData.category) {
+      case "Pelatihan Perusahaan (Corporate Training)":
+        return isEn
+          ? "🏢 Corporate & In-House training includes customized curricula, learner completion reports, and official corporate VAT invoices (Faktur Pajak)."
+          : "🏢 Pelatihan Corporate / In-House mencakup kurikulum yang disesuaikan, laporan evaluasi belajar peserta, dan invoice resmi perusahaan (faktur pajak tersedia).";
+      case "Sertifikat & Verifikasi Kelulusan":
+        return isEn
+          ? "🎓 You can also verify official digital certificates instantly using unique QR credential codes on our Official Verification Portal."
+          : "🎓 Anda juga dapat melakukan verifikasi mandiri sertifikat resmi secara instan dengan nomor seri kredensial pada Portal Verifikasi Sertifikat kami.";
+      case "Konsultasi Kelas & Karir":
+        return isEn
+          ? "Our academic advisors will map your background and recommend the most realistic roadmap tailored to your specific career objectives."
+          : "Tim penasihat akademik kami akan memetakan latar belakang Anda dan merekomendasikan jalur belajar yang paling realistis menuju tujuan karir Anda.";
+      case "Pendaftaran Program Beasiswa/Prakerja":
+        return isEn
+          ? "💡 Special student and scholarship pricing discounts are available for verified university students and eligible SME owners."
+          : "💡 Diskon program edukasi dan beasiswa tersedia bagi mahasiswa aktif dan pelaku UMKM terverifikasi.";
+      default:
+        return null;
+    }
+  })();
+
   const waMessage = encodeURIComponent(
     isEn
-      ? `Hello Matoh Technologies team, my name is ${formData.name || "Prospective Student"}.\nI have an inquiry regarding: ${selectedCategoryLabel}.\nMessage: ${formData.message || "Please provide more details regarding your learning programs."}`
-      : `Halo Tim Matoh Technologies, perkenalkan saya ${formData.name || "Calon Peserta"}.\nSaya ingin berkonsultasi mengenai: ${selectedCategoryLabel}.\nPesan: ${formData.message || "Mohon informasi lebih lanjut seputar program pelatihan."}`
+      ? `Hello Matoh Technologies team, my name is ${formData.name || "Prospective Student"}${formData.institution ? ` from ${formData.institution}` : ""}.\nI have an inquiry regarding: ${selectedCategoryLabel}.\nMessage: ${formData.message || "Please provide more details regarding your learning programs."}`
+      : `Halo Tim Matoh Technologies, perkenalkan saya ${formData.name || "Calon Peserta"}${formData.institution ? ` dari ${formData.institution}` : ""}.\nSaya ingin berkonsultasi mengenai: ${selectedCategoryLabel}.\nPesan: ${formData.message || "Mohon informasi lebih lanjut seputar program pelatihan."}`
   );
 
   return (
@@ -302,8 +331,46 @@ export function ContactForm({ locale: propLocale }: ContactFormProps) {
               />
             </div>
 
-            {/* Privacy notice & Submit */}
-            <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            {/* Dynamic Institution field for Corporate / B2B */}
+            {isCorporateOrB2B && (
+              <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200/80 space-y-2 animate-in fade-in duration-200">
+                <label className="text-xs font-bold text-blue-950 block">
+                  {isEn ? "Company / Campus / Institution Name" : "Nama Perusahaan / Institusi / Kampus"}
+                </label>
+                <div className="relative">
+                  <Building2 size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-blue-500" />
+                  <input
+                    type="text"
+                    placeholder={isEn ? "e.g. PT. Mitra Teknologi or Universitas..." : "Contoh: PT. Inovasi Digital atau Universitas..."}
+                    value={formData.institution}
+                    onChange={(e) => setFormData({ ...formData, institution: e.target.value })}
+                    className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-blue-200 text-sm focus:outline-none focus:border-blue-600 bg-white"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Smart Contextual Helper Box */}
+            {smartHint && (
+              <div className="p-3.5 rounded-2xl bg-stone-50 border border-stone-200/70 text-xs text-stone-600 flex items-start gap-2.5 animate-in fade-in duration-150">
+                <Sparkles size={16} className="text-blue-600 shrink-0 mt-0.5" />
+                <div className="flex-1 leading-relaxed">
+                  <p>{smartHint}</p>
+                  {formData.category === "Sertifikat & Verifikasi Kelulusan" && (
+                    <Link
+                      href="/verify"
+                      className="inline-flex items-center gap-1 text-blue-600 font-bold hover:underline mt-1"
+                    >
+                      <span>{isEn ? "Open Certificate Verification Portal" : "Buka Portal Verifikasi Sertifikat"}</span>
+                      <ExternalLink size={12} />
+                    </Link>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Privacy notice & Action Buttons */}
+            <div className="pt-2 space-y-4">
               <div className="flex items-center gap-2 text-xs text-stone-500">
                 <ShieldCheck size={16} className="text-blue-600 shrink-0" />
                 <span>
@@ -313,23 +380,36 @@ export function ContactForm({ locale: propLocale }: ContactFormProps) {
                 </span>
               </div>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition-all shadow-xs disabled:opacity-50 shrink-0"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 size={16} className="animate-spin" />
-                    <span>{isEn ? "Sending..." : "Mengirim..."}</span>
-                  </>
-                ) : (
-                  <>
-                    <Send size={16} />
-                    <span>{isEn ? "Send Inquiry" : "Kirim Pertanyaan"}</span>
-                  </>
-                )}
-              </button>
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+                <a
+                  href={`https://wa.me/6281210106680?text=${waMessage}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-bold transition-all hover:scale-101 cursor-pointer order-2 sm:order-1"
+                  title="Chat langsung di WhatsApp"
+                >
+                  <Phone size={15} className="text-emerald-600" />
+                  <span>{isEn ? "Chat Directly on WhatsApp" : "Chat Langsung via WhatsApp"}</span>
+                </a>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm transition-all shadow-xs disabled:opacity-50 cursor-pointer order-1 sm:order-2"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 size={16} className="animate-spin" />
+                      <span>{isEn ? "Sending..." : "Mengirim..."}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send size={15} />
+                      <span>{isEn ? "Send Inquiry Message" : "Kirim Pesan Formulir"}</span>
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </form>
         )}

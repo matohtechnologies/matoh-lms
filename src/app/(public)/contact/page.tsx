@@ -43,6 +43,7 @@ export default async function ContactPage() {
       actionUrl: "https://wa.me/6281210106680?text=Halo%20Matoh%20Technologies,%20saya%20ingin%20konsultasi%20program%20pelatihan%20dan%20layanan.",
       badge: isEn ? "Hotline 1" : "Utama",
       badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
+      isLive: true,
     },
     {
       icon: Phone,
@@ -55,6 +56,7 @@ export default async function ContactPage() {
       actionUrl: "https://wa.me/6281214140084?text=Halo%20Matoh%20Technologies,%20saya%20ingin%20konsultasi%20layanan%20riset%20dan%20publikasi.",
       badge: isEn ? "Hotline 2" : "Riset & B2B",
       badgeColor: "bg-blue-50 text-blue-700 border-blue-200",
+      isLive: true,
     },
     {
       icon: Mail,
@@ -177,9 +179,20 @@ export default async function ContactPage() {
                             </p>
                           </div>
                         </div>
-                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md border ${c.badgeColor}`}>
-                          {c.badge}
-                        </span>
+                        <div className="flex flex-col items-end gap-1.5 shrink-0">
+                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md border ${c.badgeColor}`}>
+                            {c.badge}
+                          </span>
+                          {c.isLive && (
+                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/80 text-[10px] font-bold shadow-2xs">
+                              <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                              </span>
+                              <span>{isEn ? "Online Now" : "Online"}</span>
+                            </span>
+                          )}
+                        </div>
                       </div>
                       <p className="text-xs text-stone-500 mb-3">{c.subtext}</p>
                       <a

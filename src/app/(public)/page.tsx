@@ -235,106 +235,106 @@ export default async function HomePage() {
   // The 4-Pillar Modern Learning Method (Matoh Technologies Standard)
   const pillars = isEn
     ? [
-        {
-          num: "01",
-          title: "Applied MSME Digital Marketing",
-          desc: "Bridge the gap where only 40% of Indonesian MSMEs sell digitally. Learn battle-tested strategies proven to boost sales up to 70%.",
-        },
-        {
-          num: "02",
-          title: "Scientific Decision Making (AHP & ISM)",
-          desc: "Master Analytic Hierarchy Process (AHP) and Interpretive Structural Modeling (ISM) for policy makers, researchers, and corporate leadership.",
-        },
-        {
-          num: "03",
-          title: "Business Forecasting & Applied SWOT",
-          desc: "Analyze business forecasting trends, statistical modeling, and SWOT matrix to navigate market disruption and seize new opportunities.",
-        },
-        {
-          num: "04",
-          title: "Verifiable Digital Credentials",
-          desc: "Earn authenticated certificates equipped with unique tamper-proof validation QR codes and permanent institutional registry.",
-        },
-      ]
+      {
+        num: "01",
+        title: "Applied MSME Digital Marketing",
+        desc: "Bridge the gap where only 40% of Indonesian MSMEs sell digitally. Learn battle-tested strategies proven to boost sales up to 70%.",
+      },
+      {
+        num: "02",
+        title: "Scientific Decision Making (AHP & ISM)",
+        desc: "Master Analytic Hierarchy Process (AHP) and Interpretive Structural Modeling (ISM) for policy makers, researchers, and corporate leadership.",
+      },
+      {
+        num: "03",
+        title: "Business Forecasting & Applied SWOT",
+        desc: "Analyze business forecasting trends, statistical modeling, and SWOT matrix to navigate market disruption and seize new opportunities.",
+      },
+      {
+        num: "04",
+        title: "Verifiable Digital Credentials",
+        desc: "Earn authenticated certificates equipped with unique tamper-proof validation QR codes and permanent institutional registry.",
+      },
+    ]
     : [
-        {
-          num: "01",
-          title: "Digital Marketing Terapan UMKM",
-          desc: "Mengatasi kesenjangan digital di mana baru 40% UMKM memanfaatkan pemasaran digital. Dibimbing strategi praktis yang terbukti mendongkrak penjualan hingga 70%.",
-        },
-        {
-          num: "02",
-          title: "Metodologi Keputusan Ilmiah (AHP & ISM)",
-          desc: "Kuasai Analytic Hierarchy Process (AHP) dan Interpretive Structural Modeling (ISM) untuk perumusan kebijakan publik, strategi bisnis, dan riset akademik.",
-        },
-        {
-          num: "03",
-          title: "Peramalan Bisnis & Analisis SWOT",
-          desc: "Analisis peramalan tren bisnis masa depan, pemodelan statistik, dan formulasi matriks SWOT untuk menghadapi dinamika pasar dan memitigasi risiko.",
-        },
-        {
-          num: "04",
-          title: "Kredensial Digital Terverifikasi",
-          desc: "Setiap kelulusan diterbitkan sertifikat resmi ber-QR code unik yang dapat divalidasi keabsahannya oleh institusi, perguruan tinggi, dan korporasi.",
-        },
-      ];
+      {
+        num: "01",
+        title: "Digital Marketing Terapan UMKM",
+        desc: "Mengatasi kesenjangan digital di mana baru 40% UMKM memanfaatkan pemasaran digital. Dibimbing strategi praktis yang terbukti mendongkrak penjualan hingga 70%.",
+      },
+      {
+        num: "02",
+        title: "Metodologi Keputusan Ilmiah (AHP & ISM)",
+        desc: "Kuasai Analytic Hierarchy Process (AHP) dan Interpretive Structural Modeling (ISM) untuk perumusan kebijakan publik, strategi bisnis, dan riset akademik.",
+      },
+      {
+        num: "03",
+        title: "Peramalan Bisnis & Analisis SWOT",
+        desc: "Analisis peramalan tren bisnis masa depan, pemodelan statistik, dan formulasi matriks SWOT untuk menghadapi dinamika pasar dan memitigasi risiko.",
+      },
+      {
+        num: "04",
+        title: "Kredensial Digital Terverifikasi",
+        desc: "Setiap kelulusan diterbitkan sertifikat resmi ber-QR code unik yang dapat divalidasi keabsahannya oleh institusi, perguruan tinggi, dan korporasi.",
+      },
+    ];
 
   // FAQ Items tailored to eliminate friction and highlight automated LMS
   const faqItems = isEn
     ? [
-        {
-          question: "Can beginners and MSME owners join the programs?",
-          answer:
-            "Yes, absolutely. Our courses start from core fundamentals with clear, step-by-step guidance before progressing to intermediate and advanced topics.",
-        },
-        {
-          question: "Do I get lifetime access to all learning materials?",
-          answer:
-            "Yes. Once enrolled, you receive permanent 24/7 access to all video lessons, resources, practical templates, and future curriculum updates.",
-        },
-        {
-          question: "How does automated enrollment and certificate verification work?",
-          answer:
-            "Upon instant payment via QRIS or Virtual Account, you are automatically enrolled into the classroom. After finishing the curriculum, an official digital certificate with a verifiable QR code is issued immediately.",
-        },
-        {
-          question: "What payment methods are supported?",
-          answer:
-            "We support instant automated payments via QRIS, GoPay, ShopeePay, Virtual Accounts (BCA, Mandiri, BNI, BRI), and Credit/Debit Cards.",
-        },
-        {
-          question: "Can academic institutions request in-house workshops for AHP, ISM, or research?",
-          answer:
-            "Yes. We regularly conduct tailored workshops for universities, research centers, and government bodies. Contact our research hotline on WhatsApp.",
-        },
-      ]
+      {
+        question: "Can beginners and MSME owners join the programs?",
+        answer:
+          "Yes, absolutely. Our courses start from core fundamentals with clear, step-by-step guidance before progressing to intermediate and advanced topics.",
+      },
+      {
+        question: "Do I get lifetime access to all learning materials?",
+        answer:
+          "Yes. Once enrolled, you receive permanent 24/7 access to all video lessons, resources, practical templates, and future curriculum updates.",
+      },
+      {
+        question: "How does automated enrollment and certificate verification work?",
+        answer:
+          "Upon instant payment via QRIS or Virtual Account, you are automatically enrolled into the classroom. After finishing the curriculum, an official digital certificate with a verifiable QR code is issued immediately.",
+      },
+      {
+        question: "What payment methods are supported?",
+        answer:
+          "We support instant automated payments via QRIS, GoPay, ShopeePay, Virtual Accounts (BCA, Mandiri, BNI, BRI), and Credit/Debit Cards.",
+      },
+      {
+        question: "Can academic institutions request in-house workshops for AHP, ISM, or research?",
+        answer:
+          "Yes. We regularly conduct tailored workshops for universities, research centers, and government bodies. Contact our research hotline on WhatsApp.",
+      },
+    ]
     : [
-        {
-          question: "Apakah pemula dan pelaku UMKM tanpa latar belakang IT bisa mengikuti?",
-          answer:
-            "Tentu saja. Kelas kami dirancang khusus dengan langkah-langkah praktis dan aplikatif agar langsung dapat diterapkan pada bisnis sehari-hari.",
-        },
-        {
-          question: "Apakah akses video dan materi berlaku seumur hidup?",
-          answer:
-            "Ya. Sekali mendaftar, Anda memiliki akses permanen seumur hidup (24/7 lifetime access) ke seluruh modul video, file latihan, dan pembaruan materi.",
-        },
-        {
-          question: "Bagaimana cara kerja pendaftaran otomatis dan sertifikasi digital?",
-          answer:
-            "Setelah pembayaran instan terverifikasi melalui QRIS atau Virtual Account, Anda langsung otomatis terdaftar di kelas. Setelah menuntaskan seluruh materi, sertifikat resmi ber-QR code diterbitkan secara otomatis.",
-        },
-        {
-          question: "Metode pembayaran apa saja yang didukung?",
-          answer:
-            "Kami mendukung pembayaran instan otomatis melalui QRIS, GoPay, ShopeePay, Virtual Account semua bank utama (BCA, Mandiri, BNI, BRI), hingga Kartu Kredit/Debit.",
-        },
-        {
-          question: "Apakah institusi kampus dapat mengajukan pelatihan khusus AHP, ISM, atau metodologi riset?",
-          answer:
-            "Ya, kami secara berkala menyelenggarakan workshop in-house untuk dosen, peneliti, dan mahasiswa pascasarjana. Hubungi hotline riset kami di WhatsApp.",
-        },
-      ];
+      {
+        question: "Apakah pemula dan pelaku UMKM tanpa latar belakang IT bisa mengikuti?",
+        answer:
+          "Tentu saja. Kelas kami dirancang khusus dengan langkah-langkah praktis dan aplikatif agar langsung dapat diterapkan pada bisnis sehari-hari.",
+      },
+      {
+        question: "Apakah akses video dan materi berlaku seumur hidup?",
+        answer:
+          "Ya. Sekali mendaftar, Anda memiliki akses permanen seumur hidup (24/7 lifetime access) ke seluruh modul video, file latihan, dan pembaruan materi.",
+      },
+      {
+        question: "Bagaimana cara kerja pendaftaran otomatis dan sertifikasi digital?",
+        answer:
+          "Setelah pembayaran instan terverifikasi melalui QRIS atau Virtual Account, Anda langsung otomatis terdaftar di kelas. Setelah menuntaskan seluruh materi, sertifikat resmi ber-QR code diterbitkan secara otomatis.",
+      },
+      {
+        question: "Metode pembayaran apa saja yang didukung?",
+        answer:
+          "Kami mendukung pembayaran instan otomatis melalui QRIS, GoPay, ShopeePay, Virtual Account semua bank utama (BCA, Mandiri, BNI, BRI), hingga Kartu Kredit/Debit.",
+      },
+      {
+        question: "Apakah institusi kampus dapat mengajukan pelatihan khusus AHP, ISM, atau metodologi riset?",
+        answer:
+          "Ya, kami secara berkala menyelenggarakan workshop in-house untuk dosen, peneliti, dan mahasiswa pascasarjana. Hubungi hotline riset kami di WhatsApp.",
+      },
+    ];
 
   return (
     <div className="bg-white text-slate-900 selection:bg-blue-100 selection:text-blue-900">
@@ -369,26 +369,24 @@ export default async function HomePage() {
                   : "Pusat pembelajaran penerapan teknologi digital terbaik bagi pelaku usaha (UMKM), akademisi, dan peserta didik. Kuasai Digital Marketing, Peramalan Bisnis, dan Analisis Keputusan Ilmiah (AHP & ISM) dengan sertifikasi otomatis."}
               </p>
 
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-3 pt-1">
+              {/* Action Buttons with clear primary hierarchy */}
+              <div className="flex flex-wrap items-center gap-3.5 pt-1">
                 <Link href="/courses">
                   <Button
                     size="lg"
-                    className="rounded-2xl h-13 px-7 text-sm font-semibold shadow-warm hover:shadow-warm-lg bg-blue-600 hover:bg-blue-700 transition-all hover:-translate-y-0.5"
+                    className="rounded-2xl h-14 px-8 text-sm font-bold shadow-warm-lg hover:shadow-xl bg-blue-600 hover:bg-blue-700 transition-all hover:-translate-y-0.5 cursor-pointer"
                     rightIcon={<ArrowRight size={17} />}
                   >
-                    {isEn ? "Explore Training Programs" : "Jelajahi Program Pelatihan"}
+                    {isEn ? "Explore All Programs" : "Jelajahi Program Pelatihan"}
                   </Button>
                 </Link>
 
-                <Link href="/about">
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="rounded-2xl h-13 px-6 text-sm font-semibold border-slate-200 hover:border-slate-300 bg-white/80 hover:bg-slate-50 text-slate-700 shadow-xs"
-                  >
-                    {isEn ? "About Matoh Technologies" : "Profil & Legalitas Kami"}
-                  </Button>
+                <Link
+                  href="/about"
+                  className="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-semibold text-slate-700 hover:text-blue-600 hover:bg-slate-100/80 transition-all"
+                >
+                  <span>{isEn ? "About Matoh Technologies" : "Profil & Legalitas Kami"}</span>
+                  <ArrowRight size={14} className="text-slate-400 group-hover:translate-x-0.5 transition-transform" />
                 </Link>
               </div>
 
@@ -713,8 +711,8 @@ export default async function HomePage() {
               {reviews.length > 0
                 ? tHome("testimonials_subtitle")
                 : (isEn
-                    ? "Transparent standards, industry-aligned curriculums, and lifelong guidance."
-                    : "Standar pembelajaran transparan, materi berbasis industri nyata, dan sertifikasi digital terverifikasi.")}
+                  ? "Transparent standards, industry-aligned curriculums, and lifelong guidance."
+                  : "Standar pembelajaran transparan, materi berbasis industri nyata, dan sertifikasi digital terverifikasi.")}
             </p>
           </div>
 

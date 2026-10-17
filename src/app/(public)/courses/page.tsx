@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Search, SlidersHorizontal, Grid, List } from "lucide-react";
+import { Search, SlidersHorizontal, Grid, List, X, SearchX, Sparkles, RotateCcw, MessageCircle, ArrowRight } from "lucide-react";
 import { CourseCard, CourseCardSkeleton } from "@/components/courses/course-card";
 import { CourseSortSelect } from "@/components/courses/course-sort-select";
 import { prisma } from "@/lib/prisma";
@@ -246,6 +246,55 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
 
           {/* Main content */}
           <div className="flex-1 min-w-0">
+            {/* Active Filter Chips */}
+            {(params.q || params.category || params.level) && (
+              <div className="flex flex-wrap items-center gap-2 mb-5 p-3 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider pl-1.5">
+                  {isEn ? "Active Filters:" : "Filter Aktif:"}
+                </span>
+
+                {params.q && (
+                  <a
+                    href={`/courses?${params.category ? `category=${encodeURIComponent(params.category)}&` : ""}${params.level ? `level=${params.level}&` : ""}${params.sort ? `sort=${params.sort}` : ""}`}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-semibold hover:bg-blue-100 transition-colors group"
+                    title={isEn ? "Remove search filter" : "Hapus filter pencarian"}
+                  >
+                    <span>{isEn ? "Search:" : "Kata Kunci:"} &ldquo;{params.q}&rdquo;</span>
+                    <X size={13} className="text-blue-500 group-hover:text-blue-700" />
+                  </a>
+                )}
+
+                {params.category && (
+                  <a
+                    href={`/courses?${params.q ? `q=${encodeURIComponent(params.q)}&` : ""}${params.level ? `level=${params.level}&` : ""}${params.sort ? `sort=${params.sort}` : ""}`}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-semibold hover:bg-blue-100 transition-colors group"
+                    title={isEn ? "Remove category filter" : "Hapus filter kategori"}
+                  >
+                    <span>{isEn ? "Category:" : "Kategori:"} {params.category}</span>
+                    <X size={13} className="text-blue-500 group-hover:text-blue-700" />
+                  </a>
+                )}
+
+                {params.level && (
+                  <a
+                    href={`/courses?${params.q ? `q=${encodeURIComponent(params.q)}&` : ""}${params.category ? `category=${encodeURIComponent(params.category)}&` : ""}${params.sort ? `sort=${params.sort}` : ""}`}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-semibold hover:bg-blue-100 transition-colors group"
+                    title={isEn ? "Remove level filter" : "Hapus filter level"}
+                  >
+                    <span>Level: {levelOptions.find((l) => l.value === params.level)?.label || params.level}</span>
+                    <X size={13} className="text-blue-500 group-hover:text-blue-700" />
+                  </a>
+                )}
+
+                <a
+                  href="/courses"
+                  className="text-xs text-rose-600 hover:text-rose-700 font-bold ml-auto px-2 py-1 rounded-lg hover:bg-rose-50 transition-colors"
+                >
+                  {isEn ? "Clear All" : "Reset Semua"}
+                </a>
+              </div>
+            )}
+
             {/* Sort bar */}
             <div className="flex items-center justify-between mb-6">
               <p className="text-sm text-slate-500">
@@ -300,13 +349,60 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-16">
-                  <div className="text-5xl mb-4">🔍</div>
-                  <h3 className="text-lg font-semibold text-slate-900 mb-2">{t("not_found_title")}</h3>
-                  <p className="text-slate-500">{t("not_found_desc")}</p>
-                  <a href="/courses" className="mt-4 inline-block text-blue-600 hover:underline text-sm">
-                    {t("reset_filter")}
-                  </a>
+                <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-8 sm:p-12 text-center max-w-xl mx-auto my-6 space-y-5 animate-in fade-in duration-200">
+                  <div className="w-16 h-16 rounded-3xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto border border-blue-100 shadow-2xs">
+                    <SearchX size={32} />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-900 mb-1.5">
+                      {isEn ? "No matching courses found" : "Kelas yang dicari belum ditemukan"}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-500 leading-relaxed max-w-md mx-auto">
+                      {params.q
+                        ? isEn
+                          ? `We couldn't find any courses matching "${params.q}". Try exploring our top topics below or reset filters.`
+                          : `Kami tidak menemukan kelas dengan kata kunci "${params.q}". Silakan coba topik populer di bawah atau reset filter.`
+                        : t("not_found_desc")}
+                    </p>
+                  </div>
+
+                  {/* Popular Topic Chips */}
+                  <div className="pt-1">
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2.5">
+                      {isEn ? "Recommended Searches" : "Topik Populer yang Direkomendasikan"}
+                    </p>
+                    <div className="flex flex-wrap items-center justify-center gap-2">
+                      {["Digital Marketing", "AHP & ISM", "SWOT", "Inovasi & Design"].map((keyword) => (
+                        <a
+                          key={keyword}
+                          href={`/courses?q=${encodeURIComponent(keyword)}`}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-50 hover:text-blue-700 text-slate-600 border border-slate-200/70 text-xs font-semibold transition-all hover:scale-102"
+                        >
+                          <Sparkles size={12} className="text-blue-600" />
+                          <span>{keyword}</span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-3">
+                    <a
+                      href="/courses"
+                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-xs"
+                    >
+                      <RotateCcw size={14} />
+                      <span>{isEn ? "Reset All Filters" : "Reset Semua Filter"}</span>
+                    </a>
+                    <a
+                      href="https://wa.me/6281210106680?text=Halo%20Matoh%20Technologies,%20saya%20mencari%20materi%20pelatihan%20khusus."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-bold transition-all"
+                    >
+                      <MessageCircle size={14} className="text-emerald-600" />
+                      <span>{isEn ? "Request Topic on WhatsApp" : "Request Topik di WhatsApp"}</span>
+                    </a>
+                  </div>
                 </div>
               )}
             </Suspense>

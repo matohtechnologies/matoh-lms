@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, CreditCard, Shield, Clock, BookOpen, Award, CheckCircle, Tag, X, AlertCircle } from "lucide-react";
+import { ArrowLeft, CreditCard, Shield, Clock, BookOpen, Award, CheckCircle, Tag, X, AlertCircle, MessageSquare, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
 import { resolveThumbnailUrl } from "@/lib/youtube";
@@ -509,17 +509,49 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
                 );
               })()}
 
-              <div className="mt-4 space-y-2">
-                {[
-                  { icon: Clock, text: isEn ? "30-day money-back guarantee" : "Garansi uang kembali 30 hari" },
-                  { icon: Award, text: isEn ? "Full lifetime access" : "Akses seumur hidup" },
-                  { icon: Shield, text: t("secure_payment") },
-                ].map(({ icon: Icon, text }) => (
-                  <div key={text} className="flex items-center gap-2 text-xs text-stone-500">
-                    <Icon size={13} className="text-stone-400" />
-                    {text}
-                  </div>
-                ))}
+              {/* Premium Checkout Reassurance Box */}
+              <div className="mt-5 pt-4 border-t border-stone-100 space-y-2.5">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-stone-500">
+                  {isEn ? "Guarantee & Learner Benefits:" : "Jaminan & Hak Istimewa Belajar:"}
+                </p>
+
+                <div className="space-y-2">
+                  {[
+                    {
+                      icon: Award,
+                      title: isEn ? "Lifetime Access" : "Akses Selamanya",
+                      desc: isEn ? "Learn at your own pace anytime" : "Akses modul & video kapan saja tanpa batas waktu",
+                    },
+                    {
+                      icon: CheckCircle2,
+                      title: isEn ? "Official QR-Coded Certificate" : "Sertifikat Resmi Ber-QR",
+                      desc: isEn ? "Permanent registry validation" : "Validasi keaslian permanen untuk rekruter/institusi",
+                    },
+                    {
+                      icon: MessageSquare,
+                      title: isEn ? "Direct Instructor Guidance" : "Dukungan Tanya Instruktur",
+                      desc: isEn ? "Discussion room & mentorship support" : "Ruang tanya jawab materi & bimbingan studi kasus",
+                    },
+                    {
+                      icon: Shield,
+                      title: isEn ? "30-Day Money-Back Guarantee" : "Garansi Uang Kembali 30 Hari",
+                      desc: isEn ? "100% risk-free enrollment" : "Bebas risiko jika kurikulum tidak sesuai harapan",
+                    },
+                  ].map(({ icon: Icon, title, desc }) => (
+                    <div
+                      key={title}
+                      className="p-2.5 rounded-xl bg-stone-50/80 border border-stone-200/60 flex items-start gap-2.5 text-xs"
+                    >
+                      <div className="w-6 h-6 rounded-lg bg-emerald-100/80 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
+                        <Icon size={13} />
+                      </div>
+                      <div>
+                        <p className="font-bold text-stone-800 leading-tight">{title}</p>
+                        <p className="text-[11px] text-stone-500 mt-0.5 leading-tight">{desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

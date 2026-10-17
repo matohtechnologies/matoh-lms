@@ -14,6 +14,7 @@ import {
   Lock,
   QrCode,
   Loader2,
+  Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -174,6 +175,25 @@ export function CertificateVerificationModal({
                   : "*Nomor seri dapat ditemukan di sudut kanan atas lembar sertifikat atau di bawah barcode."}
               </p>
             )}
+
+            {/* Quick Sample Demo Button */}
+            <div className="flex flex-wrap items-center gap-1.5 pt-1 pl-1">
+              <span className="text-[11px] text-stone-500 font-medium">
+                {isEn ? "Try sample:" : "Coba contoh:"}
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  setSerialCode("CERT-IMDT-2026-X-0001");
+                  setErrorMsg("");
+                }}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200/70 text-[11px] font-mono font-bold transition-all hover:scale-102 active:scale-98 cursor-pointer shadow-2xs"
+                title={isEn ? "Click to autofill sample serial number" : "Klik untuk mengisi nomor seri contoh"}
+              >
+                <Sparkles size={11} className="text-blue-600" />
+                <span>CERT-IMDT-2026-X-0001</span>
+              </button>
+            </div>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-2 pt-2">

@@ -3,6 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { ShieldCheck, Lock, CreditCard, CheckCircle2 } from "lucide-react";
+import { PAYMENT_METHODS } from "@/components/layout/payment-logos";
 
 function TwitterIcon({ className }: { className?: string }) {
   return (
@@ -149,7 +151,41 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 pt-6 border-t border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+        {/* Payment & Security Trust Bar (Minimalist Borderless Monochrome) */}
+        <div className="mt-12 pt-8 border-t border-stone-800/80 grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+          {/* Payment Methods */}
+          <div className="space-y-2.5">
+            <p className="text-[11px] font-medium uppercase tracking-wider text-stone-400 flex items-center gap-1.5">
+              <CreditCard size={13} className="text-stone-400" />
+              <span>Metode Pembayaran Resmi (Midtrans)</span>
+            </p>
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-1">
+              {PAYMENT_METHODS.map(({ name, component: Component }) => (
+                <div
+                  key={name}
+                  className="group grayscale opacity-50 hover:grayscale-0 hover:opacity-100 hover:scale-105 transition-all duration-300 cursor-pointer select-none"
+                  title={`Metode Pembayaran Resmi ${name}`}
+                >
+                  <Component className="h-6 sm:h-7 w-auto" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Security & Legal Standing */}
+          <div className="flex flex-wrap items-center lg:justify-end gap-5 text-xs text-stone-400">
+            <div className="flex items-center gap-1.5 text-stone-400 hover:text-stone-200 transition-colors">
+              <Lock size={13} className="text-stone-400 shrink-0" />
+              <span className="text-[11px] font-medium">256-Bit SSL Encrypted</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-stone-400 hover:text-stone-200 transition-colors">
+              <ShieldCheck size={13} className="text-stone-400 shrink-0" />
+              <span className="text-[11px] font-medium">SK AHU-064920.2024</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-6 pt-6 border-t border-stone-800/60 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-sm text-stone-500">
             © 2008 - {currentYear} PT. Matoh Technologies Indonesia. {t("rights")}
           </p>

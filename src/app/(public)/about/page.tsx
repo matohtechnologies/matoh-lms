@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { getTranslations, getLocale } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
+import { LegalTrustCard } from "@/components/about/legal-trust-card";
 import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -124,47 +125,92 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* History & Legal Standing */}
-      <section className="py-16 bg-white border-b border-slate-200/60">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="grid md:grid-cols-12 gap-8 items-center">
-            <div className="md:col-span-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded-full border border-blue-200/60 inline-block mb-3">
-                {isEn ? "Established in 2000" : "Sejarah & Legalitas"}
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
-                {isEn ? "25+ Years of Digital Literacy Journey" : "Perjalanan Lebih dari Dua Dekade Literasi Digital"}
-              </h2>
-              <div className="mt-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-600">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-white border border-slate-200/90 flex items-center justify-center p-1.5 shrink-0 shadow-2xs">
-                    <Image
-                      src="/images/matoh-logo.png"
-                      alt="Matoh Technologies"
-                      width={22}
-                      height={22}
-                      className="object-contain"
-                    />
-                  </div>
-                  <div>
-                    <p className="font-bold text-slate-900 text-sm">PT. Matoh Technologies Indonesia</p>
-                    <p className="font-mono text-blue-700 text-[11px] font-medium">AHU-064920.AH.01.30.Tahun 2024</p>
-                  </div>
+      {/* History, Milestone Timeline & Legal Standing */}
+      <section className="py-20 bg-white border-b border-slate-200/60">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-14">
+          {/* Section Header */}
+          <div className="text-center max-w-3xl mx-auto">
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded-full border border-blue-200/60 inline-block mb-3">
+              {isEn ? "Heritage & Legal Standing" : "Sejarah & Transformasi Legalitas"}
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+              {isEn ? "Over Two Decades of Digital Literacy Evolution" : "Perjalanan Lebih dari Dua Dekade Literasi Digital Terapan"}
+            </h2>
+            <p className="text-slate-600 text-sm mt-3 leading-relaxed">
+              {isEn
+                ? "From an early internet technology pioneer in 2000 to an accredited modern EdTech institution."
+                : "Dari pelopor fasilitas teknologi internet di awal tahun 2000 hingga institusi pendidikan teknologi berbadan hukum resmi."}
+            </p>
+          </div>
+
+          {/* Visual Milestone Timeline */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+            {/* Step 1: 2000 */}
+            <div className="bg-slate-50 rounded-3xl p-6 border border-slate-200/90 relative hover:border-blue-300 hover:shadow-sm transition-all flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="font-mono text-2xl font-black text-blue-600">2000</span>
+                  <span className="text-[11px] font-bold text-slate-500 bg-white px-2.5 py-1 rounded-full border border-slate-200">
+                    Fase Inisiasi
+                  </span>
                 </div>
+                <h3 className="font-bold text-slate-900 text-base mb-2">
+                  BARQNET
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Berdiri sebagai penyedia fasilitas komputer dan akses internet pertama bagi civitas akademika, mahasiswa, dosen, serta UMKM di Bojonegoro dan sekitarnya.
+                </p>
+              </div>
+              <div className="pt-4 mt-4 border-t border-slate-200/80 text-[11px] font-medium text-slate-500">
+                ✓ Pelatihan internet & komputer dasar
               </div>
             </div>
-            <div className="md:col-span-8 space-y-4 text-slate-600 text-sm leading-relaxed">
-              <p>
-                <strong>Matoh Technologies</strong> berdiri pada tahun 2000 dan awalnya bernama <strong>BARQNET</strong>. Berawal dari fasilitas komputer personal untuk akses internet dan pelatihan pemanfaatan teknologi internet bagi mahasiswa, dosen, dan pelaku bisnis (UMKM).
-              </p>
-              <p>
-                Pada tahun 2008, BARQNET resmi bertransformasi menjadi <strong>Matoh Technologies</strong> yang menawarkan layanan pelatihan, penelitian, dan konsultasi pemanfaatan teknologi digital dalam dunia bisnis dan pendidikan.
-              </p>
-              <p>
-                Saat ini, Matoh Technologies telah resmi berbadan hukum sebagai <strong>PT. Matoh Technologies Indonesia</strong>. Kami terus berinovasi menghadirkan sistem pembelajaran berbasis Learning Management System (LMS) modern dan terotomatisasi penuh guna mencetak talenta unggul yang siap menghadapi era kecerdasan buatan dan ekonomi digital.
-              </p>
+
+            {/* Step 2: 2008 */}
+            <div className="bg-slate-50 rounded-3xl p-6 border border-slate-200/90 relative hover:border-blue-300 hover:shadow-sm transition-all flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="font-mono text-2xl font-black text-blue-600">2008</span>
+                  <span className="text-[11px] font-bold text-slate-500 bg-white px-2.5 py-1 rounded-full border border-slate-200">
+                    Transformasi Riset
+                  </span>
+                </div>
+                <h3 className="font-bold text-slate-900 text-base mb-2">
+                  Matoh Technologies
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Bertransformasi memperluas portofolio layanan pada bimbingan metodologi keputusan ilmiah (AHP/ISM), manajemen riset publikasi, dan digital marketing terapan.
+                </p>
+              </div>
+              <div className="pt-4 mt-4 border-t border-slate-200/80 text-[11px] font-medium text-slate-500">
+                ✓ Bimbingan MCDM & Scale-Up UMKM
+              </div>
+            </div>
+
+            {/* Step 3: 2024 - Sekarang */}
+            <div className="bg-blue-50/60 rounded-3xl p-6 border-2 border-blue-300 relative shadow-xs flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="font-mono text-2xl font-black text-blue-700">2024</span>
+                  <span className="text-[11px] font-bold text-blue-800 bg-blue-100 px-2.5 py-1 rounded-full border border-blue-200">
+                    Badan Hukum Resmi
+                  </span>
+                </div>
+                <h3 className="font-bold text-slate-900 text-base mb-2">
+                  PT. Matoh Technologies Indonesia
+                </h3>
+                <p className="text-xs text-slate-700 leading-relaxed">
+                  Resmi berbadan hukum PT terdaftar Kemenkumham RI dengan peluncuran platform LMS otomatis, sistem transkrip kredensial ber-QR, dan verifikasi sertifikat permanen.
+                </p>
+              </div>
+              <div className="pt-4 mt-4 border-t border-blue-200/80 text-[11px] font-bold text-blue-800">
+                ✓ SK Kemenkumham AHU-064920.2024
+              </div>
             </div>
           </div>
+
+          {/* Interactive Legal Card */}
+          <LegalTrustCard locale={locale} />
         </div>
       </section>
 
@@ -255,18 +301,33 @@ export default async function AboutPage() {
               {leadership.map((person) => (
                 <div
                   key={person.id}
-                  className="bg-[#f8fafc] rounded-3xl border border-slate-200/80 p-6 flex flex-col justify-between hover:border-blue-200 hover:bg-blue-50/20 transition-all"
+                  className="bg-white rounded-3xl border border-slate-200/90 p-6 flex flex-col justify-between hover:border-blue-300 hover:shadow-warm transition-all group"
                 >
                   <div>
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 to-sky-500 text-white flex items-center justify-center font-bold text-xl mb-4 shadow-xs">
-                      {person.name.charAt(0)}
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-sky-500 text-white flex items-center justify-center font-bold text-2xl mb-4 shadow-xs overflow-hidden">
+                      {person.image ? (
+                        <img
+                          src={person.image}
+                          alt={person.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span>{person.name.charAt(0)}</span>
+                      )}
                     </div>
-                    <h4 className="font-bold text-slate-900 text-base">{person.name}</h4>
-                    <p className="text-xs font-semibold text-blue-600 mt-0.5">{person.role}</p>
-                    <p className="text-[11px] text-slate-400 font-mono mt-1 pb-3 border-b border-slate-200/60">
-                      {person.experience}
+                    <h4 className="font-bold text-slate-900 text-base group-hover:text-blue-600 transition-colors">
+                      {person.name}
+                    </h4>
+                    <p className="text-xs font-semibold text-blue-700 mt-0.5">{person.role}</p>
+                    <div className="flex items-center gap-1.5 mt-2">
+                      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                        <CheckCircle2 size={11} className="text-emerald-600" />
+                        <span>{person.experience}</span>
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-600 leading-relaxed mt-3 pt-3 border-t border-slate-100">
+                      {person.bio}
                     </p>
-                    <p className="text-xs text-slate-600 leading-relaxed mt-3">{person.bio}</p>
                   </div>
                 </div>
               ))}

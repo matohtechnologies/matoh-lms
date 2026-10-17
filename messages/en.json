@@ -645,6 +645,7 @@
     "portal_feature3_title": "Complete Transcript",
     "portal_feature3_desc": "Includes credit hours, competency units, & predicates.",
     "portal_employer_title": "Information for Recruiters, Institutions, & Employers",
-    "portal_employer_desc": "All certificates issued through the Matoh Technologies platform have undergone automated graduation verification based on 100% curriculum completion, evaluation quiz passing grade, and project case study assessments. If you require specialized institutional manual verification, please contact our academic team via"
+    "portal_employer_desc": "All certificates issued through the Matoh Technologies platform have undergone automated graduation verification based on 100% curriculum completion, evaluation quiz passing grade, and project case study assessments. If you require specialized institutional manual verification, please contact our academic team via",
+    "contact_page": "Contact page"
   }
 }
