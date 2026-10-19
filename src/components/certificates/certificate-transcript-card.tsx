@@ -29,6 +29,7 @@ export interface CertificateTranscriptData {
   issueDisplay: string;
   issuerName: string;
   instructorName: string;
+  signatoryName1?: string;
   signatoryRole1: string;
   signatoryName2: string;
   signatoryRole2: string;
@@ -60,6 +61,7 @@ export function CertificateTranscriptCard({
     issueDisplay,
     issuerName,
     instructorName,
+    signatoryName1,
     signatoryRole1,
     signatoryName2,
     signatoryRole2,
@@ -70,6 +72,11 @@ export function CertificateTranscriptCard({
     predicate,
     items,
   } = data;
+
+  const effectiveInstructorName = instructorName || signatoryName1 || "Dr. G. Prabantoro, SE., MM., CBec.";
+  const effectiveSignatoryRole1 = signatoryRole1 || "Lead Instructor & RnD Director";
+  const effectiveSignatoryName2 = signatoryName2 || "Dr. E. Lovita, SE., Ak., M.Si., CA.";
+  const effectiveSignatoryRole2 = signatoryRole2 || "Head of Academic Board";
 
   const { locale } = useAppLocale();
   const isEn = locale === "en";
@@ -415,21 +422,21 @@ export function CertificateTranscriptCard({
 
           {/* Instructor Signature */}
           <div className="text-center sm:text-right print:text-right min-w-0">
-            <p className="font-serif italic text-base text-stone-800 mb-0.5 print:text-xs truncate" title={instructorName}>
-              {instructorName}
+            <p className="font-serif italic text-base text-stone-800 mb-0.5 print:text-xs truncate" title={effectiveInstructorName}>
+              {effectiveInstructorName}
             </p>
             <div className="w-24 h-px bg-stone-300 mx-auto sm:ml-auto sm:mr-0 mb-1" />
-            <p className="text-[10px] font-semibold text-stone-700 truncate" title={signatoryRole1}>{signatoryRole1}</p>
+            <p className="text-[10px] font-semibold text-stone-700 truncate" title={effectiveSignatoryRole1}>{effectiveSignatoryRole1}</p>
             <p className="text-[9px] text-stone-400 truncate" title={issuerName}>{issuerName}</p>
           </div>
 
           {/* Academic Director Signature */}
           <div className="text-center sm:text-right print:text-right min-w-0">
-            <p className="font-serif italic text-base text-stone-800 mb-0.5 print:text-xs truncate" title={signatoryName2}>
-              {signatoryName2}
+            <p className="font-serif italic text-base text-stone-800 mb-0.5 print:text-xs truncate" title={effectiveSignatoryName2}>
+              {effectiveSignatoryName2}
             </p>
             <div className="w-24 h-px bg-stone-300 mx-auto sm:ml-auto sm:mr-0 mb-1" />
-            <p className="text-[10px] font-semibold text-stone-700 truncate" title={signatoryRole2}>{signatoryRole2}</p>
+            <p className="text-[10px] font-semibold text-stone-700 truncate" title={effectiveSignatoryRole2}>{effectiveSignatoryRole2}</p>
             <p className="text-[9px] text-stone-400 truncate">Direktorat Akademik</p>
           </div>
         </div>

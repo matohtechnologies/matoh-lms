@@ -124,6 +124,14 @@ export function CertificateDesigner({
     }));
   };
 
+  // Update element width from drag handles or slider
+  const handleUpdateWidth = (id: string, width: number) => {
+    setConfig((prev) => ({
+      ...prev,
+      elements: prev.elements.map((el) => (el.id === id ? { ...el, width, maxWidth: width } : el)),
+    }));
+  };
+
   // Add new element
   const handleAddElement = (type: "placeholder" | "custom_text", keyOrText?: string) => {
     const newId = `el-${Date.now()}`;
@@ -456,6 +464,7 @@ export function CertificateDesigner({
                   selectedElementId={selectedElementId}
                   onSelectElement={handleSelectElement}
                   onUpdateElementPosition={handleUpdatePosition}
+                  onUpdateElementWidth={handleUpdateWidth}
                   useSampleFallback={previewMode === "sample"}
                   className="rounded-2xl shadow-2xl bg-white"
                 />
@@ -628,8 +637,9 @@ export function CertificateDesigner({
                         onChange={(e) => updateSelectedElement({ fontFamily: e.target.value as any })}
                         className="w-full px-2.5 py-1.5 rounded-lg border border-stone-200 text-xs bg-white"
                       >
-                        <option value="serif">Serif (Elegan)</option>
+                        <option value="arial">Arial (Standar)</option>
                         <option value="sans">Sans-serif (Modern)</option>
+                        <option value="serif">Serif (Elegan)</option>
                         <option value="jakarta">Plus Jakarta Sans</option>
                         <option value="mono">Monospace (Kode)</option>
                       </select>
@@ -761,6 +771,109 @@ export function CertificateDesigner({
                         />
                         <span>KAPITAL</span>
                       </label>
+                    </div>
+                  </div>
+
+                  {/* Width / Lebar Kanan-Kiri */}
+                  <div className="pt-2 border-t border-stone-100 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label className="text-[10px] font-semibold text-stone-500 uppercase flex items-center gap-1">
+                        <Maximize2 size={12} className="text-stone-400" />
+                        Lebar Kanan-Kiri (Batas Teks)
+                      </label>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-mono font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">
+                          {selectedElement.width ? `${selectedElement.width}%` : "Otomatis"}
+                        </span>
+                        {selectedElement.width ? (
+                          <button
+                            type="button"
+                            onClick={() => updateSelectedElement({ width: undefined, maxWidth: 92 })}
+                            className="text-[9px] text-stone-400 hover:text-stone-700 underline"
+                          >
+                            Reset
+                          </button>
+                        ) : null}
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <input
+                        type="range"
+                        min="15"
+                        max="100"
+                        step="1"
+                        value={selectedElement.width || 80}
+                        onChange={(e) => {
+                          const val = Number(e.target.value);
+                          updateSelectedElement({ width: val, maxWidth: val });
+                        }}
+                        className="w-full accent-blue-600 h-1.5 bg-stone-100 rounded-lg cursor-pointer"
+                      />
+                      <div className="flex items-center justify-between text-[10px] text-stone-400">
+                        <span>15% (Sempit)</span>
+                        <span>50%</span>
+                        <span>100% (Penuh)</span>
+                      </div>
+                    </div>
+
+                    {/* Quick Preset Buttons */}
+                    <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                      <button
+                        type="button"
+                        onClick={() => updateSelectedElement({ width: undefined, maxWidth: 92 })}
+                        className={`px-2 py-1 rounded text-[10px] font-medium border transition-colors ${
+                          !selectedElement.width
+                            ? "bg-blue-50 border-blue-200 text-blue-700 font-bold"
+                            : "bg-white border-stone-200 text-stone-600 hover:bg-stone-50"
+                        }`}
+                      >
+                        Auto
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => updateSelectedElement({ width: 30, maxWidth: 30 })}
+                        className={`px-2 py-1 rounded text-[10px] font-medium border transition-colors ${
+                          selectedElement.width === 30
+                            ? "bg-blue-50 border-blue-200 text-blue-700 font-bold"
+                            : "bg-white border-stone-200 text-stone-600 hover:bg-stone-50"
+                        }`}
+                      >
+                        30% (Ttd)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => updateSelectedElement({ width: 50, maxWidth: 50 })}
+                        className={`px-2 py-1 rounded text-[10px] font-medium border transition-colors ${
+                          selectedElement.width === 50
+                            ? "bg-blue-50 border-blue-200 text-blue-700 font-bold"
+                            : "bg-white border-stone-200 text-stone-600 hover:bg-stone-50"
+                        }`}
+                      >
+                        50% (Sedang)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => updateSelectedElement({ width: 75, maxWidth: 75 })}
+                        className={`px-2 py-1 rounded text-[10px] font-medium border transition-colors ${
+                          selectedElement.width === 75
+                            ? "bg-blue-50 border-blue-200 text-blue-700 font-bold"
+                            : "bg-white border-stone-200 text-stone-600 hover:bg-stone-50"
+                        }`}
+                      >
+                        75% (Standar)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => updateSelectedElement({ width: 90, maxWidth: 90 })}
+                        className={`px-2 py-1 rounded text-[10px] font-medium border transition-colors ${
+                          selectedElement.width === 90
+                            ? "bg-blue-50 border-blue-200 text-blue-700 font-bold"
+                            : "bg-white border-stone-200 text-stone-600 hover:bg-stone-50"
+                        }`}
+                      >
+                        90% (Lebar)
+                      </button>
                     </div>
                   </div>
 

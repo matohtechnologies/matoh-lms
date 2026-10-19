@@ -28,7 +28,6 @@ import { LanguageSwitcher } from "./language-switcher";
 import { useAppLocale } from "@/components/providers/locale-provider";
 import { useSession } from "next-auth/react";
 import SignOutButton from "@/components/auth/signout-button";
-import { LearningStreakBadge } from "@/components/gamification/learning-streak-badge";
 import { CertificateVerificationModal } from "@/components/certificates/certificate-verification-modal";
 
 interface NavbarCategoryItem {
@@ -386,9 +385,8 @@ export function Navbar({ user, categories }: NavbarProps) {
           </Link>
         </div>
 
-        {/* Right side: Language Switcher, Daily Streak & Auth */}
+        {/* Right side: Language Switcher & Auth */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-          {user && <LearningStreakBadge />}
           <LanguageSwitcher />
 
           {user ? (
@@ -630,16 +628,6 @@ export function Navbar({ user, categories }: NavbarProps) {
           >
             {t("contact")}
           </Link>
-
-          {/* Daily Streak in Mobile */}
-          {user && (
-            <div className="pt-2 pb-1 px-4 flex items-center justify-between border-t border-stone-100">
-              <span className="text-xs text-stone-500 font-medium">
-                {isEn ? "Daily Learning Streak" : "Api Semangat Belajar"}
-              </span>
-              <LearningStreakBadge />
-            </div>
-          )}
 
           {/* Language Switcher in Mobile */}
           <div className="pt-3 pb-1 px-4 flex items-center justify-between border-t border-stone-100">

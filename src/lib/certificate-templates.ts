@@ -19,13 +19,14 @@ export interface CertificateElement {
   y: number; // percentage (0 - 100)
   fontSize: number; // in pt/px
   fontWeight: "normal" | "medium" | "semibold" | "bold" | "extrabold";
-  fontFamily: "serif" | "sans" | "jakarta" | "mono";
+  fontFamily: "serif" | "sans" | "jakarta" | "mono" | "arial";
   fontStyle?: "normal" | "italic";
   color: string;
   textAlign: "left" | "center" | "right";
   letterSpacing?: "normal" | "wide" | "widest";
   uppercase?: boolean;
   maxWidth?: number; // percentage e.g. 80
+  width?: number; // percentage width e.g. 15 - 100
 }
 
 export interface CertificateBackDesignConfig {
@@ -775,17 +776,78 @@ export function resolveElementText(
   data: CertificateDataValues,
   useSampleFallback = true
 ): string {
+  // Mode "Placeholder" (Tags view): display raw template tags {{key}} instead of data
+  if (!useSampleFallback) {
+    if (el.type === "placeholder" && el.placeholderKey) {
+      return `{{${el.placeholderKey}}}`;
+    }
+    if (el.type === "custom_text") {
+      return el.customText || "";
+    }
+    return el.name || "";
+  }
+
+  const getAliasValue = (key: string): string | undefined => {
+    const rawVal = data[key as keyof CertificateDataValues];
+    if (rawVal) return rawVal;
+
+    // Check common aliases
+    if (key === "signatory_name1") {
+      return (
+        data.signatory_name1 ||
+        data.signatory_name_1 ||
+        data.signatoryName1 ||
+        (data as any).instructorName ||
+        (data as any).leadInstructor
+      );
+    }
+    if (key === "signatory_role1") {
+      return data.signatory_role1 || data.signatory_role_1 || data.signatoryRole1;
+    }
+    if (key === "signatory_name2") {
+      return data.signatory_name2 || data.signatory_name_2 || data.signatoryName2;
+    }
+    if (key === "signatory_role2") {
+      return data.signatory_role2 || data.signatory_role_2 || data.signatoryRole2;
+    }
+    if (key === "student_name") {
+      return data.student_name || data.studentName;
+    }
+    if (key === "course_title") {
+      return data.course_title || data.courseTitle;
+    }
+    if (key === "category_name") {
+      return data.category_name || (data as any).categoryName;
+    }
+    if (key === "certificate_title") {
+      return data.certificate_title || data.certificateTitle;
+    }
+    if (key === "certificate_subtitle") {
+      return data.certificate_subtitle || data.subtitle;
+    }
+    if (key === "issue_date") {
+      return data.issue_date || data.issueDate || (data as any).issueDisplay;
+    }
+    if (key === "certificate_code") {
+      return data.certificate_code || data.certificateCode;
+    }
+    if (key === "issuer_name") {
+      return data.issuer_name || data.issuerName;
+    }
+    return undefined;
+  };
+
   if (el.type === "custom_text") {
     let text = el.customText || "";
     for (const opt of PLACEHOLDER_OPTIONS) {
-      const val = data[opt.key as keyof CertificateDataValues] || (useSampleFallback ? opt.defaultText : "");
+      const val = getAliasValue(opt.key) || (useSampleFallback ? opt.defaultText : "");
       text = text.replaceAll(opt.tag, val || "");
     }
     return text;
   }
 
   if (el.type === "placeholder" && el.placeholderKey) {
-    const val = data[el.placeholderKey as keyof CertificateDataValues];
+    const val = getAliasValue(el.placeholderKey);
     if (val) return val;
     if (useSampleFallback) {
       const opt = PLACEHOLDER_OPTIONS.find((p) => p.key === el.placeholderKey);

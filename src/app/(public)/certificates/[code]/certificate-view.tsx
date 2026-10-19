@@ -97,31 +97,48 @@ export function CertificateView({
     issue_date: issueDisplay,
     certificate_code: displayCode.toUpperCase(),
     issuer_name: issuerName,
+    signatory_name1: instructorName,
     signatory_name_1: instructorName,
+    signatoryName1: instructorName,
+    signatory_role1: signatoryRole1,
     signatory_role_1: signatoryRole1,
+    signatoryRole1: signatoryRole1,
+    signatory_name2: signatoryName2,
     signatory_name_2: signatoryName2,
+    signatoryName2: signatoryName2,
+    signatory_role2: signatoryRole2,
     signatory_role_2: signatoryRole2,
+    signatoryRole2: signatoryRole2,
+    certificate_subtitle: subtitle,
     subtitle: subtitle,
   };
 
-  // Fallback transcript data
-  const resolvedTranscript: CertificateTranscriptData = transcriptData || {
-    studentName,
-    courseTitle,
-    categoryName,
-    certificateCode: displayCode,
-    issueDisplay,
-    issuerName,
-    instructorName,
-    signatoryRole1,
-    signatoryName2,
-    signatoryRole2,
-    totalLessons: 10,
-    totalHours: 16,
-    overallScore: 92.5,
-    finalGrade: "A",
-    predicate: "DENGAN PUJIAN (DISTINCTION)",
-    items: [
+  // Fallback transcript data with guaranteed matching signatory
+  const resolvedTranscript: CertificateTranscriptData = transcriptData
+    ? {
+        ...transcriptData,
+        instructorName: transcriptData.instructorName || instructorName,
+        signatoryRole1: transcriptData.signatoryRole1 || signatoryRole1,
+        signatoryName2: transcriptData.signatoryName2 || signatoryName2,
+        signatoryRole2: transcriptData.signatoryRole2 || signatoryRole2,
+      }
+    : {
+        studentName,
+        courseTitle,
+        categoryName,
+        certificateCode: displayCode,
+        issueDisplay,
+        issuerName,
+        instructorName,
+        signatoryRole1,
+        signatoryName2,
+        signatoryRole2,
+        totalLessons: 10,
+        totalHours: 16,
+        overallScore: 92.5,
+        finalGrade: "A",
+        predicate: "DENGAN PUJIAN (DISTINCTION)",
+        items: [
       {
         id: "mod-1",
         title: "Modul Kurikulum & Penguasaan Teori",

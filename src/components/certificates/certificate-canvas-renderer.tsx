@@ -15,6 +15,7 @@ interface CertificateCanvasRendererProps {
   selectedElementId?: string | null;
   onSelectElement?: (id: string | null) => void;
   onUpdateElementPosition?: (id: string, x: number, y: number) => void;
+  onUpdateElementWidth?: (id: string, width: number) => void;
   useSampleFallback?: boolean;
   className?: string;
 }
@@ -26,12 +27,20 @@ export function CertificateCanvasRenderer({
   selectedElementId = null,
   onSelectElement,
   onUpdateElementPosition,
+  onUpdateElementWidth,
   useSampleFallback = true,
   className = "",
 }: CertificateCanvasRendererProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [dragStart, setDragStart] = useState<{ mouseX: number; mouseY: number; startX: number; startY: number } | null>(null);
+  const [resizing, setResizing] = useState<{
+    id: string;
+    handle: "left" | "right";
+    initialWidth: number;
+    elementX: number;
+    textAlign: "left" | "center" | "right";
+  } | null>(null);
 
   // Handle element mouse down for dragging
   const handleMouseDown = (e: React.MouseEvent, el: CertificateElement) => {
@@ -56,27 +65,60 @@ export function CertificateCanvasRenderer({
 
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
-      if (!draggingId || !dragStart || !containerRef.current) return;
+      if (!containerRef.current) return;
 
-      const rect = containerRef.current.getBoundingClientRect();
-      const deltaX = ((e.clientX - dragStart.mouseX) / rect.width) * 100;
-      const deltaY = ((e.clientY - dragStart.mouseY) / rect.height) * 100;
+      // 1. Resizing width mode
+      if (resizing) {
+        const rect = containerRef.current.getBoundingClientRect();
+        const currentMouseX = ((e.clientX - rect.left) / rect.width) * 100;
+        let newWidth = resizing.initialWidth;
 
-      const newX = Math.round(Math.max(2, Math.min(98, dragStart.startX + deltaX)));
-      const newY = Math.round(Math.max(2, Math.min(98, dragStart.startY + deltaY)));
+        if (resizing.textAlign === "center") {
+          const dist = Math.abs(currentMouseX - resizing.elementX);
+          newWidth = Math.round(Math.max(15, Math.min(100, dist * 2)));
+        } else if (resizing.textAlign === "left") {
+          if (resizing.handle === "right") {
+            newWidth = Math.round(Math.max(15, Math.min(100, currentMouseX - resizing.elementX)));
+          } else {
+            const rightEdge = resizing.elementX + resizing.initialWidth;
+            newWidth = Math.round(Math.max(15, Math.min(100, rightEdge - currentMouseX)));
+          }
+        } else if (resizing.textAlign === "right") {
+          if (resizing.handle === "left") {
+            newWidth = Math.round(Math.max(15, Math.min(100, resizing.elementX - currentMouseX)));
+          } else {
+            const leftEdge = resizing.elementX - resizing.initialWidth;
+            newWidth = Math.round(Math.max(15, Math.min(100, currentMouseX - leftEdge)));
+          }
+        }
 
-      onUpdateElementPosition?.(draggingId, newX, newY);
+        onUpdateElementWidth?.(resizing.id, newWidth);
+        return;
+      }
+
+      // 2. Dragging position mode
+      if (draggingId && dragStart) {
+        const rect = containerRef.current.getBoundingClientRect();
+        const deltaX = ((e.clientX - dragStart.mouseX) / rect.width) * 100;
+        const deltaY = ((e.clientY - dragStart.mouseY) / rect.height) * 100;
+
+        const newX = Math.round(Math.max(2, Math.min(98, dragStart.startX + deltaX)));
+        const newY = Math.round(Math.max(2, Math.min(98, dragStart.startY + deltaY)));
+
+        onUpdateElementPosition?.(draggingId, newX, newY);
+      }
     },
-    [draggingId, dragStart, onUpdateElementPosition]
+    [draggingId, dragStart, resizing, onUpdateElementPosition, onUpdateElementWidth]
   );
 
   const handleMouseUp = useCallback(() => {
     setDraggingId(null);
     setDragStart(null);
+    setResizing(null);
   }, []);
 
   useEffect(() => {
-    if (draggingId) {
+    if (draggingId || resizing) {
       window.addEventListener("mousemove", handleMouseMove);
       window.addEventListener("mouseup", handleMouseUp);
       return () => {
@@ -84,18 +126,20 @@ export function CertificateCanvasRenderer({
         window.removeEventListener("mouseup", handleMouseUp);
       };
     }
-  }, [draggingId, handleMouseMove, handleMouseUp]);
+  }, [draggingId, resizing, handleMouseMove, handleMouseUp]);
 
-  const getFontFamilyClass = (family?: string) => {
+  const getFontFamilyStyle = (family?: string): string => {
     switch (family) {
+      case "arial":
+        return "Arial, Helvetica, sans-serif";
       case "serif":
-        return "font-serif";
+        return "Georgia, Cambria, 'Times New Roman', Times, serif";
       case "jakarta":
-        return "font-sans";
+        return "var(--font-poppins, 'Plus Jakarta Sans', sans-serif)";
       case "mono":
-        return "font-mono";
+        return "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace";
       default:
-        return "font-sans";
+        return "var(--font-inter, 'Inter', system-ui, sans-serif)";
     }
   };
 
@@ -175,12 +219,15 @@ export function CertificateCanvasRenderer({
         <div className="absolute inset-3 border-2 border-dashed border-amber-600/30 rounded-xl pointer-events-none z-1" />
       )}
 
-
       {/* Canvas Elements */}
       {config.elements.map((el) => {
         const text = resolveElementText(el, data, useSampleFallback);
         const isSelected = isInteractive && selectedElementId === el.id;
         const isDragging = draggingId === el.id;
+        const isCurrentlyResizing = resizing?.id === el.id;
+
+        const computedWidth = el.width ? `${el.width}%` : (el.textAlign === "center" ? "auto" : undefined);
+        const computedMaxWidth = el.maxWidth ? `${el.maxWidth}%` : (el.width ? `${el.width}%` : "92%");
 
         return (
           <div
@@ -200,7 +247,7 @@ export function CertificateCanvasRenderer({
               isSelected
                 ? "outline-2 outline-blue-600 ring-2 ring-blue-400/50 bg-blue-50/30 rounded-md shadow-xs"
                 : ""
-            } ${isDragging ? "opacity-75 cursor-grabbing" : ""}`}
+            } ${isDragging ? "opacity-75 cursor-grabbing" : ""} ${isCurrentlyResizing ? "ring-2 ring-amber-500" : ""}`}
             style={{
               left: `${el.x}%`,
               top: `${el.y}%`,
@@ -210,14 +257,15 @@ export function CertificateCanvasRenderer({
                   : el.textAlign === "right"
                   ? "translate(-100%, -50%)"
                   : "translate(0, -50%)",
-              maxWidth: el.maxWidth ? `${el.maxWidth}%` : "92%",
-              width: el.textAlign === "center" ? "auto" : undefined,
+              width: computedWidth,
+              maxWidth: computedMaxWidth,
               textAlign: el.textAlign,
             }}
           >
             <p
-              className={`${getFontFamilyClass(el.fontFamily)} leading-[1.25]`}
+              className="leading-[1.25]"
               style={{
+                fontFamily: getFontFamilyStyle(el.fontFamily),
                 fontSize: `calc((${el.fontSize} / 1050) * 100cqw)`,
                 fontWeight: getFontWeightStyle(el.fontWeight),
                 fontStyle: el.fontStyle || "normal",
@@ -230,16 +278,62 @@ export function CertificateCanvasRenderer({
                     ? "0.05em"
                     : "normal",
                 wordBreak: "break-word",
+                whiteSpace: "normal",
               }}
             >
               {text || (isInteractive ? `[${el.name}]` : "")}
             </p>
 
-            {/* Position coordinate badge when selected in editor */}
+            {/* Interactive Left & Right Resize Handles when Selected */}
             {isSelected && isInteractive && (
-              <div className="absolute -top-6 left-1/2 -translate-x-1/2 px-1.5 py-0.5 bg-blue-600 text-white text-[9px] font-mono rounded shadow-xs whitespace-nowrap pointer-events-none">
-                {el.name} ({el.x}%, {el.y}%)
-              </div>
+              <>
+                {/* Left handle */}
+                <div
+                  onMouseDown={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    setResizing({
+                      id: el.id,
+                      handle: "left",
+                      initialWidth: el.width || 80,
+                      elementX: el.x,
+                      textAlign: el.textAlign,
+                    });
+                  }}
+                  className="absolute -left-2 top-1/2 -translate-y-1/2 w-4 h-4 bg-white border-2 border-blue-600 rounded-full cursor-ew-resize hover:scale-125 transition-transform shadow-md z-35 flex items-center justify-center"
+                  title="Tarik untuk mengatur batas lebar kiri"
+                >
+                  <div className="w-1.5 h-1.5 bg-blue-600 rounded-full" />
+                </div>
+
+                {/* Right handle */}
+                <div
+                  onMouseDown={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    setResizing({
+                      id: el.id,
+                      handle: "right",
+                      initialWidth: el.width || 80,
+                      elementX: el.x,
+                      textAlign: el.textAlign,
+                    });
+                  }}
+                  className="absolute -right-2 top-1/2 -translate-y-1/2 w-4 h-4 bg-white border-2 border-blue-600 rounded-full cursor-ew-resize hover:scale-125 transition-transform shadow-md z-35 flex items-center justify-center"
+                  title="Tarik untuk mengatur batas lebar kanan"
+                >
+                  <div className="w-1.5 h-1.5 bg-blue-600 rounded-full" />
+                </div>
+
+                {/* Information badge with live width */}
+                <div className="absolute -top-7 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-blue-600 text-white text-[9px] font-mono rounded shadow-xs whitespace-nowrap pointer-events-none flex items-center gap-1.5 z-40">
+                  <span>{el.name}</span>
+                  <span className="opacity-70">•</span>
+                  <span>Lebar: {el.width ? `${el.width}%` : "Auto"}</span>
+                  <span className="opacity-70">•</span>
+                  <span>({el.x}%, {el.y}%)</span>
+                </div>
+              </>
             )}
           </div>
         );

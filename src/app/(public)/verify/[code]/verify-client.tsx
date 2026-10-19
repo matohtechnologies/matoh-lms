@@ -58,9 +58,6 @@ export function VerifyClient({
   issuedAt,
   issuedAtFormatted,
   totalHours,
-  overallScore,
-  finalGrade,
-  predicate,
   signatoryName1,
   signatoryRole1,
   signatoryName2,
@@ -80,16 +77,6 @@ export function VerifyClient({
   const formattedDate = issuedAt
     ? format(new Date(issuedAt), "d MMMM yyyy", { locale: dateLocale })
     : issuedAtFormatted;
-
-  // Localized predicate
-  const displayPredicate = (() => {
-    if (!isEn) return predicate;
-    if (predicate.includes("DISTINCTION")) return "WITH DISTINCTION";
-    if (predicate.includes("HIGH MERIT")) return "HIGH MERIT";
-    if (predicate.includes("MERIT")) return "MERIT";
-    if (predicate.includes("PASS")) return "PASS";
-    return predicate;
-  })();
 
   const handleCopyLink = () => {
     if (typeof window !== "undefined") {
@@ -255,7 +242,7 @@ export function VerifyClient({
       </div>
 
       {/* 2. Key Information Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Card 1: Penerima Kredensial */}
         <div className="bg-white rounded-3xl p-6 border border-stone-200/90 shadow-warm space-y-4">
           <div className="flex items-center gap-3 pb-3 border-b border-stone-100">
@@ -319,40 +306,12 @@ export function VerifyClient({
                 <span className="text-stone-400">{t("graduation_date")}</span>
                 <span className="font-semibold text-stone-800">{formattedDate}</span>
               </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 3: Capaian & Predikat */}
-        <div className="bg-white rounded-3xl p-6 border border-stone-200/90 shadow-warm space-y-4">
-          <div className="flex items-center gap-3 pb-3 border-b border-stone-100">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-              <Award size={20} />
-            </div>
-            <div>
-              <p className="text-[10px] uppercase font-bold text-stone-400 tracking-wider">
-                {t("academic_results")}
-              </p>
-              <h3 className="text-base font-bold text-stone-900">
-                {t("final_score", { score: overallScore })}
-              </h3>
-            </div>
-          </div>
-
-          <div className="space-y-2 text-xs">
-            <div className="flex items-center justify-between p-2 rounded-xl bg-amber-50/80 border border-amber-200/60">
-              <span className="text-stone-500 font-medium">{t("predicate")}</span>
-              <span className="font-extrabold text-amber-900 text-right">{displayPredicate}</span>
-            </div>
-            <div className="flex justify-between text-stone-600 pt-1">
-              <span className="text-stone-400">{t("grade")}</span>
-              <span className="font-bold text-stone-800">Grade {finalGrade}</span>
-            </div>
-            <div className="flex justify-between text-stone-600">
-              <span className="text-stone-400">{t("issuing_institution")}</span>
-              <span className="font-semibold text-stone-800 truncate max-w-[170px]" title={issuerName}>
-                {issuerName}
-              </span>
+              <div className="flex justify-between">
+                <span className="text-stone-400">{t("issuing_institution")}</span>
+                <span className="font-semibold text-stone-800 truncate max-w-[200px]" title={issuerName}>
+                  {issuerName}
+                </span>
+              </div>
             </div>
           </div>
         </div>
