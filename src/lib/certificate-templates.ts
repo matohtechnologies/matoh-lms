@@ -70,13 +70,13 @@ export interface CertificateDesignConfig {
 }
 
 export const DEFAULT_BACK_DESIGN_PRESET: CertificateBackDesignConfig = {
-  presetId: "academic-slate",
+  presetId: "clean-minimal",
   backgroundType: "color",
   backgroundColor: "#ffffff",
   backgroundUrl: null,
-  borderStyle: "solid",
-  borderColor: "#e2e8f0",
-  tableTheme: "dark",
+  borderStyle: "none",
+  borderColor: "#ffffff",
+  tableTheme: "minimal",
   headerTitle: "Transkrip Nilai & Capaian Kompetensi",
   headerSubtitle: "Official Academic Transcript & Competency Assessment",
   showWorkloadColumn: true,

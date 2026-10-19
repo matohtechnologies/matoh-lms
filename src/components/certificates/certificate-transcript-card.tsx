@@ -106,50 +106,17 @@ export function CertificateTranscriptCard({
     return predicate;
   })();
 
-  const getTableHeaderClass = () => {
-    switch (backConfig?.tableTheme) {
-      case "amber":
-        return "bg-amber-900 text-amber-100";
-      case "blue":
-        return "bg-sky-950 text-sky-100";
-      case "emerald":
-        return "bg-emerald-950 text-emerald-100";
-      case "minimal":
-        return "bg-stone-100 text-stone-900 border-b border-stone-200";
-      case "dark":
-      default:
-        return "bg-stone-900 text-stone-100 print:bg-stone-800";
-    }
-  };
-
-  const getBorderClasses = () => {
-    switch (backConfig?.borderStyle) {
-      case "none":
-        return "border-none";
-      case "double":
-        return "border-8 border-double border-stone-800/20";
-      case "dashed":
-        return "border-4 border-dashed border-stone-400";
-      case "gold-frame":
-        return "border-8 border-amber-900/15";
-      case "solid":
-      default:
-        return "border-8 border-stone-800/10 print:border-2 print:border-stone-800/30";
-    }
-  };
-
   return (
     <div
       className={cn(
-        "certificate-transcript-card w-full max-w-4xl mx-auto rounded-3xl p-6 sm:p-10 shadow-warm-lg relative overflow-hidden print:w-full print:max-w-none print:rounded-none print:p-6 print:shadow-none print:m-0 print:break-inside-avoid print:page-break-inside-avoid transition-all",
-        getBorderClasses(),
+        "certificate-transcript-card w-full max-w-4xl mx-auto rounded-2xl p-6 sm:p-10 border border-stone-200/80 bg-white relative overflow-hidden print:w-full print:max-w-none print:rounded-none print:p-6 print:shadow-none print:m-0 print:border-none print:break-inside-avoid print:page-break-inside-avoid transition-all",
         className
       )}
       style={{
-        backgroundColor: backConfig?.backgroundColor || "#ffffff",
+        backgroundColor: "#ffffff",
       }}
     >
-      {/* Custom Template Background Image */}
+      {/* Custom Template Background Image if uploaded */}
       {backConfig?.backgroundUrl && (
         <img
           src={backConfig.backgroundUrl}
@@ -158,22 +125,12 @@ export function CertificateTranscriptCard({
         />
       )}
 
-      {/* Gold Frame Ornaments */}
-      {backConfig?.borderStyle === "gold-frame" && (
-        <div className="absolute inset-2 border-2 border-dashed border-amber-600/30 rounded-2xl pointer-events-none z-1" />
-      )}
-
       {/* Inner Container */}
-      <div
-        className={cn(
-          "rounded-2xl p-6 sm:p-8 relative z-10 border border-stone-200 shadow-2xs print:p-4 print:border-stone-300 transition-all",
-          backConfig?.backgroundUrl ? "bg-white/92 backdrop-blur-xs shadow-sm" : "bg-white"
-        )}
-      >
+      <div className="w-full bg-white relative z-10">
         {/* Header Document */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-stone-200/80 gap-4 print:pb-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-stone-200/80 gap-4 print:pb-3">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-white border border-stone-200/90 flex items-center justify-center p-2 shadow-xs print:w-9 print:h-9 print:p-1.5">
+            <div className="w-10 h-10 bg-white flex items-center justify-center p-1 shrink-0 print:w-8 print:h-8">
               <Image
                 src="/images/matoh-logo.png"
                 alt={issuerName}
@@ -183,7 +140,7 @@ export function CertificateTranscriptCard({
               />
             </div>
             <div>
-              <p className="text-[11px] uppercase font-extrabold tracking-widest text-stone-500">
+              <p className="text-[10px] uppercase font-extrabold tracking-widest text-stone-400">
                 {issuerName}
               </p>
               <h2
@@ -204,29 +161,30 @@ export function CertificateTranscriptCard({
               </span>
             </p>
             <p>
-              {isEn ? "Graduation Date:" : "Tanggal Lulus:"} <span className="text-stone-800 font-medium">{issueDisplay}</span>
+              {isEn ? "Graduation Date:" : "Tanggal Lulus:"}{" "}
+              <span className="text-stone-800 font-medium">{issueDisplay}</span>
             </p>
           </div>
         </div>
 
-        {/* Student & Course Info */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-5 print:grid-cols-3 print:gap-2 print:my-3">
-          <div className="p-3.5 rounded-xl bg-stone-50 border border-stone-200/60 min-w-0">
+        {/* Student & Course Info (Clean, Borderless sentences on White Background) */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 my-4 py-3 border-b border-stone-100 print:grid-cols-3 print:gap-2 print:my-2">
+          <div className="min-w-0 bg-white">
             <p className="text-[10px] uppercase font-bold tracking-wider text-stone-400">
               {isEn ? "Student Name" : "Nama Peserta"}
             </p>
             <p className="text-sm font-bold text-stone-900 truncate mt-0.5">{studentName}</p>
           </div>
-          <div className="p-3.5 rounded-xl bg-stone-50 border border-stone-200/60 min-w-0">
+          <div className="min-w-0 bg-white">
             <p className="text-[10px] uppercase font-bold tracking-wider text-stone-400">
               {isEn ? "Course Program" : "Program Kursus"}
             </p>
             <p className="text-sm font-bold text-stone-900 truncate mt-0.5">{courseTitle}</p>
             {categoryName && (
-              <p className="text-[10px] text-blue-600 font-medium truncate">{categoryName}</p>
+              <p className="text-[10px] text-stone-500 font-medium truncate mt-0.5">{categoryName}</p>
             )}
           </div>
-          <div className="p-3.5 rounded-xl bg-stone-50 border border-stone-200/60 min-w-0">
+          <div className="min-w-0 bg-white">
             <p className="text-[10px] uppercase font-bold tracking-wider text-stone-400">
               {isEn ? "Learning Workload" : "Beban Belajar"}
             </p>
@@ -236,85 +194,77 @@ export function CertificateTranscriptCard({
           </div>
         </div>
 
-        {/* Assessment Items Table */}
-        <div className="my-5 overflow-hidden rounded-xl border border-stone-200 shadow-2xs print:my-3">
-          <table className="w-full text-left text-xs border-collapse">
+        {/* Assessment Items Table (Pure White, No Border Badges) */}
+        <div className="my-5 overflow-hidden border-b border-stone-200 print:my-3">
+          <table className="w-full text-left text-xs border-collapse bg-white">
             <thead>
-              <tr className={cn("text-[10px] uppercase tracking-wider", getTableHeaderClass())}>
-                <th className="py-2.5 px-3 font-semibold text-center w-10">No</th>
-                <th className="py-2.5 px-4 font-semibold">{isEn ? "Competency Unit / Assessment Aspect" : "Unit Kompetensi / Aspek Evaluasi"}</th>
+              <tr className="bg-white text-stone-800 text-[10px] uppercase tracking-wider border-b-2 border-stone-300">
+                <th className="py-2.5 px-3 font-bold text-center w-10">No</th>
+                <th className="py-2.5 px-4 font-bold">
+                  {isEn ? "Competency Unit / Assessment Aspect" : "Unit Kompetensi / Aspek Evaluasi"}
+                </th>
                 {showCategory && (
-                  <th className="py-2.5 px-3 font-semibold text-center w-28">{isEn ? "Category" : "Kategori"}</th>
+                  <th className="py-2.5 px-3 font-bold text-center w-28">
+                    {isEn ? "Category" : "Kategori"}
+                  </th>
                 )}
                 {showWorkload && (
-                  <th className="py-2.5 px-3 font-semibold text-center w-24">{isEn ? "Workload (Hours)" : "Beban (JP)"}</th>
+                  <th className="py-2.5 px-3 font-bold text-center w-24">
+                    {isEn ? "Workload (Hours)" : "Beban (JP)"}
+                  </th>
                 )}
-                <th className="py-2.5 px-3 font-semibold text-center w-20">{isEn ? "Score" : "Skor"}</th>
+                <th className="py-2.5 px-3 font-bold text-center w-20">
+                  {isEn ? "Score" : "Skor"}
+                </th>
                 {showGrade && (
-                  <th className="py-2.5 px-3 font-semibold text-center w-16">Grade</th>
+                  <th className="py-2.5 px-3 font-bold text-center w-16">Grade</th>
                 )}
                 {showStatus && (
-                  <th className="py-2.5 px-3 font-semibold text-center w-24">Status</th>
+                  <th className="py-2.5 px-3 font-bold text-center w-24">Status</th>
                 )}
               </tr>
             </thead>
             <tbody className="divide-y divide-stone-100 bg-white">
               {items.map((item, index) => (
-                <tr
-                  key={item.id}
-                  className={cn(index % 2 === 1 ? "bg-stone-50/40" : "bg-white")}
-                >
-                  <td className="py-2 px-3 text-center text-stone-400 font-mono text-[11px]">
+                <tr key={item.id} className="bg-white hover:bg-stone-50/30">
+                  <td className="py-2.5 px-3 text-center text-stone-400 font-mono text-[11px]">
                     {index + 1}
                   </td>
                   <td className="py-2.5 px-4 text-stone-800 font-medium">
                     <span className="truncate max-w-sm sm:max-w-md block">{item.title}</span>
                   </td>
                   {showCategory && (
-                    <td className="py-2 px-3 text-center">
-                      <span
-                        className={cn(
-                          "inline-block px-2 py-0.5 rounded text-[10px] font-semibold tracking-wide",
-                          item.type === "quiz"
-                            ? "bg-blue-50 text-blue-700 border border-blue-200"
-                            : item.type === "assignment"
-                              ? "bg-purple-50 text-purple-700 border border-purple-200"
-                              : "bg-stone-100 text-stone-700"
-                        )}
-                      >
-                        {item.type === "quiz"
-                          ? (isEn ? "Quiz Evaluation" : "Evaluasi Kuis")
-                          : item.type === "assignment"
-                            ? (isEn ? "Project Task" : "Tugas Proyek")
-                            : (isEn ? "Theory Module" : "Modul Teori")}
-                      </span>
+                    <td className="py-2.5 px-3 text-center text-[11px] font-medium text-stone-600">
+                      {item.type === "quiz"
+                        ? (isEn ? "Evaluasi Kuis" : "Evaluasi Kuis")
+                        : item.type === "assignment"
+                          ? (isEn ? "Tugas Proyek" : "Tugas Proyek")
+                          : (isEn ? "Modul Teori" : "Modul Teori")}
                     </td>
                   )}
                   {showWorkload && (
-                    <td className="py-2 px-3 text-center text-stone-600 font-mono text-[11px]">
+                    <td className="py-2.5 px-3 text-center text-stone-600 font-mono text-[11px]">
                       {item.workload}
                     </td>
                   )}
-                  <td className="py-2 px-3 text-center font-bold text-stone-900 font-mono text-[11px]">
+                  <td className="py-2.5 px-3 text-center font-bold text-stone-900 font-mono text-[11px]">
                     {item.score}
                     <span className="text-stone-400 font-normal text-[10px]">/100</span>
                   </td>
                   {showGrade && (
-                    <td className="py-2 px-3 text-center font-bold text-amber-700 font-mono text-[11px]">
+                    <td className="py-2.5 px-3 text-center font-bold text-stone-900 font-mono text-[11px]">
                       {item.grade}
                     </td>
                   )}
                   {showStatus && (
-                    <td className="py-2 px-3 text-center">
-                      <span className="inline-block px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] font-bold">
-                        {item.status === "KOMPETEN"
-                          ? (isEn ? "COMPETENT" : "KOMPETEN")
-                          : item.status === "LULUS"
-                            ? (isEn ? "PASSED" : "LULUS")
-                            : item.status === "DISETUJUI"
-                              ? (isEn ? "APPROVED" : "DISETUJUI")
-                              : item.status}
-                      </span>
+                    <td className="py-2.5 px-3 text-center text-[11px] font-bold text-stone-800">
+                      {item.status === "KOMPETEN"
+                        ? (isEn ? "KOMPETEN" : "KOMPETEN")
+                        : item.status === "LULUS"
+                          ? (isEn ? "LULUS" : "LULUS")
+                          : item.status === "DISETUJUI"
+                            ? (isEn ? "DISETUJUI" : "DISETUJUI")
+                            : item.status}
                     </td>
                   )}
                 </tr>
@@ -323,46 +273,38 @@ export function CertificateTranscriptCard({
           </table>
         </div>
 
-        {/* Grade Summary Box */}
+        {/* Grade Summary Section (Pure White, No Border Boxes around text) */}
         {(showScore || showPredicateBadge || showScale) && (
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-5 p-4 rounded-xl bg-amber-50/50 border border-amber-200/60 print:grid-cols-3 print:gap-2 print:my-3 print:p-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 my-5 py-4 border-t border-b border-stone-200 bg-white print:grid-cols-3 print:gap-2 print:my-3 print:py-2">
             {showScore && (
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-stone-900 text-white flex flex-col items-center justify-center font-bold font-mono">
-                  <span className="text-base leading-none">{Math.round(overallScore)}</span>
-                  <span className="text-[8px] opacity-70 leading-none">/ 100</span>
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase font-bold text-stone-400">
-                    {isEn ? "Average Score" : "Nilai Rata-rata"}
-                  </p>
-                  <p className="text-xs font-bold text-stone-900">
-                    {overallScore.toFixed(1)} / 100
-                  </p>
-                </div>
+              <div>
+                <p className="text-[10px] uppercase font-bold text-stone-400 tracking-wider">
+                  {isEn ? "Average Score" : "Nilai Rata-rata"}
+                </p>
+                <p className="text-base font-bold text-stone-900 mt-1">
+                  {overallScore.toFixed(1)}{" "}
+                  <span className="text-xs font-normal text-stone-400">/ 100</span>
+                </p>
               </div>
             )}
 
             {showPredicateBadge && (
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-500 text-stone-950 flex items-center justify-center font-black text-lg font-mono">
-                  {finalGrade}
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase font-bold text-stone-400">
-                    {isEn ? "Graduation Predicate" : "Predikat Kelulusan"}
-                  </p>
-                  <p className="text-xs font-bold text-amber-900">{displayPredicate}</p>
-                </div>
+              <div>
+                <p className="text-[10px] uppercase font-bold text-stone-400 tracking-wider">
+                  {isEn ? "Graduation Predicate" : "Predikat Kelulusan"}
+                </p>
+                <p className="text-sm font-bold text-stone-900 mt-1">
+                  Grade {finalGrade} • {displayPredicate}
+                </p>
               </div>
             )}
 
             {showScale && (
-              <div className="text-[10px] text-stone-500 flex flex-col justify-center border-t sm:border-t-0 sm:border-l border-amber-200/60 pt-2 sm:pt-0 sm:pl-3">
-                <p className="font-bold text-stone-700 uppercase mb-0.5">
+              <div>
+                <p className="text-[10px] uppercase font-bold text-stone-400 tracking-wider">
                   {isEn ? "Grade Scale:" : "Keterangan Skala:"}
                 </p>
-                <p>
+                <p className="text-[11px] text-stone-500 mt-1 leading-relaxed">
                   {isEn
                     ? "85–100 (A) : With Distinction | 75–84 (B) : Merit"
                     : "85–100 (A) : Dengan Pujian | 75–84 (B) : Memuaskan"}
@@ -373,16 +315,16 @@ export function CertificateTranscriptCard({
         )}
 
         {/* Validation QR & Signatures */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-stone-200 items-end print:grid-cols-3 print:gap-2 print:pt-2">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-stone-200 items-end print:grid-cols-3 print:gap-2 print:pt-2 bg-white">
           {/* QR Validation */}
-          <div className="flex items-center gap-3.5 min-w-0">
+          <div className="flex items-center gap-3.5 min-w-0 bg-white">
             {showQr && (
               <>
                 {qrCodeUrl ? (
                   <Link
                     href={`/verify/${certificateCode}`}
                     target="_blank"
-                    className="shrink-0 group/qr block p-1 rounded-xl bg-white border border-stone-200/90 shadow-2xs group-hover/qr:border-emerald-500 group-hover/qr:shadow-xs transition-all"
+                    className="shrink-0 group/qr block p-1 bg-white"
                     title="Klik untuk membuka panel informasi verifikasi resmi"
                   >
                     <img
@@ -395,7 +337,7 @@ export function CertificateTranscriptCard({
                   <Link
                     href={`/verify/${certificateCode}`}
                     target="_blank"
-                    className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl border border-stone-200 bg-stone-50 flex items-center justify-center text-stone-400 hover:text-emerald-600 hover:border-emerald-300 transition-all shrink-0 print:w-14 print:h-14"
+                    className="w-16 h-16 sm:w-20 sm:h-20 bg-white flex items-center justify-center text-stone-400 hover:text-stone-700 transition-all shrink-0 print:w-14 print:h-14"
                     title="Klik untuk membuka panel informasi verifikasi resmi"
                   >
                     <QrCode size={26} />
@@ -405,9 +347,9 @@ export function CertificateTranscriptCard({
                   <Link
                     href={`/verify/${certificateCode}`}
                     target="_blank"
-                    className="font-bold text-stone-800 hover:text-emerald-700 flex items-center gap-1 transition-colors"
+                    className="font-bold text-stone-800 hover:text-stone-900 flex items-center gap-1 transition-colors"
                   >
-                    <ShieldCheck size={13} className="text-emerald-600 shrink-0" />
+                    <ShieldCheck size={13} className="text-stone-600 shrink-0" />
                     <span className="truncate">{isEn ? "Officially Verified" : "Terverifikasi Resmi"}</span>
                   </Link>
                   <p className="mt-0.5 leading-tight text-[9px] text-stone-400 break-words">
@@ -421,7 +363,7 @@ export function CertificateTranscriptCard({
           </div>
 
           {/* Instructor Signature */}
-          <div className="text-center sm:text-right print:text-right min-w-0">
+          <div className="text-center sm:text-right print:text-right min-w-0 bg-white">
             <p className="font-serif italic text-base text-stone-800 mb-0.5 print:text-xs truncate" title={effectiveInstructorName}>
               {effectiveInstructorName}
             </p>
@@ -431,7 +373,7 @@ export function CertificateTranscriptCard({
           </div>
 
           {/* Academic Director Signature */}
-          <div className="text-center sm:text-right print:text-right min-w-0">
+          <div className="text-center sm:text-right print:text-right min-w-0 bg-white">
             <p className="font-serif italic text-base text-stone-800 mb-0.5 print:text-xs truncate" title={effectiveSignatoryName2}>
               {effectiveSignatoryName2}
             </p>
