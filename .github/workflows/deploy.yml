@@ -55,5 +55,6 @@ jobs:
         with:
           name: lms-platform-standalone
           path: .next/standalone/
+          include-hidden-files: true
           if-no-files-found: error
           retention-days: 7
