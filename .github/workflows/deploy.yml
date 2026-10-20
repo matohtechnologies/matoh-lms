@@ -42,8 +42,18 @@ jobs:
           NEXT_PUBLIC_MIDTRANS_CLIENT_KEY: ${{ secrets.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY }}
           MIDTRANS_IS_PRODUCTION: "false"
 
-      - name: Verify standalone output
+      - name: Prepare standalone package
         run: |
-          test -f .next/standalone/server.js
-          test -d .next/static
-          echo "Standalone output tersedia"
+          mkdir -p .next/standalone/.next
+          cp -r .next/static .next/standalone/.next/static
+          if [ -d public ]; then
+            cp -r public .next/standalone/public
+          fi
+
+      - name: Upload standalone artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lms-platform-standalone
+          path: .next/standalone/
+          if-no-files-found: error
+          retention-days: 7
