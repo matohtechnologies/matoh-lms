@@ -44,11 +44,18 @@ jobs:
 
       - name: Prepare standalone package
         run: |
+          test -f .next/standalone/server.js
+          test -d .next/standalone/.next
+          test -d .next/static
+
           mkdir -p .next/standalone/.next
-          cp -r .next/static .next/standalone/.next/static
+          cp -a .next/static .next/standalone/.next/static
+
           if [ -d public ]; then
-            cp -r public .next/standalone/public
+            cp -a public .next/standalone/public
           fi
+
+          test -f .next/standalone/.next/BUILD_ID
 
       - name: Upload standalone artifact
         uses: actions/upload-artifact@v4
