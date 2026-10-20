@@ -19,6 +19,8 @@ const cspHeader = `
 `.replace(/\s{2,}/g, " ").trim();
 
 const nextConfig: NextConfig = {
+  output: "standalone",
+
   // 1. Security: Hide server technology signature
   poweredByHeader: false,
 
