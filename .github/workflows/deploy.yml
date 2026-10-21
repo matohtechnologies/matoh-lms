@@ -1,11 +1,18 @@
 
-name: Build LMS Platform
+name: Build and Deploy LMS Platform
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lms-platform-production
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -64,4 +71,103 @@ jobs:
           path: .next/standalone/
           include-hidden-files: true
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 3
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Download standalone artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: lms-platform-standalone
+          path: standalone
+
+      - name: Package release
+        run: tar -czf lms-platform-release.tar.gz -C standalone .
+
+      - name: Configure SSH
+        env:
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+        run: |
+          set -eu
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "$VPS_HOST" >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Upload release to VPS
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          GITHUB_SHA: ${{ github.sha }}
+        run: |
+          set -eu
+          scp lms-platform-release.tar.gz \
+            "$VPS_USER@$VPS_HOST:/home/lmsapp/lms-platform-${GITHUB_SHA}.tar.gz"
+
+      - name: Activate release and verify
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          GITHUB_SHA: ${{ github.sha }}
+        run: |
+          ssh "$VPS_USER@$VPS_HOST" \
+            "bash -s -- '$GITHUB_SHA'" <<'REMOTE'
+          set -Eeuo pipefail
+
+          BASE=/var/www/lms-platform
+          SHA="$1"
+          RELEASE="$BASE/releases/$SHA"
+          CURRENT="$BASE/releases/current"
+          ARCHIVE="/home/lmsapp/lms-platform-$SHA.tar.gz"
+
+          OLD_RELEASE="$(readlink -f "$CURRENT" 2>/dev/null || true)"
+
+          mkdir -p "$RELEASE"
+          tar -xzf "$ARCHIVE" -C "$RELEASE"
+
+          test -f "$RELEASE/server.js"
+          test -f "$RELEASE/.next/BUILD_ID"
+
+          chown -R lmsapp:lmsapp "$RELEASE"
+
+          ln -sfn "$RELEASE" "$CURRENT"
+
+          if ! sudo -n /usr/bin/systemctl restart lms-platform; then
+            echo "Restart gagal; mengembalikan release sebelumnya."
+            if [ -n "$OLD_RELEASE" ] && [ -d "$OLD_RELEASE" ]; then
+              ln -sfn "$OLD_RELEASE" "$CURRENT"
+              sudo -n /usr/bin/systemctl restart lms-platform || true
+            fi
+            exit 1
+          fi
+
+          OK=0
+          for i in $(seq 1 15); do
+            if curl --max-time 3 -fsS \
+              http://127.0.0.1:3000/ >/dev/null; then
+              OK=1
+              break
+            fi
+            sleep 2
+          done
+
+          if [ "$OK" -ne 1 ]; then
+            echo "Health check gagal; rollback."
+            if [ -n "$OLD_RELEASE" ] && [ -d "$OLD_RELEASE" ]; then
+              ln -sfn "$OLD_RELEASE" "$CURRENT"
+              sudo -n /usr/bin/systemctl restart lms-platform || true
+            fi
+            exit 1
+          fi
+
+          sudo -n /usr/bin/systemctl is-active lms-platform
+          rm -f "$ARCHIVE"
+          echo "Deployment berhasil: $SHA"
+          REMOTE
