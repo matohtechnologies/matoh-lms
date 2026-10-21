@@ -134,30 +134,6 @@ export default function LoginPage() {
             </div>
           )}
 
-          {/* Quick Admin Fill */}
-          <div className="mb-5 p-3 rounded-xl bg-blue-50/80 border border-blue-200/80">
-            <div className="flex items-center justify-between mb-1.5">
-              <p className="text-xs font-semibold text-blue-950">
-                Akses Administrator:
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                setValue("email", "admin@matohtechnologies.com", { shouldValidate: true });
-                setValue("password", "Admin@123456", { shouldValidate: true });
-              }}
-              className="w-full text-xs py-2 px-3 rounded-lg bg-white border border-blue-200 text-stone-700 hover:bg-blue-100/60 transition-colors text-left flex items-center justify-between shadow-xs"
-            >
-              <div>
-                <span className="font-semibold text-blue-700 block">Admin Matoh Technologies</span>
-                <span className="text-[10px] text-stone-500">admin@matohtechnologies.com</span>
-              </div>
-              <span className="text-[10px] font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded border border-blue-200/60">
-                Isi Otomatis
-              </span>
-            </button>
-          </div>
 
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
