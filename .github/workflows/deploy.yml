@@ -108,7 +108,7 @@ jobs:
           GITHUB_SHA: ${{ github.sha }}
         run: |
           set -eu
-          scp lms-platform-release.tar.gz \
+          scp -O lms-platform-release.tar.gz \
             "$VPS_USER@$VPS_HOST:/home/lmsapp/lms-platform-${GITHUB_SHA}.tar.gz"
 
       - name: Activate release and verify
