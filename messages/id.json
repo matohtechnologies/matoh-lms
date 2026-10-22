@@ -260,7 +260,10 @@
     "admin_console_desc": "Kelola kelas, pengguna, & sistem",
     "learner_menu": "Menu Siswa",
     "explore_section": "Lainnya",
-    "browse_courses": "Jelajahi Kelas"
+    "browse_courses": "Jelajahi Kelas",
+    "logout": "Keluar",
+    "logout_confirm_title": "Keluar dari Akun",
+    "logout_confirm_desc": "Keluar dari sesi saat ini di perangkat ini."
   },
   "checkout": {
     "title": "Checkout",

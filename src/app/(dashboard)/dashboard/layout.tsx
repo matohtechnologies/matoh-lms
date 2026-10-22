@@ -119,7 +119,7 @@ export default async function DashboardLayout({
 
         {/* Logout */}
         <div className="p-3 border-t border-slate-100">
-          <SignOutButton variant="dashboard" />
+          <SignOutButton variant="dashboard">{tDash("logout")}</SignOutButton>
         </div>
       </aside>
 
@@ -153,6 +153,12 @@ export default async function DashboardLayout({
                 Admin
               </Link>
             )}
+            <SignOutButton
+              variant="icon"
+              title={tDash("logout")}
+              aria-label={tDash("logout")}
+              className="text-slate-500 hover:text-red-600 hover:bg-red-50 border border-slate-200/80 bg-white shadow-2xs"
+            />
             <UserSidebarBadge
               initialUser={{
                 name: userName,

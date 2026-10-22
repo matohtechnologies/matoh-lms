@@ -1367,9 +1367,10 @@ export default function LearnPageClient({
           <div className="flex items-center gap-3 shrink-0">
             <Link
               href="/dashboard/my-courses"
-              className="text-xs text-stone-400 hover:text-blue-400 font-medium transition-colors hidden sm:inline"
+              className="text-xs text-stone-400 hover:text-blue-400 font-medium transition-colors inline-flex items-center gap-1"
             >
-              {t("back_to_dashboard")}
+              <ChevronLeft size={14} />
+              <span>{t("back_to_dashboard")}</span>
             </Link>
           </div>
         </header>

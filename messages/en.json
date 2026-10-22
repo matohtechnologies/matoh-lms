@@ -260,7 +260,10 @@
     "admin_console_desc": "Manage courses, users, & platform",
     "learner_menu": "Learner Menu",
     "explore_section": "Explore",
-    "browse_courses": "Browse Courses"
+    "browse_courses": "Browse Courses",
+    "logout": "Log Out",
+    "logout_confirm_title": "Sign Out of Account",
+    "logout_confirm_desc": "Log out of your current session on this device."
   },
   "checkout": {
     "title": "Checkout",

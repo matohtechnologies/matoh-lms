@@ -4,12 +4,13 @@ import { useState, useTransition, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Save, Camera, User, KeyRound, CheckCircle, AlertCircle, Loader2, Trash2 } from "lucide-react";
+import { Save, Camera, User, KeyRound, CheckCircle, AlertCircle, Loader2, Trash2, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/input";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { useAppLocale } from "@/components/providers/locale-provider";
+import SignOutButton from "@/components/auth/signout-button";
 
 export default function ProfilePage() {
   const { data: session, update } = useSession();
@@ -544,6 +545,35 @@ export default function ProfilePage() {
                 </Button>
               </div>
             </form>
+          </div>
+
+          {/* Account Session & Sign Out Card */}
+          <div className="bg-white rounded-2xl border border-stone-200/80 shadow-xs p-6 sm:p-7">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-red-50 border border-red-200/80 flex items-center justify-center text-red-600 shrink-0">
+                  <LogOut size={18} />
+                </div>
+                <div>
+                  <h3
+                    className="font-bold text-stone-900 text-base"
+                    style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+                  >
+                    {t("logout_confirm_title")}
+                  </h3>
+                  <p className="text-xs text-stone-500">
+                    {t("logout_confirm_desc")}
+                  </p>
+                </div>
+              </div>
+
+              <SignOutButton
+                variant="danger"
+                className="w-full sm:w-auto"
+              >
+                <span>{t("logout")}</span>
+              </SignOutButton>
+            </div>
           </div>
         </div>
       </div>
