@@ -33,6 +33,10 @@ const MIDTRANS_BASE_URL = process.env.MIDTRANS_IS_PRODUCTION === "true"
   ? "https://app.midtrans.com/snap/v1"
   : "https://app.sandbox.midtrans.com/snap/v1";
 
+const MIDTRANS_API_URL = process.env.MIDTRANS_IS_PRODUCTION === "true"
+  ? "https://api.midtrans.com/v2"
+  : "https://api.sandbox.midtrans.com/v2";
+
 export async function createMidtransTransaction(
   payload: CreateTransactionPayload
 ): Promise<MidtransTransactionResponse> {
@@ -88,4 +92,37 @@ export function verifyMidtransSignature(
     .update(`${orderId}${statusCode}${grossAmount}${serverKey}`)
     .digest("hex");
   return hash === signatureKey;
+}
+
+export async function checkMidtransTransactionStatus(orderId: string): Promise<{
+  transaction_status?: string;
+  payment_type?: string;
+  status_code?: string;
+  fraud_status?: string;
+} | null> {
+  const serverKey = process.env.MIDTRANS_SERVER_KEY;
+  if (!serverKey || serverKey.includes("xxxxx")) {
+    return null;
+  }
+
+  try {
+    const authString = Buffer.from(`${serverKey}:`).toString("base64");
+    const response = await fetch(`${MIDTRANS_API_URL}/${orderId}/status`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Basic ${authString}`,
+      },
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error querying Midtrans transaction status:", error);
+    return null;
+  }
 }

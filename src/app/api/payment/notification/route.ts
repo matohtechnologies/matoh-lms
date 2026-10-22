@@ -43,9 +43,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Order not found" }, { status: 404 });
     }
 
-    // Update based on status
+    // 1. Idempotency Guard: If order is already finalized as PAID, do not repeat side effects
+    if (order.status === "PAID") {
+      return NextResponse.json({
+        success: true,
+        message: "Order has already been processed as PAID. Idempotent response.",
+      });
+    }
+
+    // 2. Handle Payment Success (capture / settlement)
     if (["capture", "settlement"].includes(transaction_status)) {
-      await prisma.$transaction([
+      const txOperations: any[] = [
         prisma.order.update({
           where: { id: order.id },
           data: {
@@ -68,9 +76,28 @@ export async function POST(req: NextRequest) {
           where: { id: order.courseId },
           data: { enrollCount: { increment: 1 } },
         }),
-      ]);
+      ];
 
-      // Send transactional receipt email asynchronously
+      // If coupon was applied, record coupon usage exactly once upon settlement
+      if (order.couponId) {
+        txOperations.push(
+          prisma.coupon.update({
+            where: { id: order.couponId },
+            data: { usedCount: { increment: 1 } },
+          }).catch(() => null),
+          prisma.couponUsage.create({
+            data: {
+              couponId: order.couponId,
+              userId: order.userId,
+              orderId: order.midtransOrderId || order.id,
+            },
+          }).catch(() => null)
+        );
+      }
+
+      await prisma.$transaction(txOperations.filter(Boolean));
+
+      // Send transactional receipt email asynchronously exactly once
       if (order.user?.email && order.course?.title) {
         sendOrderReceiptEmail({
           to: order.user.email,
@@ -81,6 +108,7 @@ export async function POST(req: NextRequest) {
         }).catch((err) => console.error("[Receipt Email Error]:", err));
       }
     } else if (["cancel", "deny", "expire"].includes(transaction_status)) {
+      // 3. Handle Failure / Expiry safely
       await prisma.order.update({
         where: { id: order.id },
         data: { status: "FAILED" },

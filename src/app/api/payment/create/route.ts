@@ -162,35 +162,36 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: true, type: "free" });
     }
 
-    // Create order
-    const orderId = `EA-${Date.now()}-${nanoid(6).toUpperCase()}`;
-
-    await prisma.order.create({
-      data: {
+    // 1. Idempotency Guard: Reuse active pending order created within the last 15 minutes
+    const activePendingOrder = await prisma.order.findFirst({
+      where: {
         userId: session.user.id,
         courseId: course.id,
-        amount: finalAmount,
-        discountAmount,
-        couponId: appliedCouponId,
-        midtransOrderId: orderId,
         status: "PENDING",
+        amount: finalAmount,
+        couponId: appliedCouponId,
+        paymentToken: { not: null },
+        createdAt: { gte: new Date(Date.now() - 15 * 60 * 1000) },
       },
-    }).catch(() => null);
+      select: {
+        id: true,
+        midtransOrderId: true,
+        paymentToken: true,
+      },
+    });
 
-    if (appliedCouponId) {
-      await prisma.coupon.update({
-        where: { id: appliedCouponId },
-        data: { usedCount: { increment: 1 } },
-      }).catch(() => null);
-
-      await prisma.couponUsage.create({
-        data: {
-          couponId: appliedCouponId,
-          userId: session.user.id,
-          orderId,
-        },
-      }).catch(() => null);
+    if (activePendingOrder?.paymentToken && activePendingOrder?.midtransOrderId) {
+      return NextResponse.json({
+        success: true,
+        type: "paid",
+        token: activePendingOrder.paymentToken,
+        orderId: activePendingOrder.midtransOrderId,
+        reused: true,
+      });
     }
+
+    // 2. Generate unique order ID
+    const orderId = `EA-${Date.now()}-${nanoid(6).toUpperCase()}`;
 
     // Get user for customer details
     const user = await prisma.user.findUnique({
@@ -198,7 +199,7 @@ export async function POST(req: NextRequest) {
       select: { name: true, email: true },
     }).catch(() => ({ name: session.user?.name, email: session.user?.email }));
 
-    // Create Midtrans transaction
+    // 3. Create Midtrans Snap transaction
     const transaction = await createMidtransTransaction({
       orderId,
       grossAmount: Math.round(finalAmount),
@@ -214,6 +215,20 @@ export async function POST(req: NextRequest) {
         first_name: user?.name?.split(" ")[0] ?? "User",
         last_name: user?.name?.split(" ").slice(1).join(" "),
         email: user?.email ?? "",
+      },
+    });
+
+    // 4. Save Order with paymentToken for idempotency tracking
+    await prisma.order.create({
+      data: {
+        userId: session.user.id,
+        courseId: course.id,
+        amount: finalAmount,
+        discountAmount,
+        couponId: appliedCouponId,
+        midtransOrderId: orderId,
+        paymentToken: transaction.token,
+        status: "PENDING",
       },
     });
 
