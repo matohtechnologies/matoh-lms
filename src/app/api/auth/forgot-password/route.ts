@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
 
+import crypto from "crypto";
+import { sendPasswordResetEmail } from "@/lib/email";
+
 const schema = z.object({
   email: z.string().email(),
 });
@@ -19,17 +22,38 @@ export async function POST(req: NextRequest) {
       });
 
       if (user) {
-        // In production: generate reset token, send email
-        // For now: log the action (email service not yet configured)
-        console.log(`[Password Reset] Reset requested for: ${user.email}`);
-        
-        // TODO: Implement email sending with nodemailer or resend
-        // const resetToken = crypto.randomUUID();
-        // await prisma.passwordResetToken.create({ data: { userId: user.id, token: resetToken, expiresAt: ... } });
-        // await sendPasswordResetEmail(user.email, resetToken);
+        const token = crypto.randomUUID();
+        const expires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+
+        await prisma.verificationToken.upsert({
+          where: {
+            identifier_token: {
+              identifier: user.email,
+              token,
+            },
+          },
+          create: {
+            identifier: user.email,
+            token,
+            expires,
+          },
+          update: {
+            token,
+            expires,
+          },
+        });
+
+        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://matohtechnologies.com";
+        const resetUrl = `${baseUrl}/forgot-password?token=${token}&email=${encodeURIComponent(user.email)}`;
+
+        await sendPasswordResetEmail({
+          to: user.email,
+          name: user.name,
+          resetUrl,
+        });
       }
-    } catch {
-      // Silently fail - still return success
+    } catch (err) {
+      console.error("[Password Reset Error]:", err);
     }
 
     // Always return 200 success regardless of whether user exists

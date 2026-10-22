@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { verifyMidtransSignature } from "@/lib/midtrans";
+import { sendOrderReceiptEmail } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   try {
@@ -32,6 +33,10 @@ export async function POST(req: NextRequest) {
     // Find order
     const order = await prisma.order.findUnique({
       where: { midtransOrderId: orderId },
+      include: {
+        user: { select: { email: true, name: true } },
+        course: { select: { title: true } },
+      },
     });
 
     if (!order) {
@@ -64,6 +69,17 @@ export async function POST(req: NextRequest) {
           data: { enrollCount: { increment: 1 } },
         }),
       ]);
+
+      // Send transactional receipt email asynchronously
+      if (order.user?.email && order.course?.title) {
+        sendOrderReceiptEmail({
+          to: order.user.email,
+          name: order.user.name,
+          orderId: order.midtransOrderId || order.id,
+          courseTitle: order.course.title,
+          amount: order.amount,
+        }).catch((err) => console.error("[Receipt Email Error]:", err));
+      }
     } else if (["cancel", "deny", "expire"].includes(transaction_status)) {
       await prisma.order.update({
         where: { id: order.id },
