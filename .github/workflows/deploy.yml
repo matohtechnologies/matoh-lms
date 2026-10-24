@@ -138,6 +138,13 @@ jobs:
           test -f "$RELEASE/server.js"
           test -f "$RELEASE/.next/BUILD_ID"
 
+          # Tautkan .env dari shared base jika ada
+          if [ -f "$BASE/.env" ]; then
+            ln -sfn "$BASE/.env" "$RELEASE/.env"
+          elif [ -f "$BASE/shared/.env" ]; then
+            ln -sfn "$BASE/shared/.env" "$RELEASE/.env"
+          fi
+
           chown -R lmsapp:lmsapp "$RELEASE"
 
           ln -sfn "$RELEASE" "$CURRENT"
@@ -153,11 +160,20 @@ jobs:
 
           OK=0
           for i in $(seq 1 15); do
-            if curl --max-time 3 -fsS \
-              http://127.0.0.1:3000/ >/dev/null; then
+            # 1. Prioritaskan pengecekan endpoint /api/health
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 3 http://127.0.0.1:3000/api/health || true)
+            if [ "$HTTP_CODE" = "200" ]; then
               OK=1
               break
             fi
+
+            # 2. Fallback: cek rute root, terima status 200 atau 503 (saat maintenance mode aktif)
+            ROOT_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 3 http://127.0.0.1:3000/ || true)
+            if [ "$ROOT_CODE" = "200" ] || [ "$ROOT_CODE" = "503" ]; then
+              OK=1
+              break
+            fi
+
             sleep 2
           done
 

@@ -77,9 +77,10 @@ export async function middleware(request: NextRequest) {
     const isAdminLogin = pathname === "/login" && request.nextUrl.searchParams.get("admin") === "1";
     const isAuthApi = pathname.startsWith("/api/auth");
     const isWebhook = pathname.startsWith("/api/payment/notification") || pathname.startsWith("/api/webhooks");
+    const isHealthCheck = pathname === "/api/health";
 
-    // Allow Admin, Auth API calls, Payment Webhooks, and Admin login bypass (?admin=1)
-    if (!isAdmin && !isAdminLogin && !isAuthApi && !isWebhook) {
+    // Allow Admin, Auth API calls, Payment Webhooks, Health Check, and Admin login bypass (?admin=1)
+    if (!isAdmin && !isAdminLogin && !isAuthApi && !isWebhook && !isHealthCheck) {
       const isHtmlRequest = request.headers.get("accept")?.includes("text/html");
 
       if (isHtmlRequest) {
