@@ -32,17 +32,7 @@ export async function middleware(request: NextRequest) {
     return new NextResponse("Method Not Allowed", { status: 405 });
   }
 
-  // 2. Enforce HTTPS in production behind reverse proxies
-  if (
-    process.env.NODE_ENV === "production" &&
-    request.headers.get("x-forwarded-proto") === "http"
-  ) {
-    const httpsUrl = new URL(request.url);
-    httpsUrl.protocol = "https:";
-    return NextResponse.redirect(httpsUrl, 301);
-  }
-
-  // 3. Defend against path traversal, null byte injection, and malformed encoding
+  // 2. Defend against path traversal, null byte injection, and malformed encoding
   let decodedPath = pathname;
   try {
     decodedPath = decodeURIComponent(pathname);
