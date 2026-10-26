@@ -1,0 +1,11 @@
+User-Agent: *
+Allow: /
+Allow: /courses
+Allow: /about
+Allow: /certificates
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /admin/
+Disallow: /learn/
+
+Sitemap: https://matohtechnologies.com/sitemap.xml

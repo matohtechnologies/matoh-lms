@@ -1,0 +1,16 @@
+{
+  "node": {
+    "404ba17954f7a0d5b87eb64072f2089c1943be093a": {
+      "workers": {
+        "app/(admin)/admin/coupons/page": {
+          "moduleId": 42552,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "setUserLocale",
+      "filename": "src/i18n/actions.ts"
+    }
+  },
+  "edge": {}
+}

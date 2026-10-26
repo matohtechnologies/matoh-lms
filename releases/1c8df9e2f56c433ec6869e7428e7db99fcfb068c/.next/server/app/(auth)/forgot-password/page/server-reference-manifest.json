@@ -1,0 +1,16 @@
+{
+  "node": {
+    "4036139dab43eac22f94a8f0fe8aad9eef079a89b0": {
+      "workers": {
+        "app/(auth)/forgot-password/page": {
+          "moduleId": 45265,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "setUserLocale",
+      "filename": "src/i18n/actions.ts"
+    }
+  },
+  "edge": {}
+}

@@ -1,0 +1,16 @@
+{
+  "node": {
+    "409efb8cf0340447a55503231bf767af0f15787c57": {
+      "workers": {
+        "app/(public)/checkout/[courseId]/page": {
+          "moduleId": 29482,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "setUserLocale",
+      "filename": "src/i18n/actions.ts"
+    }
+  },
+  "edge": {}
+}

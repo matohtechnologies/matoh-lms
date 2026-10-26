@@ -1,0 +1,16 @@
+{
+  "node": {
+    "40c096a55dcfe7d0fdfa9b92df93aae47969b10a6b": {
+      "workers": {
+        "app/(public)/courses/page": {
+          "moduleId": 48368,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "setUserLocale",
+      "filename": "src/i18n/actions.ts"
+    }
+  },
+  "edge": {}
+}

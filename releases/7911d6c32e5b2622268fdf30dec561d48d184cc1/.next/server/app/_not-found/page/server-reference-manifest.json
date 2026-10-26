@@ -1,0 +1,16 @@
+{
+  "node": {
+    "4059af489d98f4755cfc45147db44c57088c10348e": {
+      "workers": {
+        "app/_not-found/page": {
+          "moduleId": 4363,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "setUserLocale",
+      "filename": "src/i18n/actions.ts"
+    }
+  },
+  "edge": {}
+}

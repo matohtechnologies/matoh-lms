@@ -1,0 +1,16 @@
+{
+  "node": {
+    "40ff66f0fe7aeea6fd58df8e2e93502372d1937de1": {
+      "workers": {
+        "app/(public)/verify/[code]/page": {
+          "moduleId": 56573,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "setUserLocale",
+      "filename": "src/i18n/actions.ts"
+    }
+  },
+  "edge": {}
+}

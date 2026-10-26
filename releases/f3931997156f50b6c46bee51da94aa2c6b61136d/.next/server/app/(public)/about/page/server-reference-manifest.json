@@ -1,0 +1,16 @@
+{
+  "node": {
+    "409a104c9092ef36e84781ad2c3eddc0b200358885": {
+      "workers": {
+        "app/(public)/about/page": {
+          "moduleId": 95864,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "setUserLocale",
+      "filename": "src/i18n/actions.ts"
+    }
+  },
+  "edge": {}
+}

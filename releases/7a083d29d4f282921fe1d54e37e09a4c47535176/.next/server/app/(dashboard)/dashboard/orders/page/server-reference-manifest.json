@@ -1,0 +1,16 @@
+{
+  "node": {
+    "40f751a93160df4c7b8283069cb6cd67584c2c769f": {
+      "workers": {
+        "app/(dashboard)/dashboard/orders/page": {
+          "moduleId": 25741,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "setUserLocale",
+      "filename": "src/i18n/actions.ts"
+    }
+  },
+  "edge": {}
+}

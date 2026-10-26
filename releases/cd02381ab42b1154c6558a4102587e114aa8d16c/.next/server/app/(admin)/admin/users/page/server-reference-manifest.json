@@ -1,0 +1,16 @@
+{
+  "node": {
+    "40bca9db46be0bf9b4d021c7c243783c9e6d6d979c": {
+      "workers": {
+        "app/(admin)/admin/users/page": {
+          "moduleId": 10425,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "setUserLocale",
+      "filename": "src/i18n/actions.ts"
+    }
+  },
+  "edge": {}
+}

@@ -1,0 +1,16 @@
+{
+  "node": {
+    "4005e2a8b33505303fdfd9d6ae475254deb8e9e54a": {
+      "workers": {
+        "app/(public)/checkout/success/page": {
+          "moduleId": 77038,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "setUserLocale",
+      "filename": "src/i18n/actions.ts"
+    }
+  },
+  "edge": {}
+}

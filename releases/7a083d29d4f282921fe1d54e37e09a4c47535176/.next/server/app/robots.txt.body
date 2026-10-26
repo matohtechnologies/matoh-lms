@@ -1,0 +1,33 @@
+User-Agent: *
+Allow: /
+Allow: /courses
+Allow: /courses/*
+Allow: /about
+Allow: /contact
+Allow: /blog
+Allow: /blog/*
+Allow: /instructors
+Allow: /verify
+Allow: /verify/*
+Allow: /certificates/*
+Allow: /help
+Allow: /privacy
+Allow: /terms
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /admin/
+Disallow: /learn/
+Disallow: /checkout/
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+
+User-Agent: Googlebot
+Allow: /
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /admin/
+Disallow: /learn/
+Disallow: /checkout/
+
+Sitemap: https://matohtechnologies.com/sitemap.xml

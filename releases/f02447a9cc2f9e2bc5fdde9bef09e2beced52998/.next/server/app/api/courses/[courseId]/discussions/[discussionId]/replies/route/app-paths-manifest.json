@@ -1,0 +1,3 @@
+{
+  "/api/courses/[courseId]/discussions/[discussionId]/replies/route": "app/api/courses/[courseId]/discussions/[discussionId]/replies/route.js"
+}

@@ -1,0 +1,16 @@
+{
+  "node": {
+    "4036139dab43eac22f94a8f0fe8aad9eef079a89b0": {
+      "workers": {
+        "app/(public)/blog/page": {
+          "moduleId": 84124,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "setUserLocale",
+      "filename": "src/i18n/actions.ts"
+    }
+  },
+  "edge": {}
+}

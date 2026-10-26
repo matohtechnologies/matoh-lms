@@ -1,0 +1,16 @@
+{
+  "node": {
+    "406380636d0d79a5808e44faa995b34bb361737d03": {
+      "workers": {
+        "app/(auth)/login/page": {
+          "moduleId": 74788,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "setUserLocale",
+      "filename": "src/i18n/actions.ts"
+    }
+  },
+  "edge": {}
+}

@@ -1,0 +1,177 @@
+{
+  "node": {
+    "40ff66f0fe7aeea6fd58df8e2e93502372d1937de1": {
+      "workers": {
+        "app/(admin)/admin/categories/page": {
+          "moduleId": 79211,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(admin)/admin/coupons/page": {
+          "moduleId": 42552,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(admin)/admin/courses/[courseId]/page": {
+          "moduleId": 27373,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(admin)/admin/courses/new/page": {
+          "moduleId": 99089,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(admin)/admin/courses/page": {
+          "moduleId": 5957,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(admin)/admin/orders/page": {
+          "moduleId": 14291,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(admin)/admin/page": {
+          "moduleId": 52270,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(admin)/admin/users/page": {
+          "moduleId": 10425,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(auth)/forgot-password/page": {
+          "moduleId": 45265,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(auth)/login/page": {
+          "moduleId": 74788,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(auth)/register/page": {
+          "moduleId": 18063,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(dashboard)/dashboard/certificates/page": {
+          "moduleId": 20457,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(dashboard)/dashboard/my-courses/page": {
+          "moduleId": 23120,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(dashboard)/dashboard/orders/page": {
+          "moduleId": 25741,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(dashboard)/dashboard/page": {
+          "moduleId": 94979,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(dashboard)/dashboard/profile/page": {
+          "moduleId": 67171,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(learn)/learn/[courseId]/page": {
+          "moduleId": 93053,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(public)/about/page": {
+          "moduleId": 95864,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(public)/blog/page": {
+          "moduleId": 84124,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(public)/certificates/[code]/page": {
+          "moduleId": 71875,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(public)/checkout/[courseId]/page": {
+          "moduleId": 29482,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(public)/checkout/success/page": {
+          "moduleId": 77038,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(public)/contact/page": {
+          "moduleId": 82925,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(public)/courses/[slug]/page": {
+          "moduleId": 34965,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(public)/courses/page": {
+          "moduleId": 48368,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(public)/help/page": {
+          "moduleId": 28360,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(public)/instructors/page": {
+          "moduleId": 31632,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(public)/page": {
+          "moduleId": 25219,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(public)/privacy/page": {
+          "moduleId": 56434,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(public)/terms/page": {
+          "moduleId": 86793,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(public)/verify/[code]/page": {
+          "moduleId": 56573,
+          "async": false,
+          "codeHash": null
+        },
+        "app/(public)/verify/page": {
+          "moduleId": 31635,
+          "async": false,
+          "codeHash": null
+        },
+        "app/_not-found/page": {
+          "moduleId": 4363,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "filename": "src/i18n/actions.ts",
+      "exportedName": "setUserLocale"
+    }
+  },
+  "edge": {},
+  "encryptionKey": "q28PU7qWI4Zl2qMpZCEJdTSqbRORRRFvxGf+EbS6Y6g="
+}

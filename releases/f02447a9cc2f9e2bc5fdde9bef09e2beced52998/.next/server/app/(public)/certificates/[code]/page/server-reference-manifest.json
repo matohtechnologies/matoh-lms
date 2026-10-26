@@ -1,0 +1,16 @@
+{
+  "node": {
+    "409a89859d31af0c69c11f1a12207b89ca9fe9ad19": {
+      "workers": {
+        "app/(public)/certificates/[code]/page": {
+          "moduleId": 71875,
+          "async": false,
+          "codeHash": null
+        }
+      },
+      "exportedName": "setUserLocale",
+      "filename": "src/i18n/actions.ts"
+    }
+  },
+  "edge": {}
+}
