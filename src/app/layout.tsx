@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Poppins } from "next/font/google";
 import { getLocale } from "next-intl/server";
 import LocaleProvider from "@/components/providers/locale-provider";
 import SessionProvider from "@/components/providers/session-provider";
@@ -8,23 +7,10 @@ import { OrganizationJsonLd } from "@/components/seo/organization-json-ld";
 import { FloatingActionDock } from "@/components/ui/floating-action-dock";
 import "./globals.css";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-poppins",
-  display: "swap",
-});
-
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#2563eb" },
-    { media: "(prefers-color-scheme: dark)", color: "#0B1120" },
+    { media: "(prefers-color-scheme: light)", color: "#0e7485" },
+    { media: "(prefers-color-scheme: dark)", color: "#072830" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -73,7 +59,7 @@ export default async function RootLayout({
   const locale = await getLocale();
 
   return (
-    <html lang={locale} className={`${inter.variable} ${poppins.variable}`}>
+    <html lang={locale}>
       <head>
         <OrganizationJsonLd />
       </head>

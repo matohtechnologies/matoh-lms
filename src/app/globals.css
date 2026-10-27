@@ -1,5 +1,36 @@
 @import "tailwindcss";
 
+@theme {
+  --color-blue-50: #f0f9fa;
+  --color-blue-100: #e0f2f5;
+  --color-blue-200: #bde4eb;
+  --color-blue-300: #87cedb;
+  --color-blue-400: #42b1c4;
+  --color-blue-500: #1b94a8;
+  --color-blue-600: #0e7485;
+  --color-blue-700: #0c5e6d;
+  --color-blue-800: #0e4d58;
+  --color-blue-900: #10404a;
+  --color-blue-950: #06272e;
+
+  --color-teal-blue-50: #f0f9fa;
+  --color-teal-blue-100: #e0f2f5;
+  --color-teal-blue-200: #bde4eb;
+  --color-teal-blue-300: #87cedb;
+  --color-teal-blue-400: #42b1c4;
+  --color-teal-blue-500: #1b94a8;
+  --color-teal-blue-600: #0e7485;
+  --color-teal-blue-700: #0c5e6d;
+  --color-teal-blue-800: #0e4d58;
+  --color-teal-blue-900: #10404a;
+  --color-teal-blue-950: #06272e;
+
+  --font-sans: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  --font-heading: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  --font-poppins: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  --font-inter: Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -14,34 +45,39 @@
     --border: 214 20% 91%;
     --input: 214 20% 91%;
 
-    --primary: 221.2 83.2% 53.3%;
+    /* Primary: Biru Teal (#0e7485) */
+    --primary: 188 81% 29%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 199 89% 48%;
+    --secondary: 186 68% 38%;
     --secondary-foreground: 0 0% 100%;
 
     --muted: 210 20% 96%;
     --muted-foreground: 215 16% 47%;
 
-    --accent: 214 100% 97%;
-    --accent-foreground: 221 83% 45%;
+    --accent: 188 55% 96%;
+    --accent-foreground: 188 81% 29%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --ring: 221.2 83.2% 53.3%;
+    --ring: 188 81% 29%;
     --radius: 0.875rem;
 
-    /* Fonts */
-    --font-inter: var(--font-inter, "Inter", system-ui, -apple-system, sans-serif);
-    --font-poppins: var(--font-poppins, "Poppins", system-ui, sans-serif);
-    --font-plus-jakarta: var(--font-poppins);
+    /* Fonts: Clean Minimalist Arial */
+    --font-arial: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    --font-inter: var(--font-arial);
+    --font-poppins: var(--font-arial);
+    --font-plus-jakarta: var(--font-arial);
+    --font-sans: var(--font-arial);
+    --font-heading: var(--font-arial);
   }
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
   }
 
   * {
@@ -52,28 +88,32 @@
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
-    font-family: var(--font-inter), "Inter", system-ui, -apple-system, sans-serif;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* 1. Judul (Heading): Poppins */
+  /* 1. Judul (Heading): Arial Clean & Minimalist */
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-poppins), "Poppins", system-ui, sans-serif;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
     font-weight: 700;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.015em;
   }
 
-  /* 2. Navigasi & Menu: Poppins */
+  /* 2. Navigasi, Menu, Buttons & Form: Arial */
   nav,
   header nav,
+  button,
+  input,
+  textarea,
+  select,
   [role="navigation"],
   [role="menu"],
   [role="menubar"],
   [role="menuitem"],
   [role="tablist"],
   [role="tab"] {
-    font-family: var(--font-poppins), "Poppins", system-ui, sans-serif;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
   }
 
   a {
@@ -82,8 +122,8 @@
   }
 
   ::selection {
-    background-color: hsl(221 83% 53% / 0.15);
-    color: hsl(221 83% 35%);
+    background-color: rgba(14, 116, 133, 0.18);
+    color: #0c5e6d;
   }
 
   /* Scrollbar styling */
@@ -109,14 +149,11 @@
 /* Custom utility classes */
 @layer utilities {
   .font-poppins,
-  .font-heading {
-    font-family: var(--font-poppins), "Poppins", system-ui, sans-serif !important;
-  }
-
+  .font-heading,
   .font-inter,
   .font-sans,
   .font-body {
-    font-family: var(--font-inter), "Inter", system-ui, sans-serif !important;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif !important;
   }
 
   .text-balance {
@@ -128,11 +165,11 @@
   }
 
   .gradient-primary {
-    background: linear-gradient(135deg, hsl(221, 83%, 53%) 0%, hsl(199, 89%, 48%) 100%);
+    background: linear-gradient(135deg, #0e7485 0%, #1b94a8 100%);
   }
 
   .gradient-hero {
-    background: radial-gradient(circle at 50% -20%, hsl(214, 100%, 97%) 0%, hsl(0, 0%, 100%) 65%);
+    background: radial-gradient(circle at 50% -20%, #f0f9fa 0%, #ffffff 65%);
   }
 
   .card-hover {
@@ -145,7 +182,7 @@
   }
 
   .text-gradient {
-    background: linear-gradient(135deg, hsl(221, 83%, 50%) 0%, hsl(200, 95%, 45%) 100%);
+    background: linear-gradient(135deg, #0e7485 0%, #1b94a8 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -159,11 +196,11 @@
   }
 
   .shadow-warm {
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.03), 0 8px 24px -4px rgb(37 99 235 / 0.08);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.03), 0 8px 24px -4px rgb(14 116 133 / 0.08);
   }
 
   .shadow-warm-lg {
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.03), 0 20px 40px -10px rgb(37 99 235 / 0.12);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.03), 0 20px 40px -10px rgb(14 116 133 / 0.12);
   }
 
   .shadow-subtle {
@@ -172,7 +209,7 @@
 
   /* Architectural & Section Background Patterns (Optimized with GPU containment) */
   .bg-dot-matrix {
-    background-image: radial-gradient(rgba(14, 165, 233, 0.14) 1px, transparent 1px);
+    background-image: radial-gradient(rgba(14, 116, 133, 0.12) 1px, transparent 1px);
     background-size: 24px 24px;
     contain: paint;
   }

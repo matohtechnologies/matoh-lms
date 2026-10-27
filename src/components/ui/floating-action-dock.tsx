@@ -92,7 +92,7 @@ export function FloatingActionDock() {
             cx={size / 2}
             cy={size / 2}
             r={radius}
-            stroke="#2563eb"
+            stroke="#0e7485"
             strokeWidth={strokeWidth}
             fill="transparent"
             strokeDasharray={circumference}
