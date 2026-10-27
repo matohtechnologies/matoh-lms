@@ -122,7 +122,7 @@ export function FeaturedCoursesShowcase({
           ))}
         </div>
       ) : courses.length === 0 ? (
-        <div className="text-center py-16 px-6 bg-slate-50/60 rounded-3xl border border-slate-200/80 max-w-2xl mx-auto space-y-4">
+        <div className="text-center py-16 px-6 bg-slate-50/80 rounded-3xl shadow-2xs max-w-2xl mx-auto space-y-4">
           <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 mx-auto flex items-center justify-center shadow-xs">
             <BookOpen size={24} />
           </div>

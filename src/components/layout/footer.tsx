@@ -41,7 +41,7 @@ export function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-2.5 mb-4 group">
-              <div className="w-8 h-8 rounded-xl bg-stone-800 border border-stone-700/80 flex items-center justify-center p-1.5 group-hover:border-stone-600 transition-colors">
+              <div className="w-8 h-8 rounded-xl bg-stone-800 flex items-center justify-center p-1.5 transition-colors">
                 <Image
                   src="/images/matoh-logo-white.png"
                   alt="PT. Matoh Technologies Indonesia"

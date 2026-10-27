@@ -23,10 +23,10 @@ export function FaqAccordion({ items }: FaqAccordionProps) {
         return (
           <div
             key={index}
-            className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
+            className={`rounded-2xl transition-all duration-200 overflow-hidden ${
               isOpen
-                ? "bg-white border-blue-200/80 shadow-sm"
-                : "bg-white/70 hover:bg-white border-slate-200/80"
+                ? "bg-slate-50 shadow-2xs"
+                : "bg-transparent hover:bg-slate-50/70"
             }`}
           >
             <button

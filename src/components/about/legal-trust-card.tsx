@@ -23,7 +23,7 @@ export function LegalTrustCard({ locale = "id" }: LegalTrustCardProps) {
   };
 
   return (
-    <div className="bg-gradient-to-br from-slate-900 via-stone-900 to-blue-950 text-white rounded-3xl p-6 sm:p-8 border border-slate-700/80 shadow-xl space-y-6">
+    <div className="bg-gradient-to-br from-slate-900 via-stone-900 to-blue-950 text-white rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-800">
         <div className="flex items-center gap-3">
@@ -54,7 +54,7 @@ export function LegalTrustCard({ locale = "id" }: LegalTrustCardProps) {
       {/* Legal Data Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* SK Menkumham Box */}
-        <div className="p-4 rounded-2xl bg-slate-800/70 border border-slate-700/60 space-y-2">
+        <div className="p-4 rounded-2xl bg-slate-800/60 space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
               {isEn ? "Decree of MinLaw & Human Rights" : "SK Menkumham RI"}
@@ -89,7 +89,7 @@ export function LegalTrustCard({ locale = "id" }: LegalTrustCardProps) {
         </div>
 
         {/* Operating Scope Box */}
-        <div className="p-4 rounded-2xl bg-slate-800/70 border border-slate-700/60 space-y-2">
+        <div className="p-4 rounded-2xl bg-slate-800/60 space-y-2">
           <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
             {isEn ? "Business Entity Classification" : "Klasifikasi Bidang Usaha"}
           </span>

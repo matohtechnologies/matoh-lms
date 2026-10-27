@@ -248,7 +248,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
             </div>
 
             {/* Mobile price card */}
-            <div className="lg:hidden bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm">
+            <div className="lg:hidden bg-white rounded-2xl p-5 shadow-sm">
               <PriceCard
                 course={displayCourse}
                 isFree={isFree}
@@ -279,7 +279,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
             />
 
             {/* What You'll Learn */}
-            <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6">
+            <div className="bg-blue-50/70 rounded-2xl p-6 shadow-2xs">
               <h2 className="text-lg font-bold text-slate-900 mb-4" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
                 {tDetail("what_learn")}
               </h2>
@@ -316,14 +316,14 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                   userId={session?.user?.id}
                 />
               ) : (
-                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 text-slate-500 text-sm">
+                <div className="p-4 rounded-xl bg-slate-50 text-slate-500 text-sm shadow-2xs">
                   {isEn ? "Course curriculum is being prepared by the instructor." : "Kurikulum kelas sedang dipersiapkan oleh instruktur."}
                 </div>
               )}
             </div>
 
             {/* Instructor */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 p-6">
+            <div className="bg-white rounded-2xl shadow-sm p-6">
               <h2 className="text-lg font-bold text-slate-900 mb-4" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
                 {isEn ? "About the Instructor" : "Tentang Instruktur"}
               </h2>
@@ -365,7 +365,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                 </h2>
                 <div className="space-y-4">
                   {displayCourse.reviews.map((review) => (
-                    <div key={review.id} className="bg-white rounded-xl border border-slate-200/80 p-4">
+                    <div key={review.id} className="bg-white rounded-xl shadow-2xs p-4">
                       <div className="flex items-start gap-3">
                         <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-sky-400 flex items-center justify-center text-white text-sm font-bold shrink-0">
                           {review.user.name?.[0]?.toUpperCase()}
@@ -390,7 +390,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
           {/* Sticky Price Card */}
           <div className="hidden lg:block">
             <div className="sticky top-24">
-              <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm">
+              <div className="bg-white rounded-2xl shadow-sm p-6">
                 <PriceCard
                   course={displayCourse}
                   isFree={isFree}
@@ -443,7 +443,7 @@ function PriceCard({
       {/* Price / Enrolled Status */}
       <div>
         {isEnrolled ? (
-          <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl space-y-1">
+          <div className="p-3.5 bg-emerald-50 rounded-xl space-y-1">
             <div className="text-emerald-800 font-bold text-sm">
               {isEn ? "You Already Own This Course" : "Kelas Sudah Anda Miliki"}
             </div>

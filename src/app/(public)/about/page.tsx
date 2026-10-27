@@ -101,7 +101,7 @@ export default async function AboutPage() {
       <section className="py-20 sm:py-24 border-b border-slate-200/70 bg-gradient-to-b from-blue-50/70 via-[#f8fafc] to-[#f8fafc] bg-dot-matrix relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.12)_0%,transparent_70%)] pointer-events-none" />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200/90 text-slate-800 text-xs font-bold mb-6 shadow-2xs">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-slate-800 text-xs font-bold mb-6 shadow-2xs">
             <Image
               src="/images/matoh-logo.png"
               alt="Matoh Technologies"
@@ -131,7 +131,7 @@ export default async function AboutPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-14 relative z-10">
           {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded-full border border-blue-200/60 inline-block mb-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded-full inline-block mb-3">
               {isEn ? "Heritage & Legal Standing" : "Sejarah & Transformasi Legalitas"}
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
@@ -147,11 +147,11 @@ export default async function AboutPage() {
           {/* Visual Milestone Timeline */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
             {/* Step 1: 2000 */}
-            <div className="bg-slate-50 rounded-3xl p-6 border border-slate-200/90 relative hover:border-blue-300 hover:shadow-sm transition-all flex flex-col justify-between">
+            <div className="bg-slate-50/80 rounded-3xl p-6 shadow-2xs hover:shadow-sm relative transition-all flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <span className="font-mono text-2xl font-black text-blue-600">2000</span>
-                  <span className="text-[11px] font-bold text-slate-500 bg-white px-2.5 py-1 rounded-full border border-slate-200">
+                  <span className="text-[11px] font-bold text-slate-600 bg-white px-2.5 py-1 rounded-full shadow-2xs">
                     Fase Inisiasi
                   </span>
                 </div>
@@ -162,17 +162,17 @@ export default async function AboutPage() {
                   Berdiri sebagai penyedia fasilitas komputer dan akses internet pertama bagi civitas akademika, mahasiswa, dosen, serta UMKM di Bojonegoro dan sekitarnya.
                 </p>
               </div>
-              <div className="pt-4 mt-4 border-t border-slate-200/80 text-[11px] font-medium text-slate-500">
+              <div className="pt-4 mt-4 border-t border-slate-200/50 text-[11px] font-medium text-slate-500">
                 ✓ Pelatihan internet & komputer dasar
               </div>
             </div>
 
             {/* Step 2: 2008 */}
-            <div className="bg-slate-50 rounded-3xl p-6 border border-slate-200/90 relative hover:border-blue-300 hover:shadow-sm transition-all flex flex-col justify-between">
+            <div className="bg-slate-50/80 rounded-3xl p-6 shadow-2xs hover:shadow-sm relative transition-all flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <span className="font-mono text-2xl font-black text-blue-600">2008</span>
-                  <span className="text-[11px] font-bold text-slate-500 bg-white px-2.5 py-1 rounded-full border border-slate-200">
+                  <span className="text-[11px] font-bold text-slate-600 bg-white px-2.5 py-1 rounded-full shadow-2xs">
                     Transformasi Riset
                   </span>
                 </div>
@@ -183,17 +183,17 @@ export default async function AboutPage() {
                   Bertransformasi memperluas portofolio layanan pada bimbingan metodologi keputusan ilmiah (AHP/ISM), manajemen riset publikasi, dan digital marketing terapan.
                 </p>
               </div>
-              <div className="pt-4 mt-4 border-t border-slate-200/80 text-[11px] font-medium text-slate-500">
+              <div className="pt-4 mt-4 border-t border-slate-200/50 text-[11px] font-medium text-slate-500">
                 ✓ Bimbingan MCDM & Scale-Up UMKM
               </div>
             </div>
 
             {/* Step 3: 2024 - Sekarang */}
-            <div className="bg-blue-50/60 rounded-3xl p-6 border-2 border-blue-300 relative shadow-xs flex flex-col justify-between">
+            <div className="bg-blue-50/70 rounded-3xl p-6 shadow-xs relative flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <span className="font-mono text-2xl font-black text-blue-700">2024</span>
-                  <span className="text-[11px] font-bold text-blue-800 bg-blue-100 px-2.5 py-1 rounded-full border border-blue-200">
+                  <span className="text-[11px] font-bold text-blue-800 bg-blue-100 px-2.5 py-1 rounded-full">
                     Badan Hukum Resmi
                   </span>
                 </div>
@@ -204,7 +204,7 @@ export default async function AboutPage() {
                   Resmi berbadan hukum PT terdaftar Kemenkumham RI dengan peluncuran platform LMS otomatis, sistem transkrip kredensial ber-QR, dan verifikasi sertifikat permanen.
                 </p>
               </div>
-              <div className="pt-4 mt-4 border-t border-blue-200/80 text-[11px] font-bold text-blue-800">
+              <div className="pt-4 mt-4 border-t border-blue-200/60 text-[11px] font-bold text-blue-800">
                 ✓ SK Kemenkumham AHU-064920.2024
               </div>
             </div>
@@ -239,7 +239,7 @@ export default async function AboutPage() {
       <section className="py-20 bg-white border-b border-slate-200/60 bg-dot-matrix-slate relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded-full border border-blue-200/60 inline-block mb-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded-full inline-block mb-3">
               {isEn ? "Core Pillars" : "Keyakinan & Pilar Kami"}
             </span>
             <h2
@@ -259,10 +259,10 @@ export default async function AboutPage() {
             {pillars.map((p) => (
               <div
                 key={p.num}
-                className="bento-card bg-white rounded-3xl border border-slate-200/80 p-7 flex flex-col justify-between group"
+                className="bento-card bg-white rounded-3xl shadow-sm hover:shadow-md p-7 flex flex-col justify-between group"
               >
                 <div>
-                  <span className="font-mono text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-200/60 inline-block mb-5">
+                  <span className="font-mono text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg inline-block mb-5">
                     {p.num}
                   </span>
                   <h3
@@ -282,7 +282,7 @@ export default async function AboutPage() {
       <section className="py-20 bg-white border-t border-slate-200/70">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded-full border border-blue-200/60 inline-block mb-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded-full inline-block mb-3">
               {isEn ? "Instructors & Leadership" : "Tim Akademik & Instruktur"}
             </span>
             <h2
@@ -303,7 +303,7 @@ export default async function AboutPage() {
               {leadership.map((person) => (
                 <div
                   key={person.id}
-                  className="bg-white rounded-3xl border border-slate-200/90 p-6 flex flex-col justify-between hover:border-blue-300 hover:shadow-warm transition-all group"
+                  className="bg-white rounded-3xl shadow-sm hover:shadow-md p-6 flex flex-col justify-between transition-all group"
                 >
                   <div>
                     <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-sky-500 text-white flex items-center justify-center font-bold text-2xl mb-4 shadow-xs overflow-hidden">
@@ -322,7 +322,7 @@ export default async function AboutPage() {
                     </h4>
                     <p className="text-xs font-semibold text-blue-700 mt-0.5">{person.role}</p>
                     <div className="flex items-center gap-1.5 mt-2">
-                      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
                         <CheckCircle2 size={11} className="text-emerald-600" />
                         <span>{person.experience}</span>
                       </span>
@@ -335,7 +335,7 @@ export default async function AboutPage() {
               ))}
             </div>
           ) : (
-            <div className="bg-[#f8fafc] rounded-3xl border border-slate-200/80 p-12 text-center max-w-xl mx-auto">
+            <div className="bg-[#f8fafc] rounded-3xl shadow-2xs p-12 text-center max-w-xl mx-auto">
               <p className="text-slate-600 text-sm">
                 {isEn
                   ? "Instructor profiles are currently being updated by the administration team."

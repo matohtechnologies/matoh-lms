@@ -42,7 +42,7 @@ export default async function ContactPage() {
       actionLabel: isEn ? "Chat on WhatsApp ➔" : "Chat WhatsApp ➔",
       actionUrl: "https://wa.me/6281210106680?text=Halo%20Matoh%20Technologies,%20saya%20ingin%20konsultasi%20program%20pelatihan%20dan%20layanan.",
       badge: isEn ? "Hotline 1" : "Utama",
-      badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
+      badgeColor: "bg-emerald-50 text-emerald-700",
       isLive: true,
     },
     {
@@ -55,7 +55,7 @@ export default async function ContactPage() {
       actionLabel: isEn ? "Contact Research Line ➔" : "Hubungi Riset ➔",
       actionUrl: "https://wa.me/6281214140084?text=Halo%20Matoh%20Technologies,%20saya%20ingin%20konsultasi%20layanan%20riset%20dan%20publikasi.",
       badge: isEn ? "Hotline 2" : "Riset & B2B",
-      badgeColor: "bg-blue-50 text-blue-700 border-blue-200",
+      badgeColor: "bg-blue-50 text-blue-700",
       isLive: true,
     },
     {
@@ -68,7 +68,7 @@ export default async function ContactPage() {
       actionLabel: isEn ? "Send Email ➔" : "Kirim Email ➔",
       actionUrl: "mailto:info@matohtechnologies.com",
       badge: isEn ? "Official" : "Resmi",
-      badgeColor: "bg-sky-50 text-sky-700 border-sky-200",
+      badgeColor: "bg-sky-50 text-sky-700",
     },
     {
       icon: Building,
@@ -80,7 +80,7 @@ export default async function ContactPage() {
       actionLabel: isEn ? "Call Office ➔" : "Hubungi Kantor ➔",
       actionUrl: "tel:02147866642",
       badge: isEn ? "Office" : "Kantor",
-      badgeColor: "bg-purple-50 text-purple-700 border-purple-200",
+      badgeColor: "bg-purple-50 text-purple-700",
     },
   ];
 
@@ -125,7 +125,7 @@ export default async function ContactPage() {
       <section className="py-16 sm:py-20 border-b border-stone-200/70 bg-gradient-to-b from-blue-50/60 via-[#f8fafc] to-[#f8fafc] bg-dot-matrix relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.12)_0%,transparent_70%)] pointer-events-none" />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/70 text-blue-700 text-xs font-bold mb-4 shadow-2xs">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-bold mb-4 shadow-2xs">
             <MessageSquare size={14} className="text-blue-600" />
             {isEn ? "Student Advisory & Academic Support" : "Layanan Siswa & Konsultasi Akademik"}
           </div>
@@ -166,11 +166,11 @@ export default async function ContactPage() {
                   return (
                     <div
                       key={c.title}
-                      className="bento-card bg-white rounded-2xl border border-stone-200/80 p-5 shadow-2xs group"
+                      className="bento-card bg-white rounded-2xl p-5 shadow-sm hover:shadow-md transition-all group"
                     >
                       <div className="flex items-start justify-between gap-3 mb-2">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200/60 flex items-center justify-center text-blue-600 shadow-2xs">
+                          <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shadow-2xs">
                             <Icon size={18} />
                           </div>
                           <div>
@@ -181,11 +181,11 @@ export default async function ContactPage() {
                           </div>
                         </div>
                         <div className="flex flex-col items-end gap-1.5 shrink-0">
-                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md border ${c.badgeColor}`}>
+                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${c.badgeColor}`}>
                             {c.badge}
                           </span>
                           {c.isLive && (
-                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/80 text-[10px] font-bold shadow-2xs">
+                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold shadow-2xs">
                               <span className="relative flex h-2 w-2">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -210,9 +210,9 @@ export default async function ContactPage() {
               </div>
 
               {/* Office & Operational Hours Card */}
-              <div className="bg-white rounded-2xl border border-stone-200/80 p-6 shadow-2xs space-y-4">
+              <div className="bg-white rounded-2xl p-6 shadow-sm space-y-4">
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200/60 flex items-center justify-center text-blue-600 shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
                     <MapPin size={20} />
                   </div>
                   <div>
@@ -269,7 +269,7 @@ export default async function ContactPage() {
       <section className="py-16 bg-white border-t border-stone-200/70 bg-blueprint-grid relative">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
           <div className="text-center mb-10">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded-md border border-blue-200/60">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded-md">
               {isEn ? "Frequently Asked Questions" : "Pertanyaan Populer"}
             </span>
             <h2
@@ -284,7 +284,7 @@ export default async function ContactPage() {
             {faqs.map((f, idx) => (
               <div
                 key={idx}
-                className="bento-card p-5 rounded-2xl border border-stone-200/80 bg-white shadow-2xs"
+                className="bento-card p-5 rounded-2xl bg-white shadow-sm"
               >
                 <h4 className="text-sm font-bold text-stone-900 flex items-start gap-2.5 mb-2">
                   <HelpCircle size={18} className="text-blue-600 shrink-0 mt-0.5" />
@@ -306,7 +306,7 @@ export default async function ContactPage() {
             <div className="flex items-center justify-center gap-3">
               <Link
                 href="/courses"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100/70 px-4 py-2 rounded-xl transition-colors border border-blue-200"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100/70 px-4 py-2 rounded-xl transition-colors"
               >
                 <Compass size={14} />
                 {isEn ? "Explore All Courses" : "Jelajahi Semua Kelas"}

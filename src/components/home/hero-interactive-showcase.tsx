@@ -21,7 +21,7 @@ export function HeroInteractiveShowcase({ isEn, studentCount = 0 }: HeroInteract
       <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-400/20 via-sky-300/20 to-blue-500/20 blur-2xl opacity-70 pointer-events-none" />
 
       {/* Main Container */}
-      <div className="relative bg-white rounded-3xl border border-slate-200/90 shadow-2xl overflow-hidden backdrop-blur-xl">
+      <div className="relative bg-white rounded-3xl shadow-xl overflow-hidden backdrop-blur-xl">
         {/* Top Window Chrome */}
         <div className="flex items-center justify-between px-5 py-3.5 bg-slate-50/80 border-b border-slate-100">
           <div className="flex items-center gap-2">
@@ -33,7 +33,7 @@ export function HeroInteractiveShowcase({ isEn, studentCount = 0 }: HeroInteract
             </span>
           </div>
 
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200/70 text-emerald-700 text-[11px] font-semibold">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-semibold">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             <span>{isEn ? "Live Sandbox" : "Ruang Belajar Aktif"}</span>
           </div>
@@ -191,7 +191,7 @@ export function HeroInteractiveShowcase({ isEn, studentCount = 0 }: HeroInteract
             {/* Lesson Info */}
             <div className="flex items-center justify-between pt-1">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200/80 flex items-center justify-center p-1.5 shadow-2xs">
+                <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center p-1.5 shadow-2xs">
                   <Image
                     src="/images/matoh-logo.png"
                     alt="Matoh Technologies"
@@ -212,12 +212,12 @@ export function HeroInteractiveShowcase({ isEn, studentCount = 0 }: HeroInteract
 
               <div className="text-right">
                 {isPlaying ? (
-                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200/60">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">
                     <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
                     {isEn ? "Now Playing Preview" : "Sedang Memutar"}
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 bg-slate-50 px-3 py-1 rounded-full border border-slate-200">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
                     <Sparkles size={13} className="text-blue-600" />
                     <span>{isEn ? "Click to play" : "Klik untuk putar"}</span>
                   </span>
@@ -230,7 +230,7 @@ export function HeroInteractiveShowcase({ isEn, studentCount = 0 }: HeroInteract
         {/* Tab Content 2: Real Project */}
         {activeTab === "project" && (
           <div className="p-5 space-y-4">
-            <div className="rounded-2xl border border-slate-200/90 bg-slate-50 p-4 space-y-3">
+            <div className="rounded-2xl bg-slate-50 p-4 space-y-3 shadow-2xs">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-900 uppercase tracking-wider">
                   {isEn ? "Applied Business Case Study" : "Studi Kasus Bisnis & Riset Terapan"}
@@ -254,7 +254,7 @@ export function HeroInteractiveShowcase({ isEn, studentCount = 0 }: HeroInteract
                   (tag) => (
                     <span
                       key={tag}
-                      className="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-[11px] font-medium text-slate-700 shadow-2xs"
+                      className="px-2.5 py-1 rounded-lg bg-white text-[11px] font-medium text-slate-700 shadow-2xs"
                     >
                       {tag}
                     </span>
@@ -263,7 +263,7 @@ export function HeroInteractiveShowcase({ isEn, studentCount = 0 }: HeroInteract
               </div>
             </div>
 
-            <div className="flex items-center gap-2 p-3 rounded-xl bg-emerald-50/80 border border-emerald-200/70 text-emerald-800 text-xs">
+            <div className="flex items-center gap-2 p-3 rounded-xl bg-emerald-50 text-emerald-800 text-xs">
               <CheckCircle2 size={16} className="text-emerald-600 shrink-0" />
               <span>
                 {isEn
@@ -277,7 +277,7 @@ export function HeroInteractiveShowcase({ isEn, studentCount = 0 }: HeroInteract
         {/* Tab Content 3: Certificate */}
         {activeTab === "certificate" && (
           <div className="p-5 space-y-4">
-            <div className="rounded-2xl border-2 border-dashed border-blue-200 bg-blue-50/40 p-5 text-center space-y-2.5">
+            <div className="rounded-2xl bg-blue-50/50 p-5 text-center space-y-2.5 shadow-2xs">
               <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 mx-auto flex items-center justify-center shadow-xs">
                 <Award size={24} />
               </div>
@@ -293,7 +293,7 @@ export function HeroInteractiveShowcase({ isEn, studentCount = 0 }: HeroInteract
                     : "Dapat disematkan langsung ke profil LinkedIn & CV dengan URL verifikasi permanen dan QR code unik."}
                 </p>
               </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-blue-200 text-[11px] font-mono text-slate-700 font-semibold shadow-2xs">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white text-[11px] font-mono text-slate-700 font-semibold shadow-2xs">
                 <ShieldCheck size={13} className="text-emerald-600" />
                 <span>{isEn ? "VERIFIED DIGITAL CREDENTIAL" : "KREDENSIAL DIGITAL RESMI"}</span>
               </div>
@@ -317,7 +317,7 @@ export function HeroInteractiveShowcase({ isEn, studentCount = 0 }: HeroInteract
             </span>
           </div>
 
-          <span className="text-[11px] font-semibold text-blue-700 bg-blue-50 border border-blue-200/60 px-2.5 py-1 rounded-lg">
+          <span className="text-[11px] font-semibold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-lg">
             {isEn ? "Online Academy" : "Akademi Digital"}
           </span>
         </div>

@@ -159,7 +159,7 @@ export function Navbar({ user, categories }: NavbarProps) {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between gap-2 xl:gap-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
-          <div className="w-9 h-9 rounded-xl bg-white border border-stone-200/80 shadow-2xs flex items-center justify-center p-1.5 group-hover:border-blue-400 group-hover:shadow-xs transition-all">
+          <div className="w-9 h-9 rounded-xl bg-white shadow-2xs flex items-center justify-center p-1.5 group-hover:shadow-xs transition-all">
             <Image
               src="/images/matoh-logo.png"
               alt="PT. Matoh Technologies Indonesia"
@@ -258,7 +258,7 @@ export function Navbar({ user, categories }: NavbarProps) {
                         <Link
                           key={cat.name}
                           href={cat.href}
-                          className="flex flex-col justify-center p-2.5 rounded-xl border border-stone-200/50 hover:border-blue-200 hover:bg-blue-50/40 transition-all group shadow-2xs"
+                          className="flex flex-col justify-center p-2.5 rounded-xl hover:bg-blue-50/60 transition-all group"
                           onClick={() => setIsProgramDropdownOpen(false)}
                         >
                           <div className="flex items-center justify-between gap-1">
@@ -266,7 +266,7 @@ export function Navbar({ user, categories }: NavbarProps) {
                               {cat.name}
                             </p>
                             {cat.badge && (
-                              <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-blue-50 text-blue-700 border border-blue-200/60 shrink-0">
+                              <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-blue-50 text-blue-700 shrink-0">
                                 {cat.badge}
                               </span>
                             )}
@@ -291,7 +291,7 @@ export function Navbar({ user, categories }: NavbarProps) {
                           <Link
                             key={fmt.title}
                             href={fmt.href}
-                            className="block p-3 rounded-2xl border border-stone-200/70 hover:border-blue-200 hover:bg-blue-50/30 transition-all group shadow-2xs"
+                            className="block p-3 rounded-2xl hover:bg-blue-50/50 transition-all group"
                             onClick={() => setIsProgramDropdownOpen(false)}
                           >
                             <div className="flex items-center gap-2 mb-1">

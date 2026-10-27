@@ -349,7 +349,7 @@ export default async function HomePage() {
             {/* Left Column: Compelling Editorial Pitch */}
             <div className="lg:col-span-6 space-y-6 text-left">
               {/* Trust Badge */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-xs font-semibold tracking-wide">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold tracking-wide">
                 <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
                 <span>PT. Matoh Technologies Indonesia • AHU-064920.AH.01.30.Tahun 2024</span>
               </div>
@@ -458,7 +458,7 @@ export default async function HomePage() {
                 />
 
                 {/* Floating Badge 1: Top Right */}
-                <div className="absolute -top-1 -right-1 sm:top-2 sm:right-2 bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-warm rounded-2xl p-3 flex items-center gap-2.5 transition-all hover:scale-105 pointer-events-auto animate-float-gentle">
+                <div className="absolute -top-1 -right-1 sm:top-2 sm:right-2 bg-white/95 backdrop-blur-md shadow-warm rounded-2xl p-3 flex items-center gap-2.5 transition-all hover:scale-105 pointer-events-auto animate-float-gentle">
                   <div className="w-8 h-8 flex items-center justify-center shrink-0">
                     <ColorfulLightbulbIcon className="w-8 h-8 drop-shadow-xs" />
                   </div>
@@ -473,7 +473,7 @@ export default async function HomePage() {
                 </div>
 
                 {/* Floating Badge 2: Bottom Left */}
-                <div className="absolute -bottom-2 -left-1 sm:bottom-4 sm:left-2 bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-warm rounded-2xl p-3 flex items-center gap-2.5 transition-all hover:scale-105 pointer-events-auto animate-float-gentle-reverse">
+                <div className="absolute -bottom-2 -left-1 sm:bottom-4 sm:left-2 bg-white/95 backdrop-blur-md shadow-warm rounded-2xl p-3 flex items-center gap-2.5 transition-all hover:scale-105 pointer-events-auto animate-float-gentle-reverse">
                   <div className="w-8 h-8 flex items-center justify-center shrink-0">
                     <ColorfulGraduationIcon className="w-8 h-8 drop-shadow-xs" />
                   </div>
@@ -524,7 +524,7 @@ export default async function HomePage() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
           <div className="max-w-2xl mx-auto text-center mb-16">
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-700 uppercase tracking-wider bg-white/90 px-3.5 py-1.5 rounded-full border border-blue-200/80 shadow-xs mb-4">
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-700 uppercase tracking-wider bg-blue-50 px-3.5 py-1.5 rounded-full mb-4">
               <Sparkles size={13} className="text-blue-600" />
               <span>{isEn ? "The Matoh Standard" : "Standar Matoh Technologies"}</span>
             </span>
@@ -547,14 +547,14 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Bento Item 1: Wide Card (spans 2 cols on lg) - Digital Marketing Terapan */}
             <ScrollReveal delayMs={0} className="lg:col-span-2">
-              <div className="bento-card bg-white rounded-3xl p-8 sm:p-10 border border-slate-200/90 shadow-subtle flex flex-col justify-between relative overflow-hidden group h-full">
+              <div className="bento-card bg-white rounded-3xl p-8 sm:p-10 shadow-sm hover:shadow-md flex flex-col justify-between relative overflow-hidden group h-full">
                 <div className="absolute top-0 right-0 w-80 h-80 bg-[radial-gradient(circle,rgba(59,130,246,0.08)_0%,transparent_70%)] pointer-events-none" />
                 <div>
                   <div className="flex items-center justify-between gap-4 mb-6">
                     <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-sky-500 text-white flex items-center justify-center font-bold text-lg shadow-warm">
                       01
                     </div>
-                    <span className="text-[11px] font-bold text-blue-700 bg-blue-50 border border-blue-200/60 px-3 py-1 rounded-full uppercase tracking-wider">
+                    <span className="text-[11px] font-bold text-blue-700 bg-blue-50 px-3 py-1 rounded-full uppercase tracking-wider">
                       {isEn ? "High-Impact MSME" : "Paling Diminati UMKM"}
                     </span>
                   </div>
@@ -577,13 +577,13 @@ export default async function HomePage() {
 
             {/* Bento Item 2: Vertical Card (1 col) - Metodologi Keputusan Ilmiah AHP & ISM */}
             <ScrollReveal delayMs={120}>
-              <div className="bento-card bg-white rounded-3xl p-8 border border-slate-200/90 shadow-subtle flex flex-col justify-between group h-full">
+              <div className="bento-card bg-white rounded-3xl p-8 shadow-sm hover:shadow-md flex flex-col justify-between group h-full">
                 <div>
                   <div className="flex items-center justify-between gap-4 mb-6">
                     <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-600 to-blue-600 text-white flex items-center justify-center font-bold text-lg shadow-warm">
                       02
                     </div>
-                    <span className="text-[11px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-200/60 px-3 py-1 rounded-full uppercase tracking-wider">
+                    <span className="text-[11px] font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full uppercase tracking-wider">
                       MCDM &amp; ISM
                     </span>
                   </div>
@@ -603,13 +603,13 @@ export default async function HomePage() {
 
             {/* Bento Item 3: Vertical Card (1 col) - Peramalan Bisnis & Analisis SWOT */}
             <ScrollReveal delayMs={180}>
-              <div className="bento-card bg-white rounded-3xl p-8 border border-slate-200/90 shadow-subtle flex flex-col justify-between group h-full">
+              <div className="bento-card bg-white rounded-3xl p-8 shadow-sm hover:shadow-md flex flex-col justify-between group h-full">
                 <div>
                   <div className="flex items-center justify-between gap-4 mb-6">
                     <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 text-white flex items-center justify-center font-bold text-lg shadow-warm">
                       03
                     </div>
-                    <span className="text-[11px] font-bold text-amber-800 bg-amber-50 border border-amber-200/60 px-3 py-1 rounded-full uppercase tracking-wider">
+                    <span className="text-[11px] font-bold text-amber-800 bg-amber-50 px-3 py-1 rounded-full uppercase tracking-wider">
                       {isEn ? "Market Forecast" : "Peramalan Pasar"}
                     </span>
                   </div>
@@ -629,14 +629,14 @@ export default async function HomePage() {
 
             {/* Bento Item 4: Wide Card (spans 2 cols on lg) - Kredensial Digital Terverifikasi */}
             <ScrollReveal delayMs={240} className="lg:col-span-2">
-              <div className="bento-card bg-white rounded-3xl p-8 sm:p-10 border border-slate-200/90 shadow-subtle flex flex-col justify-between relative overflow-hidden group h-full">
+              <div className="bento-card bg-white rounded-3xl p-8 sm:p-10 shadow-sm hover:shadow-md flex flex-col justify-between relative overflow-hidden group h-full">
                 <div className="absolute top-0 right-0 w-80 h-80 bg-[radial-gradient(circle,rgba(16,185,129,0.08)_0%,transparent_70%)] pointer-events-none" />
                 <div>
                   <div className="flex items-center justify-between gap-4 mb-6">
                     <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-500 text-white flex items-center justify-center font-bold text-lg shadow-warm">
                       04
                     </div>
-                    <span className="text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/60 px-3 py-1 rounded-full uppercase tracking-wider">
+                    <span className="text-[11px] font-bold text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-wider">
                       {isEn ? "Verified Registry" : "Validasi QR Code Resmi"}
                     </span>
                   </div>
@@ -671,10 +671,10 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
             {/* Left Quote Card: Editorial Dark Card */}
             <ScrollReveal direction="left" delayMs={0} className="lg:col-span-6 flex">
-              <div className="w-full glass-card-dark rounded-3xl p-8 sm:p-12 flex flex-col justify-between relative overflow-hidden border border-slate-700/80">
+              <div className="w-full glass-card-dark rounded-3xl p-8 sm:p-12 flex flex-col justify-between relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-80 h-80 bg-[radial-gradient(circle,rgba(59,130,246,0.15)_0%,transparent_70%)] pointer-events-none" />
                 <div>
-                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-semibold mb-8">
+                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 text-blue-300 text-xs font-semibold mb-8">
                     <Quote size={13} className="text-blue-400" />
                     <span>{isEn ? "Founder's Philosophy" : "Filosofi & Pesan Pendiri"}</span>
                   </div>
@@ -689,7 +689,7 @@ export default async function HomePage() {
                   </div>
                   <div className="text-right">
                     <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 block">Slogan Resmi</span>
-                    <span className="text-xs font-bold text-white bg-slate-800/80 px-3 py-1.5 rounded-xl border border-slate-700 inline-block mt-1">
+                    <span className="text-xs font-bold text-white bg-slate-800/80 px-3 py-1.5 rounded-xl inline-block mt-1">
                       &ldquo;Make You Ready Digital&rdquo;
                     </span>
                   </div>
@@ -700,7 +700,7 @@ export default async function HomePage() {
             {/* Right 3 Core Beliefs Cards: Interactive Dark Cards */}
             <ScrollReveal direction="right" delayMs={150} className="lg:col-span-6 flex flex-col justify-between space-y-6">
               <div>
-                <span className="text-xs font-bold text-blue-400 uppercase tracking-wider bg-blue-950/80 px-3.5 py-1.5 rounded-full border border-blue-800/60 inline-block mb-3">
+                <span className="text-xs font-bold text-blue-400 uppercase tracking-wider bg-blue-950/80 px-3.5 py-1.5 rounded-full inline-block mb-3">
                   {isEn ? "Core Philosophy" : "3 Keyakinan Pokok Matoh"}
                 </span>
                 <h3
@@ -717,7 +717,7 @@ export default async function HomePage() {
               </div>
 
               <div className="space-y-4">
-                <div className="p-6 rounded-2xl border border-slate-800 bg-slate-900/70 hover:bg-slate-850 hover:border-blue-500/50 hover:shadow-lg transition-all duration-300 group">
+                <div className="p-6 rounded-2xl bg-slate-900/60 hover:bg-slate-900/90 hover:shadow-lg transition-all duration-300 group">
                   <div className="flex items-start gap-4">
                     <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-sm shrink-0 mt-0.5 shadow-warm group-hover:scale-105 transition-transform">
                       01
@@ -731,7 +731,7 @@ export default async function HomePage() {
                   </div>
                 </div>
 
-                <div className="p-6 rounded-2xl border border-slate-800 bg-slate-900/70 hover:bg-slate-850 hover:border-blue-500/50 hover:shadow-lg transition-all duration-300 group">
+                <div className="p-6 rounded-2xl bg-slate-900/60 hover:bg-slate-900/90 hover:shadow-lg transition-all duration-300 group">
                   <div className="flex items-start gap-4">
                     <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm shrink-0 mt-0.5 shadow-warm group-hover:scale-105 transition-transform">
                       02
@@ -745,7 +745,7 @@ export default async function HomePage() {
                   </div>
                 </div>
 
-                <div className="p-6 rounded-2xl border border-slate-800 bg-slate-900/70 hover:bg-slate-850 hover:border-blue-500/50 hover:shadow-lg transition-all duration-300 group">
+                <div className="p-6 rounded-2xl bg-slate-900/60 hover:bg-slate-900/90 hover:shadow-lg transition-all duration-300 group">
                   <div className="flex items-start gap-4">
                     <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-sm shrink-0 mt-0.5 shadow-warm group-hover:scale-105 transition-transform">
                       03
@@ -769,7 +769,7 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
             <div>
-              <span className="text-xs font-bold text-blue-700 uppercase tracking-wider bg-blue-50 px-3 py-1 rounded-full border border-blue-200/60 inline-block mb-3">
+              <span className="text-xs font-bold text-blue-700 uppercase tracking-wider bg-blue-50 px-3 py-1 rounded-full inline-block mb-3">
                 {isEn ? "Curated Programs" : "Program Pilihan"}
               </span>
               <h2
@@ -811,7 +811,7 @@ export default async function HomePage() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
           <div className="max-w-2xl mx-auto text-center mb-16">
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-800 uppercase tracking-wider bg-amber-50/90 px-3.5 py-1.5 rounded-full border border-amber-200/80 shadow-xs mb-4">
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-800 uppercase tracking-wider bg-amber-50/90 px-3.5 py-1.5 rounded-full mb-4">
               <Star size={13} className="text-amber-500 fill-amber-500" />
               <span>
                 {reviews.length > 0
@@ -841,7 +841,7 @@ export default async function HomePage() {
               {reviews.map((item, idx) => (
                 <ScrollReveal key={item.id} delayMs={idx * 120}>
                   <div
-                    className="bento-card bg-white rounded-3xl p-8 border border-slate-200/90 shadow-subtle flex flex-col justify-between relative overflow-hidden group h-full"
+                    className="bento-card bg-white rounded-3xl p-8 shadow-sm hover:shadow-md flex flex-col justify-between relative overflow-hidden group h-full"
                   >
                     <div className="space-y-4">
                       <div className="flex items-center gap-1 text-amber-500">
@@ -904,9 +904,9 @@ export default async function HomePage() {
               ].map((card, idx) => (
                 <ScrollReveal key={idx} delayMs={idx * 120}>
                   <div
-                    className="bento-card bg-white rounded-3xl p-8 border border-slate-200/90 shadow-subtle flex flex-col justify-between h-full"
+                    className="bento-card bg-white rounded-3xl p-8 shadow-sm hover:shadow-md flex flex-col justify-between h-full"
                   >
-                    <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-800 border border-amber-200/60 flex items-center justify-center font-bold text-sm mb-4">
+                    <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-800 flex items-center justify-center font-bold text-sm mb-4">
                       0{idx + 1}
                     </div>
                     <div>
@@ -928,7 +928,7 @@ export default async function HomePage() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
           <div className="max-w-2xl mx-auto text-center mb-16">
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-700 uppercase tracking-wider bg-blue-50 px-3.5 py-1.5 rounded-full border border-blue-200/60 shadow-xs mb-4">
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-700 uppercase tracking-wider bg-blue-50 px-3.5 py-1.5 rounded-full mb-4">
               <HelpCircle size={13} className="text-blue-600" />
               <span>{tHome("faq_badge")}</span>
             </span>
@@ -950,11 +950,11 @@ export default async function HomePage() {
       {/* 6.5. DIRECT CAREER ADVISORY & CONTACT BANNER (Emerald & Sky Dual Accent) */}
       <section id="kontak" className="relative py-20 bg-slate-50/90 border-b border-slate-200/80 scroll-mt-20 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-          <div className="bg-gradient-to-br from-white via-white to-emerald-50/40 rounded-3xl border-2 border-emerald-500/20 p-8 sm:p-12 shadow-warm-lg flex flex-col lg:flex-row items-center justify-between gap-8 relative overflow-hidden">
+          <div className="bg-gradient-to-br from-white via-white to-emerald-50/40 rounded-3xl p-8 sm:p-12 shadow-warm-lg flex flex-col lg:flex-row items-center justify-between gap-8 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-72 h-72 bg-[radial-gradient(circle,rgba(52,211,153,0.12)_0%,transparent_70%)] pointer-events-none" />
             
             <div className="space-y-3.5 max-w-2xl text-left relative z-10">
-              <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 uppercase tracking-wider bg-emerald-50 px-3.5 py-1.5 rounded-full border border-emerald-200/70 shadow-xs">
+              <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 uppercase tracking-wider bg-emerald-50 px-3.5 py-1.5 rounded-full">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 <span>{isEn ? "Free Consultation & Advisory" : "Konsultasi Pelatihan & Riset Terapan"}</span>
               </span>
@@ -987,7 +987,7 @@ export default async function HomePage() {
                 href="https://wa.me/6281210106680?text=Halo%20Matoh%20Technologies,%20saya%20ingin%20konsultasi%20program%20pelatihan."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-13 px-6 rounded-2xl border-2 border-emerald-300 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-sm font-bold shadow-xs transition-all hover:-translate-y-0.5"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-13 px-6 rounded-2xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-sm font-bold shadow-xs transition-all hover:-translate-y-0.5"
               >
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping shrink-0" />
                 <span>WhatsApp Hotline Resmi</span>

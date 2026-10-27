@@ -141,7 +141,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
       <div className="bg-gradient-to-b from-blue-50/70 via-[#f8fafc] to-[#f8fafc] border-b border-slate-200/70 py-12 sm:py-14 bg-dot-matrix relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[280px] bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.12)_0%,transparent_70%)] pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100/70 text-blue-800 border border-blue-200/60 text-xs font-semibold mb-3">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100/70 text-blue-800 text-xs font-semibold mb-3">
             <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
             <span>{isEn ? "Matoh Learning Catalog" : "Katalog Pelatihan Matoh"}</span>
           </div>
@@ -170,7 +170,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
         <div className="flex flex-col lg:flex-row gap-8 items-start">
           {/* Sidebar Filters */}
           <aside className="lg:w-64 shrink-0 w-full">
-            <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs sticky top-24 space-y-6">
+            <div className="bg-white rounded-2xl p-5 shadow-sm sticky top-24 space-y-6">
               <div>
                 <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
                   <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
@@ -187,7 +187,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                     href="/courses"
                     className={`block px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
                       !params.category
-                        ? "bg-blue-50/90 text-blue-950 font-bold border border-blue-200/80 shadow-2xs"
+                        ? "bg-blue-50 text-blue-700 font-bold"
                         : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                     }`}
                   >
@@ -199,7 +199,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                       href={`/courses?category=${encodeURIComponent(cat.name)}${params.level ? `&level=${params.level}` : ""}${params.sort ? `&sort=${params.sort}` : ""}`}
                       className={`block px-3 py-2 rounded-xl text-xs font-medium transition-all ${
                         params.category === cat.name
-                          ? "bg-blue-50/90 text-blue-950 font-bold border border-blue-200/80 shadow-2xs"
+                          ? "bg-blue-50 text-blue-700 font-bold"
                           : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                       }`}
                     >
@@ -222,7 +222,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                       href={`/courses?${params.q ? `q=${params.q}&` : ""}${params.category ? `category=${params.category}&` : ""}level=${opt.value}${params.sort ? `&sort=${params.sort}` : ""}`}
                       className={`block px-3 py-2 rounded-xl text-xs font-medium transition-all ${
                         params.level === opt.value
-                          ? "bg-blue-50/90 text-blue-950 font-bold border border-blue-200/80 shadow-2xs"
+                          ? "bg-blue-50 text-blue-700 font-bold"
                           : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
                       }`}
                     >
@@ -238,7 +238,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
           <div className="flex-1 min-w-0">
             {/* Active Filter Chips */}
             {(params.q || params.category || params.level) && (
-              <div className="flex flex-wrap items-center gap-2 mb-5 p-3 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+              <div className="flex flex-wrap items-center gap-2 mb-5 p-3 rounded-2xl bg-white shadow-2xs">
                 <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider pl-1.5">
                   {isEn ? "Active Filters:" : "Filter Aktif:"}
                 </span>
@@ -246,7 +246,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                 {params.q && (
                   <a
                     href={`/courses?${params.category ? `category=${encodeURIComponent(params.category)}&` : ""}${params.level ? `level=${params.level}&` : ""}${params.sort ? `sort=${params.sort}` : ""}`}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-semibold hover:bg-blue-100 transition-colors group"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold hover:bg-blue-100 transition-colors group"
                     title={isEn ? "Remove search filter" : "Hapus filter pencarian"}
                   >
                     <span>{isEn ? "Search:" : "Kata Kunci:"} &ldquo;{params.q}&rdquo;</span>
@@ -257,7 +257,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                 {params.category && (
                   <a
                     href={`/courses?${params.q ? `q=${encodeURIComponent(params.q)}&` : ""}${params.level ? `level=${params.level}&` : ""}${params.sort ? `sort=${params.sort}` : ""}`}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-semibold hover:bg-blue-100 transition-colors group"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold hover:bg-blue-100 transition-colors group"
                     title={isEn ? "Remove category filter" : "Hapus filter kategori"}
                   >
                     <span>{isEn ? "Category:" : "Kategori:"} {params.category}</span>
@@ -268,7 +268,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                 {params.level && (
                   <a
                     href={`/courses?${params.q ? `q=${encodeURIComponent(params.q)}&` : ""}${params.category ? `category=${encodeURIComponent(params.category)}&` : ""}${params.sort ? `sort=${params.sort}` : ""}`}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-semibold hover:bg-blue-100 transition-colors group"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold hover:bg-blue-100 transition-colors group"
                     title={isEn ? "Remove level filter" : "Hapus filter level"}
                   >
                     <span>Level: {levelOptions.find((l) => l.value === params.level)?.label || params.level}</span>
@@ -339,8 +339,8 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                   ))}
                 </div>
               ) : (
-                <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-8 sm:p-12 text-center max-w-xl mx-auto my-6 space-y-5 animate-in fade-in duration-200">
-                  <div className="w-16 h-16 rounded-3xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto border border-blue-100 shadow-2xs">
+                <div className="bg-white rounded-3xl shadow-sm p-8 sm:p-12 text-center max-w-xl mx-auto my-6 space-y-5 animate-in fade-in duration-200">
+                  <div className="w-16 h-16 rounded-3xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto shadow-2xs">
                     <SearchX size={32} />
                   </div>
                   <div>
@@ -366,7 +366,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                         <a
                           key={keyword}
                           href={`/courses?q=${encodeURIComponent(keyword)}`}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-50 hover:text-blue-700 text-slate-600 border border-slate-200/70 text-xs font-semibold transition-all hover:scale-102"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-50 hover:text-blue-700 text-slate-600 text-xs font-semibold transition-all hover:scale-102"
                         >
                           <Sparkles size={12} className="text-blue-600" />
                           <span>{keyword}</span>
@@ -387,7 +387,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                       href="https://wa.me/6281210106680?text=Halo%20Matoh%20Technologies,%20saya%20mencari%20materi%20pelatihan%20khusus."
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-bold transition-all"
+                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold transition-all"
                     >
                       <MessageCircle size={14} className="text-emerald-600" />
                       <span>{isEn ? "Request Topic on WhatsApp" : "Request Topik di WhatsApp"}</span>
