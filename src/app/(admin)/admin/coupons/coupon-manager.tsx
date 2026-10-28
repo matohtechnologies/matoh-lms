@@ -410,12 +410,7 @@ export function CouponManager({
       {/* Summary Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Kupon</span>
-            <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
-              <Ticket size={14} />
-            </div>
-          </div>
+          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Kupon</span>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-extrabold text-slate-900">{coupons.length}</span>
             <span className="text-xs text-emerald-600 font-semibold">{totalActiveCoupons} aktif</span>
@@ -423,12 +418,7 @@ export function CouponManager({
         </div>
 
         <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Khusus Kelas</span>
-            <div className="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
-              <BookOpen size={14} />
-            </div>
-          </div>
+          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Khusus Kelas</span>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-extrabold text-slate-900">{totalCourseSpecific}</span>
             <span className="text-xs text-slate-400">kupon terikat</span>
@@ -436,12 +426,7 @@ export function CouponManager({
         </div>
 
         <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Khusus User</span>
-            <div className="w-7 h-7 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center">
-              <UserCheck size={14} />
-            </div>
-          </div>
+          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Khusus User</span>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-extrabold text-slate-900">{totalUserRestricted}</span>
             <span className="text-xs text-purple-600 font-semibold">akses terbatas</span>
@@ -449,12 +434,7 @@ export function CouponManager({
         </div>
 
         <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Terpakai</span>
-            <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
-              <Coins size={14} />
-            </div>
-          </div>
+          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Terpakai</span>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-extrabold text-slate-900">{totalRedemptions}</span>
             <span className="text-xs text-slate-400">kali klaim</span>

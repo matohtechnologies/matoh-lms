@@ -290,34 +290,19 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
       {/* Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white p-4 rounded-2xl border border-stone-200/80 shadow-2xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">Total Kategori</span>
-            <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-              <FolderTree size={16} />
-            </div>
-          </div>
+          <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">Total Kategori</span>
           <p className="text-2xl font-black text-stone-900 mt-2">{totalCategories}</p>
           <p className="text-[11px] text-stone-500 mt-0.5">Disediakan di navbar dan pencarian</p>
         </div>
 
         <div className="bg-white p-4 rounded-2xl border border-stone-200/80 shadow-2xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">Kategori Aktif</span>
-            <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-              <Layers size={16} />
-            </div>
-          </div>
+          <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">Kategori Aktif</span>
           <p className="text-2xl font-black text-emerald-700 mt-2">{categoriesWithCourses}</p>
           <p className="text-[11px] text-stone-500 mt-0.5">Memiliki minimal 1 kelas aktif</p>
         </div>
 
         <div className="bg-white p-4 rounded-2xl border border-stone-200/80 shadow-2xs">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">Total Kelas Terkait</span>
-            <div className="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
-              <BookOpen size={16} />
-            </div>
-          </div>
+          <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">Total Kelas Terkait</span>
           <p className="text-2xl font-black text-purple-700 mt-2">{totalCourses}</p>
           <p className="text-[11px] text-stone-500 mt-0.5">Terdistribusi di semua kategori</p>
         </div>

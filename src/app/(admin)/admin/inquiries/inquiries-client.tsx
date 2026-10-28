@@ -210,46 +210,31 @@ export function InquiriesClient() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-2xs flex items-center justify-between">
-          <div>
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-              Total Pesan Masuk
-            </p>
-            <p className="text-2xl font-bold text-slate-900 mt-1">
-              {stats.total}
-            </p>
-          </div>
-          <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-            <MessageSquare size={22} />
-          </div>
+        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-2xs">
+          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            Total Pesan Masuk
+          </p>
+          <p className="text-2xl font-bold text-slate-900 mt-1">
+            {stats.total}
+          </p>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-amber-200/80 shadow-2xs flex items-center justify-between">
-          <div>
-            <p className="text-xs font-semibold text-amber-700 uppercase tracking-wider">
-              Belum Dibaca
-            </p>
-            <p className="text-2xl font-bold text-amber-900 mt-1">
-              {stats.unread}
-            </p>
-          </div>
-          <div className="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
-            <Clock size={22} />
-          </div>
+        <div className="bg-white p-5 rounded-2xl border border-amber-200/80 shadow-2xs">
+          <p className="text-xs font-semibold text-amber-700 uppercase tracking-wider">
+            Belum Dibaca
+          </p>
+          <p className="text-2xl font-bold text-amber-900 mt-1">
+            {stats.unread}
+          </p>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-emerald-200/80 shadow-2xs flex items-center justify-between">
-          <div>
-            <p className="text-xs font-semibold text-emerald-700 uppercase tracking-wider">
-              Sudah Ditinjau
-            </p>
-            <p className="text-2xl font-bold text-emerald-900 mt-1">
-              {stats.read}
-            </p>
-          </div>
-          <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-            <CheckCircle2 size={22} />
-          </div>
+        <div className="bg-white p-5 rounded-2xl border border-emerald-200/80 shadow-2xs">
+          <p className="text-xs font-semibold text-emerald-700 uppercase tracking-wider">
+            Sudah Ditinjau
+          </p>
+          <p className="text-2xl font-bold text-emerald-900 mt-1">
+            {stats.read}
+          </p>
         </div>
       </div>
 

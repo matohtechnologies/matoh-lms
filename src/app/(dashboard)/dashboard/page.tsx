@@ -325,25 +325,12 @@ export default async function DashboardPage({
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map(({ label, value, icon: Icon, color, href }) => (
+        {stats.map(({ label, value, href }) => (
           <Link
             key={label}
             href={href}
             className="bg-white rounded-2xl border border-stone-200/80 p-5 shadow-xs hover:shadow-warm hover:-translate-y-0.5 transition-all duration-200 group"
           >
-            <div
-              className={`w-11 h-11 rounded-xl flex items-center justify-center mb-3 transition-transform group-hover:scale-105 ${
-                color === "blue"
-                  ? "bg-blue-50 text-blue-600"
-                  : color === "green"
-                  ? "bg-emerald-50 text-emerald-600"
-                  : color === "amber"
-                  ? "bg-amber-50 text-amber-600"
-                  : "bg-sky-50 text-sky-600"
-              }`}
-            >
-              <Icon size={20} />
-            </div>
             <p
               className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
