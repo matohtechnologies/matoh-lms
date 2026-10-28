@@ -317,7 +317,11 @@ function renderInlineMarkdown(
             src={normalizeDisplayImageUrl(imgMatch[2])}
             alt={imgMatch[1] || "Gambar materi"}
             loading="lazy"
-            className="rounded-xl border border-stone-200 dark:border-stone-800 max-h-80 object-contain mx-auto shadow-sm"
+            decoding="async"
+            width={800}
+            height={450}
+            style={{ aspectRatio: "16 / 9" }}
+            className="rounded-xl border border-stone-200 dark:border-stone-800 max-h-80 w-auto object-contain mx-auto shadow-sm aspect-video"
           />
           {imgMatch[1] && (
             <span className="block text-xs text-stone-500 mt-1 italic">
@@ -771,9 +775,13 @@ function ImageNode({
           src={resolvedSrc}
           alt={alt || "Ilustrasi materi pembelajaran"}
           loading="lazy"
+          decoding="async"
+          width={800}
+          height={450}
+          style={{ aspectRatio: "16 / 9" }}
           onError={() => setHasError(true)}
           onClick={() => setModalOpen(true)}
-          className="mx-auto max-h-[520px] w-auto object-contain cursor-zoom-in transition-transform duration-300 group-hover:scale-[1.01]"
+          className="mx-auto max-h-[520px] w-auto object-contain cursor-zoom-in transition-transform duration-300 group-hover:scale-[1.01] aspect-video"
         />
       </div>
       {alt && (

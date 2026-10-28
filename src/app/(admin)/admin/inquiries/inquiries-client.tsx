@@ -288,6 +288,8 @@ export function InquiriesClient() {
         <div className="relative w-full md:w-72">
           <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
+            id="inquiry-search"
+            name="search"
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}

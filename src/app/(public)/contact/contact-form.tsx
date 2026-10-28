@@ -258,11 +258,14 @@ export function ContactForm({ locale: propLocale }: ContactFormProps) {
             {/* Name & Phone */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-semibold text-stone-700 block mb-1.5">
+                <label htmlFor="contact-name" className="text-xs font-semibold text-stone-700 block mb-1.5">
                   {isEn ? "Full Name" : "Nama Lengkap"}{" "}
                   <span className="text-red-500">*</span>
                 </label>
                 <input
+                  id="contact-name"
+                  name="name"
+                  autoComplete="name"
                   type="text"
                   required
                   placeholder={isEn ? "e.g. Alex Morgan" : "Contoh: Budi Pratama"}
@@ -275,10 +278,13 @@ export function ContactForm({ locale: propLocale }: ContactFormProps) {
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-stone-700 block mb-1.5">
+                <label htmlFor="contact-phone" className="text-xs font-semibold text-stone-700 block mb-1.5">
                   {isEn ? "WhatsApp / Phone Number" : "Nomor WhatsApp / HP"}
                 </label>
                 <input
+                  id="contact-phone"
+                  name="phone"
+                  autoComplete="tel"
                   type="tel"
                   placeholder={isEn ? "e.g. +62 812 3456 7890" : "Contoh: 081234567890"}
                   value={formData.phone}
@@ -293,11 +299,14 @@ export function ContactForm({ locale: propLocale }: ContactFormProps) {
             {/* Email & Category */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-semibold text-stone-700 block mb-1.5">
+                <label htmlFor="contact-email" className="text-xs font-semibold text-stone-700 block mb-1.5">
                   {isEn ? "Active Email Address" : "Alamat Email Aktif"}{" "}
                   <span className="text-red-500">*</span>
                 </label>
                 <input
+                  id="contact-email"
+                  name="email"
+                  autoComplete="email"
                   type="email"
                   required
                   placeholder="name@email.com"
@@ -310,10 +319,12 @@ export function ContactForm({ locale: propLocale }: ContactFormProps) {
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-stone-700 block mb-1.5">
+                <label htmlFor="contact-category" className="text-xs font-semibold text-stone-700 block mb-1.5">
                   {isEn ? "Inquiry Topic" : "Topik Kebutuhan"}
                 </label>
                 <select
+                  id="contact-category"
+                  name="category"
                   value={formData.category}
                   onChange={(e) =>
                     setFormData({ ...formData, category: e.target.value })
@@ -331,11 +342,13 @@ export function ContactForm({ locale: propLocale }: ContactFormProps) {
 
             {/* Message */}
             <div>
-              <label className="text-xs font-semibold text-stone-700 block mb-1.5">
+              <label htmlFor="contact-message" className="text-xs font-semibold text-stone-700 block mb-1.5">
                 {isEn ? "Question / Message Details" : "Pertanyaan / Detail Pesan"}{" "}
                 <span className="text-red-500">*</span>
               </label>
               <textarea
+                id="contact-message"
+                name="message"
                 required
                 rows={4}
                 placeholder={
@@ -354,12 +367,15 @@ export function ContactForm({ locale: propLocale }: ContactFormProps) {
             {/* Dynamic Institution field for Corporate / B2B */}
             {isCorporateOrB2B && (
               <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200/80 space-y-2 animate-in fade-in duration-200">
-                <label className="text-xs font-bold text-blue-950 block">
+                <label htmlFor="contact-institution" className="text-xs font-bold text-blue-950 block">
                   {isEn ? "Company / Campus / Institution Name" : "Nama Perusahaan / Institusi / Kampus"}
                 </label>
                 <div className="relative">
                   <Building2 size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-blue-500" />
                   <input
+                    id="contact-institution"
+                    name="institution"
+                    autoComplete="organization"
                     type="text"
                     placeholder={isEn ? "e.g. PT. Mitra Teknologi or Universitas..." : "Contoh: PT. Inovasi Digital atau Universitas..."}
                     value={formData.institution}
