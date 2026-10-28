@@ -110,6 +110,36 @@ jobs:
           ssh-keyscan -H "$VPS_HOST" >> ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
 
+      - name: Clean up disk space on VPS
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          ssh "$VPS_USER@$VPS_HOST" 'bash -s' <<'CLEANUP'
+          set -eu
+          echo "=== Pembersihan Disk VPS Sebelum Upload ==="
+          # 1. Hapus arsip tar.gz lama di home lmsapp
+          rm -f /home/lmsapp/*.tar.gz /home/lmsapp/lms-platform-*.tar.gz 2>/dev/null || true
+
+          # 2. Hapus cache npm dan cache sementara
+          rm -rf /home/lmsapp/.npm /home/lmsapp/.cache /tmp/lms* 2>/dev/null || true
+
+          # 3. Hapus folder release lama di /var/www/lms-platform/releases (simpan rilis aktif dan shared)
+          BASE="/var/www/lms-platform"
+          if [ -d "$BASE/releases" ]; then
+            CURRENT_TARGET="$(readlink -f "$BASE/releases/current" 2>/dev/null || echo "")"
+            for dir in "$BASE/releases"/*; do
+              if [ -d "$dir" ] && [ "$dir" != "$BASE/releases/current" ] && [ "$dir" != "$BASE/releases/shared" ] && [ "$dir" != "$CURRENT_TARGET" ]; then
+                echo "Membersihkan folder release lama: $dir"
+                rm -rf "$dir" 2>/dev/null || true
+              fi
+            done
+          fi
+
+          echo "Kapasitas disk setelah dibersihkan:"
+          df -h /
+          CLEANUP
+
       - name: Upload release to VPS
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
