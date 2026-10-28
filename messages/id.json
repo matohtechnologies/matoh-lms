@@ -643,7 +643,7 @@
     "not_found_desc": "Nomor sertifikat {code} tidak ditemukan dalam pangkalan data resmi kami. Pastikan nomor sertifikat yang Anda masukkan sudah benar.",
     "search_again_btn": "Cari Ulang Kredensial",
     "back_to_home": "Kembali ke Beranda",
-    "portal_badge": "Pangkalan Verifikasi Kredensial Resmi",
+    "portal_badge": "Verifikasi Kredensial Resmi",
     "portal_title": "Verifikasi Keaslian Sertifikat Digital",
     "portal_subtitle": "Periksa dan pastikan keaslian sertifikat kelulusan serta transkrip capaian kompetensi yang diterbitkan oleh PT. Matoh Technologies Indonesia.",
     "portal_input_label": "Nomor ID Kredensial Sertifikat",

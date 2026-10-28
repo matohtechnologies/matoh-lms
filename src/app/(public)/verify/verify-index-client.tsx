@@ -31,7 +31,6 @@ export function VerifyIndexClient() {
         <div className="flex flex-col items-center text-center space-y-4">
           <div className="flex items-center gap-3">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-800 text-xs sm:text-sm font-bold border border-emerald-200 shadow-2xs">
-              <ShieldCheck size={16} />
               <span>{t("portal_badge")}</span>
             </div>
           </div>
@@ -81,20 +80,6 @@ export function VerifyIndexClient() {
               <p className="text-xs text-stone-400">
                 {t("portal_input_hint")}
               </p>
-              <div className="flex items-center gap-1.5">
-                <span className="text-xs text-stone-500 font-medium">
-                  Contoh serial:
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setCode("CERT-IMDT-2026-X-0001")}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200/70 text-xs font-mono font-bold transition-all hover:scale-102 active:scale-98 cursor-pointer shadow-2xs"
-                  title="Klik untuk mengisi nomor seri contoh"
-                >
-                  <Sparkles size={12} className="text-blue-600" />
-                  <span>CERT-IMDT-2026-X-0001</span>
-                </button>
-              </div>
             </div>
           </form>
 

@@ -643,7 +643,7 @@
     "not_found_desc": "Certificate number {code} was not found in our official database. Please ensure the certificate number you entered is correct.",
     "search_again_btn": "Search Credential Again",
     "back_to_home": "Back to Home",
-    "portal_badge": "Official Credential Verification Registry",
+    "portal_badge": "Official Credential Verification",
     "portal_title": "Digital Certificate Authenticity Verification",
     "portal_subtitle": "Verify and validate the authenticity of graduation certificates and competency transcripts issued by PT. Matoh Technologies Indonesia.",
     "portal_input_label": "Certificate Credential ID",
