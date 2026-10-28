@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sendContactInquiryNotificationEmail } from "@/lib/email";
+import { ensureInquiriesTable } from "@/lib/db-inquiries";
 
 export async function POST(req: Request) {
   try {
@@ -36,17 +37,42 @@ export async function POST(req: Request) {
     const trimmedInstitution = institution ? String(institution).trim() : null;
     const trimmedMessage = message.trim();
 
-    // 1. Save to Database
-    const inquiry = await prisma.contactInquiry.create({
-      data: {
-        name: trimmedName,
-        email: trimmedEmail,
-        phone: trimmedPhone,
-        category: trimmedCategory,
-        institution: trimmedInstitution,
-        message: trimmedMessage,
-      },
-    });
+    // 1. Save to Database (with auto-create table fallback)
+    let inquiry;
+    try {
+      inquiry = await prisma.contactInquiry.create({
+        data: {
+          name: trimmedName,
+          email: trimmedEmail,
+          phone: trimmedPhone,
+          category: trimmedCategory,
+          institution: trimmedInstitution,
+          message: trimmedMessage,
+        },
+      });
+    } catch (dbErr: unknown) {
+      const errMsg = String(dbErr);
+      if (
+        errMsg.includes("contact_inquiries") ||
+        errMsg.includes("does not exist") ||
+        (dbErr as { code?: string })?.code === "P2021"
+      ) {
+        console.warn("[Contact API] Table missing, auto-creating contact_inquiries table...");
+        await ensureInquiriesTable();
+        inquiry = await prisma.contactInquiry.create({
+          data: {
+            name: trimmedName,
+            email: trimmedEmail,
+            phone: trimmedPhone,
+            category: trimmedCategory,
+            institution: trimmedInstitution,
+            message: trimmedMessage,
+          },
+        });
+      } else {
+        throw dbErr;
+      }
+    }
 
     // 2. Send Email Notification to Admin in background
     sendContactInquiryNotificationEmail({

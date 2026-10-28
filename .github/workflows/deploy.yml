@@ -151,12 +151,6 @@ jobs:
             ln -sfn "$BASE/shared/.env" "$RELEASE/.env"
           fi
 
-          # Sinkronisasi database PostgreSQL VPS otomatis jika ada perubahan model Prisma
-          if [ -f "$RELEASE/prisma/schema.prisma" ]; then
-            echo "Menjalankan prisma db push untuk sinkronisasi tabel PostgreSQL..."
-            npx --yes prisma db push --schema="$RELEASE/prisma/schema.prisma" --skip-generate --accept-data-loss || true
-          fi
-
           chown -R lmsapp:lmsapp "$RELEASE"
 
           ln -sfn "$RELEASE" "$CURRENT"

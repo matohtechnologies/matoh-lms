@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { ensureInquiriesTable } from "@/lib/db-inquiries";
 
 export async function GET(req: Request) {
   try {
@@ -31,23 +32,54 @@ export async function GET(req: Request) {
       ];
     }
 
-    const [inquiries, totalCount, unreadCount] = await Promise.all([
-      prisma.contactInquiry.findMany({
-        where,
-        orderBy: { createdAt: "desc" },
-      }),
-      prisma.contactInquiry.count(),
-      prisma.contactInquiry.count({ where: { isRead: false } }),
-    ]);
+    try {
+      const [inquiries, totalCount, unreadCount] = await Promise.all([
+        prisma.contactInquiry.findMany({
+          where,
+          orderBy: { createdAt: "desc" },
+        }),
+        prisma.contactInquiry.count(),
+        prisma.contactInquiry.count({ where: { isRead: false } }),
+      ]);
 
-    return NextResponse.json({
-      inquiries,
-      stats: {
-        total: totalCount,
-        unread: unreadCount,
-        read: totalCount - unreadCount,
-      },
-    });
+      return NextResponse.json({
+        inquiries,
+        stats: {
+          total: totalCount,
+          unread: unreadCount,
+          read: totalCount - unreadCount,
+        },
+      });
+    } catch (queryError: unknown) {
+      const errMsg = String(queryError);
+      if (
+        errMsg.includes("contact_inquiries") ||
+        errMsg.includes("does not exist") ||
+        (queryError as { code?: string })?.code === "P2021"
+      ) {
+        console.warn("[Admin Inquiries] Table missing, auto-creating contact_inquiries table...");
+        await ensureInquiriesTable();
+
+        const [inquiries, totalCount, unreadCount] = await Promise.all([
+          prisma.contactInquiry.findMany({
+            where,
+            orderBy: { createdAt: "desc" },
+          }),
+          prisma.contactInquiry.count(),
+          prisma.contactInquiry.count({ where: { isRead: false } }),
+        ]);
+
+        return NextResponse.json({
+          inquiries,
+          stats: {
+            total: totalCount,
+            unread: unreadCount,
+            read: totalCount - unreadCount,
+          },
+        });
+      }
+      throw queryError;
+    }
   } catch (error) {
     console.error("[Admin Inquiries GET]", error);
     return NextResponse.json(
@@ -56,4 +88,3 @@ export async function GET(req: Request) {
     );
   }
 }
-
