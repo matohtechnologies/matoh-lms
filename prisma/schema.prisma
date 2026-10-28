@@ -532,3 +532,20 @@ model StudyNote {
   @@map("study_notes")
 }
 
+model ContactInquiry {
+  id          String    @id @default(cuid())
+  name        String
+  email       String
+  phone       String?
+  category    String
+  institution String?
+  message     String    @db.Text
+  isRead      Boolean   @default(false)
+  repliedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([isRead])
+  @@index([createdAt])
+  @@map("contact_inquiries")
+}

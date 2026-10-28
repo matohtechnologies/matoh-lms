@@ -26,6 +26,7 @@ export default async function AdminLayout({
     { href: "/admin/users", label: tAdmin("nav_users") },
     { href: "/admin/orders", label: tAdmin("nav_orders") },
     { href: "/admin/coupons", label: tAdmin("nav_coupons") },
+    { href: "/admin/inquiries", label: "Pesan Konsultasi" },
   ];
 
   return (

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, BookOpen, Users, ShoppingBag, Ticket, FolderTree, type LucideIcon } from "lucide-react";
+import { LayoutDashboard, BookOpen, Users, ShoppingBag, Ticket, FolderTree, MessageSquare, type LucideIcon } from "lucide-react";
 
 const ADMIN_ICON_MAP: Record<string, LucideIcon> = {
   "/admin": LayoutDashboard,
@@ -12,6 +12,7 @@ const ADMIN_ICON_MAP: Record<string, LucideIcon> = {
   "/admin/users": Users,
   "/admin/orders": ShoppingBag,
   "/admin/coupons": Ticket,
+  "/admin/inquiries": MessageSquare,
 };
 
 export interface AdminNavItem {

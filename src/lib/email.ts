@@ -177,3 +177,138 @@ export async function sendOrderReceiptEmail({
     return { success: false, error: err };
   }
 }
+
+interface SendContactInquiryParams {
+  name: string;
+  email: string;
+  phone?: string | null;
+  category: string;
+  institution?: string | null;
+  message: string;
+}
+
+export async function sendContactInquiryNotificationEmail(params: SendContactInquiryParams) {
+  if (!resend) {
+    console.warn("[Resend] RESEND_API_KEY is not configured. Contact inquiry notification skipped.");
+    return { success: false, error: "RESEND_API_KEY missing" };
+  }
+
+  const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL || process.env.ADMIN_EMAIL || "kemplang313@gmail.com";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.matohtechnologies.com";
+
+  const emailHtml = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #f8fafc; margin: 0; padding: 24px; color: #1e293b; }
+        .card { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; padding: 32px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .badge { display: inline-block; padding: 4px 12px; background: #dbeafe; color: #1e40af; border-radius: 9999px; font-size: 12px; font-weight: 700; margin-bottom: 16px; }
+        .info-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px; }
+        .info-table td { padding: 8px 12px; border-bottom: 1px solid #f1f5f9; }
+        .info-table td.label { width: 140px; color: #64748b; font-weight: 600; }
+        .message-box { background: #f8fafc; border-left: 4px solid #2563eb; padding: 16px; border-radius: 8px; margin: 20px 0; font-size: 14px; line-height: 1.6; color: #334155; white-space: pre-wrap; }
+        .btn { display: inline-block; background-color: #2563eb; color: #ffffff !important; font-weight: 600; font-size: 13px; padding: 10px 20px; border-radius: 8px; text-decoration: none; margin-top: 16px; }
+        .btn-wa { display: inline-block; background-color: #10b981; color: #ffffff !important; font-weight: 600; font-size: 13px; padding: 10px 20px; border-radius: 8px; text-decoration: none; margin-top: 16px; margin-left: 8px; }
+      </style>
+    </head>
+    <body>
+      <div class="card">
+        <span class="badge">PESAN KONSULTASI MASUK</span>
+        <h2 style="margin: 0 0 8px 0; color: #0f172a;">Ada Pertanyaan Baru dari Website</h2>
+        <p style="font-size: 13px; color: #64748b; margin-top: 0;">Pengunjung telah mengirimkan pesan konsultasi melalui formulir bantuan.</p>
+
+        <table class="info-table">
+          <tr>
+            <td class="label">Nama Lengkap</td>
+            <td><strong>${params.name}</strong></td>
+          </tr>
+          <tr>
+            <td class="label">Email</td>
+            <td><a href="mailto:${params.email}" style="color: #2563eb;">${params.email}</a></td>
+          </tr>
+          <tr>
+            <td class="label">WhatsApp / HP</td>
+            <td>${params.phone ? `<a href="https://wa.me/${params.phone.replace(/[^0-9]/g, '')}" style="color: #059669;">${params.phone}</a>` : '-'}</td>
+          </tr>
+          <tr>
+            <td class="label">Topik Kebutuhan</td>
+            <td><span style="font-weight: 600; color: #1e40af;">${params.category}</span></td>
+          </tr>
+          <tr>
+            <td class="label">Instansi / UMKM</td>
+            <td>${params.institution || '-'}</td>
+          </tr>
+        </table>
+
+        <div style="font-size: 12px; font-weight: 700; color: #475569; text-transform: uppercase;">Isi Pesan / Pertanyaan:</div>
+        <div class="message-box">${params.message}</div>
+
+        <div style="margin-top: 24px; text-align: left;">
+          <a href="${appUrl}/admin/inquiries" class="btn" target="_blank">
+            Buka Dashboard Admin
+          </a>
+          ${params.phone ? `
+            <a href="https://wa.me/${params.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Halo ${params.name}, kami dari tim PT. Matoh Technologies Indonesia menanggapi pesan konsultasi Anda mengenai ${params.category}...`)}" class="btn-wa" target="_blank">
+              Balas via WhatsApp
+            </a>
+          ` : ''}
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  try {
+    // Attempt 1: Using default configured sender and recipient
+    let result = await resend.emails.send({
+      from: DEFAULT_SENDER,
+      to: adminEmail,
+      replyTo: params.email,
+      subject: `[Konsultasi Baru] ${params.category} - ${params.name}`,
+      html: emailHtml,
+    });
+
+    // Fallback if domain is unverified (status 403)
+    if (result.error) {
+      console.warn("[Resend Warning] First attempt failed:", result.error.message);
+
+      // Attempt 2: Fallback to onboarding@resend.dev
+      result = await resend.emails.send({
+        from: "Matoh Technologies <onboarding@resend.dev>",
+        to: adminEmail,
+        replyTo: params.email,
+        subject: `[Konsultasi Baru] ${params.category} - ${params.name}`,
+        html: emailHtml,
+      });
+
+      // Attempt 3: If in testing sandbox mode, Resend only allows sending to the registered account owner
+      if (
+        result.error &&
+        result.error.message &&
+        result.error.message.includes("kemplang313@gmail.com") &&
+        adminEmail !== "kemplang313@gmail.com"
+      ) {
+        console.warn("[Resend Sandbox] Sending to registered account owner: kemplang313@gmail.com");
+        result = await resend.emails.send({
+          from: "Matoh Technologies <onboarding@resend.dev>",
+          to: "kemplang313@gmail.com",
+          replyTo: params.email,
+          subject: `[Konsultasi Baru Sandbox] ${params.category} - ${params.name}`,
+          html: emailHtml,
+        });
+      }
+    }
+
+    if (result.error) {
+      console.error("[Resend Error] All attempts to send notification email failed:", result.error);
+      return { success: false, error: result.error };
+    }
+
+    return { success: true, data: result.data };
+  } catch (err) {
+    console.error("[Resend Exception] Error sending contact notification:", err);
+    return { success: false, error: err };
+  }
+}

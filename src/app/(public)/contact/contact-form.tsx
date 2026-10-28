@@ -75,10 +75,30 @@ export function ContactForm({ locale: propLocale }: ContactFormProps) {
     }
 
     setLoading(true);
-    // Simulate real network submission with realistic latency
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setLoading(false);
-    setSubmitted(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || (isEn ? "Failed to send message" : "Gagal mengirim pesan"));
+      }
+
+      setSubmitted(true);
+    } catch (err: unknown) {
+      alert(
+        err instanceof Error
+          ? err.message
+          : isEn
+          ? "A network error occurred. Please try again or chat via WhatsApp."
+          : "Terjadi kesalahan jaringan. Silakan coba lagi atau gunakan opsi WhatsApp."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleReset = () => {
