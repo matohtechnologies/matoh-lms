@@ -50,7 +50,7 @@ export function VerifyIndexClient() {
         {/* Verification Search Form Box */}
         <div className="bg-white rounded-3xl p-6 sm:p-10 border border-stone-200/90 shadow-warm space-y-6">
           <form onSubmit={handleSubmit} className="space-y-4">
-            <label className="block text-xs font-bold uppercase tracking-wider text-stone-500">
+            <label htmlFor="verify-serial-code" className="block text-xs font-bold uppercase tracking-wider text-stone-500">
               {t("portal_input_label")}
             </label>
             <div className="flex flex-col sm:flex-row gap-3">
@@ -60,6 +60,9 @@ export function VerifyIndexClient() {
                   size={18}
                 />
                 <input
+                  id="verify-serial-code"
+                  name="code"
+                  autoComplete="off"
                   type="text"
                   value={code}
                   onChange={(e) => setCode(e.target.value)}

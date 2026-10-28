@@ -121,8 +121,11 @@ export default function ForgotPasswordPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
+              id="forgot-email"
+              name="email"
               label="Email Terdaftar"
               type="email"
+              autoComplete="email"
               placeholder="email@kamu.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

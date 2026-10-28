@@ -454,7 +454,8 @@ export default async function HomePage() {
                   height={620}
                   priority
                   unoptimized
-                  className="w-full h-auto max-h-[500px] object-contain transition-transform duration-500 hover:scale-[1.02]"
+                  style={{ aspectRatio: "1 / 1" }}
+                  className="w-full h-auto max-h-[500px] object-contain transition-transform duration-500 hover:scale-[1.02] aspect-square"
                 />
 
                 {/* Floating Badge 1: Top Right */}

@@ -121,6 +121,9 @@ export function CertificateTranscriptCard({
         <img
           src={backConfig.backgroundUrl}
           alt="Back Template Background"
+          width={1123}
+          height={794}
+          style={{ aspectRatio: "1123 / 794" }}
           className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none"
         />
       )}
@@ -136,7 +139,9 @@ export function CertificateTranscriptCard({
                 alt={issuerName}
                 width={32}
                 height={32}
-                className="object-contain"
+                priority
+                style={{ aspectRatio: "1 / 1" }}
+                className="object-contain aspect-square"
               />
             </div>
             <div>
@@ -330,7 +335,10 @@ export function CertificateTranscriptCard({
                     <img
                       src={qrCodeUrl}
                       alt="QR Code Verifikasi"
-                      className="w-16 h-16 sm:w-20 sm:h-20 block shrink-0 object-contain print:w-14 print:h-14"
+                      width={80}
+                      height={80}
+                      style={{ aspectRatio: "1 / 1" }}
+                      className="w-16 h-16 sm:w-20 sm:h-20 block shrink-0 object-contain print:w-14 print:h-14 aspect-square"
                     />
                   </Link>
                 ) : (

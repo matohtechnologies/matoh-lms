@@ -419,10 +419,8 @@ export function ResourceManager({ courseId, sections = [] }: ResourceManagerProp
         {/* Search */}
         <div className="relative flex-1">
           <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
-          <input
-            type="text"
-            placeholder="Cari judul bahan ajar atau nama file..."
-            value={searchQuery}
+          <label htmlFor="resource-search-filter" className="sr-only">Cari bahan ajar</label>
+          <input id="resource-search-filter" name="search" type="text" placeholder="Cari judul bahan ajar atau nama file..." value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full text-xs pl-9 pr-3 py-2 rounded-xl border border-stone-200 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
           />
@@ -432,9 +430,7 @@ export function ResourceManager({ courseId, sections = [] }: ResourceManagerProp
         <div className="flex items-center gap-2 shrink-0">
           <Filter size={14} className="text-stone-400 shrink-0" />
           <span className="text-xs font-semibold text-stone-600 shrink-0">Filter Chapter:</span>
-          <select
-            value={selectedSectionFilter}
-            onChange={(e) => setSelectedSectionFilter(e.target.value)}
+          <select id="resource-section-filter" name="sectionFilter" aria-label="Filter Bab Bahan Ajar" value={selectedSectionFilter} onChange={(e) => setSelectedSectionFilter(e.target.value)}
             className="text-xs px-3 py-2 rounded-xl border border-stone-200 bg-white font-medium text-stone-800 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
           >
             <option value="ALL">Semua Bahan Ajar ({resources.length})</option>
@@ -598,13 +594,10 @@ export function ResourceManager({ courseId, sections = [] }: ResourceManagerProp
             <form onSubmit={handleSaveResource} className="space-y-4">
               {/* Judul Bahan Belajar */}
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                <label htmlFor="resource-modal-title" className="block text-xs font-semibold text-stone-700 mb-1">
                   Judul Bahan Ajar <span className="text-red-500">*</span>
                 </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Contoh: Source Code Proyek Toko Online (v1.0)"
+                <input id="resource-modal-title" name="title" type="text" required placeholder="Contoh: Source Code Proyek Toko Online (v1.0)"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   className="w-full text-xs px-3 py-2.5 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
@@ -613,12 +606,10 @@ export function ResourceManager({ courseId, sections = [] }: ResourceManagerProp
 
               {/* Target Chapter / Bab */}
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                <label htmlFor="resource-modal-section" className="block text-xs font-semibold text-stone-700 mb-1">
                   Target Chapter / Bab Pembelajaran
                 </label>
-                <select
-                  value={sectionId}
-                  onChange={(e) => setSectionId(e.target.value)}
+                <select id="resource-modal-section" name="sectionId" value={sectionId} onChange={(e) => setSectionId(e.target.value)}
                   className="w-full text-xs px-3 py-2.5 rounded-xl border border-stone-300 bg-white font-medium text-stone-800 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">🌐 Semua Chapter (Bahan Belajar Umum / Keseluruhan Kelas)</option>
@@ -635,9 +626,7 @@ export function ResourceManager({ courseId, sections = [] }: ResourceManagerProp
 
               {/* Tipe Bahan Ajar */}
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1">
-                  Tipe / Format Bahan Ajar
-                </label>
+                <span className="block text-xs font-semibold text-stone-700 mb-1">Tipe / Format Bahan Ajar</span>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {[
                     { id: "FILE", label: "File Berkas" },
@@ -668,17 +657,11 @@ export function ResourceManager({ courseId, sections = [] }: ResourceManagerProp
               {/* Upload File atau Input URL */}
               <div className="p-3.5 bg-stone-50 rounded-xl border border-stone-200 space-y-3">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-semibold text-stone-700">
+                  <label htmlFor="resource-upload-input" className="text-xs font-semibold text-stone-700">
                     File Dokumen / Tautan Berkas <span className="text-red-500">*</span>
                   </label>
                   <div>
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      onChange={handleFileUpload}
-                      className="hidden"
-                      id="resource-upload-input"
-                    />
+                    <input ref={fileInputRef} id="resource-upload-input" name="resourceFile" type="file" onChange={handleFileUpload} className="hidden" />
                     <label
                       htmlFor="resource-upload-input"
                       className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-stone-200 text-stone-700 text-xs font-semibold cursor-pointer hover:bg-stone-100 hover:text-stone-900 shadow-xs transition-colors ${
@@ -696,11 +679,7 @@ export function ResourceManager({ courseId, sections = [] }: ResourceManagerProp
                 </div>
 
                 <div>
-                  <input
-                    type="text"
-                    required
-                    placeholder="https://... atau /uploads/..."
-                    value={fileUrl}
+                  <input id="resource-modal-url" name="fileUrl" type="text" required placeholder="https://... atau /uploads/..." value={fileUrl}
                     onChange={(e) => setFileUrl(e.target.value)}
                     className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 font-mono"
                   />
@@ -711,25 +690,19 @@ export function ResourceManager({ courseId, sections = [] }: ResourceManagerProp
 
                 <div className="grid grid-cols-2 gap-2 pt-1">
                   <div>
-                    <label className="block text-[11px] font-medium text-stone-500 mb-0.5">
+                    <label htmlFor="resource-modal-filename" className="block text-[11px] font-medium text-stone-500 mb-0.5">
                       Nama File (opsional)
                     </label>
-                    <input
-                      type="text"
-                      placeholder="contoh.pdf / starter.zip"
-                      value={fileName}
+                    <input id="resource-modal-filename" name="fileName" type="text" placeholder="contoh.pdf / starter.zip" value={fileName}
                       onChange={(e) => setFileName(e.target.value)}
                       className="w-full text-xs px-2.5 py-1.5 rounded-lg border border-stone-200 bg-white"
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-medium text-stone-500 mb-0.5">
+                    <label htmlFor="resource-modal-filesize" className="block text-[11px] font-medium text-stone-500 mb-0.5">
                       Ukuran File (bytes/opsional)
                     </label>
-                    <input
-                      type="number"
-                      placeholder="Contoh: 1048576"
-                      value={fileSize || ""}
+                    <input id="resource-modal-filesize" name="fileSize" type="number" placeholder="Contoh: 1048576" value={fileSize || ""}
                       onChange={(e) => setFileSize(Number(e.target.value) || null)}
                       className="w-full text-xs px-2.5 py-1.5 rounded-lg border border-stone-200 bg-white"
                     />
@@ -739,13 +712,10 @@ export function ResourceManager({ courseId, sections = [] }: ResourceManagerProp
 
               {/* Deskripsi Tambahan */}
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                <label htmlFor="resource-modal-desc" className="block text-xs font-semibold text-stone-700 mb-1">
                   Deskripsi / Petunjuk Penggunaan (Opsional)
                 </label>
-                <textarea
-                  rows={2}
-                  placeholder="Catatan tambahan untuk siswa mengenai cara membuka file atau menggunakan materi ini..."
-                  value={description}
+                <textarea id="resource-modal-desc" name="description" rows={2} placeholder="Catatan tambahan untuk siswa mengenai cara membuka file atau menggunakan materi ini..." value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />

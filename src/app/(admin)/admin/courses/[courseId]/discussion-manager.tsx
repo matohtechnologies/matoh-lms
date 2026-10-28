@@ -225,11 +225,7 @@ export function DiscussionManager({ courseId }: { courseId: string }) {
             Kirim Topik / Pengumuman Baru
           </h3>
           <form onSubmit={handlePostTopic} className="space-y-3">
-            <textarea
-              rows={3}
-              required
-              placeholder="Tuliskan pertanyaan pengantar atau topik diskusi untuk siswa kelas ini..."
-              value={newTopicContent}
+            <textarea id="admin-new-topic-content" name="content" rows={3} required placeholder="Tuliskan pertanyaan pengantar atau topik diskusi untuk siswa kelas ini..." value={newTopicContent}
               onChange={(e) => setNewTopicContent(e.target.value)}
               className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
             />
@@ -289,11 +285,7 @@ export function DiscussionManager({ courseId }: { courseId: string }) {
                     <div className="w-9 h-9 rounded-full bg-stone-100 flex items-center justify-center text-stone-700 text-xs font-bold overflow-hidden shrink-0 mt-0.5 border border-stone-200">
                       {d.user?.image ? (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={d.user.image}
-                          alt={d.user.name || "User"}
-                          className="w-full h-full object-cover"
-                        />
+                        <img src={d.user.image} alt={d.user.name || "User"} width={36} height={36} style={{ aspectRatio: "1 / 1" }} className="w-full h-full object-cover aspect-square" />
                       ) : (
                         <UserIcon size={16} />
                       )}
@@ -358,11 +350,7 @@ export function DiscussionManager({ courseId }: { courseId: string }) {
                           <div className="w-7 h-7 rounded-full bg-stone-200 flex items-center justify-center text-stone-700 text-[11px] font-bold overflow-hidden shrink-0 mt-0.5">
                             {reply.user?.image ? (
                               // eslint-disable-next-line @next/next/no-img-element
-                              <img
-                                src={reply.user.image}
-                                alt={reply.user.name || "User"}
-                                className="w-full h-full object-cover"
-                              />
+                              <img src={reply.user.image} alt={reply.user.name || "User"} width={28} height={28} style={{ aspectRatio: "1 / 1" }} className="w-full h-full object-cover aspect-square" />
                             ) : (
                               <UserIcon size={12} />
                             )}
@@ -398,10 +386,7 @@ export function DiscussionManager({ courseId }: { courseId: string }) {
 
                 {/* Reply Input Bar */}
                 <div className="flex items-center gap-2">
-                  <input
-                    type="text"
-                    placeholder="Tulis balasan resmi sebagai Admin..."
-                    value={replyInputs[d.id] || ""}
+                  <input id={"admin-reply-" + d.id} name="reply" type="text" placeholder="Tulis balasan resmi sebagai Admin..." value={replyInputs[d.id] || ""}
                     onChange={(e) =>
                       setReplyInputs((prev) => ({ ...prev, [d.id]: e.target.value }))
                     }

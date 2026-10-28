@@ -135,7 +135,7 @@ export function CertificateVerificationModal({
         {/* Verification Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-stone-700">
+            <label htmlFor="modal-verify-serial-code" className="block text-xs font-bold text-stone-700">
               {isEn ? "Certificate Serial Number / ID" : "Nomor Seri / ID Kredensial Sertifikat"}
             </label>
             <div className="relative">
@@ -144,6 +144,9 @@ export function CertificateVerificationModal({
                 className="absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none"
               />
               <input
+                id="modal-verify-serial-code"
+                name="code"
+                autoComplete="off"
                 ref={inputRef}
                 type="text"
                 value={serialCode}

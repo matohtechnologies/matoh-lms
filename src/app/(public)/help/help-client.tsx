@@ -166,8 +166,14 @@ export function HelpClient({ isEn }: { isEn: boolean }) {
       {/* Search Input Bar */}
       <div className="max-w-2xl mx-auto -mt-7 relative z-20 px-4">
         <div className="relative rounded-2xl bg-white shadow-md border border-slate-200/90 p-2 flex items-center">
+          <label htmlFor="help-search-input" className="sr-only">
+            {isEn ? "Search questions" : "Cari pertanyaan"}
+          </label>
           <Search className="w-5 h-5 text-slate-400 ml-3 shrink-0" />
           <input
+            id="help-search-input"
+            name="search"
+            autoComplete="off"
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}

@@ -85,7 +85,8 @@ export function CourseCard({
                   safeThumbnail.includes("youtube.com") ||
                   safeThumbnail.includes("ytimg.com")
                 }
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                style={{ aspectRatio: "16 / 9" }}
+                className="object-cover aspect-video transition-transform duration-300 group-hover:scale-105"
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
             )

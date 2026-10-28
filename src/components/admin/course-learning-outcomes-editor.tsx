@@ -142,10 +142,8 @@ export function CourseLearningOutcomesEditor({
           <div className="p-3 rounded-xl bg-amber-50/70 border border-amber-200 text-amber-900 text-xs leading-relaxed">
             Ketik atau paste poin-poin kompetensi di bawah ini. <strong>Setiap baris baru akan otomatis menjadi 1 poin centang</strong> di halaman detail kelas.
           </div>
-          <textarea
-            rows={8}
-            value={bulkText}
-            onChange={(e) => setBulkText(e.target.value)}
+          <label htmlFor="learning-outcomes-bulk" className="sr-only">Daftar Poin Kompetensi</label>
+          <textarea id="learning-outcomes-bulk" name="outcomesBulk" rows={8} value={bulkText} onChange={(e) => setBulkText(e.target.value)}
             placeholder="Contoh:&#10;Memahami konsep dasar digital marketing&#10;Menguasai analisis segmentasi pasar&#10;Mempraktikkan kampanye media sosial"
             className="w-full p-4 rounded-xl border border-stone-200 bg-stone-50/50 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-sans leading-relaxed"
           />
@@ -208,10 +206,7 @@ export function CourseLearningOutcomesEditor({
                     <CheckCircle2 size={16} />
                   </div>
 
-                  <input
-                    type="text"
-                    value={item}
-                    onChange={(e) => handleItemChange(index, e.target.value)}
+                  <input id={"learning-outcome-" + index} name={"outcome_" + index} type="text" value={item} onChange={(e) => handleItemChange(index, e.target.value)}
                     placeholder={`Poin ${index + 1}: Contoh: Memahami konsep dasar dan implementasi nyata...`}
                     className="flex-1 bg-transparent px-2 py-1.5 text-sm text-stone-800 focus:outline-none placeholder:text-stone-400"
                   />

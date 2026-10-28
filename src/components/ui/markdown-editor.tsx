@@ -573,9 +573,7 @@ export function MarkdownEditor({
           <div className="flex items-center justify-between px-4 py-2.5 border-b border-stone-100 bg-stone-50/70">
             <div>
               {label && (
-                <label className="text-xs font-bold uppercase tracking-wider text-stone-700">
-                  {label}
-                </label>
+                <label htmlFor="markdown-editor-main-textarea" className="text-xs font-bold uppercase tracking-wider text-stone-700">{label}</label>
               )}
               {isFullscreen && (
                 <span className="ml-2 text-[11px] font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
@@ -765,13 +763,8 @@ export function MarkdownEditor({
               </button>
 
               {/* Hidden file input for image upload */}
-              <input
-                type="file"
-                ref={fileInputRef}
-                accept="image/jpeg,image/png,image/webp,image/gif"
-                className="hidden"
-                onChange={handleImageFileSelect}
-              />
+              <label htmlFor="markdown-image-file-input" className="sr-only">Unggah Berkas Gambar</label>
+              <input id="markdown-image-file-input" name="imageFile" type="file" ref={fileInputRef} accept="image/jpeg,image/png,image/webp,image/gif" className="hidden" onChange={handleImageFileSelect} />
 
               <button
                 type="button"
@@ -942,9 +935,7 @@ export function MarkdownEditor({
           {/* Left: Textarea Editor */}
           {viewMode !== "preview" && (
             <div className="flex flex-col h-full bg-stone-50/30">
-              <textarea
-                ref={textareaRef}
-                value={value}
+              <textarea id="markdown-editor-main-textarea" name="markdownContent" ref={textareaRef} value={value}
                 onChange={(e) => {
                   onChange(e.target.value);
                   lastSelectionRef.current = {
@@ -1064,13 +1055,8 @@ export function MarkdownEditor({
                 )}
 
                 <div>
-                  <label className="block text-xs font-bold text-stone-700 mb-1">
-                    Teks Tautan (Anchor Text)
-                  </label>
-                  <input
-                    type="text"
-                    value={linkTitleInput}
-                    onChange={(e) => setLinkTitleInput(e.target.value)}
+                  <label htmlFor="md-link-title" className="block text-xs font-bold text-stone-700 mb-1">Teks Tautan (Anchor Text)</label>
+                  <input id="md-link-title" name="linkTitle" type="text" value={linkTitleInput} onChange={(e) => setLinkTitleInput(e.target.value)}
                     placeholder="Contoh: Baca Dokumentasi Resmi"
                     className="w-full px-3 py-2 text-xs rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-stone-900 bg-white"
                   />
@@ -1080,13 +1066,8 @@ export function MarkdownEditor({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-stone-700 mb-1">
-                    Alamat URL Tujuan <span className="text-rose-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={linkUrlInput}
-                    onChange={(e) => {
+                  <label htmlFor="md-link-url" className="block text-xs font-bold text-stone-700 mb-1">Alamat URL Tujuan <span className="text-rose-500">*</span></label>
+                  <input id="md-link-url" name="linkUrl" type="text" value={linkUrlInput} onChange={(e) => {
                       setLinkUrlInput(e.target.value);
                       if (linkError) setLinkError("");
                     }}
@@ -1186,13 +1167,8 @@ export function MarkdownEditor({
                 )}
 
                 <div>
-                  <label className="block text-xs font-bold text-stone-700 mb-1">
-                    Alamat URL Gambar <span className="text-rose-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={imageUrlInput}
-                    onChange={(e) => {
+                  <label htmlFor="md-img-url" className="block text-xs font-bold text-stone-700 mb-1">Alamat URL Gambar <span className="text-rose-500">*</span></label>
+                  <input id="md-img-url" name="imageUrl" type="text" value={imageUrlInput} onChange={(e) => {
                       const val = e.target.value;
                       setImageUrlInput(val);
                       if (imageError) setImageError("");
@@ -1209,13 +1185,8 @@ export function MarkdownEditor({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-stone-700 mb-1">
-                    Keterangan / Caption Gambar
-                  </label>
-                  <input
-                    type="text"
-                    value={imageAltInput}
-                    onChange={(e) => setImageAltInput(e.target.value)}
+                  <label htmlFor="md-img-alt" className="block text-xs font-bold text-stone-700 mb-1">Keterangan / Caption Gambar</label>
+                  <input id="md-img-alt" name="imageAlt" type="text" value={imageAltInput} onChange={(e) => setImageAltInput(e.target.value)}
                     placeholder="Contoh: Diagram Alur Proses Bisnis"
                     className="w-full px-3 py-2 text-xs rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-pink-500/20 focus:border-pink-500 text-stone-900 bg-white"
                   />
@@ -1247,15 +1218,7 @@ export function MarkdownEditor({
                     </div>
 
                     <div className="relative max-h-36 min-h-[70px] flex items-center justify-center bg-white rounded-xl border border-stone-200 overflow-hidden p-1.5">
-                      <img
-                        src={normalizeImageUrl(imageUrlInput)}
-                        alt="Pratinjau"
-                        className={`max-h-32 mx-auto rounded-lg object-contain transition-opacity duration-200 ${
-                          previewStatus === "success" ? "opacity-100" : "opacity-0"
-                        }`}
-                        onLoad={() => setPreviewStatus("success")}
-                        onError={() => setPreviewStatus("error")}
-                      />
+                      <img src={normalizeImageUrl(imageUrlInput)} alt="Pratinjau" style={{ aspectRatio: "auto" }} className={`max-h-32 mx-auto rounded-lg object-contain transition-opacity duration-200 aspect-auto ${previewStatus === "success" ? "opacity-100" : "opacity-0"}`} onLoad={() => setPreviewStatus("success")} onError={() => setPreviewStatus("error")} />
 
                       {previewStatus === "error" && (
                         <div className="p-2.5 text-center">

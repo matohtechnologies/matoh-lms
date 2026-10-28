@@ -552,10 +552,8 @@ export function CurriculumManager({
                   />
 
                   <div className="space-y-1.5 flex flex-col justify-end pb-2">
-                    <label className="flex items-center gap-2 cursor-pointer select-none">
-                      <input
-                        type="checkbox"
-                        checked={lessonIsFree}
+                    <label htmlFor="lesson-isfree" className="flex items-center gap-2 cursor-pointer select-none">
+                      <input id="lesson-isfree" name="isFree" type="checkbox" checked={lessonIsFree}
                         onChange={(e) => setLessonIsFree(e.target.checked)}
                         className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 accent-blue-600"
                       />

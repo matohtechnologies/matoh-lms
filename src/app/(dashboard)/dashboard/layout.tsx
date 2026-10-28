@@ -48,7 +48,9 @@ export default async function DashboardLayout({
                 alt="Matoh Technologies"
                 width={22}
                 height={22}
-                className="object-contain"
+                priority
+                style={{ aspectRatio: "1 / 1" }}
+                className="object-contain aspect-square"
               />
             </div>
             <span
@@ -134,7 +136,9 @@ export default async function DashboardLayout({
                 alt="Matoh Technologies"
                 width={18}
                 height={18}
-                className="object-contain"
+                priority
+                style={{ aspectRatio: "1 / 1" }}
+                className="object-contain aspect-square"
               />
             </div>
             <span

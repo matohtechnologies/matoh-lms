@@ -138,15 +138,19 @@ export default function LoginPage() {
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <Input
+              id="login-email"
               label={t("email")}
               type="email"
+              autoComplete="email"
               placeholder="email@kamu.com"
               error={errors.email?.message}
               {...register("email")}
             />
             <Input
+              id="login-password"
               label={t("password")}
               type={showPassword ? "text" : "password"}
+              autoComplete="current-password"
               placeholder="••••••••"
               error={errors.password?.message}
               rightIcon={

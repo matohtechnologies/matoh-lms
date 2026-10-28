@@ -127,9 +127,11 @@ export function HeroInteractiveShowcase({ isEn, studentCount = 0 }: HeroInteract
                   <Image
                     src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1000&q=80"
                     alt="Interactive Classroom Lesson"
-                    fill
+                    priority
+                  fill
                     sizes="(max-width: 768px) 100vw, 600px"
-                    className="object-cover opacity-85 group-hover:scale-102 transition-transform duration-500"
+                    style={{ aspectRatio: "16 / 9" }}
+                    className="object-cover opacity-85 group-hover:scale-102 transition-transform duration-500 aspect-video"
                   />
 
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-black/20 to-black/30 group-hover:via-black/10 transition-colors" />
@@ -197,7 +199,9 @@ export function HeroInteractiveShowcase({ isEn, studentCount = 0 }: HeroInteract
                     alt="Matoh Technologies"
                     width={26}
                     height={26}
-                    className="object-contain"
+                    priority
+                    style={{ aspectRatio: "1 / 1" }}
+                    className="object-contain aspect-square"
                   />
                 </div>
                 <div>

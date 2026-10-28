@@ -20,6 +20,9 @@ export function CourseSortSelect({ defaultValue = "popular", options }: CourseSo
 
   return (
     <select
+      id="courses-sort-select"
+      name="sort"
+      aria-label="Urutkan Kelas"
       className="h-9 px-3 rounded-xl border border-slate-300 bg-white text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
       defaultValue={defaultValue}
       onChange={handleChange}

@@ -191,7 +191,9 @@ export default async function BlogPage() {
               alt="Matoh Technologies"
               width={16}
               height={16}
-              className="object-contain"
+              priority
+              style={{ aspectRatio: "1 / 1" }}
+              className="object-contain aspect-square"
             />
             {isEn ? "Research & Engineering Publications" : "Publikasi Riset & Wawasan Teknologi"}
           </div>

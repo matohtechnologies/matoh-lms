@@ -723,13 +723,10 @@ export function QuizManager({
 
             <form onSubmit={editingQuiz ? handleSaveEditQuiz : handleCreateQuiz} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                <label htmlFor="quiz-modal-title" className="block text-xs font-semibold text-stone-700 mb-1">
                   Judul Kuis <span className="text-red-500">*</span>
                 </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Contoh: Kuis Akhir Modul 1: Dasar TypeScript"
+                <input id="quiz-modal-title" name="quizTitle" type="text" required placeholder="Contoh: Kuis Akhir Modul 1: Dasar TypeScript"
                   value={quizTitle}
                   onChange={(e) => setQuizTitle(e.target.value)}
                   className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
@@ -737,25 +734,20 @@ export function QuizManager({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                <label htmlFor="quiz-modal-desc" className="block text-xs font-semibold text-stone-700 mb-1">
                   Deskripsi / Petunjuk (Opsional)
                 </label>
-                <textarea
-                  rows={2}
-                  placeholder="Petunjuk singkat sebelum mengerjakan kuis..."
-                  value={quizDescription}
+                <textarea id="quiz-modal-desc" name="quizDescription" rows={2} placeholder="Petunjuk singkat sebelum mengerjakan kuis..." value={quizDescription}
                   onChange={(e) => setQuizDescription(e.target.value)}
                   className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                <label htmlFor="quiz-modal-section" className="block text-xs font-semibold text-stone-700 mb-1">
                   Target Bab / Section Pembelajaran
                 </label>
-                <select
-                  value={quizSectionId}
-                  onChange={(e) => setQuizSectionId(e.target.value)}
+                <select id="quiz-modal-section" name="quizSectionId" value={quizSectionId} onChange={(e) => setQuizSectionId(e.target.value)}
                   className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">🌐 Kuis Umum (Berlaku untuk Semua Bab / Kursus)</option>
@@ -771,14 +763,10 @@ export function QuizManager({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                <label htmlFor="quiz-modal-passing-score" className="block text-xs font-semibold text-stone-700 mb-1">
                   Nilai Minimal Kelulusan (%)
                 </label>
-                <input
-                  type="number"
-                  min={10}
-                  max={100}
-                  value={passingScore}
+                <input id="quiz-modal-passing-score" name="passingScore" type="number" min={10} max={100} value={passingScore}
                   onChange={(e) => setPassingScore(Number(e.target.value))}
                   className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
@@ -832,14 +820,10 @@ export function QuizManager({
 
             <form onSubmit={handleSaveQuestion} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                <label htmlFor="quiz-modal-question-text" className="block text-xs font-semibold text-stone-700 mb-1">
                   Pertanyaan <span className="text-red-500">*</span>
                 </label>
-                <textarea
-                  rows={3}
-                  required
-                  placeholder="Tuliskan teks pertanyaan di sini..."
-                  value={questionText}
+                <textarea id="quiz-modal-question-text" name="questionText" rows={3} required placeholder="Tuliskan teks pertanyaan di sini..." value={questionText}
                   onChange={(e) => setQuestionText(e.target.value)}
                   className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
@@ -847,9 +831,7 @@ export function QuizManager({
 
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-semibold text-stone-700">
-                    Pilihan Jawaban (Tandai lingkaran untuk jawaban yang benar) <span className="text-red-500">*</span>
-                  </label>
+                  <span className="text-xs font-semibold text-stone-700">Pilihan Jawaban (Tandai lingkaran untuk jawaban yang benar) <span className="text-red-500">*</span></span>
                   {options.length < 5 && (
                     <button
                       type="button"
@@ -868,10 +850,7 @@ export function QuizManager({
                     return (
                       <div key={idx} className="flex items-center gap-2">
                         <label className="flex items-center gap-1.5 cursor-pointer shrink-0" title={`Pilih ${label} sebagai jawaban benar`}>
-                          <input
-                            type="radio"
-                            name="correctAnswerRadio"
-                            checked={isCorrect}
+                          <input id={"quiz-correct-radio-" + idx} type="radio" name="correctAnswerRadio" checked={isCorrect}
                             onChange={() => setCorrectAnswer(idx)}
                             className="text-blue-600 focus:ring-blue-500 accent-blue-600 w-4 h-4 cursor-pointer"
                           />
@@ -885,11 +864,7 @@ export function QuizManager({
                             {label}
                           </span>
                         </label>
-                        <input
-                          type="text"
-                          required
-                          placeholder={`Pilihan ${label}...`}
-                          value={opt}
+                        <input id={"quiz-opt-text-" + idx} name={"option_" + idx} type="text" required placeholder={`Pilihan ${label}...`} value={opt}
                           onChange={(e) => {
                             const newOpts = [...options];
                             newOpts[idx] = e.target.value;
@@ -924,13 +899,10 @@ export function QuizManager({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                <label htmlFor="quiz-modal-explanation" className="block text-xs font-semibold text-stone-700 mb-1">
                   Pembahasan / Penjelasan Jawaban (Opsional)
                 </label>
-                <textarea
-                  rows={2}
-                  placeholder="Mengapa opsi ini benar? Jelaskan konsepnya kepada siswa..."
-                  value={explanation}
+                <textarea id="quiz-modal-explanation" name="explanation" rows={2} placeholder="Mengapa opsi ini benar? Jelaskan konsepnya kepada siswa..." value={explanation}
                   onChange={(e) => setExplanation(e.target.value)}
                   className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />

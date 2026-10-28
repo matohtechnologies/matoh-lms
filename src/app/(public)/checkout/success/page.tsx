@@ -78,7 +78,10 @@ export default function CheckoutSuccessPage() {
                 <img
                   src={course.thumbnail}
                   alt={course.title}
-                  className="w-full h-full object-cover"
+                  width={64}
+                  height={64}
+                  style={{ aspectRatio: "1 / 1" }}
+                  className="w-full h-full object-cover aspect-square"
                 />
               ) : (
                 <BookOpen size={24} className="text-blue-600" />

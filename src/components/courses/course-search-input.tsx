@@ -84,7 +84,13 @@ export function CourseSearchInput({
           )}
         </div>
 
+        <label htmlFor="courses-search-input" className="sr-only">
+          {placeholder}
+        </label>
         <input
+          id="courses-search-input"
+          name="q"
+          autoComplete="off"
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}

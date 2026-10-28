@@ -97,7 +97,8 @@ export function CourseHeroMedia({
                 posterUrl.includes("youtube.com") ||
                 posterUrl.includes("ytimg.com")
               }
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              style={{ aspectRatio: "16 / 9" }}
+              className="object-cover transition-transform duration-500 group-hover:scale-105 aspect-video"
               priority
             />
           ) : isVideoUrl(posterUrl || videoSource) ? (

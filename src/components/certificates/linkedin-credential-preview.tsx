@@ -47,7 +47,9 @@ export function LinkedInCredentialPreview({
               alt="PT. Matoh Technologies Indonesia"
               width={32}
               height={32}
-              className="object-contain invert"
+              priority
+              style={{ aspectRatio: "1 / 1" }}
+              className="object-contain invert aspect-square"
             />
           </div>
 

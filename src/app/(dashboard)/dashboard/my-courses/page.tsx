@@ -154,7 +154,10 @@ export default async function MyCoursesPage() {
                   <img
                     src={enrollment.course.thumbnail}
                     alt={enrollment.course.title}
-                    className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
+                    width={384}
+                    height={216}
+                    style={{ aspectRatio: "16 / 9" }}
+                    className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300 aspect-video"
                   />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-blue-50 to-sky-100 flex items-center justify-center text-blue-400">

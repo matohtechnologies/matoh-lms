@@ -631,10 +631,8 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                   Aktifkan agar siswa yang memenuhi syarat dapat menerbitkan sertifikat.
                 </p>
               </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={form.isEnabled}
+              <label htmlFor="cert-is-enabled" className="relative inline-flex items-center cursor-pointer">
+                <input id="cert-is-enabled" name="isEnabled" type="checkbox" checked={form.isEnabled}
                   onChange={(e) => setForm({ ...form, isEnabled: e.target.checked })}
                   className="sr-only peer"
                 />
@@ -655,7 +653,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
             {/* Min Progress */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-stone-700 flex items-center gap-1.5">
+                <label htmlFor="cert-min-progress" className="text-xs font-semibold text-stone-700 flex items-center gap-1.5">
                   <CheckSquare size={14} className="text-stone-400" />
                   Minimal Progres Penyelesaian Materi
                 </label>
@@ -663,12 +661,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                   {form.minProgress}% Materi
                 </span>
               </div>
-              <input
-                type="range"
-                min="50"
-                max="100"
-                step="5"
-                value={form.minProgress}
+              <input id="cert-min-progress" name="minProgress" type="range" min="50" max="100" step="5" value={form.minProgress}
                 onChange={(e) => setForm({ ...form, minProgress: Number(e.target.value) })}
                 className="w-full accent-blue-600 h-2 bg-stone-100 rounded-lg cursor-pointer"
               />
@@ -689,10 +682,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                   </p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer shrink-0">
-                  <input
-                    type="checkbox"
-                    checked={form.requireQuizPassed}
-                    onChange={(e) => setForm({ ...form, requireQuizPassed: e.target.checked })}
+                  <input id="cert-req-quiz" name="requireQuizPassed" type="checkbox" checked={form.requireQuizPassed} onChange={(e) => setForm({ ...form, requireQuizPassed: e.target.checked })}
                     className="sr-only peer"
                   />
                   <div className="w-9 h-5 bg-stone-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-stone-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
@@ -713,12 +703,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                   </p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer shrink-0">
-                  <input
-                    type="checkbox"
-                    checked={form.requireAssignmentApproved}
-                    onChange={(e) =>
-                      setForm({ ...form, requireAssignmentApproved: e.target.checked })
-                    }
+                  <input id="cert-req-assignment" name="requireAssignmentApproved" type="checkbox" checked={form.requireAssignmentApproved} onChange={(e) => setForm({ ...form, requireAssignmentApproved: e.target.checked })}
                     className="sr-only peer"
                   />
                   <div className="w-9 h-5 bg-stone-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-stone-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
@@ -766,27 +751,21 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
             {/* Inputs: Pattern & Course Code */}
             <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
               <div className="sm:col-span-8 space-y-1.5">
-                <label className="text-xs font-semibold text-stone-700 flex items-center justify-between">
+                <label htmlFor="cert-serial-pattern" className="text-xs font-semibold text-stone-700 flex items-center justify-between">
                   <span>Template Pola Serial</span>
                   <span className="text-[10px] text-stone-400">Gunakan tag kurung kurawal</span>
                 </label>
-                <input
-                  type="text"
-                  value={form.serialPattern || ""}
-                  onChange={(e) => setForm({ ...form, serialPattern: e.target.value })}
+                <input id="cert-serial-pattern" name="serialPattern" type="text" value={form.serialPattern || ""} onChange={(e) => setForm({ ...form, serialPattern: e.target.value })}
                   placeholder="MT/{COURSE_CODE}/{YEAR}/{COUNTER}"
                   className="w-full px-3 py-2 rounded-xl border border-stone-200 bg-white text-xs font-mono font-semibold text-stone-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 />
               </div>
 
               <div className="sm:col-span-4 space-y-1.5">
-                <label className="text-xs font-semibold text-stone-700 flex items-center justify-between">
+                <label htmlFor="cert-course-code" className="text-xs font-semibold text-stone-700 flex items-center justify-between">
                   <span>Kode Singkatan Kelas</span>
                 </label>
-                <input
-                  type="text"
-                  value={form.courseCode || ""}
-                  onChange={(e) => setForm({ ...form, courseCode: e.target.value.toUpperCase() })}
+                <input id="cert-course-code" name="courseCode" type="text" value={form.courseCode || ""} onChange={(e) => setForm({ ...form, courseCode: e.target.value.toUpperCase() })}
                   placeholder={
                     courseInfo?.slug
                       ?.split("-")
@@ -801,7 +780,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
 
             {/* Preset Patterns */}
             <div className="space-y-2">
-              <label className="text-[11px] font-semibold text-stone-600 block">Pilihan Preset Pola Populer:</label>
+              <span className="text-[11px] font-semibold text-stone-600 block">Pilihan Preset Pola Populer:</span>
               <div className="flex flex-wrap gap-2">
                 {[
                   { label: "Standar MT", pattern: "MT/{COURSE_CODE}/{YEAR}/{COUNTER}" },
@@ -859,12 +838,8 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
             {/* Counter & Padding Settings */}
             <div className="pt-3 border-t border-stone-100 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-stone-700">
-                  Jumlah Digit Nomor Urut (Padding)
-                </label>
-                <select
-                  value={form.counterPadding ?? 4}
-                  onChange={(e) => setForm({ ...form, counterPadding: Number(e.target.value) })}
+                <label htmlFor="cert-counter-padding" className="text-xs font-semibold text-stone-700">Jumlah Digit Nomor Urut (Padding)</label>
+                <select id="cert-counter-padding" name="counterPadding" value={form.counterPadding ?? 4} onChange={(e) => setForm({ ...form, counterPadding: Number(e.target.value) })}
                   className="w-full px-3 py-2 rounded-xl border border-stone-200 bg-white text-xs font-medium text-stone-800 focus:outline-none focus:border-blue-500"
                 >
                   <option value={3}>3 Digit (contoh: 001, 042)</option>
@@ -878,13 +853,8 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-stone-700">
-                  Nomor Urut Berikutnya (Next Counter)
-                </label>
-                <input
-                  type="number"
-                  min="1"
-                  value={form.nextCounter ?? 1}
+                <label htmlFor="cert-next-counter" className="text-xs font-semibold text-stone-700">Nomor Urut Berikutnya (Next Counter)</label>
+                <input id="cert-next-counter" name="nextCounter" type="number" min="1" value={form.nextCounter ?? 1}
                   onChange={(e) =>
                     setForm({ ...form, nextCounter: Math.max(1, Number(e.target.value) || 1) })
                   }
@@ -924,23 +894,14 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
               otomatis dicetak tepat di atas template tersebut.
             </p>
 
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleUploadTemplate}
-              accept="image/png,image/jpeg,image/jpg,image/webp"
-              className="hidden"
-            />
+            <label htmlFor="cert-template-file" className="sr-only">Unggah Template</label>
+            <input id="cert-template-file" name="templateFile" type="file" ref={fileInputRef} onChange={handleUploadTemplate} accept="image/png,image/jpeg,image/jpg,image/webp" className="hidden" />
 
             {form.templateUrl ? (
               <div className="p-4 rounded-xl bg-blue-50/50 border border-blue-200 space-y-3">
                 <div className="flex items-center gap-3.5">
                   <div className="w-24 h-16 rounded-lg bg-stone-100 border border-stone-200 overflow-hidden shrink-0 relative shadow-xs">
-                    <img
-                      src={form.templateUrl}
-                      alt="Template Preview"
-                      className="w-full h-full object-cover"
-                    />
+                    <img src={form.templateUrl} alt="Template Preview" width={96} height={64} style={{ aspectRatio: "3 / 2" }} className="w-full h-full object-cover" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5 text-xs font-bold text-stone-800 truncate">
@@ -1017,39 +978,24 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
 
             <div className="space-y-3">
               <div>
-                <label className="text-xs font-semibold text-stone-700 block mb-1">
-                  Judul Sertifikat
-                </label>
-                <input
-                  type="text"
-                  value={form.title}
-                  onChange={(e) => setForm({ ...form, title: e.target.value })}
+                <label htmlFor="cert-title-input" className="text-xs font-semibold text-stone-700 block mb-1">Judul Sertifikat</label>
+                <input id="cert-title-input" name="title" type="text" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })}
                   placeholder="Contoh: Certificate of Completion"
                   className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-stone-700 block mb-1">
-                  Nama Institusi / Lembaga Penerbit
-                </label>
-                <input
-                  type="text"
-                  value={form.issuerName}
-                  onChange={(e) => setForm({ ...form, issuerName: e.target.value })}
+                <label htmlFor="cert-issuer-input" className="text-xs font-semibold text-stone-700 block mb-1">Nama Institusi / Lembaga Penerbit</label>
+                <input id="cert-issuer-input" name="issuerName" type="text" value={form.issuerName} onChange={(e) => setForm({ ...form, issuerName: e.target.value })}
                   placeholder="Contoh: PT. Matoh Technologies Indonesia"
                   className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-stone-700 block mb-1">
-                  Narasi / Keterangan Kelulusan
-                </label>
-                <textarea
-                  rows={2}
-                  value={form.subtitle}
-                  onChange={(e) => setForm({ ...form, subtitle: e.target.value })}
+                <label htmlFor="cert-subtitle-input" className="text-xs font-semibold text-stone-700 block mb-1">Narasi / Keterangan Kelulusan</label>
+                <textarea id="cert-subtitle-input" name="subtitle" rows={2} value={form.subtitle} onChange={(e) => setForm({ ...form, subtitle: e.target.value })}
                   placeholder="Keterangan pencapaian siswa..."
                   className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-blue-500 resize-none"
                 />
@@ -1063,20 +1009,16 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                     Penandatangan 1 (Kiri)
                   </p>
                   <div>
-                    <label className="text-[10px] text-stone-500 block mb-0.5">Nama Lengkap</label>
-                    <input
-                      type="text"
-                      value={form.signatoryName1}
+                    <label htmlFor="cert-signatory1-name" className="text-[10px] text-stone-500 block mb-0.5">Nama Lengkap</label>
+                    <input id="cert-signatory1-name" name="signatoryName1" autoComplete="off" type="text" value={form.signatoryName1}
                       onChange={(e) => setForm({ ...form, signatoryName1: e.target.value })}
                       placeholder="Nama Instruktur"
                       className="w-full px-2.5 py-1.5 rounded-lg border border-stone-200 bg-white text-xs focus:outline-none focus:border-blue-500"
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] text-stone-500 block mb-0.5">Jabatan / Role</label>
-                    <input
-                      type="text"
-                      value={form.signatoryRole1}
+                    <label htmlFor="cert-signatory1-role" className="text-[10px] text-stone-500 block mb-0.5">Jabatan / Role</label>
+                    <input id="cert-signatory1-role" name="signatoryRole1" autoComplete="off" type="text" value={form.signatoryRole1}
                       onChange={(e) => setForm({ ...form, signatoryRole1: e.target.value })}
                       placeholder="Lead Instructor"
                       className="w-full px-2.5 py-1.5 rounded-lg border border-stone-200 bg-white text-xs focus:outline-none focus:border-blue-500"
@@ -1090,20 +1032,16 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                     Penandatangan 2 (Kanan)
                   </p>
                   <div>
-                    <label className="text-[10px] text-stone-500 block mb-0.5">Nama Lengkap</label>
-                    <input
-                      type="text"
-                      value={form.signatoryName2}
+                    <label htmlFor="cert-signatory2-name" className="text-[10px] text-stone-500 block mb-0.5">Nama Lengkap</label>
+                    <input id="cert-signatory2-name" name="signatoryName2" autoComplete="off" type="text" value={form.signatoryName2}
                       onChange={(e) => setForm({ ...form, signatoryName2: e.target.value })}
                       placeholder="Nama Kepala Akademik"
                       className="w-full px-2.5 py-1.5 rounded-lg border border-stone-200 bg-white text-xs focus:outline-none focus:border-blue-500"
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] text-stone-500 block mb-0.5">Jabatan / Role</label>
-                    <input
-                      type="text"
-                      value={form.signatoryRole2}
+                    <label htmlFor="cert-signatory2-role" className="text-[10px] text-stone-500 block mb-0.5">Jabatan / Role</label>
+                    <input id="cert-signatory2-role" name="signatoryRole2" autoComplete="off" type="text" value={form.signatoryRole2}
                       onChange={(e) => setForm({ ...form, signatoryRole2: e.target.value })}
                       placeholder="Head of Curriculum"
                       className="w-full px-2.5 py-1.5 rounded-lg border border-stone-200 bg-white text-xs focus:outline-none focus:border-blue-500"
@@ -1261,11 +1199,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                 title="Klik untuk melihat pratinjau ukuran penuh (A4)"
               >
                 {form.templateUrl ? (
-                  <img
-                    src={form.templateUrl}
-                    alt="Template Background"
-                    className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none"
-                  />
+                  <img src={form.templateUrl} alt="Template Background" width={1123} height={794} style={{ aspectRatio: "1123 / 794" }} className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none" />
                 ) : (
                   <>
                     <div className="absolute -right-12 -top-12 w-40 h-40 rounded-full bg-blue-100/30 pointer-events-none blur-2xl" />
@@ -1444,11 +1378,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                           style={{ aspectRatio: "297 / 210" }}
                         >
                           {form.templateUrl && (
-                            <img
-                              src={form.templateUrl}
-                              alt="Template Background"
-                              className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none"
-                            />
+                            <img src={form.templateUrl} alt="Template Background" width={1123} height={794} style={{ aspectRatio: "1123 / 794" }} className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none" />
                           )}
                           <div
                             className={cn(

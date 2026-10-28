@@ -314,10 +314,14 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
         <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-stone-50 border border-stone-200/60 flex-1 max-w-md">
           <Search size={15} className="text-stone-400 shrink-0" />
           <input
+            id="admin-categories-search"
+            name="search"
+            autoComplete="off"
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Cari berdasarkan nama, nama Inggris, atau slug..."
+            aria-label="Cari kategori"
             className="flex-1 text-xs bg-transparent text-stone-800 placeholder:text-stone-400 focus:outline-none"
           />
           {search && (
@@ -334,6 +338,9 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
         <div className="flex flex-wrap items-center gap-2">
           {/* Status Filter */}
           <select
+            id="admin-categories-filter"
+            name="filterType"
+            aria-label="Filter kategori"
             value={filterType}
             onChange={(e) => setFilterType(e.target.value as "ALL" | "WITH_COURSES" | "EMPTY")}
             className="text-xs font-semibold text-stone-700 bg-stone-50 hover:bg-stone-100 border border-stone-200/70 rounded-xl px-3 py-2 focus:outline-none cursor-pointer"
@@ -344,9 +351,7 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
           </select>
 
           {/* Sort Filter */}
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as "name_asc" | "name_desc" | "courses_desc")}
+          <select id="admin-categories-sort" name="sortBy" aria-label="Urutkan Kategori" value={sortBy} onChange={(e) => setSortBy(e.target.value as "name_asc" | "name_desc" | "courses_desc")}
             className="text-xs font-semibold text-stone-700 bg-stone-50 hover:bg-stone-100 border border-stone-200/70 rounded-xl px-3 py-2 focus:outline-none cursor-pointer"
           >
             <option value="name_asc">Urut: Nama (A-Z)</option>
@@ -559,14 +564,10 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
 
               {/* Nama Kategori (ID) */}
               <div>
-                <label className="block text-xs font-bold text-stone-700 mb-1.5">
+                <label htmlFor="modal-cat-name" className="block text-xs font-bold text-stone-700 mb-1.5">
                   Nama Kategori (Bahasa Indonesia) <span className="text-red-500">*</span>
                 </label>
-                <input
-                  type="text"
-                  required
-                  value={modalName}
-                  onChange={(e) => handleNameChange(e.target.value)}
+                <input id="modal-cat-name" name="categoryName" autoComplete="off" type="text" required value={modalName} onChange={(e) => handleNameChange(e.target.value)}
                   placeholder="Contoh: Kecerdasan Buatan & Robotika"
                   className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-stone-200 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium text-stone-900"
                 />
@@ -575,7 +576,7 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
               {/* Nama Kategori (EN) */}
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <label className="block text-xs font-bold text-stone-700">
+                  <label htmlFor="modal-cat-name-en" className="block text-xs font-bold text-stone-700">
                     Nama Kategori (English)
                   </label>
                   <button
@@ -586,10 +587,7 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
                     Samakan dengan ID
                   </button>
                 </div>
-                <input
-                  type="text"
-                  value={modalNameEn}
-                  onChange={(e) => setModalNameEn(e.target.value)}
+                <input id="modal-cat-name-en" name="categoryNameEn" autoComplete="off" type="text" value={modalNameEn} onChange={(e) => setModalNameEn(e.target.value)}
                   placeholder="Contoh: Artificial Intelligence & Robotics"
                   className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-stone-200 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium text-stone-900"
                 />
@@ -598,13 +596,11 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
               {/* Slug URL */}
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <label className="block text-xs font-bold text-stone-700">
+                  <label htmlFor="modal-cat-slug" className="block text-xs font-bold text-stone-700">
                     Slug URL <span className="text-stone-400 font-normal">(identifier unik)</span>
                   </label>
-                  <label className="flex items-center gap-1.5 text-[10px] text-stone-500 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={autoSlug}
+                  <label htmlFor="modal-cat-autoslug" className="flex items-center gap-1.5 text-[10px] text-stone-500 cursor-pointer">
+                    <input id="modal-cat-autoslug" name="autoSlug" type="checkbox" checked={autoSlug}
                       onChange={(e) => {
                         setAutoSlug(e.target.checked);
                         if (e.target.checked && modalName) {
@@ -617,10 +613,7 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
                   </label>
                 </div>
                 <div className="relative">
-                  <input
-                    type="text"
-                    value={modalSlug}
-                    onChange={(e) => {
+                  <input id="modal-cat-slug" name="slug" autoComplete="off" type="text" value={modalSlug} onChange={(e) => {
                       setAutoSlug(false);
                       setModalSlug(slugify(e.target.value));
                     }}
@@ -635,14 +628,11 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
 
               {/* Optional Icon / Emoji */}
               <div>
-                <label className="block text-xs font-bold text-stone-700 mb-1.5">
+                <label htmlFor="modal-cat-icon" className="block text-xs font-bold text-stone-700 mb-1.5">
                   Icon Emoji <span className="text-stone-400 font-normal">(opsional)</span>
                 </label>
                 <div className="flex items-center gap-2">
-                  <input
-                    type="text"
-                    value={modalIcon}
-                    onChange={(e) => setModalIcon(e.target.value)}
+                  <input id="modal-cat-icon" name="icon" autoComplete="off" type="text" value={modalIcon} onChange={(e) => setModalIcon(e.target.value)}
                     placeholder="💡"
                     maxLength={4}
                     className="w-16 text-center text-base px-2 py-2 rounded-xl border border-stone-200 focus:outline-none focus:border-blue-500"

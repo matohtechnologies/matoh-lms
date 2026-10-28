@@ -28,7 +28,13 @@ export function NewsletterForm({ isEn }: { isEn: boolean }) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2.5 max-w-md mx-auto">
+      <label htmlFor="blog-newsletter-email" className="sr-only">
+        {isEn ? "Email address" : "Alamat email"}
+      </label>
       <input
+        id="blog-newsletter-email"
+        name="email"
+        autoComplete="email"
         type="email"
         required
         value={email}

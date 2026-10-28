@@ -207,11 +207,7 @@ export function CertificateCanvasRenderer({
     >
       {/* Background Image if uploaded */}
       {config.backgroundUrl ? (
-        <img
-          src={config.backgroundUrl}
-          alt="Certificate Template Background"
-          className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none"
-        />
+        <img src={config.backgroundUrl} alt="Certificate Template Background" width={1123} height={794} style={{ aspectRatio: "1123 / 794" }} className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none" />
       ) : null}
 
       {/* Decorative Ornaments for Gold Frame Preset */}

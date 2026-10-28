@@ -33,7 +33,9 @@ export function LegalTrustCard({ locale = "id" }: LegalTrustCardProps) {
               alt="PT. Matoh Technologies Indonesia"
               width={30}
               height={30}
-              className="object-contain"
+              priority
+            style={{ aspectRatio: "1 / 1" }}
+              className="object-contain aspect-square"
             />
           </div>
           <div>

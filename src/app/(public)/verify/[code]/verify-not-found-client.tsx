@@ -35,9 +35,14 @@ export function VerifyNotFoundClient({ code }: VerifyNotFoundClientProps) {
         </div>
 
         <form action="/verify" method="GET" className="space-y-3 pt-2">
+          <label htmlFor="verify-not-found-code" className="sr-only">
+            {t("search_placeholder")}
+          </label>
           <input
+            id="verify-not-found-code"
             type="text"
             name="code"
+            autoComplete="off"
             placeholder={t("search_placeholder")}
             className="w-full px-4 py-2.5 rounded-xl border border-stone-300 text-xs text-stone-900 text-center font-mono uppercase focus:outline-none focus:border-blue-500"
           />

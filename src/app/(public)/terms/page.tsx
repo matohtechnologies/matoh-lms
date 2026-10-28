@@ -41,7 +41,9 @@ export default async function TermsPage() {
               alt="Matoh Technologies"
               width={16}
               height={16}
-              className="object-contain"
+              priority
+              style={{ aspectRatio: "1 / 1" }}
+              className="object-contain aspect-square"
             />
             {isEn ? "Legal Documentation & Compliance" : "Dokumen Legalitas & Kepatuhan Layanan"}
           </div>

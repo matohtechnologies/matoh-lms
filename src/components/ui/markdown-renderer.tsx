@@ -316,12 +316,12 @@ function renderInlineMarkdown(
           <img
             src={normalizeDisplayImageUrl(imgMatch[2])}
             alt={imgMatch[1] || "Gambar materi"}
-            loading="lazy"
+            loading="eager"
             decoding="async"
             width={800}
             height={450}
-            style={{ aspectRatio: "16 / 9" }}
-            className="rounded-xl border border-stone-200 dark:border-stone-800 max-h-80 w-auto object-contain mx-auto shadow-sm aspect-video"
+            style={{ aspectRatio: "16 / 9", width: "100%", height: "auto" }}
+            className="rounded-xl border border-stone-200 dark:border-stone-800 max-h-80 w-full object-contain mx-auto shadow-sm aspect-video"
           />
           {imgMatch[1] && (
             <span className="block text-xs text-stone-500 mt-1 italic">
@@ -774,14 +774,14 @@ function ImageNode({
         <img
           src={resolvedSrc}
           alt={alt || "Ilustrasi materi pembelajaran"}
-          loading="lazy"
+          loading="eager"
           decoding="async"
           width={800}
           height={450}
-          style={{ aspectRatio: "16 / 9" }}
+          style={{ aspectRatio: "16 / 9", width: "100%", height: "auto" }}
           onError={() => setHasError(true)}
           onClick={() => setModalOpen(true)}
-          className="mx-auto max-h-[520px] w-auto object-contain cursor-zoom-in transition-transform duration-300 group-hover:scale-[1.01] aspect-video"
+          className="mx-auto max-h-[520px] w-full object-contain cursor-zoom-in transition-transform duration-300 group-hover:scale-[1.01] aspect-video"
         />
       </div>
       {alt && (
@@ -801,11 +801,7 @@ function ImageNode({
           onClick={() => setModalOpen(false)}
         >
           <div className="relative max-w-5xl max-h-[90vh]">
-            <img
-              src={resolvedSrc}
-              alt={alt || "Perbesar gambar"}
-              className="max-h-[85vh] max-w-full rounded-2xl object-contain shadow-2xl"
-            />
+            <img src={resolvedSrc} alt={alt || "Perbesar gambar"} width={1200} height={675} style={{ aspectRatio: "auto" }} className="max-h-[85vh] max-w-full rounded-2xl object-contain shadow-2xl aspect-auto" />
             {alt && (
               <p className="text-center text-white/90 text-xs sm:text-sm mt-3 font-medium">
                 {alt}

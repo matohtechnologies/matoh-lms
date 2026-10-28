@@ -56,6 +56,10 @@ export default async function AdminCoursesPage() {
           <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-stone-50 border border-stone-200/60 flex-1 max-w-md">
             <Search size={15} className="text-stone-400 shrink-0" />
             <input
+              id="admin-courses-search"
+              name="search"
+              autoComplete="off"
+              aria-label={t("search_courses")}
               placeholder={t("search_courses")}
               className="flex-1 text-xs bg-transparent text-stone-800 placeholder:text-stone-400 focus:outline-none"
             />
@@ -103,11 +107,7 @@ export default async function AdminCoursesPage() {
                       <div className="flex items-center gap-3">
                         {course.thumbnail ? (
                           <div className="w-12 h-8 rounded-lg overflow-hidden bg-stone-100 border border-stone-200/80 shrink-0 relative">
-                            <img
-                              src={course.thumbnail}
-                              alt={course.title}
-                              className="w-full h-full object-cover"
-                            />
+                            <img src={course.thumbnail} alt={course.title} width={48} height={32} style={{ aspectRatio: "3 / 2" }} className="w-full h-full object-cover aspect-video" />
                           </div>
                         ) : (
                           <div className="w-12 h-8 rounded-lg bg-blue-50 border border-blue-200/60 flex items-center justify-center text-blue-600 shrink-0">

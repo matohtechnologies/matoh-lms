@@ -214,7 +214,10 @@ export function VerifyClient({
                   <img
                     src={qrCodeUrl}
                     alt="Barcode Verifikasi"
-                    className="w-full h-full object-contain block"
+                    width={72}
+                    height={72}
+                    style={{ aspectRatio: "1 / 1" }}
+                    className="w-full h-full object-contain block aspect-square"
                   />
                 </div>
               ) : (
@@ -504,7 +507,13 @@ export function VerifyClient({
         </div>
 
         <form onSubmit={handleSearchSubmit} className="flex flex-col sm:flex-row gap-2 max-w-md">
+          <label htmlFor="verify-search-code" className="sr-only">
+            {t("search_placeholder")}
+          </label>
           <input
+            id="verify-search-code"
+            name="code"
+            autoComplete="off"
             type="text"
             value={searchCode}
             onChange={(e) => setSearchCode(e.target.value)}

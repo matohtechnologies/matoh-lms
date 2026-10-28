@@ -42,7 +42,9 @@ export default async function PrivacyPage() {
               alt="Matoh Technologies"
               width={16}
               height={16}
-              className="object-contain"
+              priority
+              style={{ aspectRatio: "1 / 1" }}
+              className="object-contain aspect-square"
             />
             {isEn ? "Data Protection & Privacy Compliance" : "Kepatuhan UU No. 27/2022 (UU PDP)"}
           </div>

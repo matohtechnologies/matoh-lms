@@ -34,7 +34,10 @@ export function UserSidebarBadge({ initialUser, variant = "dashboard" }: UserSid
           <img
             src={image}
             alt={name}
-            className="w-full h-full object-cover"
+            width={36}
+            height={36}
+            style={{ aspectRatio: "1 / 1" }}
+            className="w-full h-full object-cover aspect-square"
           />
         ) : (
           <span>{userInitial}</span>
@@ -54,7 +57,10 @@ export function UserSidebarBadge({ initialUser, variant = "dashboard" }: UserSid
             <img
               src={image}
               alt={name}
-              className="w-full h-full object-cover"
+              width={36}
+              height={36}
+              style={{ aspectRatio: "1 / 1" }}
+              className="w-full h-full object-cover aspect-square"
             />
           ) : (
             <span>{userInitial}</span>
@@ -81,7 +87,10 @@ export function UserSidebarBadge({ initialUser, variant = "dashboard" }: UserSid
           <img
             src={image}
             alt={name}
-            className="w-full h-full object-cover"
+            width={36}
+            height={36}
+            style={{ aspectRatio: "1 / 1" }}
+            className="w-full h-full object-cover aspect-square"
           />
         ) : (
           <span>{userInitial}</span>

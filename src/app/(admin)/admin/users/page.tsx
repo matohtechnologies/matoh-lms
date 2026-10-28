@@ -85,6 +85,10 @@ export default async function AdminUsersPage() {
           <div className="flex items-center gap-3 w-full sm:w-80 px-3 py-2 rounded-xl bg-stone-50 border border-stone-200/60">
             <Search size={15} className="text-stone-400 shrink-0" />
             <input
+              id="admin-users-search"
+              name="search"
+              autoComplete="off"
+              aria-label={t("search_users")}
               placeholder={t("search_users")}
               className="w-full text-xs bg-transparent text-stone-700 placeholder:text-stone-400 focus:outline-none"
             />

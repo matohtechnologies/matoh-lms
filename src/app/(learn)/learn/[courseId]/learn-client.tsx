@@ -917,7 +917,9 @@ export default function LearnPageClient({
                 alt="Matoh Technologies"
                 width={18}
                 height={18}
-                className="object-contain"
+                priority
+                style={{ aspectRatio: "1 / 1" }}
+                className="object-contain aspect-square"
               />
             </div>
             <span className="text-sm font-bold text-white tracking-tight">
@@ -1619,20 +1621,16 @@ export default function LearnPageClient({
                     </span>
                     <div className="flex items-center gap-1.5 text-xs text-stone-400 font-mono">
                       <span>⏱️ Detik:</span>
-                      <input
-                        type="number"
-                        min="0"
-                        value={newNoteTimestamp}
-                        onChange={(e) => setNewNoteTimestamp(Math.max(0, parseInt(e.target.value) || 0))}
+                      <label htmlFor="lesson-note-seconds" className="sr-only">Detik</label>
+                      <input id="lesson-note-seconds" name="noteSeconds" type="number" min="0" value={newNoteTimestamp} onChange={(e) => setNewNoteTimestamp(Math.max(0, parseInt(e.target.value) || 0))}
                         className="w-16 px-2 py-1 rounded bg-stone-800 border border-stone-700 text-stone-200 text-center text-xs focus:outline-none focus:border-blue-500"
                         title="Detik dalam video (misal: 60 = 01:00)"
                       />
                     </div>
                   </div>
 
-                  <textarea
-                    value={newNoteContent}
-                    onChange={(e) => setNewNoteContent(e.target.value)}
+                  <label htmlFor="lesson-note-content" className="sr-only">Catatan</label>
+                  <textarea id="lesson-note-content" name="noteContent" value={newNoteContent} onChange={(e) => setNewNoteContent(e.target.value)}
                     placeholder={locale === "en" ? "Write your key insight, formula, or reminder here..." : "Tulis ringkasan rumus, poin penting, atau pengingat di sini..."}
                     rows={3}
                     className="w-full p-3 rounded-xl bg-stone-950 border border-stone-800 text-stone-200 text-sm placeholder:text-stone-600 focus:outline-none focus:border-blue-500"
@@ -2519,14 +2517,9 @@ export default function LearnPageClient({
 
                                 {userSub.status === "REJECTED" && (
                                   <div className="pt-2 space-y-3">
-                                    <label className="block text-xs font-semibold text-stone-300">
-                                      {t("submit_revision")}
-                                    </label>
+                                    <label htmlFor={"revision-url-" + assignment.id} className="block text-xs font-semibold text-stone-300">{t("submit_revision")}</label>
 
-                                    <input
-                                      type="text"
-                                      placeholder={t("revision_placeholder")}
-                                      value={submissionUrlInput[assignment.id] || ""}
+                                    <input id={"revision-url-" + assignment.id} name={"revisionUrl_" + assignment.id} type="text" placeholder={t("revision_placeholder")} value={submissionUrlInput[assignment.id] || ""}
                                       onChange={(e) =>
                                         setSubmissionUrlInput((prev) => ({
                                           ...prev,
@@ -2572,12 +2565,7 @@ export default function LearnPageClient({
                                             <span>{t("upload_revision")}</span>
                                           </>
                                         )}
-                                        <input
-                                          type="file"
-                                          disabled={uploadingForAssignmentId === assignment.id}
-                                          onChange={(e) => handleStudentFileUpload(assignment.id, e)}
-                                          className="hidden"
-                                        />
+                                        <input id={"revision-file-upload-" + assignment.id} name={"revisionFile_" + assignment.id} type="file" disabled={uploadingForAssignmentId === assignment.id} onChange={(e) => handleStudentFileUpload(assignment.id, e)} className="hidden" />
                                       </label>
                                     )}
 
@@ -2599,13 +2587,8 @@ export default function LearnPageClient({
                             ) : (
                               <div className="space-y-3">
                                 <div>
-                                  <label className="block text-xs font-semibold text-stone-300 mb-1">
-                                    {t("submit_url_placeholder")}
-                                  </label>
-                                  <input
-                                    type="text"
-                                    placeholder="https://github.com/username/project..."
-                                    value={submissionUrlInput[assignment.id] || ""}
+                                  <label htmlFor={"assign-url-" + assignment.id} className="block text-xs font-semibold text-stone-300 mb-1">{t("submit_url_placeholder")}</label>
+                                  <input id={"assign-url-" + assignment.id} name={"assignUrl_" + assignment.id} type="text" placeholder="https://github.com/username/project..." value={submissionUrlInput[assignment.id] || ""}
                                     onChange={(e) =>
                                       setSubmissionUrlInput((prev) => ({
                                         ...prev,
@@ -2618,9 +2601,7 @@ export default function LearnPageClient({
 
                                 {/* Upload File option */}
                                 <div>
-                                  <label className="block text-xs font-semibold text-stone-300 mb-1">
-                                    {t("upload_file_label")}
-                                  </label>
+                                  <label htmlFor={"assign-file-" + assignment.id} className="block text-xs font-semibold text-stone-300 mb-1">{t("upload_file_label")}</label>
 
                                   {currentFile ? (
                                     <div className="flex items-center justify-between p-3 rounded-xl bg-blue-500/10 border border-blue-500/30 text-xs">
@@ -2659,12 +2640,7 @@ export default function LearnPageClient({
                                           </span>
                                         </>
                                       )}
-                                      <input
-                                        type="file"
-                                        disabled={uploadingForAssignmentId === assignment.id}
-                                        onChange={(e) => handleStudentFileUpload(assignment.id, e)}
-                                        className="hidden"
-                                      />
+                                      <input id={"student-file-upload-" + assignment.id} name={"studentFile_" + assignment.id} type="file" disabled={uploadingForAssignmentId === assignment.id} onChange={(e) => handleStudentFileUpload(assignment.id, e)} className="hidden" />
                                     </label>
                                   )}
                                 </div>
@@ -2703,10 +2679,8 @@ export default function LearnPageClient({
                   <h3 className="text-sm font-bold text-stone-200">
                     {t("post_discussion")}
                   </h3>
-                  <textarea
-                    rows={3}
-                    value={newTopicText}
-                    onChange={(e) => setNewTopicText(e.target.value)}
+                  <label htmlFor="learn-discussion-topic" className="sr-only">Topik Diskusi</label>
+                  <textarea id="learn-discussion-topic" name="topicContent" rows={3} value={newTopicText} onChange={(e) => setNewTopicText(e.target.value)}
                     placeholder={t("discussion_placeholder")}
                     className="w-full rounded-xl bg-stone-950 border border-stone-800 p-3 text-xs sm:text-sm text-stone-200 placeholder:text-stone-600 focus:outline-hidden focus:border-blue-500"
                   />
@@ -2744,11 +2718,7 @@ export default function LearnPageClient({
                               <div className="w-8 h-8 rounded-full bg-stone-800 border border-stone-700 flex items-center justify-center font-bold text-white text-xs overflow-hidden">
                                 {d.user?.image ? (
                                   // eslint-disable-next-line @next/next/no-img-element
-                                  <img
-                                    src={d.user.image}
-                                    alt={d.user.name || "User"}
-                                    className="w-full h-full object-cover"
-                                  />
+                                  <img src={d.user.image} alt={d.user.name || "User"} width={32} height={32} loading="eager" style={{ aspectRatio: "1 / 1" }} className="w-full h-full object-cover aspect-square" />
                                 ) : (
                                   <UserIcon size={14} className="text-stone-400" />
                                 )}
@@ -2799,11 +2769,7 @@ export default function LearnPageClient({
                                         <div className="w-5 h-5 rounded-full bg-stone-800 flex items-center justify-center text-[10px] font-bold overflow-hidden">
                                           {reply.user?.image ? (
                                             // eslint-disable-next-line @next/next/no-img-element
-                                            <img
-                                              src={reply.user.image}
-                                              alt={reply.user.name || "User"}
-                                              className="w-full h-full object-cover"
-                                            />
+                                            <img src={reply.user.image} alt={reply.user.name || "User"} width={20} height={20} loading="eager" style={{ aspectRatio: "1 / 1" }} className="w-full h-full object-cover aspect-square" />
                                           ) : (
                                             <UserIcon size={10} className="text-stone-400" />
                                           )}
@@ -2837,10 +2803,8 @@ export default function LearnPageClient({
 
                           {/* Reply Box */}
                           <div className="flex gap-2">
-                            <input
-                              type="text"
-                              placeholder={t("reply_placeholder")}
-                              value={replyTexts[d.id] || ""}
+                            <label htmlFor={"reply-input-" + d.id} className="sr-only">Balas</label>
+                            <input id={"reply-input-" + d.id} name="replyContent" type="text" placeholder={t("reply_placeholder")} value={replyTexts[d.id] || ""}
                               onChange={(e) =>
                                 setReplyTexts((prev) => ({ ...prev, [d.id]: e.target.value }))
                               }

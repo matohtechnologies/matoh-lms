@@ -299,7 +299,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                 )}
               </p>
               <div className="flex items-center gap-2">
-                <label className="text-sm text-slate-500 hidden sm:block">{t("sort_label")}</label>
+                <label htmlFor="courses-sort-select" className="text-sm text-slate-500 hidden sm:block">{t("sort_label")}</label>
                 <CourseSortSelect defaultValue={params.sort ?? "popular"} options={sortOptions} />
               </div>
             </div>

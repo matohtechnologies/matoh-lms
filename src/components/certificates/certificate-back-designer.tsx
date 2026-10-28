@@ -307,25 +307,13 @@ export function CertificateBackDesigner({
           {activeTab === "style" && (
             <div className="space-y-4">
               <div>
-                <label className="text-xs font-bold text-stone-800 block mb-1.5">
-                  Template Gambar Latar Belakang (Back Template)
-                </label>
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={handleUploadBg}
-                  accept="image/png,image/jpeg,image/jpg,image/webp"
-                  className="hidden"
-                />
+                <label htmlFor="cert-back-bg-upload" className="text-xs font-bold text-stone-800 block mb-1.5">Template Gambar Latar Belakang (Back Template)</label>
+                <input id="cert-back-bg-upload" name="backgroundFile" type="file" ref={fileInputRef} onChange={handleUploadBg} accept="image/png,image/jpeg,image/jpg,image/webp" className="hidden" />
 
                 {config.backgroundUrl ? (
                   <div className="p-3 rounded-xl bg-stone-50 border border-stone-200 space-y-2">
                     <div className="flex items-center gap-3">
-                      <img
-                        src={config.backgroundUrl}
-                        alt="Template Belakang"
-                        className="w-16 h-10 object-cover rounded-md border border-stone-200 shrink-0"
-                      />
+                      <img src={config.backgroundUrl} alt="Template Belakang" width={64} height={40} style={{ aspectRatio: "16 / 10" }} className="w-16 h-10 object-cover rounded-md border border-stone-200 shrink-0" />
                       <div className="min-w-0 flex-1">
                         <p className="text-xs font-bold text-stone-800 truncate">Template Kustom Terpasang</p>
                         <a
@@ -372,9 +360,7 @@ export function CertificateBackDesigner({
 
               {/* Border Styles */}
               <div>
-                <label className="text-xs font-bold text-stone-800 block mb-1.5">
-                  Gaya Bingkai Luar (Border Style)
-                </label>
+                <span className="text-xs font-bold text-stone-800 block mb-1.5">Gaya Bingkai Luar (Border Style)</span>
                 <div className="grid grid-cols-2 gap-2">
                   {[
                     { id: "solid", label: "Bingkai Standar (Solid)" },
@@ -402,9 +388,7 @@ export function CertificateBackDesigner({
 
               {/* Background Color */}
               <div>
-                <label className="text-xs font-bold text-stone-800 block mb-1.5">
-                  Warna Latar Belakang (Base Color)
-                </label>
+                <span className="text-xs font-bold text-stone-800 block mb-1.5">Warna Latar Belakang (Base Color)</span>
                 <div className="flex items-center gap-2">
                   {[
                     { color: "#ffffff", label: "Putih Murni" },
@@ -439,26 +423,16 @@ export function CertificateBackDesigner({
           {activeTab === "text" && (
             <div className="space-y-4">
               <div>
-                <label className="text-xs font-bold text-stone-800 block mb-1">
-                  Judul Utama Transkrip
-                </label>
-                <input
-                  type="text"
-                  value={config.headerTitle}
-                  onChange={(e) => setConfig({ ...config, headerTitle: e.target.value })}
+                <label htmlFor="cert-back-header-title" className="text-xs font-bold text-stone-800 block mb-1">Judul Utama Transkrip</label>
+                <input id="cert-back-header-title" name="headerTitle" type="text" value={config.headerTitle} onChange={(e) => setConfig({ ...config, headerTitle: e.target.value })}
                   placeholder="Transkrip Nilai & Capaian Kompetensi"
                   className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold text-stone-800 block mb-1">
-                  Subjudul Dokumen (Bahasa Inggris / Keterangan)
-                </label>
-                <input
-                  type="text"
-                  value={config.headerSubtitle}
-                  onChange={(e) => setConfig({ ...config, headerSubtitle: e.target.value })}
+                <label htmlFor="cert-back-header-subtitle" className="text-xs font-bold text-stone-800 block mb-1">Subjudul Dokumen (Bahasa Inggris / Keterangan)</label>
+                <input id="cert-back-header-subtitle" name="headerSubtitle" type="text" value={config.headerSubtitle} onChange={(e) => setConfig({ ...config, headerSubtitle: e.target.value })}
                   placeholder="Official Academic Transcript & Competency Assessment"
                   className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-blue-500"
                 />
@@ -470,9 +444,7 @@ export function CertificateBackDesigner({
           {activeTab === "table" && (
             <div className="space-y-4">
               <div>
-                <label className="text-xs font-bold text-stone-800 block mb-1.5">
-                  Tema Warna Header Tabel
-                </label>
+                <span className="text-xs font-bold text-stone-800 block mb-1.5">Tema Warna Header Tabel</span>
                 <div className="grid grid-cols-2 gap-2">
                   {[
                     { id: "dark", label: "Slate Charcoal (Standar)", color: "bg-stone-900" },
@@ -505,9 +477,7 @@ export function CertificateBackDesigner({
 
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-stone-700">Kolom Kategori (Modul / Kuis / Tugas)</span>
-                  <input
-                    type="checkbox"
-                    checked={config.showCategoryColumn}
+                  <input id="cb-cat-col" name="showCategoryColumn" type="checkbox" checked={config.showCategoryColumn}
                     onChange={(e) => setConfig({ ...config, showCategoryColumn: e.target.checked })}
                     className="w-4 h-4 accent-blue-600 rounded cursor-pointer"
                   />
@@ -515,9 +485,7 @@ export function CertificateBackDesigner({
 
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-stone-700">Kolom Beban Jam Pelajaran (JP)</span>
-                  <input
-                    type="checkbox"
-                    checked={config.showWorkloadColumn}
+                  <input id="cb-work-col" name="showWorkloadColumn" type="checkbox" checked={config.showWorkloadColumn}
                     onChange={(e) => setConfig({ ...config, showWorkloadColumn: e.target.checked })}
                     className="w-4 h-4 accent-blue-600 rounded cursor-pointer"
                   />
@@ -525,9 +493,7 @@ export function CertificateBackDesigner({
 
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-stone-700">Kolom Grade Huruf (A / B / C)</span>
-                  <input
-                    type="checkbox"
-                    checked={config.showGradeColumn}
+                  <input id="cb-grade-col" name="showGradeColumn" type="checkbox" checked={config.showGradeColumn}
                     onChange={(e) => setConfig({ ...config, showGradeColumn: e.target.checked })}
                     className="w-4 h-4 accent-blue-600 rounded cursor-pointer"
                   />
@@ -535,9 +501,7 @@ export function CertificateBackDesigner({
 
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-stone-700">Kolom Lencana Status (Kompeten / Lulus)</span>
-                  <input
-                    type="checkbox"
-                    checked={config.showStatusBadge}
+                  <input id="cb-status-badge" name="showStatusBadge" type="checkbox" checked={config.showStatusBadge}
                     onChange={(e) => setConfig({ ...config, showStatusBadge: e.target.checked })}
                     className="w-4 h-4 accent-blue-600 rounded cursor-pointer"
                   />
@@ -556,9 +520,7 @@ export function CertificateBackDesigner({
                   <p className="text-xs font-semibold text-stone-800">Kartu Skor Rata-rata Kumulatif</p>
                   <p className="text-[10px] text-stone-400">Menampilkan kalkulasi skor 0-100</p>
                 </div>
-                <input
-                  type="checkbox"
-                  checked={config.showScoreSummary}
+                <input id="cb-score-summary" name="showScoreSummary" type="checkbox" checked={config.showScoreSummary}
                   onChange={(e) => setConfig({ ...config, showScoreSummary: e.target.checked })}
                   className="w-4 h-4 accent-blue-600 rounded cursor-pointer"
                 />
@@ -569,9 +531,7 @@ export function CertificateBackDesigner({
                   <p className="text-xs font-semibold text-stone-800">Kartu Predikat Kelulusan</p>
                   <p className="text-[10px] text-stone-400">Menampilkan predikat (Dengan Pujian, dll)</p>
                 </div>
-                <input
-                  type="checkbox"
-                  checked={config.showPredicate}
+                <input id="cb-predicate" name="showPredicate" type="checkbox" checked={config.showPredicate}
                   onChange={(e) => setConfig({ ...config, showPredicate: e.target.checked })}
                   className="w-4 h-4 accent-blue-600 rounded cursor-pointer"
                 />
@@ -582,9 +542,7 @@ export function CertificateBackDesigner({
                   <p className="text-xs font-semibold text-stone-800">Panduan Skala Penilaian</p>
                   <p className="text-[10px] text-stone-400">Keterangan standar nilai 85-100 dsb.</p>
                 </div>
-                <input
-                  type="checkbox"
-                  checked={config.showScaleLegend}
+                <input id="cb-scale-legend" name="showScaleLegend" type="checkbox" checked={config.showScaleLegend}
                   onChange={(e) => setConfig({ ...config, showScaleLegend: e.target.checked })}
                   className="w-4 h-4 accent-blue-600 rounded cursor-pointer"
                 />
@@ -595,9 +553,7 @@ export function CertificateBackDesigner({
                   <p className="text-xs font-semibold text-stone-800">QR Code Verifikasi Online</p>
                   <p className="text-[10px] text-stone-400">Pindai kamera untuk validasi sertifikat sah</p>
                 </div>
-                <input
-                  type="checkbox"
-                  checked={config.showQrCode}
+                <input id="cb-qrcode" name="showQrCode" type="checkbox" checked={config.showQrCode}
                   onChange={(e) => setConfig({ ...config, showQrCode: e.target.checked })}
                   className="w-4 h-4 accent-blue-600 rounded cursor-pointer"
                 />

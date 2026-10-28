@@ -40,7 +40,9 @@ export default async function AdminLayout({
               alt="Matoh Technologies"
               width={20}
               height={20}
-              className="object-contain"
+              priority
+              style={{ aspectRatio: "1 / 1" }}
+              className="object-contain aspect-square"
             />
           </div>
           <div>
@@ -95,7 +97,9 @@ export default async function AdminLayout({
                 alt="Matoh Technologies"
                 width={24}
                 height={24}
-                className="object-contain"
+                priority
+                style={{ aspectRatio: "1 / 1" }}
+                className="object-contain aspect-square"
               />
             </div>
             <div>

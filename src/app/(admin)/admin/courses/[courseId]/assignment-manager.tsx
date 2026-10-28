@@ -572,11 +572,7 @@ export function AssignmentManager({
                                   <div className="w-6 h-6 rounded-full bg-stone-200 flex items-center justify-center text-stone-600 text-xs font-bold overflow-hidden">
                                     {sub.user?.image ? (
                                       // eslint-disable-next-line @next/next/no-img-element
-                                      <img
-                                        src={sub.user.image}
-                                        alt={sub.user?.name || "User"}
-                                        className="w-full h-full object-cover"
-                                      />
+                                      <img src={sub.user.image} alt={sub.user?.name || "User"} width={24} height={24} style={{ aspectRatio: "1 / 1" }} className="w-full h-full object-cover aspect-square" />
                                     ) : (
                                       <UserIcon size={12} />
                                     )}
@@ -687,13 +683,10 @@ export function AssignmentManager({
 
             <form onSubmit={editingAssignment ? handleUpdateAssignment : handleCreateAssignment} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                <label htmlFor="assignment-modal-title" className="block text-xs font-semibold text-stone-700 mb-1">
                   Judul Tugas <span className="text-red-500">*</span>
                 </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Contoh: Submission Proyek Akhir: Landing Page Responsif"
+                <input id="assignment-modal-title" name="title" type="text" required placeholder="Contoh: Submission Proyek Akhir: Landing Page Responsif"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
@@ -701,12 +694,10 @@ export function AssignmentManager({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                <label htmlFor="assignment-modal-section" className="block text-xs font-semibold text-stone-700 mb-1">
                   Target Bab / Section Pembelajaran
                 </label>
-                <select
-                  value={sectionId}
-                  onChange={(e) => setSectionId(e.target.value)}
+                <select id="assignment-modal-section" name="sectionId" value={sectionId} onChange={(e) => setSectionId(e.target.value)}
                   className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">🌐 Tugas Umum (Berlaku untuk Semua Bab / Kursus)</option>
@@ -722,13 +713,10 @@ export function AssignmentManager({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                <label htmlFor="assignment-modal-desc" className="block text-xs font-semibold text-stone-700 mb-1">
                   Instruksi & Kriteria Penilaian <span className="text-red-500">*</span>
                 </label>
-                <textarea
-                  rows={4}
-                  required
-                  placeholder="Jelaskan kriteria tugas, apa saja yang harus dikerjakan, dan format pengumpulan (file ZIP/PDF atau link GitHub/Figma)..."
+                <textarea id="assignment-modal-desc" name="description" rows={4} required placeholder="Jelaskan kriteria tugas, apa saja yang harus dikerjakan, dan format pengumpulan (file ZIP/PDF atau link GitHub/Figma)..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
@@ -737,7 +725,7 @@ export function AssignmentManager({
 
               {/* Lampirkan File / Starter Code */}
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                <label htmlFor="assignment-starter-file" className="block text-xs font-semibold text-stone-700 mb-1">
                   Lampirkan Berkas Starter / Panduan (Opsional)
                 </label>
                 {attachedFileUrl ? (
@@ -777,12 +765,7 @@ export function AssignmentManager({
                         </span>
                       </div>
                     )}
-                    <input
-                      type="file"
-                      disabled={uploadingFile}
-                      onChange={handleFileUpload}
-                      className="hidden"
-                    />
+                    <input id="assignment-starter-file" name="starterFile" type="file" disabled={uploadingFile} onChange={handleFileUpload} className="hidden" />
                   </label>
                 )}
               </div>
@@ -875,9 +858,7 @@ export function AssignmentManager({
 
             <form onSubmit={handleReviewSubmission} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1">
-                  Keputusan Status
-                </label>
+                <span className="block text-xs font-semibold text-stone-700 mb-1">Keputusan Status</span>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
@@ -907,27 +888,20 @@ export function AssignmentManager({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                <label htmlFor="assignment-review-score" className="block text-xs font-semibold text-stone-700 mb-1">
                   Nilai Skor (0 - 100)
                 </label>
-                <input
-                  type="number"
-                  min={0}
-                  max={100}
-                  required
-                  value={reviewScore}
+                <input id="assignment-review-score" name="reviewScore" type="number" min={0} max={100} required value={reviewScore}
                   onChange={(e) => setReviewScore(Number(e.target.value))}
                   className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1">
+                <label htmlFor="assignment-review-feedback" className="block text-xs font-semibold text-stone-700 mb-1">
                   Catatan / Feedback untuk Siswa
                 </label>
-                <textarea
-                  rows={3}
-                  placeholder="Misal: Bagus sekali! Desain responsif berjalan baik. Saran sedikit pada struktur semantic HTML..."
+                <textarea id="assignment-review-feedback" name="reviewFeedback" rows={3} placeholder="Misal: Bagus sekali! Desain responsif berjalan baik. Saran sedikit pada struktur semantic HTML..."
                   value={reviewFeedback}
                   onChange={(e) => setReviewFeedback(e.target.value)}
                   className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"

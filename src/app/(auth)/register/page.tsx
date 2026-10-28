@@ -149,22 +149,28 @@ export default function RegisterPage() {
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <Input
+              id="register-name"
               label={t("name")}
+              autoComplete="name"
               placeholder="John Doe"
               error={errors.name?.message}
               {...register("name")}
             />
             <Input
+              id="register-email"
               label={t("email")}
               type="email"
+              autoComplete="email"
               placeholder="email@kamu.com"
               error={errors.email?.message}
               {...register("email")}
             />
             <div>
               <Input
+                id="register-password"
                 label={t("password")}
                 type={showPassword ? "text" : "password"}
+                autoComplete="new-password"
                 placeholder="••••••••"
                 error={errors.password?.message}
                 rightIcon={
@@ -190,8 +196,10 @@ export default function RegisterPage() {
               )}
             </div>
             <Input
+              id="register-confirm-password"
               label={t("confirm_password")}
               type={showPassword ? "text" : "password"}
+              autoComplete="new-password"
               placeholder="••••••••"
               error={errors.confirmPassword?.message}
               {...register("confirmPassword")}

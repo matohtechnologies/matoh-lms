@@ -272,7 +272,10 @@ export default async function DashboardPage({
                     <img
                       src={lastEnrollment.course.thumbnail}
                       alt={lastEnrollment.course.title}
-                      className="w-full h-full object-cover"
+                      width={56}
+                      height={44}
+                      style={{ aspectRatio: "14 / 11" }}
+                      className="w-full h-full object-cover aspect-[14/11]"
                     />
                   </div>
                 ) : (
@@ -378,7 +381,10 @@ export default async function DashboardPage({
                           <img
                             src={enrollment.course.thumbnail}
                             alt={enrollment.course.title}
-                            className="w-full h-full object-cover"
+                            width={64}
+                            height={48}
+                            style={{ aspectRatio: "4 / 3" }}
+                            className="w-full h-full object-cover aspect-[4/3]"
                           />
                         </div>
                       ) : (

@@ -335,6 +335,9 @@ export function CertificateView({
                 <img
                   src={templateUrl}
                   alt="Certificate Background Template"
+                  width={1123}
+                  height={794}
+                  style={{ aspectRatio: "1123 / 794" }}
                   className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none"
                 />
               ) : (
@@ -361,7 +364,9 @@ export function CertificateView({
                       alt={issuerName}
                       width={38}
                       height={38}
-                      className="object-contain"
+                      priority
+                      style={{ aspectRatio: "1 / 1" }}
+                      className="object-contain aspect-square"
                     />
                   </div>
                   <h2

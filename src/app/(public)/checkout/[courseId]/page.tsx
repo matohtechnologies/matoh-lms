@@ -305,7 +305,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
                         course.thumbnail.includes("youtube.com") ||
                         course.thumbnail.includes("ytimg.com")
                       }
-                      className="object-cover w-full h-full"
+                      priority style={{ aspectRatio: "3 / 2" }} className="object-cover w-full h-full aspect-[3/2]"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-sky-100">
@@ -366,7 +366,13 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
               ) : (
                 <form onSubmit={handleApplyCoupon} className="space-y-2">
                   <div className="flex gap-2">
+                    <label htmlFor="checkout-coupon-code" className="sr-only">
+                      {isEn ? "Coupon Code" : "Kode Kupon"}
+                    </label>
                     <input
+                      id="checkout-coupon-code"
+                      name="couponCode"
+                      autoComplete="off"
                       type="text"
                       value={couponInput}
                       onChange={(e) => {

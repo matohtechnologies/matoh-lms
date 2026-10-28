@@ -107,7 +107,9 @@ export default async function AboutPage() {
               alt="Matoh Technologies"
               width={16}
               height={16}
-              className="object-contain"
+              priority
+              style={{ aspectRatio: "1 / 1" }}
+              className="object-contain aspect-square"
             />
             {isEn ? "PT. Matoh Technologies Indonesia" : "Profil PT. Matoh Technologies Indonesia"}
           </div>
@@ -311,7 +313,10 @@ export default async function AboutPage() {
                         <img
                           src={person.image}
                           alt={person.name}
-                          className="w-full h-full object-cover"
+                          width={64}
+                          height={64}
+                          style={{ aspectRatio: "1 / 1" }}
+                          className="w-full h-full object-cover aspect-square"
                         />
                       ) : (
                         <span>{person.name.charAt(0)}</span>

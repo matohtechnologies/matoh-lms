@@ -67,6 +67,12 @@ const nextConfig: NextConfig = {
 
   // 5. Hardened HTTP Security Headers
   async headers() {
+    // Only apply strict production headers (CSP, HSTS) in production build
+    // to avoid conflicts with Turbopack Fast Refresh / HMR eval() on localhost.
+    if (process.env.NODE_ENV !== "production") {
+      return [];
+    }
+
     return [
       {
         source: "/:path*",

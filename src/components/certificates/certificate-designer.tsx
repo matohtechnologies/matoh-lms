@@ -591,12 +591,8 @@ export function CertificateDesigner({
                   {/* Element Content */}
                   {selectedElement.type === "placeholder" ? (
                     <div>
-                      <label className="text-[11px] font-semibold text-stone-700 block mb-1">
-                        Pilih Data Placeholder:
-                      </label>
-                      <select
-                        value={selectedElement.placeholderKey || "student_name"}
-                        onChange={(e) => {
+                      <label htmlFor="cert-designer-placeholder" className="text-[11px] font-semibold text-stone-700 block mb-1">Pilih Data Placeholder:</label>
+                      <select id="cert-designer-placeholder" name="placeholderKey" value={selectedElement.placeholderKey || "student_name"} onChange={(e) => {
                           const opt = PLACEHOLDER_OPTIONS.find((p) => p.key === e.target.value);
                           updateSelectedElement({
                             placeholderKey: e.target.value as any,
@@ -614,12 +610,8 @@ export function CertificateDesigner({
                     </div>
                   ) : (
                     <div>
-                      <label className="text-[11px] font-semibold text-stone-700 block mb-1">
-                        Teks Kustom (Mendukung tag placeholder):
-                      </label>
-                      <textarea
-                        rows={2}
-                        value={selectedElement.customText || ""}
+                      <label htmlFor="cert-designer-customtext" className="text-[11px] font-semibold text-stone-700 block mb-1">Teks Kustom (Mendukung tag placeholder):</label>
+                      <textarea id="cert-designer-customtext" name="customText" rows={2} value={selectedElement.customText || ""}
                         onChange={(e) => updateSelectedElement({ customText: e.target.value })}
                         className="w-full px-3 py-2 rounded-xl border border-stone-200 text-xs focus:outline-none focus:border-blue-500 resize-none"
                       />
@@ -629,12 +621,8 @@ export function CertificateDesigner({
                   {/* Typography Row */}
                   <div className="grid grid-cols-2 gap-3 pt-2">
                     <div>
-                      <label className="text-[10px] font-semibold text-stone-500 uppercase block mb-1">
-                        Jenis Font
-                      </label>
-                      <select
-                        value={selectedElement.fontFamily || "sans"}
-                        onChange={(e) => updateSelectedElement({ fontFamily: e.target.value as any })}
+                      <label htmlFor="cert-designer-fontfamily" className="text-[10px] font-semibold text-stone-500 uppercase block mb-1">Jenis Font</label>
+                      <select id="cert-designer-fontfamily" name="fontFamily" value={selectedElement.fontFamily || "sans"} onChange={(e) => updateSelectedElement({ fontFamily: e.target.value as any })}
                         className="w-full px-2.5 py-1.5 rounded-lg border border-stone-200 text-xs bg-white"
                       >
                         <option value="arial">Arial (Standar)</option>
@@ -646,12 +634,8 @@ export function CertificateDesigner({
                     </div>
 
                     <div>
-                      <label className="text-[10px] font-semibold text-stone-500 uppercase block mb-1">
-                        Ketebalan
-                      </label>
-                      <select
-                        value={selectedElement.fontWeight || "normal"}
-                        onChange={(e) => updateSelectedElement({ fontWeight: e.target.value as any })}
+                      <label htmlFor="cert-designer-fontweight" className="text-[10px] font-semibold text-stone-500 uppercase block mb-1">Ketebalan</label>
+                      <select id="cert-designer-fontweight" name="fontWeight" value={selectedElement.fontWeight || "normal"} onChange={(e) => updateSelectedElement({ fontWeight: e.target.value as any })}
                         className="w-full px-2.5 py-1.5 rounded-lg border border-stone-200 text-xs bg-white"
                       >
                         <option value="normal">Normal (400)</option>
@@ -667,37 +651,25 @@ export function CertificateDesigner({
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <div className="flex items-center justify-between mb-1">
-                        <label className="text-[10px] font-semibold text-stone-500 uppercase">
-                          Ukuran Teks
-                        </label>
+                        <label htmlFor="cert-designer-fontsize" className="text-[10px] font-semibold text-stone-500 uppercase">Ukuran Teks</label>
                         <span className="text-[10px] font-bold text-stone-700">
                           {selectedElement.fontSize}px
                         </span>
                       </div>
-                      <input
-                        type="range"
-                        min="9"
-                        max="48"
-                        value={selectedElement.fontSize}
+                      <input id="cert-designer-fontsize" name="fontSize" type="range" min="9" max="48" value={selectedElement.fontSize}
                         onChange={(e) => updateSelectedElement({ fontSize: Number(e.target.value) })}
                         className="w-full accent-blue-600 h-1.5 bg-stone-100 rounded-lg cursor-pointer"
                       />
                     </div>
 
                     <div>
-                      <label className="text-[10px] font-semibold text-stone-500 uppercase block mb-1">
-                        Warna Teks
-                      </label>
+                      <label htmlFor="cert-designer-color-hex" className="text-[10px] font-semibold text-stone-500 uppercase block mb-1">Warna Teks</label>
                       <div className="flex items-center gap-2">
-                        <input
-                          type="color"
-                          value={selectedElement.color || "#1c1917"}
+                        <input id="cert-designer-color-picker" name="colorPicker" type="color" aria-label="Pemilih Warna Teks" value={selectedElement.color || "#1c1917"}
                           onChange={(e) => updateSelectedElement({ color: e.target.value })}
                           className="w-7 h-7 rounded border border-stone-200 p-0 cursor-pointer"
                         />
-                        <input
-                          type="text"
-                          value={selectedElement.color || "#1c1917"}
+                        <input id="cert-designer-color-hex" name="colorHex" type="text" value={selectedElement.color || "#1c1917"}
                           onChange={(e) => updateSelectedElement({ color: e.target.value })}
                           className="flex-1 px-2 py-1 text-xs border border-stone-200 rounded font-mono"
                         />
@@ -708,9 +680,7 @@ export function CertificateDesigner({
                   {/* Alignment & Styles */}
                   <div className="pt-2 border-t border-stone-100 flex items-center justify-between">
                     <div>
-                      <label className="text-[10px] font-semibold text-stone-500 uppercase block mb-1">
-                        Perataan
-                      </label>
+                      <span className="text-[10px] font-semibold text-stone-500 uppercase block mb-1">Perataan</span>
                       <div className="flex items-center border border-stone-200 rounded-lg p-0.5">
                         <button
                           type="button"
@@ -750,9 +720,7 @@ export function CertificateDesigner({
 
                     <div className="flex items-center gap-3">
                       <label className="flex items-center gap-1.5 cursor-pointer text-xs text-stone-700">
-                        <input
-                          type="checkbox"
-                          checked={selectedElement.fontStyle === "italic"}
+                        <input id="cert-designer-italic" name="isItalic" type="checkbox" checked={selectedElement.fontStyle === "italic"}
                           onChange={(e) =>
                             updateSelectedElement({
                               fontStyle: e.target.checked ? "italic" : "normal",
@@ -763,9 +731,7 @@ export function CertificateDesigner({
                         <span>Miring</span>
                       </label>
                       <label className="flex items-center gap-1.5 cursor-pointer text-xs text-stone-700">
-                        <input
-                          type="checkbox"
-                          checked={selectedElement.uppercase || false}
+                        <input id="cert-designer-uppercase" name="isUppercase" type="checkbox" checked={selectedElement.uppercase || false}
                           onChange={(e) => updateSelectedElement({ uppercase: e.target.checked })}
                           className="rounded text-blue-600 focus:ring-blue-500"
                         />
@@ -777,7 +743,7 @@ export function CertificateDesigner({
                   {/* Width / Lebar Kanan-Kiri */}
                   <div className="pt-2 border-t border-stone-100 space-y-2">
                     <div className="flex items-center justify-between">
-                      <label className="text-[10px] font-semibold text-stone-500 uppercase flex items-center gap-1">
+                      <label htmlFor="cert-designer-width" className="text-[10px] font-semibold text-stone-500 uppercase flex items-center gap-1">
                         <Maximize2 size={12} className="text-stone-400" />
                         Lebar Kanan-Kiri (Batas Teks)
                       </label>
@@ -798,12 +764,7 @@ export function CertificateDesigner({
                     </div>
 
                     <div className="space-y-1">
-                      <input
-                        type="range"
-                        min="15"
-                        max="100"
-                        step="1"
-                        value={selectedElement.width || 80}
+                      <input id="cert-designer-width" name="elementWidth" type="range" min="15" max="100" step="1" value={selectedElement.width || 80}
                         onChange={(e) => {
                           const val = Number(e.target.value);
                           updateSelectedElement({ width: val, maxWidth: val });
@@ -888,22 +849,14 @@ export function CertificateDesigner({
                     <div className="grid grid-cols-2 gap-2 text-xs">
                       <div>
                         <span className="text-[10px] text-stone-400 block">Posisi X (% dari kiri)</span>
-                        <input
-                          type="number"
-                          min="0"
-                          max="100"
-                          value={selectedElement.x}
+                        <input id="cert-designer-pos-x" name="posX" aria-label="Posisi Horizontal X" type="number" min="0" max="100" value={selectedElement.x}
                           onChange={(e) => updateSelectedElement({ x: Number(e.target.value) })}
                           className="w-full px-2 py-1 rounded border border-stone-200 bg-white"
                         />
                       </div>
                       <div>
                         <span className="text-[10px] text-stone-400 block">Posisi Y (% dari atas)</span>
-                        <input
-                          type="number"
-                          min="0"
-                          max="100"
-                          value={selectedElement.y}
+                        <input id="cert-designer-pos-y" name="posY" aria-label="Posisi Vertikal Y" type="number" min="0" max="100" value={selectedElement.y}
                           onChange={(e) => updateSelectedElement({ y: Number(e.target.value) })}
                           className="w-full px-2 py-1 rounded border border-stone-200 bg-white"
                         />
@@ -1014,21 +967,12 @@ export function CertificateDesigner({
                   )}
                 </div>
 
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={handleUploadBackground}
-                  accept="image/png,image/jpeg,image/jpg,image/webp"
-                  className="hidden"
-                />
+                <label htmlFor="cert-designer-bg-file" className="sr-only">Unggah Background</label>
+            <input id="cert-designer-bg-file" name="backgroundFile" type="file" ref={fileInputRef} onChange={handleUploadBackground} accept="image/png,image/jpeg,image/jpg,image/webp" className="hidden" />
 
                 {config.backgroundUrl ? (
                   <div className="flex items-center gap-3">
-                    <img
-                      src={config.backgroundUrl}
-                      alt="Background"
-                      className="w-16 h-10 object-cover rounded border border-stone-200"
-                    />
+                    <img src={config.backgroundUrl} alt="Background" width={64} height={40} style={{ aspectRatio: "16 / 10" }} className="w-16 h-10 object-cover rounded border border-stone-200" />
                     <div className="flex-1 min-w-0">
                       <p className="text-[11px] font-semibold text-stone-700 truncate">
                         Template Kustom Terpasang
@@ -1058,19 +1002,13 @@ export function CertificateDesigner({
 
               {/* Background Color */}
               <div>
-                <label className="text-[11px] font-semibold text-stone-700 block mb-1">
-                  Warna Latar Dasar:
-                </label>
+                <label htmlFor="cert-designer-bgcolor-hex" className="text-[11px] font-semibold text-stone-700 block mb-1">Warna Latar Dasar:</label>
                 <div className="flex items-center gap-2">
-                  <input
-                    type="color"
-                    value={config.backgroundColor || "#ffffff"}
+                  <input id="cert-designer-bgcolor-picker" name="bgColorPicker" type="color" aria-label="Pemilih Warna Latar" value={config.backgroundColor || "#ffffff"}
                     onChange={(e) => setConfig((prev) => ({ ...prev, backgroundColor: e.target.value }))}
                     className="w-8 h-8 rounded border border-stone-200 p-0 cursor-pointer"
                   />
-                  <input
-                    type="text"
-                    value={config.backgroundColor || "#ffffff"}
+                  <input id="cert-designer-bgcolor-hex" name="bgColorHex" type="text" value={config.backgroundColor || "#ffffff"}
                     onChange={(e) => setConfig((prev) => ({ ...prev, backgroundColor: e.target.value }))}
                     className="flex-1 px-2.5 py-1.5 text-xs border border-stone-200 rounded-lg font-mono"
                   />
@@ -1080,11 +1018,8 @@ export function CertificateDesigner({
               {/* Border Styles */}
               <div className="grid grid-cols-2 gap-3 pt-2">
                 <div>
-                  <label className="text-[11px] font-semibold text-stone-700 block mb-1">
-                    Gaya Bingkai Border:
-                  </label>
-                  <select
-                    value={config.borderStyle || "none"}
+                  <label htmlFor="cert-designer-borderstyle" className="text-[11px] font-semibold text-stone-700 block mb-1">Gaya Bingkai Border:</label>
+                  <select id="cert-designer-borderstyle" name="borderStyle" value={config.borderStyle || "none"}
                     onChange={(e) => setConfig((prev) => ({ ...prev, borderStyle: e.target.value as any }))}
                     className="w-full px-2.5 py-1.5 rounded-lg border border-stone-200 text-xs bg-white"
                   >
@@ -1097,19 +1032,13 @@ export function CertificateDesigner({
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-semibold text-stone-700 block mb-1">
-                    Warna Border:
-                  </label>
+                  <label htmlFor="cert-designer-bordercolor-hex" className="text-[11px] font-semibold text-stone-700 block mb-1">Warna Border:</label>
                   <div className="flex items-center gap-1.5">
-                    <input
-                      type="color"
-                      value={config.borderColor || "#e2e8f0"}
+                    <input id="cert-designer-bordercolor-picker" name="borderColorPicker" type="color" aria-label="Pemilih Warna Border" value={config.borderColor || "#e2e8f0"}
                       onChange={(e) => setConfig((prev) => ({ ...prev, borderColor: e.target.value }))}
                       className="w-7 h-7 rounded border border-stone-200 p-0 cursor-pointer"
                     />
-                    <input
-                      type="text"
-                      value={config.borderColor || "#e2e8f0"}
+                    <input id="cert-designer-bordercolor-hex" name="borderColorHex" type="text" value={config.borderColor || "#e2e8f0"}
                       onChange={(e) => setConfig((prev) => ({ ...prev, borderColor: e.target.value }))}
                       className="flex-1 px-2 py-1 text-xs border border-stone-200 rounded font-mono"
                     />

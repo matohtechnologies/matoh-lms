@@ -401,7 +401,10 @@ export function Navbar({ user, categories }: NavbarProps) {
                     <img
                       src={currentUser.image}
                       alt={currentUser.name ?? "User"}
-                      className="w-full h-full object-cover"
+                      width={32}
+                      height={32}
+                      style={{ aspectRatio: "1 / 1" }}
+                      className="w-full h-full object-cover aspect-square"
                     />
                   ) : (
                     <span>{currentUser?.name?.[0]?.toUpperCase() ?? "U"}</span>

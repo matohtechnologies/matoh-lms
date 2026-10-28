@@ -31,6 +31,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )}
           <input
             id={inputId}
+            name={props.name ?? inputId}
             ref={ref}
             className={cn(
               "w-full h-10 px-3 text-sm bg-white border rounded-xl transition-all duration-150",
@@ -90,6 +91,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         )}
         <textarea
           id={inputId}
+          name={props.name ?? inputId}
           ref={ref}
           className={cn(
             "w-full px-3 py-2.5 text-sm bg-white border rounded-xl transition-all duration-150",

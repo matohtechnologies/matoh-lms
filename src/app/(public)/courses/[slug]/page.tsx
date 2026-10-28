@@ -333,7 +333,10 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                     <img
                       src={displayCourse.instructor.image}
                       alt={displayCourse.instructor.name || "Instructor"}
-                      className="w-full h-full object-cover"
+                      width={64}
+                      height={64}
+                      style={{ aspectRatio: "1 / 1" }}
+                      className="w-full h-full object-cover aspect-square"
                     />
                   ) : (
                     <span>{displayCourse.instructor.name?.[0]?.toUpperCase()}</span>

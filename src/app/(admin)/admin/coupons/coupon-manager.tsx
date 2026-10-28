@@ -448,8 +448,12 @@ export function CouponManager({
         <div className="relative flex-1">
           <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
+            id="admin-coupons-search"
+            name="search"
+            autoComplete="off"
             type="text"
             placeholder="Cari kode kupon atau email pengguna..."
+            aria-label="Cari kode kupon"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full text-xs pl-9 pr-3 py-2.5 rounded-xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
@@ -461,9 +465,7 @@ export function CouponManager({
           <Filter size={14} className="text-slate-400 shrink-0" />
           
           {/* Target Course Filter */}
-          <select
-            value={courseFilter}
-            onChange={(e) => setCourseFilter(e.target.value)}
+          <select id="coupon-course-filter" name="courseFilter" aria-label="Filter Kupon Kelas" value={courseFilter} onChange={(e) => setCourseFilter(e.target.value)}
             className="text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white font-medium text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20"
           >
             <option value="ALL">Semua Kelas</option>
@@ -476,9 +478,7 @@ export function CouponManager({
           </select>
 
           {/* Status Filter */}
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+          <select id="coupon-status-filter" name="statusFilter" aria-label="Filter Status Kupon" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}
             className="text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white font-medium text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20"
           >
             <option value="ALL">Semua Status</option>
@@ -743,15 +743,12 @@ export function CouponManager({
             <form onSubmit={handleSaveCoupon} className="space-y-4">
               {/* Kode Kupon */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label htmlFor="coupon-code-input" className="block text-xs font-semibold text-slate-700 mb-1">
                   Kode Kupon <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <Ticket size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                  <input
-                    type="text"
-                    required
-                    placeholder="Misal: MATOHPROMO50, VIP-FRONTEND"
+                  <input id="coupon-code-input" name="code" type="text" required placeholder="Misal: MATOHPROMO50, VIP-FRONTEND"
                     value={code}
                     onChange={(e) => setCode(e.target.value.toUpperCase())}
                     className="w-full text-xs font-mono font-bold pl-9 pr-3 py-2.5 rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
@@ -762,12 +759,10 @@ export function CouponManager({
               {/* Tipe & Nilai Diskon */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label htmlFor="coupon-disc-type" className="block text-xs font-semibold text-slate-700 mb-1">
                     Tipe Diskon <span className="text-red-500">*</span>
                   </label>
-                  <select
-                    value={discountType}
-                    onChange={(e) => setDiscountType(e.target.value as "PERCENTAGE" | "FIXED")}
+                  <select id="coupon-disc-type" name="discountType" value={discountType} onChange={(e) => setDiscountType(e.target.value as "PERCENTAGE" | "FIXED")}
                     className="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-300 bg-white font-medium text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="PERCENTAGE">Persentase (%)</option>
@@ -776,15 +771,11 @@ export function CouponManager({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label htmlFor="coupon-disc-value" className="block text-xs font-semibold text-slate-700 mb-1">
                     Besaran Diskon <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <input
-                      type="number"
-                      required
-                      min="1"
-                      placeholder={discountType === "PERCENTAGE" ? "Misal: 50" : "Misal: 50000"}
+                    <input id="coupon-disc-value" name="discountValue" type="number" required min="1" placeholder={discountType === "PERCENTAGE" ? "Misal: 50" : "Misal: 50000"}
                       value={discountValue}
                       onChange={(e) => setDiscountValue(e.target.value)}
                       className="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
@@ -800,26 +791,20 @@ export function CouponManager({
               <div className="grid grid-cols-2 gap-3">
                 {discountType === "PERCENTAGE" ? (
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <label htmlFor="coupon-max-disc" className="block text-xs font-semibold text-slate-700 mb-1">
                       Maksimal Diskon (Rp)
                     </label>
-                    <input
-                      type="number"
-                      placeholder="Opsional, misal: 200000"
-                      value={maxDiscount}
+                    <input id="coupon-max-disc" name="maxDiscount" type="number" placeholder="Opsional, misal: 200000" value={maxDiscount}
                       onChange={(e) => setMaxDiscount(e.target.value)}
                       className="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                 ) : (
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <label htmlFor="coupon-min-buy" className="block text-xs font-semibold text-slate-700 mb-1">
                       Minimal Belanja (Rp)
                     </label>
-                    <input
-                      type="number"
-                      placeholder="Opsional, misal: 100000"
-                      value={minPurchase}
+                    <input id="coupon-min-buy" name="minPurchase" type="number" placeholder="Opsional, misal: 100000" value={minPurchase}
                       onChange={(e) => setMinPurchase(e.target.value)}
                       className="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                     />
@@ -827,14 +812,10 @@ export function CouponManager({
                 )}
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label htmlFor="coupon-max-user" className="block text-xs font-semibold text-slate-700 mb-1">
                     Maksimal Pemakaian / Akun
                   </label>
-                  <input
-                    type="number"
-                    min="1"
-                    placeholder="Default: 1x per akun"
-                    value={maxUsagePerUser}
+                  <input id="coupon-max-user" name="maxUsagePerUser" type="number" min="1" placeholder="Default: 1x per akun" value={maxUsagePerUser}
                     onChange={(e) => setMaxUsagePerUser(e.target.value)}
                     className="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   />
@@ -876,12 +857,10 @@ export function CouponManager({
 
                 {courseTargetType === "SPECIFIC" && (
                   <div className="pt-2 animate-in fade-in">
-                    <label className="block text-[11px] font-semibold text-slate-600 mb-1">
+                    <label htmlFor="coupon-target-course" className="block text-[11px] font-semibold text-slate-600 mb-1">
                       Pilih Kelas yang Berhak Menggunakan Kupon Ini:
                     </label>
-                    <select
-                      value={targetCourseId}
-                      onChange={(e) => setTargetCourseId(e.target.value)}
+                    <select id="coupon-target-course" name="targetCourseId" value={targetCourseId} onChange={(e) => setTargetCourseId(e.target.value)}
                       className="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-300 bg-white font-medium text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                     >
                       {courses.map((c) => (
@@ -933,13 +912,10 @@ export function CouponManager({
                 {userRestrictionType === "RESTRICTED" && (
                   <div className="pt-2 space-y-2 animate-in fade-in">
                     <div>
-                      <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                      <label htmlFor="coupon-allowed-emails" className="block text-[11px] font-semibold text-slate-700 mb-1">
                         Daftar Email User yang Diizinkan (pisahkan dengan koma atau baris baru):
                       </label>
-                      <textarea
-                        rows={3}
-                        required
-                        placeholder="contoh: budi@gmail.com, siti@gmail.com, student@matoh.id"
+                      <textarea id="coupon-allowed-emails" name="allowedEmails" rows={3} required placeholder="contoh: budi@gmail.com, siti@gmail.com, student@matoh.id"
                         value={allowedEmailsInput}
                         onChange={(e) => setAllowedEmailsInput(e.target.value)}
                         className="w-full text-xs font-mono px-3 py-2 rounded-xl border border-purple-300 focus:outline-hidden focus:ring-2 focus:ring-purple-500"
@@ -978,14 +954,10 @@ export function CouponManager({
               {/* Total Kuota & Masa Berlaku */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label htmlFor="coupon-total-max-usage" className="block text-xs font-semibold text-slate-700 mb-1">
                     Total Kuota Klaim
                   </label>
-                  <input
-                    type="number"
-                    min="1"
-                    placeholder="Kosongkan jika bebas"
-                    value={maxUsage}
+                  <input id="coupon-total-max-usage" name="maxUsage" type="number" min="1" placeholder="Kosongkan jika bebas" value={maxUsage}
                     onChange={(e) => setMaxUsage(e.target.value)}
                     className="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   />
@@ -993,12 +965,10 @@ export function CouponManager({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label htmlFor="coupon-expires-at" className="block text-xs font-semibold text-slate-700 mb-1">
                     Batas Waktu Kedaluwarsa
                   </label>
-                  <input
-                    type="datetime-local"
-                    value={expiresAtInput}
+                  <input id="coupon-expires-at" name="expiresAt" type="datetime-local" value={expiresAtInput}
                     onChange={(e) => setExpiresAtInput(e.target.value)}
                     className="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   />
@@ -1012,10 +982,8 @@ export function CouponManager({
                   <span className="text-xs font-semibold text-slate-800">Status Kupon Aktif</span>
                   <p className="text-[10px] text-slate-400">Nonaktifkan untuk sementara jika tidak ingin kupon dipakai</p>
                 </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={isActive}
+                <label htmlFor="coupon-modal-active" className="relative inline-flex items-center cursor-pointer">
+                  <input id="coupon-modal-active" name="isActive" type="checkbox" checked={isActive}
                     onChange={(e) => setIsActive(e.target.checked)}
                     className="sr-only peer"
                   />

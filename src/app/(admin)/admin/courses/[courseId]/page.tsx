@@ -488,13 +488,10 @@ export default function EditCoursePage() {
             />
 
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-stone-700">URL Slug</label>
+              <label htmlFor="edit-course-slug" className="text-sm font-medium text-stone-700">URL Slug</label>
               <div className="flex items-center rounded-xl border border-stone-200 bg-stone-50 px-3 py-2 text-sm text-stone-600">
                 <span className="text-stone-400 select-none mr-1">/courses/</span>
-                <input
-                  type="text"
-                  value={slug}
-                  onChange={(e) => setSlug(e.target.value)}
+                <input id="edit-course-slug" name="slug" type="text" value={slug} onChange={(e) => setSlug(e.target.value)}
                   className="bg-transparent flex-1 focus:outline-none text-stone-800 font-mono text-xs"
                 />
               </div>
@@ -502,10 +499,8 @@ export default function EditCoursePage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-stone-700">Kategori</label>
-                <select
-                  value={categoryId}
-                  onChange={(e) => setCategoryId(e.target.value)}
+                <label htmlFor="edit-course-category" className="text-sm font-medium text-stone-700">Kategori</label>
+                <select id="edit-course-category" name="categoryId" value={categoryId} onChange={(e) => setCategoryId(e.target.value)}
                   className="w-full h-11 px-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                 >
                   {categories.map((c) => (
@@ -517,10 +512,8 @@ export default function EditCoursePage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-stone-700">Tingkat Kesulitan</label>
-                <select
-                  value={level}
-                  onChange={(e) => setLevel(e.target.value as typeof level)}
+                <label htmlFor="edit-course-level" className="text-sm font-medium text-stone-700">Tingkat Kesulitan</label>
+                <select id="edit-course-level" name="level" value={level} onChange={(e) => setLevel(e.target.value as typeof level)}
                   className="w-full h-11 px-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                 >
                   <option value="BEGINNER">Pemula (Beginner)</option>
@@ -563,32 +556,26 @@ export default function EditCoursePage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-stone-700">Harga Normal (IDR)</label>
+                <label htmlFor="edit-course-price" className="text-sm font-medium text-stone-700">Harga Normal (IDR)</label>
                 <div className="relative">
                   <span className="absolute left-3 top-2.5 text-sm font-medium text-stone-400">
                     Rp
                   </span>
-                  <input
-                    type="number"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
+                  <input id="edit-course-price" name="price" type="number" value={price} onChange={(e) => setPrice(e.target.value)}
                     className="w-full h-11 pl-10 pr-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-stone-700">
-                  Harga Diskon (opsional)
-                </label>
+                <label htmlFor="edit-course-discount" className="text-sm font-medium text-stone-700">
+                Harga Diskon (opsional)
+              </label>
                 <div className="relative">
                   <span className="absolute left-3 top-2.5 text-sm font-medium text-stone-400">
                     Rp
                   </span>
-                  <input
-                    type="number"
-                    value={discountPrice}
-                    onChange={(e) => setDiscountPrice(e.target.value)}
+                  <input id="edit-course-discount" name="discountPrice" type="number" value={discountPrice} onChange={(e) => setDiscountPrice(e.target.value)}
                     placeholder="Kosongkan jika tidak ada"
                     className="w-full h-11 pl-10 pr-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                   />
@@ -596,11 +583,8 @@ export default function EditCoursePage() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-stone-700">Durasi (Jam)</label>
-                <input
-                  type="number"
-                  value={duration}
-                  onChange={(e) => setDuration(e.target.value)}
+                <label htmlFor="edit-course-duration" className="text-sm font-medium text-stone-700">Durasi (Jam)</label>
+                <input id="edit-course-duration" name="duration" type="number" value={duration} onChange={(e) => setDuration(e.target.value)}
                   className="w-full h-11 px-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                 />
               </div>
@@ -621,10 +605,7 @@ export default function EditCoursePage() {
             </h2>
             <div className="space-y-3">
               <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={published}
-                  onChange={(e) => setPublished(e.target.checked)}
+                <input id="edit-course-published" name="published" type="checkbox" checked={published} onChange={(e) => setPublished(e.target.checked)}
                   className="w-4 h-4 rounded border-stone-300 text-blue-600 focus:ring-blue-500 accent-blue-600"
                 />
                 <div>
@@ -633,10 +614,7 @@ export default function EditCoursePage() {
                 </div>
               </label>
               <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={featured}
-                  onChange={(e) => setFeatured(e.target.checked)}
+                <input id="edit-course-featured" name="featured" type="checkbox" checked={featured} onChange={(e) => setFeatured(e.target.checked)}
                   className="w-4 h-4 rounded border-stone-300 text-blue-600 focus:ring-blue-500 accent-blue-600"
                 />
                 <div>

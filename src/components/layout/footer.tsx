@@ -47,7 +47,9 @@ export function Footer() {
                   alt="PT. Matoh Technologies Indonesia"
                   width={22}
                   height={22}
-                  className="object-contain"
+                  priority
+              style={{ aspectRatio: "1 / 1" }}
+                  className="object-contain aspect-square"
                 />
               </div>
               <span className="font-bold text-white text-lg" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
@@ -136,14 +138,20 @@ export function Footer() {
               {t("newsletter_desc")}
             </p>
             <form className="flex flex-col gap-2" onSubmit={(e) => e.preventDefault()}>
+              <label htmlFor="newsletter-email" className="sr-only">
+                {t("email_placeholder")}
+              </label>
               <input
+                id="newsletter-email"
+                name="email"
                 type="email"
+                autoComplete="email"
                 placeholder={t("email_placeholder")}
                 className="h-10 px-3 rounded-xl bg-stone-800 border border-stone-700 text-sm text-white placeholder:text-stone-500 focus:outline-none focus:border-blue-500 transition-colors"
               />
               <button
                 type="submit"
-                className="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-colors"
+                className="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-colors cursor-pointer"
               >
                 {t("subscribe")}
               </button>

@@ -189,10 +189,8 @@ export function CourseMediaPicker({
                 : "border-stone-300 hover:border-blue-400 bg-stone-50/50 hover:bg-blue-50/20"
             }`}
           >
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime"
+            <label htmlFor="course-media-upload" className="sr-only">Unggah Media</label>
+            <input id="course-media-upload" name="mediaFile" ref={fileInputRef} type="file" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime"
               className="hidden"
               onChange={(e) => {
                 const file = e.target.files?.[0];
@@ -292,10 +290,7 @@ export function CourseMediaPicker({
               /* If YouTube or normal image */
               <div className="relative w-full h-full">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={previewThumbnail || value}
-                  alt="Preview Banner"
-                  className="w-full h-full object-cover"
+                <img src={previewThumbnail || value} alt="Preview Banner" width={480} height={270} style={{ aspectRatio: "16 / 9" }} className="w-full h-full object-cover aspect-video"
                   onError={(e) => {
                     const img = e.target as HTMLImageElement;
                     if (img.src.includes("maxresdefault.jpg")) {

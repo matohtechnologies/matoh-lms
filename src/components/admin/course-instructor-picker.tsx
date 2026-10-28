@@ -120,15 +120,13 @@ export function CourseInstructorPicker({
 
       {/* 1. Select Instructor */}
       <div className="space-y-2">
-        <label className="text-sm font-medium text-stone-700 flex items-center justify-between">
+        <label htmlFor="course-instructor-select" className="text-sm font-medium text-stone-700 flex items-center justify-between">
           <span>Pilih Instruktur Pengampu</span>
           <span className="text-xs text-blue-600 font-normal">
             {instructors.length} Instruktur Terdaftar
           </span>
         </label>
-        <select
-          value={selectedInstructorId}
-          onChange={(e) => handleInstructorSelect(e.target.value)}
+        <select id="course-instructor-select" name="instructorId" value={selectedInstructorId} onChange={(e) => handleInstructorSelect(e.target.value)}
           className="w-full h-11 px-3.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-medium"
         >
           {instructors.length === 0 ? (
@@ -149,11 +147,7 @@ export function CourseInstructorPicker({
           <div className="flex items-center gap-3.5 min-w-0">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-sky-500 flex items-center justify-center text-white text-base font-bold shrink-0 shadow-xs overflow-hidden ring-2 ring-white">
               {currentInstructor.image ? (
-                <img
-                  src={currentInstructor.image}
-                  alt={currentInstructor.name || "Instructor"}
-                  className="w-full h-full object-cover"
-                />
+                <img src={currentInstructor.image} alt={currentInstructor.name || "Instructor"} width={48} height={48} style={{ aspectRatio: "1 / 1" }} className="w-full h-full object-cover aspect-square" />
               ) : (
                 <span>{(currentInstructor.name || "A")[0].toUpperCase()}</span>
               )}
@@ -188,17 +182,12 @@ export function CourseInstructorPicker({
       {/* 3. Headline / Title Input */}
       <div className="space-y-1.5">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-stone-700">
-            Jabatan / Gelar / Headline Instruktur
-          </label>
+          <label htmlFor="course-instructor-headline" className="text-sm font-medium text-stone-700">Jabatan / Gelar / Headline Instruktur</label>
           <span className="text-[11px] text-stone-400">
             Tampil di bawah nama instruktur (berwarna biru)
           </span>
         </div>
-        <input
-          type="text"
-          value={instructorHeadline}
-          onChange={(e) => onHeadlineChange(e.target.value)}
+        <input id="course-instructor-headline" name="instructorHeadline" type="text" value={instructorHeadline} onChange={(e) => onHeadlineChange(e.target.value)}
           placeholder="Contoh: Lead Instructor & RnD Director / Pakar MCDM & Analisis Keputusan"
           className="w-full h-11 px-3.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
         />
@@ -207,17 +196,12 @@ export function CourseInstructorPicker({
       {/* 4. Bio / About Textarea */}
       <div className="space-y-1.5">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-stone-700">
-            Biografi / Tentang Instruktur (Khusus Kelas Ini)
-          </label>
+          <label htmlFor="course-instructor-bio" className="text-sm font-medium text-stone-700">Biografi / Tentang Instruktur (Khusus Kelas Ini)</label>
           <span className="text-[11px] text-stone-400">
             Mendukung teks multi-baris
           </span>
         </div>
-        <textarea
-          rows={4}
-          value={instructorBio}
-          onChange={(e) => onBioChange(e.target.value)}
+        <textarea id="course-instructor-bio" name="instructorBio" rows={4} value={instructorBio} onChange={(e) => onBioChange(e.target.value)}
           placeholder="Tuliskan pengalaman industri, sertifikasi internasional, atau capaian instruktur yang relevan dengan topik kelas ini..."
           className="w-full p-3.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 leading-relaxed font-sans"
         />

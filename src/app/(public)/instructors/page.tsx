@@ -185,7 +185,9 @@ export default async function InstructorsPage() {
               alt="Matoh Technologies"
               width={16}
               height={16}
-              className="object-contain"
+              priority
+              style={{ aspectRatio: "1 / 1" }}
+              className="object-contain aspect-square"
             />
             {isEn ? "Distinguished Faculty & Practitioners" : "Dewan Pengajar & Tim Ahli"}
           </div>
@@ -283,7 +285,8 @@ export default async function InstructorsPage() {
                               src={instructor.image}
                               alt={instructor.name}
                               fill
-                              className="object-cover"
+                              style={{ aspectRatio: "1 / 1" }}
+                              className="object-cover aspect-square"
                             />
                           </div>
                         ) : (

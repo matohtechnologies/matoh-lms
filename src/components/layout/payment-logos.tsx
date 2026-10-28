@@ -9,6 +9,9 @@ export function QrisLogo({ className = "h-6 w-auto" }: { className?: string }) {
         src="/images/qris-logo-white.png"
         alt="QRIS"
         decoding="async"
+        width={60}
+        height={24}
+        style={{ aspectRatio: "5 / 2" }}
         className="h-full w-auto object-contain transition-opacity duration-200 group-hover:opacity-0"
       />
       <img
@@ -16,6 +19,9 @@ export function QrisLogo({ className = "h-6 w-auto" }: { className?: string }) {
         alt=""
         aria-hidden="true"
         decoding="async"
+        width={60}
+        height={24}
+        style={{ aspectRatio: "5 / 2" }}
         className="absolute inset-0 m-auto h-full w-auto object-contain opacity-0 transition-opacity duration-200 group-hover:opacity-100 pointer-events-none"
       />
     </span>
@@ -29,6 +35,9 @@ export function BcaLogo({ className = "h-6 w-auto" }: { className?: string }) {
         src="/images/bca-logo-white.png"
         alt="Bank BCA"
         decoding="async"
+        width={60}
+        height={24}
+        style={{ aspectRatio: "5 / 2" }}
         className="h-full w-auto object-contain transition-opacity duration-200 group-hover:opacity-0"
       />
       <img
@@ -36,6 +45,9 @@ export function BcaLogo({ className = "h-6 w-auto" }: { className?: string }) {
         alt=""
         aria-hidden="true"
         decoding="async"
+        width={60}
+        height={24}
+        style={{ aspectRatio: "5 / 2" }}
         className="absolute inset-0 m-auto h-full w-auto object-contain opacity-0 transition-opacity duration-200 group-hover:opacity-100 pointer-events-none"
       />
     </span>
@@ -49,6 +61,9 @@ export function MandiriLogo({ className = "h-6 w-auto" }: { className?: string }
         src="/images/mandiri-logo-white.png"
         alt="Bank Mandiri"
         decoding="async"
+        width={60}
+        height={24}
+        style={{ aspectRatio: "5 / 2" }}
         className="h-full w-auto object-contain transition-opacity duration-200 group-hover:opacity-0"
       />
       <img
@@ -56,6 +71,9 @@ export function MandiriLogo({ className = "h-6 w-auto" }: { className?: string }
         alt=""
         aria-hidden="true"
         decoding="async"
+        width={60}
+        height={24}
+        style={{ aspectRatio: "5 / 2" }}
         className="absolute inset-0 m-auto h-full w-auto object-contain opacity-0 transition-opacity duration-200 group-hover:opacity-100 pointer-events-none"
       />
     </span>
@@ -69,6 +87,9 @@ export function BniLogo({ className = "h-6 w-auto" }: { className?: string }) {
         src="/images/bni-logo-white.png"
         alt="Bank BNI"
         decoding="async"
+        width={60}
+        height={24}
+        style={{ aspectRatio: "5 / 2" }}
         className="h-full w-auto object-contain transition-opacity duration-200 group-hover:opacity-0"
       />
       <img
@@ -76,6 +97,9 @@ export function BniLogo({ className = "h-6 w-auto" }: { className?: string }) {
         alt=""
         aria-hidden="true"
         decoding="async"
+        width={60}
+        height={24}
+        style={{ aspectRatio: "5 / 2" }}
         className="absolute inset-0 m-auto h-full w-auto object-contain opacity-0 transition-opacity duration-200 group-hover:opacity-100 pointer-events-none"
       />
     </span>
@@ -89,6 +113,9 @@ export function BriLogo({ className = "h-6 w-auto" }: { className?: string }) {
         src="/images/bri-logo-white.png?v=2"
         alt="Bank BRI"
         decoding="async"
+        width={60}
+        height={24}
+        style={{ aspectRatio: "5 / 2" }}
         className="h-full w-auto object-contain transition-opacity duration-200 group-hover:opacity-0"
       />
       <img
@@ -96,6 +123,9 @@ export function BriLogo({ className = "h-6 w-auto" }: { className?: string }) {
         alt=""
         aria-hidden="true"
         decoding="async"
+        width={60}
+        height={24}
+        style={{ aspectRatio: "5 / 2" }}
         className="absolute inset-0 m-auto h-full w-auto object-contain opacity-0 transition-opacity duration-200 group-hover:opacity-100 pointer-events-none"
       />
     </span>
@@ -109,6 +139,9 @@ export function GopayLogo({ className = "h-6 w-auto" }: { className?: string }) 
         src="/images/gopay-logo-white.png"
         alt="GoPay"
         decoding="async"
+        width={60}
+        height={24}
+        style={{ aspectRatio: "5 / 2" }}
         className="h-full w-auto object-contain transition-opacity duration-200 group-hover:opacity-0"
       />
       <img
@@ -116,6 +149,9 @@ export function GopayLogo({ className = "h-6 w-auto" }: { className?: string }) 
         alt=""
         aria-hidden="true"
         decoding="async"
+        width={60}
+        height={24}
+        style={{ aspectRatio: "5 / 2" }}
         className="absolute inset-0 m-auto h-full w-auto object-contain opacity-0 transition-opacity duration-200 group-hover:opacity-100 pointer-events-none"
       />
     </span>
@@ -129,6 +165,9 @@ export function OvoLogo({ className = "h-6 w-auto" }: { className?: string }) {
         src="/images/ovo-logo-white.png"
         alt="OVO"
         decoding="async"
+        width={60}
+        height={24}
+        style={{ aspectRatio: "5 / 2" }}
         className="h-full w-auto object-contain transition-opacity duration-200 group-hover:opacity-0"
       />
       <img
@@ -136,6 +175,9 @@ export function OvoLogo({ className = "h-6 w-auto" }: { className?: string }) {
         alt=""
         aria-hidden="true"
         decoding="async"
+        width={60}
+        height={24}
+        style={{ aspectRatio: "5 / 2" }}
         className="absolute inset-0 m-auto h-full w-auto object-contain opacity-0 transition-opacity duration-200 group-hover:opacity-100 pointer-events-none"
       />
     </span>
@@ -149,6 +191,9 @@ export function DanaLogo({ className = "h-6 w-auto" }: { className?: string }) {
         src="/images/dana-logo-white.png"
         alt="DANA"
         decoding="async"
+        width={60}
+        height={24}
+        style={{ aspectRatio: "5 / 2" }}
         className="h-full w-auto object-contain transition-opacity duration-200 group-hover:opacity-0"
       />
       <img
@@ -156,6 +201,9 @@ export function DanaLogo({ className = "h-6 w-auto" }: { className?: string }) {
         alt=""
         aria-hidden="true"
         decoding="async"
+        width={60}
+        height={24}
+        style={{ aspectRatio: "5 / 2" }}
         className="absolute inset-0 m-auto h-full w-auto object-contain opacity-0 transition-opacity duration-200 group-hover:opacity-100 pointer-events-none"
       />
     </span>
@@ -169,6 +217,9 @@ export function VisaLogo({ className = "h-6 w-auto" }: { className?: string }) {
         src="/images/visa-logo-white.png"
         alt="Visa"
         decoding="async"
+        width={60}
+        height={24}
+        style={{ aspectRatio: "5 / 2" }}
         className="h-full w-auto object-contain transition-opacity duration-200 group-hover:opacity-0"
       />
       <img
@@ -176,6 +227,9 @@ export function VisaLogo({ className = "h-6 w-auto" }: { className?: string }) {
         alt=""
         aria-hidden="true"
         decoding="async"
+        width={60}
+        height={24}
+        style={{ aspectRatio: "5 / 2" }}
         className="absolute inset-0 m-auto h-full w-auto object-contain opacity-0 transition-opacity duration-200 group-hover:opacity-100 pointer-events-none"
       />
     </span>
@@ -189,6 +243,9 @@ export function MastercardLogo({ className = "h-6 w-auto" }: { className?: strin
         src="/images/mastercard-logo-white.png"
         alt="Mastercard"
         decoding="async"
+        width={60}
+        height={24}
+        style={{ aspectRatio: "5 / 2" }}
         className="h-full w-auto object-contain transition-opacity duration-200 group-hover:opacity-0"
       />
       <img
@@ -196,6 +253,9 @@ export function MastercardLogo({ className = "h-6 w-auto" }: { className?: strin
         alt=""
         aria-hidden="true"
         decoding="async"
+        width={60}
+        height={24}
+        style={{ aspectRatio: "5 / 2" }}
         className="absolute inset-0 m-auto h-full w-auto object-contain opacity-0 transition-opacity duration-200 group-hover:opacity-100 pointer-events-none"
       />
     </span>
@@ -209,6 +269,9 @@ export function MidtransLogo({ className = "h-6 w-auto" }: { className?: string 
         src="/images/midtrans-logo-white.png"
         alt="Midtrans"
         decoding="async"
+        width={60}
+        height={24}
+        style={{ aspectRatio: "5 / 2" }}
         className="h-full w-auto object-contain transition-opacity duration-200 group-hover:opacity-0"
       />
       <img
@@ -216,6 +279,9 @@ export function MidtransLogo({ className = "h-6 w-auto" }: { className?: string 
         alt=""
         aria-hidden="true"
         decoding="async"
+        width={60}
+        height={24}
+        style={{ aspectRatio: "5 / 2" }}
         className="absolute inset-0 m-auto h-full w-auto object-contain opacity-0 transition-opacity duration-200 group-hover:opacity-100 pointer-events-none"
       />
     </span>

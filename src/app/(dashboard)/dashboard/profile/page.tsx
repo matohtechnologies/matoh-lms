@@ -275,8 +275,13 @@ export default function ProfilePage() {
             <div className="h-20 bg-gradient-to-r from-blue-100 via-sky-50 to-blue-50 -mt-6 -mx-6 mb-5 border-b border-blue-100/60" />
 
             <div className="relative inline-block -mt-14 mb-2">
+              <label htmlFor="profile-avatar-upload" className="sr-only">
+                {isEn ? "Upload Profile Avatar" : "Unggah Foto Profil"}
+              </label>
               <input
                 ref={fileInputRef}
+                id="profile-avatar-upload"
+                name="avatarFile"
                 type="file"
                 accept="image/jpeg,image/png,image/webp,image/gif"
                 onChange={handleAvatarChange}
@@ -292,7 +297,10 @@ export default function ProfilePage() {
                   <img
                     src={avatarUrl}
                     alt={session?.user?.name || "Avatar"}
-                    className="w-full h-full object-cover"
+                    width={96}
+                    height={96}
+                    style={{ aspectRatio: "1 / 1" }}
+                    className="w-full h-full object-cover aspect-square"
                   />
                 ) : (
                   <span>{session?.user?.name?.[0]?.toUpperCase() ?? <User size={32} />}</span>
@@ -435,7 +443,9 @@ export default function ProfilePage() {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
               <div>
                 <Input
+                  id="profile-name"
                   label={t("full_name")}
+                  autoComplete="name"
                   placeholder={t("name_placeholder")}
                   error={errors.name?.message}
                   {...register("name")}
@@ -446,9 +456,17 @@ export default function ProfilePage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-sm font-semibold text-stone-700">Email</label>
+                <label htmlFor="profile-email-readonly" className="text-sm font-semibold text-stone-700">Email</label>
                 <div className="h-10 px-3.5 rounded-xl border border-stone-200 bg-stone-50/80 flex items-center text-sm text-stone-600 justify-between">
-                  <span className="font-mono text-xs text-stone-700">{session?.user?.email}</span>
+                  <input
+                    id="profile-email-readonly"
+                    name="email"
+                    autoComplete="email"
+                    type="email"
+                    readOnly
+                    value={session?.user?.email || ""}
+                    className="font-mono text-xs text-stone-700 bg-transparent border-none outline-none flex-1"
+                  />
                   <span className="text-[10px] font-semibold bg-stone-200/70 text-stone-600 px-2 py-0.5 rounded-md">
                     {t("email_readonly")}
                   </span>
@@ -456,7 +474,9 @@ export default function ProfilePage() {
               </div>
 
               <Textarea
+                id="profile-bio"
                 label="Bio"
+                autoComplete="off"
                 placeholder={t("bio_placeholder")}
                 error={errors.bio?.message}
                 hint={t("bio_hint")}
@@ -513,6 +533,7 @@ export default function ProfilePage() {
               <Input
                 label={t("old_password")}
                 type="password"
+                autoComplete="current-password"
                 placeholder="••••••••"
                 error={pwdErrors.oldPassword?.message}
                 {...registerPwd("oldPassword")}
@@ -521,6 +542,7 @@ export default function ProfilePage() {
                 <Input
                   label={t("new_password")}
                   type="password"
+                  autoComplete="new-password"
                   placeholder="••••••••"
                   error={pwdErrors.newPassword?.message}
                   hint={t("new_password_hint")}
@@ -529,6 +551,7 @@ export default function ProfilePage() {
                 <Input
                   label={t("confirm_password")}
                   type="password"
+                  autoComplete="new-password"
                   placeholder="••••••••"
                   error={pwdErrors.confirmPassword?.message}
                   {...registerPwd("confirmPassword")}
