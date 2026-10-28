@@ -64,6 +64,12 @@ jobs:
             cp -a public .next/standalone/public
           fi
 
+          # Sertakan folder prisma untuk sinkronisasi database di VPS
+          rm -rf .next/standalone/prisma
+          if [ -d prisma ]; then
+            cp -a prisma .next/standalone/prisma
+          fi
+
           test -f .next/standalone/.next/BUILD_ID
           test -f .next/standalone/public/gambar-heading.svg
 
@@ -143,6 +149,12 @@ jobs:
             ln -sfn "$BASE/.env" "$RELEASE/.env"
           elif [ -f "$BASE/shared/.env" ]; then
             ln -sfn "$BASE/shared/.env" "$RELEASE/.env"
+          fi
+
+          # Sinkronisasi database PostgreSQL VPS otomatis jika ada perubahan model Prisma
+          if [ -f "$RELEASE/prisma/schema.prisma" ]; then
+            echo "Menjalankan prisma db push untuk sinkronisasi tabel PostgreSQL..."
+            npx --yes prisma db push --schema="$RELEASE/prisma/schema.prisma" --skip-generate --accept-data-loss || true
           fi
 
           chown -R lmsapp:lmsapp "$RELEASE"
