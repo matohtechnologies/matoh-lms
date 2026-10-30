@@ -81,7 +81,7 @@ export default function ForgotPasswordPage() {
           <Link href="/" className="inline-flex items-center gap-2.5 mb-6 group">
             <div className="w-10 h-10 rounded-xl bg-white border border-stone-200/80 shadow-2xs flex items-center justify-center p-2 group-hover:border-blue-400 group-hover:shadow-xs transition-all">
               <Image
-                src="/images/matoh-logo.png"
+                src="/images/matoh-logo-v2.png"
                 alt="Matoh Technologies"
                 width={26}
                 height={26}
@@ -93,7 +93,7 @@ export default function ForgotPasswordPage() {
               className="font-bold text-stone-900 text-xl"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
-              Matoh<span className="text-blue-600">Technologies</span>
+              Matoh<span className="text-[#2C7E8C]">Technologies</span>
             </span>
           </Link>
           <h1

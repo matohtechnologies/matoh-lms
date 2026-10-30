@@ -195,7 +195,7 @@ export function HeroInteractiveShowcase({ isEn, studentCount = 0 }: HeroInteract
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center p-1.5 shadow-2xs">
                   <Image
-                    src="/images/matoh-logo.png"
+                    src="/images/matoh-logo-v2.png"
                     alt="Matoh Technologies"
                     width={26}
                     height={26}

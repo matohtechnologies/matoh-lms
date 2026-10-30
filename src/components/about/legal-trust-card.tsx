@@ -29,7 +29,7 @@ export function LegalTrustCard({ locale = "id" }: LegalTrustCardProps) {
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-2xl bg-white p-2 flex items-center justify-center shrink-0 shadow-sm">
             <Image
-              src="/images/matoh-logo.png"
+              src="/images/matoh-logo-v2.png"
               alt="PT. Matoh Technologies Indonesia"
               width={30}
               height={30}

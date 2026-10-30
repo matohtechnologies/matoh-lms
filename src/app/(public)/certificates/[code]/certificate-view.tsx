@@ -360,7 +360,7 @@ export function CertificateView({
                 <div className="flex flex-col items-center justify-center mb-6 print:mb-3">
                   <div className="w-14 h-14 rounded-2xl bg-white border border-stone-200/90 flex items-center justify-center shadow-md p-2.5 mb-3 print:mb-1.5 print:w-11 print:h-11">
                     <Image
-                      src="/images/matoh-logo.png"
+                      src="/images/matoh-logo-v2.png"
                       alt={issuerName}
                       width={38}
                       height={38}

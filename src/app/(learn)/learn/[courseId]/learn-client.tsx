@@ -913,7 +913,7 @@ export default function LearnPageClient({
           <Link href="/" className="flex items-center gap-2 mb-3 group">
             <div className="w-7 h-7 rounded-lg bg-stone-800 border border-stone-700/80 flex items-center justify-center p-1 group-hover:border-stone-600 transition-colors">
               <Image
-                src="/images/matoh-logo-white.png"
+                src="/images/matoh-logo-white-v2.png"
                 alt="Matoh Technologies"
                 width={18}
                 height={18}
@@ -923,7 +923,7 @@ export default function LearnPageClient({
               />
             </div>
             <span className="text-sm font-bold text-white tracking-tight">
-              Matoh<span className="text-blue-400">Technologies</span>
+              Matoh<span className="text-teal-400">Technologies</span>
             </span>
           </Link>
           <h2 className="text-sm font-bold text-stone-100 leading-snug line-clamp-2" title={course.title}>

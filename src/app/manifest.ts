@@ -12,13 +12,13 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: "#0e7485",
     icons: [
       {
-        src: "/images/matoh-logo.png",
+        src: "/images/matoh-logo-v2.png",
         sizes: "192x192",
         type: "image/png",
         purpose: "any",
       },
       {
-        src: "/images/matoh-logo.png",
+        src: "/images/matoh-logo-v2.png",
         sizes: "512x512",
         type: "image/png",
         purpose: "maskable",

@@ -43,17 +43,17 @@ export function Footer() {
             <Link href="/" className="flex items-center gap-2.5 mb-4 group">
               <div className="w-8 h-8 rounded-xl bg-stone-800 flex items-center justify-center p-1.5 transition-colors">
                 <Image
-                  src="/images/matoh-logo-white.png"
+                  src="/images/matoh-logo-white-v2.png"
                   alt="PT. Matoh Technologies Indonesia"
                   width={22}
                   height={22}
                   priority
-              style={{ aspectRatio: "1 / 1" }}
+                  style={{ aspectRatio: "1 / 1" }}
                   className="object-contain aspect-square"
                 />
               </div>
               <span className="font-bold text-white text-lg" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
-                Matoh<span className="text-blue-400">Technologies</span>
+                Matoh<span className="text-teal-400">Technologies</span>
               </span>
             </Link>
             <p className="text-xs leading-relaxed text-stone-400 mb-3">
@@ -159,36 +159,25 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Payment & Security Trust Bar (Minimalist Borderless Monochrome) */}
-        <div className="mt-12 pt-8 border-t border-stone-800/80 grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
-          {/* Payment Methods */}
-          <div className="space-y-2.5">
-            <p className="text-[11px] font-medium uppercase tracking-wider text-stone-400 flex items-center gap-1.5">
+        {/* Payment & Security Trust Section */}
+        <div className="mt-12 pt-8 border-t border-stone-800/80 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-stone-400 flex items-center gap-1.5">
               <span>{t("payment_methods_title")}</span>
             </p>
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-1">
-              {PAYMENT_METHODS.map(({ name, component: Component }) => (
-                <div
-                  key={name}
-                  className="group opacity-50 hover:opacity-100 hover:scale-105 transition-transform transition-opacity duration-200 cursor-pointer select-none"
-                  title={t("payment_method_item", { name })}
-                >
-                  <Component className="h-6 sm:h-7 w-auto" />
-                </div>
-              ))}
-            </div>
           </div>
 
-          {/* Security & Legal Standing */}
-          <div className="flex flex-wrap items-center lg:justify-end gap-5 text-xs text-stone-400">
-            <div className="flex items-center gap-1.5 text-stone-400 hover:text-stone-200 transition-colors">
-              <Lock size={13} className="text-stone-400 shrink-0" />
-              <span className="text-[11px] font-medium">{t("ssl_encrypted")}</span>
-            </div>
-            <div className="flex items-center gap-1.5 text-stone-400 hover:text-stone-200 transition-colors">
-              <ShieldCheck size={13} className="text-stone-400 shrink-0" />
-              <span className="text-[11px] font-medium">{t("legal_ahu")}</span>
-            </div>
+          {/* Payment Methods (Borderless) */}
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3.5 sm:gap-x-7 sm:gap-y-4 pt-1">
+            {PAYMENT_METHODS.map(({ name, component: Component, opticalHeight }) => (
+              <div
+                key={name}
+                className="group flex items-center justify-center shrink-0 cursor-pointer select-none transition-transform duration-200 hover:scale-105"
+                title={t("payment_method_item", { name })}
+              >
+                <Component className={`${opticalHeight} w-auto`} />
+              </div>
+            ))}
           </div>
         </div>
 

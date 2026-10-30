@@ -45,9 +45,9 @@ export const metadata: Metadata = {
     follow: true,
   },
   icons: {
-    icon: "/images/matoh-logo.png",
-    shortcut: "/images/matoh-logo.png",
-    apple: "/images/matoh-logo.png",
+    icon: "/images/matoh-logo-v2.png",
+    shortcut: "/images/matoh-logo-v2.png",
+    apple: "/images/matoh-logo-v2.png",
   },
 };
 

@@ -36,7 +36,7 @@ export default async function AdminLayout({
         <Link href="/" className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-xl bg-white border border-slate-200/80 shadow-2xs flex items-center justify-center p-1">
             <Image
-              src="/images/matoh-logo.png"
+              src="/images/matoh-logo-v2.png"
               alt="Matoh Technologies"
               width={20}
               height={20}
@@ -93,7 +93,7 @@ export default async function AdminLayout({
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="w-9 h-9 rounded-xl bg-white border border-slate-200/80 shadow-2xs flex items-center justify-center p-1.5 group-hover:border-blue-400 group-hover:scale-105 transition-all">
               <Image
-                src="/images/matoh-logo.png"
+                src="/images/matoh-logo-v2.png"
                 alt="Matoh Technologies"
                 width={24}
                 height={24}
@@ -107,7 +107,7 @@ export default async function AdminLayout({
                 className="font-bold text-slate-900 text-sm block leading-tight"
                 style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
               >
-                Matoh<span className="text-blue-600">Technologies</span>
+                Matoh<span className="text-[#2C7E8C]">Technologies</span>
               </span>
               <span className="inline-block text-[10px] text-blue-700 font-bold uppercase tracking-wider bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200/60 mt-0.5">
                 Admin Console

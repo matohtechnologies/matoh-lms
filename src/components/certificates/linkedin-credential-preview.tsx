@@ -43,13 +43,13 @@ export function LinkedInCredentialPreview({
           {/* Company Logo in LinkedIn style */}
           <div className="w-12 h-12 rounded-xl bg-white border border-stone-200/90 p-1.5 flex items-center justify-center shrink-0 shadow-2xs">
             <Image
-              src="/images/matoh-logo-white.png"
+              src="/images/matoh-logo-v2.png"
               alt="PT. Matoh Technologies Indonesia"
               width={32}
               height={32}
               priority
               style={{ aspectRatio: "1 / 1" }}
-              className="object-contain invert aspect-square"
+              className="object-contain aspect-square"
             />
           </div>
 

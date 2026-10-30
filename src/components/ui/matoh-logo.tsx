@@ -21,8 +21,8 @@ export function MatohLogo({
 }: MatohLogoProps) {
   const src =
     variant === "white"
-      ? "/images/matoh-logo-white.png"
-      : "/images/matoh-logo.png";
+      ? "/images/matoh-logo-white-v2.png"
+      : "/images/matoh-logo-v2.png";
 
   return (
     <div className={cn("inline-flex items-center gap-2.5", className)}>
@@ -43,7 +43,7 @@ export function MatohLogo({
           style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
         >
           Matoh
-          <span className={variant === "white" ? "text-blue-400" : "text-blue-600"}>
+          <span className={variant === "white" ? "text-teal-400" : "text-[#2C7E8C]"}>
             Technologies
           </span>
         </span>

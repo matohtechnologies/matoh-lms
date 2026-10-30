@@ -158,23 +158,20 @@ export function Navbar({ user, categories }: NavbarProps) {
     >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between gap-2 xl:gap-4">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
-          <div className="w-9 h-9 rounded-xl bg-white shadow-2xs flex items-center justify-center p-1.5 group-hover:shadow-xs transition-all">
-            <Image
-              src="/images/matoh-logo.png"
-              alt="PT. Matoh Technologies Indonesia"
-              width={24}
-              height={24}
-              className="object-contain"
-              priority
-            />
-          </div>
-          <span
-            className="font-bold text-stone-900 text-lg sm:text-xl tracking-tight"
-            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
-          >
-            Matoh<span className="text-blue-600">Technologies</span>
-          </span>
+        <Link
+          href="/"
+          className="flex items-center shrink-0 group py-1"
+          aria-label="PT. Matoh Technologies Indonesia"
+        >
+          <Image
+            src="/images/matoh-logo-v2.png"
+            alt="PT. Matoh Technologies Indonesia"
+            width={44}
+            height={44}
+            priority
+            style={{ aspectRatio: "1 / 1" }}
+            className="h-10 w-10 sm:h-11 sm:w-11 object-contain transition-transform duration-200 group-hover:scale-105 aspect-square"
+          />
         </Link>
 
         {/* Desktop Nav Links */}

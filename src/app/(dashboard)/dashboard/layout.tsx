@@ -44,7 +44,7 @@ export default async function DashboardLayout({
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="w-8 h-8 rounded-lg bg-white border border-slate-200/80 shadow-2xs flex items-center justify-center p-1 group-hover:border-blue-400 group-hover:scale-105 transition-all">
               <Image
-                src="/images/matoh-logo.png"
+                src="/images/matoh-logo-v2.png"
                 alt="Matoh Technologies"
                 width={22}
                 height={22}
@@ -57,7 +57,7 @@ export default async function DashboardLayout({
               className="font-bold text-slate-900 text-base"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
-              Matoh<span className="text-blue-600">Technologies</span>
+              Matoh<span className="text-[#2C7E8C]">Technologies</span>
             </span>
           </Link>
         </div>
@@ -132,7 +132,7 @@ export default async function DashboardLayout({
           <Link href="/" className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-lg bg-white border border-slate-200/80 shadow-2xs flex items-center justify-center p-0.5">
               <Image
-                src="/images/matoh-logo.png"
+                src="/images/matoh-logo-v2.png"
                 alt="Matoh Technologies"
                 width={18}
                 height={18}
@@ -145,7 +145,7 @@ export default async function DashboardLayout({
               className="font-bold text-slate-900 text-sm"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
-              Matoh<span className="text-blue-600">Technologies</span>
+              Matoh<span className="text-[#2C7E8C]">Technologies</span>
             </span>
           </Link>
           <div className="flex items-center gap-2">

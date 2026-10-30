@@ -29,7 +29,7 @@ export default async function HelpPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200/90 text-slate-800 text-xs font-bold mb-6 shadow-2xs">
             <Image
-              src="/images/matoh-logo.png"
+              src="/images/matoh-logo-v2.png"
               alt="Matoh Technologies"
               width={16}
               height={16}
