@@ -172,9 +172,9 @@ export function DashboardCoursesClient({
     sortBy !== "popular";
 
   return (
-    <div className="space-y-6">
-      {/* ── Minimalist Clean Header (Sesuai Standar Dashboard Matoh) ─────────────── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-stone-200/60">
+    <div className="space-y-5 sm:space-y-6">
+      {/* ── Minimalist Clean Header (Fully Responsive) ─────────────── */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 pb-2 border-b border-stone-200/60">
         <div>
           <h1
             className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight"
@@ -213,10 +213,10 @@ export function DashboardCoursesClient({
         </div>
       </div>
 
-      {/* ── Search & Filter Controls (Clean & Subtle) ─────────────────────────── */}
-      <div className="bg-white rounded-2xl border border-stone-200/80 p-4 shadow-2xs space-y-3">
+      {/* ── Search & Filter Controls (Responsive Grid/Flex) ─────────────────────────── */}
+      <div className="bg-white rounded-2xl border border-stone-200/80 p-3.5 sm:p-4 shadow-2xs space-y-3">
         {/* Row 1: Search & Dropdown Filters */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-2.5">
           {/* Search Box */}
           <div className="relative flex-1">
             <Search
@@ -241,12 +241,13 @@ export function DashboardCoursesClient({
             )}
           </div>
 
-          {/* Level Filter */}
-          <div className="flex items-center gap-2">
+          {/* Dropdown Filters (Grid on mobile, flex on desktop) */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            {/* Level Filter */}
             <select
               value={selectedLevel}
               onChange={(e) => setSelectedLevel(e.target.value)}
-              className="h-9 px-3 rounded-xl border border-stone-200 bg-white text-xs font-medium text-stone-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="w-full h-9 px-2.5 sm:px-3 rounded-xl border border-stone-200 bg-white text-xs font-medium text-stone-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
             >
               <option value="ALL">{isEn ? "All Levels" : "Semua Tingkat"}</option>
               <option value="BEGINNER">{isEn ? "Beginner" : "Pemula"}</option>
@@ -258,7 +259,7 @@ export function DashboardCoursesClient({
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="h-9 px-3 rounded-xl border border-stone-200 bg-white text-xs font-medium text-stone-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="w-full h-9 px-2.5 sm:px-3 rounded-xl border border-stone-200 bg-white text-xs font-medium text-stone-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
             >
               <option value="ALL">{isEn ? "All Status" : "Semua Status"}</option>
               <option value="NOT_ENROLLED">{isEn ? "Ready to Buy" : "Belum Dimiliki"}</option>
@@ -269,7 +270,7 @@ export function DashboardCoursesClient({
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="h-9 px-3 rounded-xl border border-stone-200 bg-white text-xs font-medium text-stone-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="col-span-2 sm:col-span-1 w-full h-9 px-2.5 sm:px-3 rounded-xl border border-stone-200 bg-white text-xs font-medium text-stone-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
             >
               <option value="popular">{isEn ? "Most Popular" : "Paling Populer"}</option>
               <option value="rating">{isEn ? "Rating" : "Rating Tertinggi"}</option>
@@ -280,7 +281,7 @@ export function DashboardCoursesClient({
         </div>
 
         {/* Row 2: Category Filter Tabs */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-none pt-1">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none pt-1">
           <button
             type="button"
             onClick={() => setSelectedCategory("ALL")}
@@ -320,9 +321,9 @@ export function DashboardCoursesClient({
         </div>
       </div>
 
-      {/* ── Course Grid ─────────────────────────── */}
+      {/* ── Course Grid (Fully Responsive: 1 col on mobile, 2 on tablet, 3 on desktop) ─────────────────────────── */}
       {filteredCourses.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-stone-200/80 p-12 text-center shadow-2xs">
+        <div className="bg-white rounded-2xl border border-stone-200/80 p-8 sm:p-12 text-center shadow-2xs">
           <div className="w-12 h-12 rounded-xl bg-stone-100 text-stone-400 flex items-center justify-center mx-auto mb-3">
             <BookOpen size={22} />
           </div>
@@ -347,7 +348,7 @@ export function DashboardCoursesClient({
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5">
           {filteredCourses.map((course) => {
             const isEnrolled = enrolledSet.has(course.id);
             const isPending = pendingSet.has(course.id);
@@ -420,7 +421,7 @@ export function DashboardCoursesClient({
                 </div>
 
                 {/* Card Body */}
-                <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
+                <div className="p-3.5 sm:p-4 flex-1 flex flex-col justify-between space-y-3">
                   <div className="space-y-1.5">
                     {/* Level & Rating */}
                     <div className="flex items-center justify-between text-xs">
@@ -528,15 +529,15 @@ export function DashboardCoursesClient({
         </div>
       )}
 
-      {/* ── Syllabus / Curriculum Preview Modal (Minimalist & Clean) ─────────────── */}
+      {/* ── Syllabus / Curriculum Preview Modal (Fully Responsive on Mobile/Tablet/PC) ─────────────── */}
       {selectedCourseForModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/40 backdrop-blur-xs">
-          <div className="relative w-full max-w-lg max-h-[85vh] bg-white rounded-2xl shadow-xl border border-stone-200 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-950/40 backdrop-blur-xs">
+          <div className="relative w-full max-w-lg max-h-[90vh] sm:max-h-[85vh] bg-white rounded-2xl shadow-xl border border-stone-200 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
             {/* Modal Header */}
-            <div className="p-4 sm:p-5 border-b border-stone-100 flex items-start justify-between gap-3">
-              <div className="space-y-1">
+            <div className="p-3.5 sm:p-5 border-b border-stone-100 flex items-start justify-between gap-3">
+              <div className="space-y-1 pr-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-medium text-stone-500">
+                  <span className="text-[11px] sm:text-xs font-medium text-stone-500">
                     {selectedCourseForModal.category.name}
                   </span>
                   <LevelBadge
@@ -545,7 +546,7 @@ export function DashboardCoursesClient({
                   />
                 </div>
                 <h3
-                  className="text-base font-bold text-stone-900 leading-snug"
+                  className="text-sm sm:text-base font-bold text-stone-900 leading-snug"
                   style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
                 >
                   {selectedCourseForModal.title}
@@ -562,7 +563,7 @@ export function DashboardCoursesClient({
             </div>
 
             {/* Modal Body */}
-            <div className="p-4 sm:p-5 overflow-y-auto space-y-4 flex-1 text-xs text-stone-600">
+            <div className="p-3.5 sm:p-5 overflow-y-auto space-y-4 flex-1 text-xs text-stone-600">
               {/* Description */}
               <div>
                 <p className="leading-relaxed">
@@ -572,7 +573,7 @@ export function DashboardCoursesClient({
 
               {/* What You'll Learn (if available) */}
               {selectedCourseForModal.whatYouLearn && (
-                <div className="p-3.5 rounded-xl bg-stone-50 border border-stone-200/60 space-y-2">
+                <div className="p-3 sm:p-3.5 rounded-xl bg-stone-50 border border-stone-200/60 space-y-2">
                   <h4 className="font-bold text-stone-900 text-xs">
                     {isEn ? "Key Takeaways:" : "Materi Pembelajaran:"}
                   </h4>
@@ -610,10 +611,10 @@ export function DashboardCoursesClient({
                         className="rounded-xl border border-stone-200/70 overflow-hidden"
                       >
                         <div className="px-3 py-2 bg-stone-50 border-b border-stone-100 flex items-center justify-between text-xs font-semibold text-stone-800">
-                          <span>
+                          <span className="truncate pr-2">
                             {idx + 1}. {section.title}
                           </span>
-                          <span className="text-[10px] text-stone-400 font-normal">
+                          <span className="text-[10px] text-stone-400 font-normal shrink-0">
                             {section.lessons.length} {isEn ? "lessons" : "materi"}
                           </span>
                         </div>
@@ -623,7 +624,7 @@ export function DashboardCoursesClient({
                               key={lesson.id}
                               className="px-3 py-2 flex items-center justify-between text-[11px] text-stone-600"
                             >
-                              <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-2 min-w-0 pr-2">
                                 <PlayCircle size={12} className="text-stone-400 shrink-0" />
                                 <span className="truncate">{lesson.title}</span>
                               </div>
@@ -643,10 +644,10 @@ export function DashboardCoursesClient({
             </div>
 
             {/* Modal Footer */}
-            <div className="p-4 border-t border-stone-100 bg-stone-50 flex items-center justify-between gap-3">
+            <div className="p-3.5 sm:p-4 border-t border-stone-100 bg-stone-50 flex items-center justify-between gap-2.5">
               <div>
                 <p className="text-[10px] text-stone-400 uppercase font-semibold">Harga</p>
-                <p className="text-sm font-bold text-stone-900">
+                <p className="text-xs sm:text-sm font-bold text-stone-900">
                   {enrolledSet.has(selectedCourseForModal.id)
                     ? isEn
                       ? "Enrolled"
@@ -672,7 +673,7 @@ export function DashboardCoursesClient({
                 {enrolledSet.has(selectedCourseForModal.id) ? (
                   <Link
                     href={`/learn/${selectedCourseForModal.id}`}
-                    className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-xl bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold transition-colors"
                   >
                     <PlayCircle size={13} />
                     <span>{isEn ? "Learn" : "Mulai Belajar"}</span>
@@ -680,7 +681,7 @@ export function DashboardCoursesClient({
                 ) : (
                   <Link
                     href={`/checkout/${selectedCourseForModal.id}`}
-                    className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors shadow-2xs"
+                    className="inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors shadow-2xs"
                   >
                     <CreditCard size={13} />
                     <span>
