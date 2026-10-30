@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { BookOpen, Shield } from "lucide-react";
+import { BookOpen, Shield, Compass } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { getTranslations, getLocale } from "next-intl/server";
 import DashboardNavLink from "./nav-link";
@@ -24,6 +24,7 @@ export default async function DashboardLayout({
 
   const navItems = [
     { href: "/dashboard", label: tDash("overview"), exact: true },
+    { href: "/dashboard/courses", label: tDash("catalog") },
     { href: "/dashboard/my-courses", label: tDash("my_courses") },
     { href: "/dashboard/certificates", label: tDash("certificates") },
     { href: "/dashboard/orders", label: tDash("orders") },
@@ -110,11 +111,11 @@ export default async function DashboardLayout({
               {tDash("explore_section")}
             </p>
             <Link
-              href="/courses"
+              href="/dashboard/courses"
               className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-700 transition-all border border-transparent hover:border-slate-200/60"
             >
-              <BookOpen size={15} className="text-slate-400" />
-              {tDash("browse_courses")}
+              <Compass size={15} className="text-blue-500" />
+              {tDash("catalog")}
             </Link>
           </div>
         </nav>

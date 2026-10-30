@@ -263,7 +263,9 @@
     "browse_courses": "Jelajahi Kelas",
     "logout": "Keluar",
     "logout_confirm_title": "Keluar dari Akun",
-    "logout_confirm_desc": "Keluar dari sesi saat ini di perangkat ini."
+    "logout_confirm_desc": "Keluar dari sesi saat ini di perangkat ini.",
+    "catalog": "Pilih & Beli Kelas",
+    "mobile_catalog": "Beli Kelas"
   },
   "checkout": {
     "title": "Checkout",
