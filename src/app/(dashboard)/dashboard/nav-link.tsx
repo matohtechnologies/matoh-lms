@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
+  Compass,
   BookOpen,
   Award,
   User,
@@ -14,6 +15,7 @@ import {
 
 const ICON_MAP: Record<string, LucideIcon> = {
   "/dashboard": LayoutDashboard,
+  "/dashboard/courses": Compass,
   "/dashboard/my-courses": BookOpen,
   "/dashboard/certificates": Award,
   "/dashboard/orders": ShoppingBag,

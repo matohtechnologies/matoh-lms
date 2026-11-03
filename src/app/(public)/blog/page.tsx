@@ -14,7 +14,6 @@ import {
   Share2,
   CheckCircle2,
 } from "lucide-react";
-import { NewsletterForm } from "./newsletter-form";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -401,30 +400,35 @@ export default async function BlogPage() {
         </div>
       </section>
 
-      {/* Closing CTA - Identical gradient banner style from About Page */}
+      {/* Closing CTA */}
       <section className="py-20 bg-gradient-to-br from-blue-600 via-blue-700 to-sky-600 text-white text-center relative overflow-hidden">
         <div className="absolute inset-0 bg-blueprint-grid opacity-10 pointer-events-none" />
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/10 text-blue-100 text-xs font-bold mb-4 backdrop-blur-xs border border-white/20">
-            <TrendingUp className="w-3.5 h-3.5" />
-            {isEn ? "Weekly Research Digest" : "Buletin Wawasan Mingguan"}
-          </span>
-
+        <div className="max-w-3xl mx-auto px-4 relative z-10 space-y-6">
           <h2
-            className="text-3xl sm:text-4xl lg:text-5xl font-black mb-4 tracking-tight leading-tight"
+            className="text-3xl sm:text-4xl font-extrabold tracking-tight"
             style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
-            {isEn ? "Get Research Insights Straight to Your Inbox" : "Dapatkan Rangkuman Riset Langsung di Email Anda"}
+            {isEn ? "Ready to Advance Your Digital Skills?" : "Siap Mengembangkan Keahlian Digital Anda?"}
           </h2>
-
-          <p className="text-blue-100 text-sm sm:text-base max-w-2xl mx-auto mb-8 leading-relaxed">
+          <p className="text-blue-100 text-sm sm:text-base leading-relaxed max-w-xl mx-auto">
             {isEn
-              ? "Join 5,000+ entrepreneurs, developers, and researchers receiving our weekly analysis on digital tools, decision science, and practical tutorials."
-              : "Bergabung bersama 5.000+ pelaku usaha, pengembang aplikasi, dan akademisi yang menerima ringkasan riset metodologi keputusan dan teknologi digital terapan."}
+              ? "Explore our industry-certified learning programs and start learning directly from experienced instructors."
+              : "Pelajari silabus pelatihan bersertifikasi dan mulai belajar langsung bersama dewan instruktur berpengalaman."}
           </p>
-
-          <div className="max-w-md mx-auto">
-            <NewsletterForm isEn={isEn} />
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+            <Link
+              href="/courses"
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-white text-blue-600 font-bold hover:bg-blue-50 transition-colors shadow-sm text-sm"
+            >
+              <span>{isEn ? "Explore Programs" : "Jelajahi Program Pelatihan"}</span>
+              <ArrowRight size={16} />
+            </Link>
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl border-2 border-white/80 hover:bg-white/10 text-white font-bold transition-colors text-sm"
+            >
+              <span>{isEn ? "Contact Us" : "Hubungi Kami & Konsultasi"}</span>
+            </Link>
           </div>
         </div>
       </section>

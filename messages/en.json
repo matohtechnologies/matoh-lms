@@ -263,7 +263,9 @@
     "browse_courses": "Browse Courses",
     "logout": "Log Out",
     "logout_confirm_title": "Sign Out of Account",
-    "logout_confirm_desc": "Log out of your current session on this device."
+    "logout_confirm_desc": "Log out of your current session on this device.",
+    "catalog": "Explore & Buy",
+    "mobile_catalog": "Buy Courses"
   },
   "checkout": {
     "title": "Checkout",

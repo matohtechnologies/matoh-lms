@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
+  Compass,
   BookOpen,
   Award,
   ShoppingBag,
@@ -18,6 +19,7 @@ export default function MobileNav() {
 
   const mobileNavItems = [
     { href: "/dashboard", labelKey: "mobile_home" as const, icon: LayoutDashboard, exact: true },
+    { href: "/dashboard/courses", labelKey: "mobile_catalog" as const, icon: Compass },
     { href: "/dashboard/my-courses", labelKey: "mobile_courses" as const, icon: BookOpen },
     { href: "/dashboard/certificates", labelKey: "mobile_certificates" as const, icon: Award },
     { href: "/dashboard/orders", labelKey: "mobile_orders" as const, icon: ShoppingBag },
@@ -34,19 +36,21 @@ export default function MobileNav() {
               key={href}
               href={href}
               className={cn(
-                "flex-1 flex flex-col items-center justify-center gap-1 text-[10px] font-medium transition-colors",
-                isActive ? "text-blue-600" : "text-slate-400 hover:text-slate-600"
+                "flex-1 flex flex-col items-center justify-center gap-1 text-[9px] sm:text-[10px] font-medium transition-colors",
+                isActive ? "text-blue-600 font-bold" : "text-slate-400 hover:text-slate-600"
               )}
             >
               <div
                 className={cn(
-                  "w-9 h-6 rounded-full flex items-center justify-center transition-all",
+                  "w-8 h-5 sm:w-9 sm:h-6 rounded-full flex items-center justify-center transition-all",
                   isActive ? "bg-blue-100 text-blue-700" : ""
                 )}
               >
-                <Icon size={18} />
+                <Icon size={16} />
               </div>
-              {t(labelKey)}
+              <span className="truncate max-w-[54px] sm:max-w-none text-center">
+                {t(labelKey)}
+              </span>
             </Link>
           );
         })}

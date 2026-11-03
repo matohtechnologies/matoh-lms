@@ -91,7 +91,7 @@ export default async function MyCoursesPage() {
           </p>
         </div>
         <Link
-          href="/courses"
+          href="/dashboard/courses"
           className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-stone-200/80 bg-white text-stone-700 hover:text-blue-700 text-xs font-semibold hover:bg-blue-50/60 transition-colors shadow-2xs shrink-0"
         >
           <GraduationCap size={15} className="text-blue-600" />
@@ -135,7 +135,7 @@ export default async function MyCoursesPage() {
             {t("no_courses_empty_desc")}
           </p>
           <Link
-            href="/courses"
+            href="/dashboard/courses"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition-colors"
           >
             {t("explore_courses")}

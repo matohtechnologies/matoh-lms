@@ -315,7 +315,7 @@ export default async function DashboardPage({
           ) : (
             <div className="pt-2">
               <Link
-                href="/courses"
+                href="/dashboard/courses"
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-blue-700 text-xs font-bold hover:bg-blue-50 transition-all shadow-xs"
               >
                 <GraduationCap size={15} />
@@ -445,7 +445,7 @@ export default async function DashboardPage({
                   {t("no_courses_desc")}
                 </p>
                 <Link
-                  href="/courses"
+                  href="/dashboard/courses"
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition-colors"
                 >
                   <Zap size={14} />
