@@ -1,8 +1,7 @@
 import { Suspense } from "react";
-import { Search, SlidersHorizontal, Grid, List, X, SearchX, Sparkles, RotateCcw, MessageCircle, ArrowRight } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { CourseCard, CourseCardSkeleton } from "@/components/courses/course-card";
-import { CourseSortSelect } from "@/components/courses/course-sort-select";
-import { CourseSearchInput } from "@/components/courses/course-search-input";
+import { CourseCertificateVerifier } from "@/components/courses/course-certificate-verifier";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { getTranslations, getLocale } from "next-intl/server";
@@ -17,49 +16,16 @@ export const revalidate = 60;
 
 interface CoursesPageProps {
   searchParams: Promise<{
-    q?: string;
-    category?: string;
-    level?: string;
-    sort?: string;
     page?: string;
   }>;
 }
 
-async function getCourses(params: {
-  q?: string;
-  category?: string;
-  level?: string;
-  sort?: string;
-  page?: number;
-}) {
+async function getCourses(page = 1) {
   try {
-    const { q, category, level, sort = "popular", page = 1 } = params;
     const pageSize = 12;
     const skip = (page - 1) * pageSize;
 
     const where: Record<string, unknown> = { published: true };
-
-    if (q) {
-      where.OR = [
-        { title: { contains: q, mode: "insensitive" } },
-        { description: { contains: q, mode: "insensitive" } },
-      ];
-    }
-
-    if (category) {
-      where.category = { name: { contains: category, mode: "insensitive" } };
-    }
-
-    if (level && ["BEGINNER", "INTERMEDIATE", "ADVANCED"].includes(level)) {
-      where.level = level;
-    }
-
-    const orderBy: Record<string, string>[] = [];
-    if (sort === "popular") orderBy.push({ enrollCount: "desc" });
-    else if (sort === "newest") orderBy.push({ createdAt: "desc" });
-    else if (sort === "rating") orderBy.push({ rating: "desc" });
-    else if (sort === "price-asc") orderBy.push({ price: "asc" });
-    else if (sort === "price-desc") orderBy.push({ price: "desc" });
 
     const [courses, total] = await Promise.all([
       prisma.course.findMany({
@@ -68,7 +34,7 @@ async function getCourses(params: {
           instructor: { select: { name: true, image: true } },
           category: { select: { name: true } },
         },
-        orderBy,
+        orderBy: [{ enrollCount: "desc" }, { createdAt: "desc" }],
         skip,
         take: pageSize,
       }),
@@ -81,29 +47,16 @@ async function getCourses(params: {
   }
 }
 
-async function getCategories() {
-  try {
-    return await prisma.category.findMany({ orderBy: { name: "asc" } });
-  } catch {
-    return [];
-  }
-}
-
 export default async function CoursesPage({ searchParams }: CoursesPageProps) {
   const params = await searchParams;
   const locale = await getLocale();
   const isEn = locale === "en";
   const t = await getTranslations("courses");
-  const [session, { courses, total, pages }, categories] = await Promise.all([
+  const currentPage = params.page ? parseInt(params.page) : 1;
+
+  const [session, { courses, total, pages }] = await Promise.all([
     auth(),
-    getCourses({
-      q: params.q,
-      category: params.category,
-      level: params.level,
-      sort: params.sort,
-      page: params.page ? parseInt(params.page) : 1,
-    }),
-    getCategories(),
+    getCourses(currentPage),
   ]);
 
   const enrolledCourseIds = new Set<string>();
@@ -119,28 +72,12 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
     }
   }
 
-  const currentPage = params.page ? parseInt(params.page) : 1;
-
-  const levelOptions = [
-    { value: "BEGINNER", label: t("level.BEGINNER") },
-    { value: "INTERMEDIATE", label: t("level.INTERMEDIATE") },
-    { value: "ADVANCED", label: t("level.ADVANCED") },
-  ];
-
-  const sortOptions = [
-    { value: "popular", label: t("sort.popular") },
-    { value: "newest", label: t("sort.newest") },
-    { value: "rating", label: t("sort.rating") },
-    { value: "price-asc", label: t("sort.price_asc") },
-    { value: "price-desc", label: t("sort.price_desc") },
-  ];
-
   return (
     <div className="pt-20 bg-[#f8fafc] min-h-screen">
       {/* Header */}
-      <div className="bg-gradient-to-b from-blue-50/70 via-[#f8fafc] to-[#f8fafc] border-b border-slate-200/70 py-12 sm:py-14 bg-dot-matrix relative overflow-hidden">
+      <div className="bg-gradient-to-b from-blue-50/70 via-[#f8fafc] to-[#f8fafc] border-b border-slate-200/70 py-12 sm:py-16 bg-dot-matrix relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[280px] bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.12)_0%,transparent_70%)] pointer-events-none" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 text-center">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100/70 text-blue-800 text-xs font-semibold mb-3">
             <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
             <span>{isEn ? "Matoh Learning Catalog" : "Katalog Pelatihan Matoh"}</span>
@@ -151,271 +88,106 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
           >
             {t("catalog_title")}
           </h1>
-          <p className="text-slate-500 mb-6 text-sm sm:text-base max-w-2xl leading-relaxed">
+          <p className="text-slate-500 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
             {isEn
               ? `Explore ${total} curated, industry-aligned courses crafted by leading tech practitioners.`
               : `${total} kelas terstruktur dan kurikulum industri siap membantumu menguasai skill masa depan.`}
           </p>
-
-          {/* Real-time Debounced Search bar */}
-          <CourseSearchInput
-            defaultValue={params.q}
-            placeholder={t("search_placeholder")}
-            searchButtonLabel={isEn ? "Search" : "Cari Kelas"}
-          />
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        <div className="flex flex-col lg:flex-row gap-8 items-start">
-          {/* Sidebar Filters */}
-          <aside className="lg:w-64 shrink-0 w-full">
-            <div className="bg-white rounded-2xl p-5 shadow-sm sticky top-24 space-y-6">
-              <div>
-                <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
-                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
-                    {t("filter.category")}
-                  </h3>
-                  {params.category && (
-                    <a href="/courses" className="text-[11px] text-blue-600 hover:underline">
-                      Reset
-                    </a>
-                  )}
-                </div>
-                <div className="space-y-1">
-                  <a
-                    href="/courses"
-                    className={`block px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
-                      !params.category
-                        ? "bg-blue-50 text-blue-700 font-bold"
-                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-                    }`}
-                  >
-                    {isEn ? "All Categories" : "Semua Kategori"}
-                  </a>
-                  {categories.map((cat) => (
-                    <a
-                      key={cat.id}
-                      href={`/courses?category=${encodeURIComponent(cat.name)}${params.level ? `&level=${params.level}` : ""}${params.sort ? `&sort=${params.sort}` : ""}`}
-                      className={`block px-3 py-2 rounded-xl text-xs font-medium transition-all ${
-                        params.category === cat.name
-                          ? "bg-blue-50 text-blue-700 font-bold"
-                          : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-                      }`}
-                    >
-                      {cat.name}
-                    </a>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
-                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
-                    {t("filter.level")}
-                  </h3>
-                </div>
-                <div className="space-y-1">
-                  {levelOptions.map((opt) => (
-                    <a
-                      key={opt.value}
-                      href={`/courses?${params.q ? `q=${params.q}&` : ""}${params.category ? `category=${params.category}&` : ""}level=${opt.value}${params.sort ? `&sort=${params.sort}` : ""}`}
-                      className={`block px-3 py-2 rounded-xl text-xs font-medium transition-all ${
-                        params.level === opt.value
-                          ? "bg-blue-50 text-blue-700 font-bold"
-                          : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-                      }`}
-                    >
-                      {opt.label}
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </aside>
-
-          {/* Main content */}
-          <div className="flex-1 min-w-0">
-            {/* Active Filter Chips */}
-            {(params.q || params.category || params.level) && (
-              <div className="flex flex-wrap items-center gap-2 mb-5 p-3 rounded-2xl bg-white shadow-2xs">
-                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider pl-1.5">
-                  {isEn ? "Active Filters:" : "Filter Aktif:"}
-                </span>
-
-                {params.q && (
-                  <a
-                    href={`/courses?${params.category ? `category=${encodeURIComponent(params.category)}&` : ""}${params.level ? `level=${params.level}&` : ""}${params.sort ? `sort=${params.sort}` : ""}`}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold hover:bg-blue-100 transition-colors group"
-                    title={isEn ? "Remove search filter" : "Hapus filter pencarian"}
-                  >
-                    <span>{isEn ? "Search:" : "Kata Kunci:"} &ldquo;{params.q}&rdquo;</span>
-                    <X size={13} className="text-blue-500 group-hover:text-blue-700" />
-                  </a>
-                )}
-
-                {params.category && (
-                  <a
-                    href={`/courses?${params.q ? `q=${encodeURIComponent(params.q)}&` : ""}${params.level ? `level=${params.level}&` : ""}${params.sort ? `sort=${params.sort}` : ""}`}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold hover:bg-blue-100 transition-colors group"
-                    title={isEn ? "Remove category filter" : "Hapus filter kategori"}
-                  >
-                    <span>{isEn ? "Category:" : "Kategori:"} {params.category}</span>
-                    <X size={13} className="text-blue-500 group-hover:text-blue-700" />
-                  </a>
-                )}
-
-                {params.level && (
-                  <a
-                    href={`/courses?${params.q ? `q=${encodeURIComponent(params.q)}&` : ""}${params.category ? `category=${encodeURIComponent(params.category)}&` : ""}${params.sort ? `sort=${params.sort}` : ""}`}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold hover:bg-blue-100 transition-colors group"
-                    title={isEn ? "Remove level filter" : "Hapus filter level"}
-                  >
-                    <span>Level: {levelOptions.find((l) => l.value === params.level)?.label || params.level}</span>
-                    <X size={13} className="text-blue-500 group-hover:text-blue-700" />
-                  </a>
-                )}
-
-                <a
-                  href="/courses"
-                  className="text-xs text-rose-600 hover:text-rose-700 font-bold ml-auto px-2 py-1 rounded-lg hover:bg-rose-50 transition-colors"
-                >
-                  {isEn ? "Clear All" : "Reset Semua"}
-                </a>
-              </div>
-            )}
-
-            {/* Sort bar */}
-            <div className="flex items-center justify-between mb-6">
-              <p className="text-sm text-slate-500">
-                {isEn ? (
-                  <>
-                    Showing <span className="font-medium text-slate-900">{courses.length}</span> of <span className="font-medium text-slate-900">{total}</span> courses
-                  </>
-                ) : (
-                  <>
-                    Menampilkan <span className="font-medium text-slate-900">{courses.length}</span> dari <span className="font-medium text-slate-900">{total}</span> kelas
-                  </>
-                )}
-              </p>
-              <div className="flex items-center gap-2">
-                <label htmlFor="courses-sort-select" className="text-sm text-slate-500 hidden sm:block">{t("sort_label")}</label>
-                <CourseSortSelect defaultValue={params.sort ?? "popular"} options={sortOptions} />
-              </div>
-            </div>
-
-            {/* Course grid */}
-            <Suspense
-              fallback={
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-                  {Array(6).fill(0).map((_, i) => (
-                    <CourseCardSkeleton key={i} />
-                  ))}
-                </div>
-              }
-            >
-              {courses.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-                  {courses.map((course) => (
-                    <CourseCard
-                      key={course.id}
-                      id={course.id}
-                      slug={course.slug}
-                      title={course.title}
-                      thumbnail={course.thumbnail}
-                      price={course.price}
-                      discountPrice={course.discountPrice}
-                      level={course.level}
-                      rating={course.rating}
-                      reviewCount={course.reviewCount}
-                      enrollCount={course.enrollCount}
-                      totalLessons={course.totalLessons}
-                      duration={course.duration}
-                      instructor={(course as { instructor: { name?: string | null; image?: string | null } }).instructor}
-                      category={course.category}
-                      locale={locale}
-                      isEnrolled={enrolledCourseIds.has(course.id)}
-                    />
-                  ))}
-                </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+        {/* Course Catalog Section: Clean Minimal View */}
+        <section id="daftar-kelas">
+          {/* Header Bar: Total Courses Count */}
+          <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-200/80">
+            <p className="text-sm sm:text-base text-slate-600 font-medium">
+              {isEn ? (
+                <>
+                  Showing <span className="font-bold text-slate-900">{courses.length}</span> of <span className="font-bold text-slate-900">{total}</span> courses
+                </>
               ) : (
-                <div className="bg-white rounded-3xl shadow-sm p-8 sm:p-12 text-center max-w-xl mx-auto my-6 space-y-5 animate-in fade-in duration-200">
-                  <div className="w-16 h-16 rounded-3xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto shadow-2xs">
-                    <SearchX size={32} />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-slate-900 mb-1.5">
-                      {isEn ? "No matching courses found" : "Kelas yang dicari belum ditemukan"}
-                    </h3>
-                    <p className="text-xs sm:text-sm text-slate-500 leading-relaxed max-w-md mx-auto">
-                      {params.q
-                        ? isEn
-                          ? `We couldn't find any courses matching "${params.q}". Try exploring our top topics below or reset filters.`
-                          : `Kami tidak menemukan kelas dengan kata kunci "${params.q}". Silakan coba topik populer di bawah atau reset filter.`
-                        : t("not_found_desc")}
-                    </p>
-                  </div>
-
-                  {/* Popular Topic Chips */}
-                  <div className="pt-1">
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2.5">
-                      {isEn ? "Recommended Searches" : "Topik Populer yang Direkomendasikan"}
-                    </p>
-                    <div className="flex flex-wrap items-center justify-center gap-2">
-                      {["Digital Marketing", "AHP & ISM", "SWOT", "Inovasi & Design"].map((keyword) => (
-                        <a
-                          key={keyword}
-                          href={`/courses?q=${encodeURIComponent(keyword)}`}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-50 hover:text-blue-700 text-slate-600 text-xs font-semibold transition-all hover:scale-102"
-                        >
-                          <Sparkles size={12} className="text-blue-600" />
-                          <span>{keyword}</span>
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-3">
-                    <a
-                      href="/courses"
-                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-xs"
-                    >
-                      <RotateCcw size={14} />
-                      <span>{isEn ? "Reset All Filters" : "Reset Semua Filter"}</span>
-                    </a>
-                    <a
-                      href="https://wa.me/6281210106680?text=Halo%20Matoh%20Technologies,%20saya%20mencari%20materi%20pelatihan%20khusus."
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold transition-all"
-                    >
-                      <MessageCircle size={14} className="text-emerald-600" />
-                      <span>{isEn ? "Request Topic on WhatsApp" : "Request Topik di WhatsApp"}</span>
-                    </a>
-                  </div>
-                </div>
+                <>
+                  Menampilkan <span className="font-bold text-slate-900">{courses.length}</span> dari <span className="font-bold text-slate-900">{total}</span> kelas
+                </>
               )}
-            </Suspense>
+            </p>
+          </div>
 
-            {/* Pagination */}
-            {pages > 1 && (
-              <div className="flex items-center justify-center gap-2 mt-10">
-                {Array.from({ length: pages }, (_, i) => i + 1).map((page) => (
-                  <a
-                    key={page}
-                    href={`/courses?${new URLSearchParams({ ...params, page: String(page) }).toString()}`}
-                    className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-medium transition-colors ${
-                      currentPage === page
-                        ? "bg-blue-600 text-white"
-                        : "bg-white border border-slate-300 text-slate-700 hover:border-blue-400"
-                    }`}
-                  >
-                    {page}
-                  </a>
+          {/* Course grid: 4 columns on large screens for optimal visual space */}
+          <Suspense
+            fallback={
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {Array(8).fill(0).map((_, i) => (
+                  <CourseCardSkeleton key={i} />
                 ))}
               </div>
+            }
+          >
+            {courses.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {courses.map((course) => (
+                  <CourseCard
+                    key={course.id}
+                    id={course.id}
+                    slug={course.slug}
+                    title={course.title}
+                    thumbnail={course.thumbnail}
+                    price={course.price}
+                    discountPrice={course.discountPrice}
+                    level={course.level}
+                    rating={course.rating}
+                    reviewCount={course.reviewCount}
+                    enrollCount={course.enrollCount}
+                    totalLessons={course.totalLessons}
+                    duration={course.duration}
+                    instructor={(course as { instructor: { name?: string | null; image?: string | null } }).instructor}
+                    category={course.category}
+                    locale={locale}
+                    isEnrolled={enrolledCourseIds.has(course.id)}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="bg-white rounded-3xl border border-slate-200/80 p-8 sm:p-12 text-center max-w-xl mx-auto my-6 space-y-4">
+                <div className="w-16 h-16 rounded-3xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto shadow-2xs">
+                  <BookOpen size={32} />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-1.5">
+                    {isEn ? "No courses available" : "Belum ada kelas yang tersedia"}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-500 leading-relaxed max-w-md mx-auto">
+                    {t("not_found_desc")}
+                  </p>
+                </div>
+              </div>
             )}
-          </div>
+          </Suspense>
+
+          {/* Pagination */}
+          {pages > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-10">
+              {Array.from({ length: pages }, (_, i) => i + 1).map((page) => (
+                <a
+                  key={page}
+                  href={`/courses?page=${page}`}
+                  className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-medium transition-colors ${
+                    currentPage === page
+                      ? "bg-blue-600 text-white"
+                      : "bg-white border border-slate-300 text-slate-700 hover:border-blue-400"
+                  }`}
+                >
+                  {page}
+                </a>
+              ))}
+            </div>
+          )}
+        </section>
+
+        {/* Certificate Verification Section: Diletakkan SETELAH tampilan course */}
+        <div className="mt-20 pt-16 border-t border-slate-200">
+          <CourseCertificateVerifier isEn={isEn} />
         </div>
       </div>
     </div>

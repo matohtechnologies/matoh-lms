@@ -182,7 +182,7 @@ export function CertificateTranscriptCard({
           </div>
           <div className="min-w-0 bg-white">
             <p className="text-[10px] uppercase font-bold tracking-wider text-stone-400">
-              {isEn ? "Course Program" : "Program Kursus"}
+              {isEn ? "Course" : "Nama Kelas"}
             </p>
             <p className="text-sm font-bold text-stone-900 truncate mt-0.5">{courseTitle}</p>
             {categoryName && (

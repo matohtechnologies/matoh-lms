@@ -40,7 +40,7 @@ export default async function ContactPage() {
         ? "Fast response during business hours (08:00 - 17:00 WIB)"
         : "Respons cepat selama jam kerja operasional (08:00 - 17:00 WIB)",
       actionLabel: isEn ? "Chat on WhatsApp ➔" : "Chat WhatsApp ➔",
-      actionUrl: "https://wa.me/6281210106680?text=Halo%20Matoh%20Technologies,%20saya%20ingin%20konsultasi%20program%20pelatihan%20dan%20layanan.",
+      actionUrl: "https://wa.me/6281210106680?text=Halo%20Matoh%20Technologies,%20saya%20ingin%20konsultasi%20kelas%20pelatihan%20dan%20layanan.",
       badge: isEn ? "Hotline 1" : "Utama",
       badgeColor: "bg-emerald-50 text-emerald-700",
       isLive: true,
@@ -148,7 +148,7 @@ export default async function ContactPage() {
           <p className="text-sm sm:text-base text-stone-600 max-w-2xl mx-auto leading-relaxed">
             {isEn
               ? "From guidance on choosing your first course, inquiries about official graduation credentials, to enterprise training programs for corporate engineering teams."
-              : "Mulai dari bimbingan memilih kelas pertama, pertanyaan seputar sertifikat resmi kelulusan, hingga penawaran program upskilling untuk tim perusahaan Anda."}
+              : "Mulai dari bimbingan memilih kelas pertama, pertanyaan seputar sertifikat resmi kelulusan, hingga penawaran kelas upskilling untuk tim perusahaan Anda."}
           </p>
         </div>
       </section>
