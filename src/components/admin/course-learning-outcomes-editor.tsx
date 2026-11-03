@@ -7,27 +7,15 @@ import {
   Trash2,
   ChevronUp,
   ChevronDown,
-  Sparkles,
   AlignLeft,
   ListOrdered,
-  RotateCcw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { dynamicConfirm } from "@/components/ui/dynamic-alert-provider";
 
 interface CourseLearningOutcomesEditorProps {
   value: string[];
   onChange: (items: string[]) => void;
 }
-
-const DEFAULT_SUGGESTIONS = [
-  "Memahami konsep dasar dan fundamental materi secara komprehensif",
-  "Mengimplementasikan project nyata dari tahap inisiasi hingga deployment/production",
-  "Menguasai best practices, framework, dan metodologi standar industri modern",
-  "Membangun portofolio project unggulan yang siap dipresentasikan kepada klien & rekruter",
-  "Mendapatkan sertifikat kelulusan resmi dengan verifikasi kode kredensial & QR Code",
-  "Bergabung dengan komunitas belajar interaktif dan sesi bimbingan bersama instruktur",
-];
 
 export function CourseLearningOutcomesEditor({
   value,
@@ -83,20 +71,6 @@ export function CourseLearningOutcomesEditor({
     }
   };
 
-  const handleApplySuggestions = async () => {
-    if (value.length > 0) {
-      const ok = await dynamicConfirm({
-        title: "Terapkan Template Rekomendasi?",
-        message: "Gunakan template rekomendasi standar? Poin capaian pembelajaran yang sudah Anda ketik saat ini akan digantikan.",
-        confirmText: "Ya, Terapkan",
-        cancelText: "Batal",
-        variant: "warning",
-      });
-      if (!ok) return;
-    }
-    onChange([...DEFAULT_SUGGESTIONS]);
-  };
-
   return (
     <div className="bg-white rounded-2xl border border-stone-200 p-6 shadow-warm space-y-5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone-100 pb-3">
@@ -115,16 +89,6 @@ export function CourseLearningOutcomesEditor({
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
-          <button
-            type="button"
-            onClick={handleApplySuggestions}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 text-xs font-semibold transition-colors"
-            title="Isi otomatis dengan 6 poin standar industri"
-          >
-            <Sparkles size={13} />
-            <span>Template Rekomendasi</span>
-          </button>
-
           <button
             type="button"
             onClick={handleToggleBulkMode}
@@ -174,16 +138,6 @@ export function CourseLearningOutcomesEditor({
                 </p>
               </div>
               <div className="flex items-center justify-center gap-2 pt-2">
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="outline"
-                  onClick={handleApplySuggestions}
-                  leftIcon={<Sparkles size={14} className="text-blue-600" />}
-                  className="text-xs font-semibold"
-                >
-                  Gunakan Template
-                </Button>
                 <Button
                   type="button"
                   size="sm"
