@@ -348,12 +348,6 @@ export default async function HomePage() {
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             {/* Left Column: Compelling Editorial Pitch */}
             <div className="lg:col-span-6 space-y-6 text-left">
-              {/* Trust Badge */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold tracking-wide">
-                <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-                <span>PT. Matoh Technologies Indonesia • AHU-064920.AH.01.30.Tahun 2024</span>
-              </div>
-
               {/* Main Headline */}
               <h1
                 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-[1.12] tracking-tight text-balance"
