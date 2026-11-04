@@ -1050,7 +1050,7 @@ export default function LearnPageClient({
                       <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500 px-1">
                         <span className="flex items-center gap-1.5 text-amber-400">
                           <HelpCircle size={12} />
-                          <span>Kuis Bab Ini ({secQuizzes.length})</span>
+                          <span>Tes Bab Ini ({secQuizzes.length})</span>
                         </span>
                         {!isSecCompleted && (
                           <span className="text-[10px] text-amber-500/90 font-medium flex items-center gap-1">
@@ -1500,16 +1500,16 @@ export default function LearnPageClient({
                     count: relevantResourcesCount,
                   },
                   {
-                    key: "quiz",
-                    label: locale === "en" ? "Quiz" : "Kuis Evaluasi",
-                    icon: HelpCircle,
-                    count: quizzes.length,
-                  },
-                  {
                     key: "assignment",
-                    label: locale === "en" ? "Assignments" : "Tugas & Submission",
+                    label: locale === "en" ? "Assignments & Submission" : "Tugas & Submission",
                     icon: FileCode2,
                     count: assignments.length,
+                  },
+                  {
+                    key: "quiz",
+                    label: locale === "en" ? "Test" : "Tes",
+                    icon: HelpCircle,
+                    count: quizzes.length,
                   },
                   {
                     key: "discussion",
@@ -1996,7 +1996,7 @@ export default function LearnPageClient({
                                     📘 Bab: {quizSection.title}
                                   </span>
                                   <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1">
-                                    <Lock size={11} /> Kuis Terkunci
+                                    <Lock size={11} /> Tes Terkunci
                                   </span>
                                 </div>
                                 {quiz.description && (
@@ -2015,9 +2015,9 @@ export default function LearnPageClient({
                                   Selesaikan Materi Bab Terlebih Dahulu
                                 </h4>
                                 <p className="text-xs text-slate-500 leading-relaxed">
-                                  Kuis ini dikhususkan untuk menguji pemahaman bab{" "}
+                                  Tes ini dikhususkan untuk menguji pemahaman bab{" "}
                                   <span className="text-amber-300 font-semibold">&ldquo;{quizSection.title}&rdquo;</span>.
-                                  Anda harus menyelesaikan seluruh materi di bab ini agar kuis terbuka dan dapat dikerjakan.
+                                  Anda harus menyelesaikan seluruh materi di bab ini agar tes terbuka dan dapat dikerjakan.
                                 </p>
                               </div>
 
