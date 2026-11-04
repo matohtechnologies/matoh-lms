@@ -55,7 +55,6 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
   const [modalName, setModalName] = useState("");
   const [modalNameEn, setModalNameEn] = useState("");
   const [modalSlug, setModalSlug] = useState("");
-  const [modalIcon, setModalIcon] = useState("");
   const [autoSlug, setAutoSlug] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [modalError, setModalError] = useState("");
@@ -88,7 +87,6 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
     setModalName("");
     setModalNameEn("");
     setModalSlug("");
-    setModalIcon("");
     setAutoSlug(true);
     setModalError("");
     setIsModalOpen(true);
@@ -100,7 +98,6 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
     setModalName(cat.name);
     setModalNameEn(cat.nameEn || "");
     setModalSlug(cat.slug);
-    setModalIcon(cat.icon || "");
     setAutoSlug(false);
     setModalError("");
     setIsModalOpen(true);
@@ -130,7 +127,7 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
         name: modalName.trim(),
         nameEn: modalNameEn.trim() || modalName.trim(),
         slug: modalSlug.trim() ? slugify(modalSlug.trim()) : slugify(modalName.trim()),
-        icon: modalIcon.trim() || null,
+        icon: null,
       };
 
       if (editingCategory) {
@@ -419,11 +416,6 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
                           <span className="font-bold text-stone-900 group-hover:text-blue-600 transition-colors">
                             {cat.name}
                           </span>
-                          {cat.icon && (
-                            <span className="text-xs" title={`Emoji: ${cat.icon}`}>
-                              {cat.icon}
-                            </span>
-                          )}
                         </div>
                         <div className="flex items-center gap-1 text-[11px] text-stone-500 mt-0.5">
                           <span className="font-medium text-stone-400">EN:</span>
@@ -624,23 +616,6 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
                 <p className="text-[10px] text-stone-400 mt-1">
                   Preview URL: <span className="font-mono text-stone-600">/courses?category={encodeURIComponent(modalName || "...")}</span>
                 </p>
-              </div>
-
-              {/* Optional Icon / Emoji */}
-              <div>
-                <label htmlFor="modal-cat-icon" className="block text-xs font-bold text-stone-700 mb-1.5">
-                  Icon Emoji <span className="text-stone-400 font-normal">(opsional)</span>
-                </label>
-                <div className="flex items-center gap-2">
-                  <input id="modal-cat-icon" name="icon" autoComplete="off" type="text" value={modalIcon} onChange={(e) => setModalIcon(e.target.value)}
-                    placeholder="💡"
-                    maxLength={4}
-                    className="w-16 text-center text-base px-2 py-2 rounded-xl border border-stone-200 focus:outline-none focus:border-blue-500"
-                  />
-                  <span className="text-[11px] text-stone-500">
-                    Emoji simbol pengenal (contoh: 💻, 📊, 🤖, 🎨, 📱)
-                  </span>
-                </div>
               </div>
 
               {/* Action Buttons */}

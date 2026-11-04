@@ -901,19 +901,19 @@ export default function LearnPageClient({
   };
 
   return (
-    <div className="flex h-screen bg-stone-950 text-stone-200 overflow-hidden font-sans">
+    <div className="flex h-screen bg-slate-50 text-slate-800 overflow-hidden font-sans">
       {/* Sidebar: Lessons Navigation */}
       <aside
         className={`${
           sidebarOpen ? "w-80" : "w-0"
-        } shrink-0 bg-stone-900 border-r border-stone-800 transition-all duration-300 overflow-hidden flex flex-col z-20`}
+        } shrink-0 bg-white border-r border-slate-200 transition-all duration-300 overflow-hidden flex flex-col z-20 shadow-xs`}
       >
         {/* Brand & Course Title */}
-        <div className="p-4 border-b border-stone-800 bg-stone-900/90 backdrop-blur-md">
+        <div className="p-4 border-b border-slate-200 bg-white/95 backdrop-blur-md">
           <Link href="/" className="flex items-center gap-2 mb-3 group">
-            <div className="w-7 h-7 rounded-lg bg-stone-800 border border-stone-700/80 flex items-center justify-center p-1 group-hover:border-stone-600 transition-colors">
+            <div className="w-7 h-7 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center p-1 group-hover:border-slate-300 transition-colors">
               <Image
-                src="/images/matoh-logo-white-v2.png"
+                src="/images/matoh-logo-v2.png"
                 alt="Matoh Technologies"
                 width={18}
                 height={18}
@@ -922,15 +922,15 @@ export default function LearnPageClient({
                 className="object-contain aspect-square"
               />
             </div>
-            <span className="text-sm font-bold text-white tracking-tight">
+            <span className="text-sm font-bold text-slate-900 tracking-tight">
               Matoh<span className="text-teal-400">Technologies</span>
             </span>
           </Link>
-          <h2 className="text-sm font-bold text-stone-100 leading-snug line-clamp-2" title={course.title}>
+          <h2 className="text-sm font-bold text-slate-900 leading-snug line-clamp-2" title={course.title}>
             {course.title}
           </h2>
-          <div className="mt-3 bg-stone-950/60 p-2.5 rounded-xl border border-stone-800/80">
-            <div className="flex items-center justify-between text-xs text-stone-400 mb-1.5 font-medium">
+          <div className="mt-3 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+            <div className="flex items-center justify-between text-xs text-slate-600 mb-1.5 font-medium">
               <span>{t("progress")}</span>
               <span className="text-blue-400 font-bold">{t("done_pct", { pct: progress })}</span>
             </div>
@@ -951,15 +951,15 @@ export default function LearnPageClient({
               <details
                 key={section.id}
                 open
-                className="group rounded-xl border border-stone-800/70 overflow-hidden bg-stone-950/40"
+                className="group rounded-xl border border-slate-200 overflow-hidden bg-white shadow-2xs"
               >
-                <summary className="flex items-center justify-between px-3.5 py-2.5 cursor-pointer hover:bg-stone-800/60 list-none select-none transition-colors">
-                  <span className="text-xs font-bold text-stone-300 uppercase tracking-wider">
+                <summary className="flex items-center justify-between px-3.5 py-2.5 cursor-pointer hover:bg-slate-50 bg-slate-50/60 list-none select-none transition-colors">
+                  <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
                     {section.title}
                   </span>
-                  <ChevronDown size={14} className="text-stone-500 group-open:rotate-180 transition-transform" />
+                  <ChevronDown size={14} className="text-slate-400 group-open:rotate-180 transition-transform" />
                 </summary>
-                <div className="divide-y divide-stone-800/40">
+                <div className="divide-y divide-slate-100">
                   {section.lessons.map((lesson) => {
                     const isActive = lesson.id === currentLesson.id;
                     const isCompleted = completedLessons.has(lesson.id);
@@ -968,8 +968,8 @@ export default function LearnPageClient({
                         key={lesson.id}
                         className={`w-full flex items-center gap-3 px-3.5 py-2.5 text-left transition-all ${
                           isActive
-                            ? "bg-blue-600/20 text-blue-300 font-semibold border-l-2 border-blue-500"
-                            : "hover:bg-stone-800/40 text-stone-300 border-l-2 border-transparent"
+                            ? "bg-blue-50 text-blue-700 font-semibold border-l-2 border-blue-600"
+                            : "hover:bg-slate-50 text-slate-700 border-l-2 border-transparent"
                         }`}
                       >
                         <button
@@ -982,8 +982,8 @@ export default function LearnPageClient({
                             isCompleted
                               ? "bg-green-600 text-white"
                               : isActive
-                              ? "border-2 border-blue-500 text-blue-400"
-                              : "border border-stone-600 text-stone-500"
+                              ? "border-2 border-blue-600 text-blue-600 bg-white"
+                              : "border border-slate-300 text-slate-400 bg-white"
                           }`}
                           title={
                             isCompleted
@@ -996,7 +996,7 @@ export default function LearnPageClient({
                         <button
                           type="button"
                           onClick={() => setCurrentLesson(lesson)}
-                          className="text-xs truncate flex-1 text-left hover:text-white transition-colors"
+                          className="text-xs truncate flex-1 text-left hover:text-blue-600 text-slate-700 transition-colors"
                         >
                           {lesson.title}
                         </button>
@@ -1006,8 +1006,8 @@ export default function LearnPageClient({
 
                   {/* Specific Learning Materials for this Section */}
                   {secResources.length > 0 && (
-                    <div className="p-2.5 bg-stone-900/70 border-t border-stone-800/60 space-y-1.5">
-                      <div className="flex items-center justify-between text-[11px] font-semibold text-stone-400 px-1">
+                    <div className="p-2.5 bg-slate-50/70 border-t border-slate-200/80 space-y-1.5">
+                      <div className="flex items-center justify-between text-[11px] font-semibold text-slate-600 px-1">
                         <span className="flex items-center gap-1.5 text-blue-400">
                           <FolderDown size={12} />
                           <span>Bahan Bab Ini ({secResources.length})</span>
@@ -1030,14 +1030,14 @@ export default function LearnPageClient({
                             href={res.fileUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center justify-between p-1.5 rounded-lg bg-stone-950/70 hover:bg-stone-800 border border-stone-800/80 text-[11px] text-stone-300 hover:text-white transition-colors group"
+                            className="flex items-center justify-between p-1.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-[11px] text-slate-700 hover:text-slate-900 transition-colors group"
                             title={res.title}
                           >
                             <span className="truncate flex items-center gap-1.5">
-                              <Paperclip size={11} className="text-stone-500 group-hover:text-blue-400 shrink-0" />
+                              <Paperclip size={11} className="text-slate-400 group-hover:text-blue-400 shrink-0" />
                               <span className="truncate">{res.title}</span>
                             </span>
-                            <Download size={11} className="text-stone-500 group-hover:text-blue-400 shrink-0 ml-1.5" />
+                            <Download size={11} className="text-slate-400 group-hover:text-blue-400 shrink-0 ml-1.5" />
                           </a>
                         ))}
                       </div>
@@ -1046,8 +1046,8 @@ export default function LearnPageClient({
 
                   {/* Quizzes specifically for this section */}
                   {secQuizzes.length > 0 && (
-                    <div className="p-2.5 bg-stone-900/60 border-t border-stone-800/60 space-y-1.5">
-                      <div className="flex items-center justify-between text-[11px] font-semibold text-stone-400 px-1">
+                    <div className="p-2.5 bg-slate-50/70 border-t border-slate-200/80 space-y-1.5">
+                      <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500 px-1">
                         <span className="flex items-center gap-1.5 text-amber-400">
                           <HelpCircle size={12} />
                           <span>Kuis Bab Ini ({secQuizzes.length})</span>
@@ -1074,8 +1074,8 @@ export default function LearnPageClient({
                               }}
                               className={`w-full flex items-center justify-between p-2 rounded-lg border text-left text-xs transition-colors group ${
                                 isSecCompleted
-                                  ? "bg-stone-950/70 hover:bg-stone-800 border-stone-800/80 text-stone-200 hover:text-white"
-                                  : "bg-stone-950/40 border-stone-800/40 text-stone-400 hover:bg-stone-900/60"
+                                  ? "bg-white hover:bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900"
+                                  : "bg-slate-100/50 border-slate-200/50 text-slate-400 hover:bg-slate-100"
                               }`}
                             >
                               <div className="flex items-center gap-2 min-w-0">
@@ -1086,14 +1086,14 @@ export default function LearnPageClient({
                                     <HelpCircle size={13} className="text-amber-400 shrink-0" />
                                   )
                                 ) : (
-                                  <Lock size={13} className="text-stone-500 shrink-0" />
+                                  <Lock size={13} className="text-slate-400 shrink-0" />
                                 )}
                                 <span className="truncate font-medium">{q.title}</span>
                               </div>
                               <span
                                 className={`text-[10px] px-1.5 py-0.5 rounded-full shrink-0 font-medium ${
                                   !isSecCompleted
-                                    ? "bg-stone-800 text-stone-500"
+                                    ? "bg-slate-100 text-slate-400"
                                     : passed
                                     ? "bg-emerald-500/20 text-emerald-300"
                                     : "bg-amber-500/20 text-amber-300"
@@ -1114,8 +1114,8 @@ export default function LearnPageClient({
 
                   {/* Assignments specifically for this section */}
                   {secAssignments.length > 0 && (
-                    <div className="p-2.5 bg-stone-900/60 border-t border-stone-800/60 space-y-1.5">
-                      <div className="flex items-center justify-between text-[11px] font-semibold text-stone-400 px-1">
+                    <div className="p-2.5 bg-slate-50/70 border-t border-slate-200/80 space-y-1.5">
+                      <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500 px-1">
                         <span className="flex items-center gap-1.5 text-indigo-400">
                           <FileCode2 size={12} />
                           <span>Tugas Bab Ini ({secAssignments.length})</span>
@@ -1138,8 +1138,8 @@ export default function LearnPageClient({
                               }}
                               className={`w-full flex items-center justify-between p-2 rounded-lg border text-left text-xs transition-colors group ${
                                 isSecCompleted
-                                  ? "bg-stone-950/70 hover:bg-stone-800 border-stone-800/80 text-stone-200 hover:text-white"
-                                  : "bg-stone-950/40 border-stone-800/40 text-stone-400 hover:bg-stone-900/60"
+                                  ? "bg-white hover:bg-slate-50 border-slate-200 text-slate-800 hover:text-slate-900"
+                                  : "bg-slate-50/50 border-slate-200 text-slate-500 hover:bg-slate-50/60"
                               }`}
                             >
                               <div className="flex items-center gap-2 min-w-0">
@@ -1150,14 +1150,14 @@ export default function LearnPageClient({
                                     <FileCode2 size={13} className="text-indigo-400 shrink-0" />
                                   )
                                 ) : (
-                                  <Lock size={13} className="text-stone-500 shrink-0" />
+                                  <Lock size={13} className="text-slate-400 shrink-0" />
                                 )}
                                 <span className="truncate font-medium">{a.title}</span>
                               </div>
                               <span
                                 className={`text-[10px] px-1.5 py-0.5 rounded-full shrink-0 font-medium ${
                                   !isSecCompleted
-                                    ? "bg-stone-800 text-stone-500"
+                                    ? "bg-slate-100 text-slate-400"
                                     : sub?.status === "APPROVED"
                                     ? "bg-emerald-500/20 text-emerald-300"
                                     : sub?.status === "PENDING"
@@ -1188,9 +1188,9 @@ export default function LearnPageClient({
           {generalResources.length > 0 && (
             <details
               open
-              className="group rounded-xl border border-stone-800/70 overflow-hidden bg-stone-950/40"
+              className="group rounded-xl border border-slate-200/70 overflow-hidden bg-slate-50/60"
             >
-              <summary className="flex items-center justify-between px-3.5 py-2.5 cursor-pointer hover:bg-stone-800/60 list-none select-none transition-colors">
+              <summary className="flex items-center justify-between px-3.5 py-2.5 cursor-pointer hover:bg-slate-100/60 list-none select-none transition-colors">
                 <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
                   <Globe size={13} />
                   Bahan Belajar Umum ({generalResources.length})
@@ -1207,24 +1207,24 @@ export default function LearnPageClient({
                   >
                     Buka Tab &rarr;
                   </button>
-                  <ChevronDown size={14} className="text-stone-500 group-open:rotate-180 transition-transform" />
+                  <ChevronDown size={14} className="text-slate-400 group-open:rotate-180 transition-transform" />
                 </div>
               </summary>
-              <div className="p-2 space-y-1 bg-stone-900/60">
+              <div className="p-2 space-y-1 bg-slate-50/70">
                 {generalResources.map((res) => (
                   <a
                     key={res.id}
                     href={res.fileUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between p-1.5 rounded-lg bg-stone-950/70 hover:bg-stone-800 border border-stone-800/80 text-[11px] text-stone-300 hover:text-white transition-colors group"
+                    className="flex items-center justify-between p-1.5 rounded-lg bg-white hover:bg-slate-50 border border-slate-200 text-[11px] text-slate-700 hover:text-slate-900 transition-colors group"
                     title={res.title}
                   >
                     <span className="truncate flex items-center gap-1.5">
-                      <Paperclip size={11} className="text-stone-500 group-hover:text-emerald-400 shrink-0" />
+                      <Paperclip size={11} className="text-slate-400 group-hover:text-emerald-400 shrink-0" />
                       <span className="truncate">{res.title}</span>
                     </span>
-                    <Download size={11} className="text-stone-500 group-hover:text-emerald-400 shrink-0 ml-1.5" />
+                    <Download size={11} className="text-slate-400 group-hover:text-emerald-400 shrink-0 ml-1.5" />
                   </a>
                 ))}
               </div>
@@ -1233,9 +1233,9 @@ export default function LearnPageClient({
         </div>
 
         {/* Certificate Section at Sidebar Bottom */}
-        <div className="p-4 border-t border-stone-800 bg-stone-900/90">
+        <div className="p-4 border-t border-slate-200 bg-white">
           {certStatus?.isEnabled === false ? (
-            <div className="p-3 rounded-xl bg-stone-800/50 border border-stone-800 text-stone-500 text-[11px] text-center">
+            <div className="p-3 rounded-xl bg-slate-100 border border-slate-200 text-slate-500 text-[11px] text-center">
               {t("cert_not_enabled")}
             </div>
           ) : certStatus?.isIssued ? (
@@ -1282,9 +1282,9 @@ export default function LearnPageClient({
             </div>
           ) : (
             <div className="space-y-2">
-              <div className="p-2.5 rounded-xl bg-stone-800/80 border border-stone-700/60 text-stone-400">
+              <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-600">
                 <div className="flex items-center justify-between mb-1.5">
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-stone-300">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-800">
                     <Lock size={13} className="text-amber-500" />
                     <span>{t("cert_locked")}</span>
                   </div>
@@ -1294,9 +1294,9 @@ export default function LearnPageClient({
                 </div>
 
                 {/* Criteria Checklist */}
-                <div className="space-y-1 pt-1.5 border-t border-stone-700/50 text-[10px]">
+                <div className="space-y-1 pt-1.5 border-t border-slate-200 text-[10px]">
                   <div className="flex items-center justify-between">
-                    <span className="text-stone-300">
+                    <span className="text-slate-700">
                       • {t("criteria_material", { done: completedLessons.size, total: allLessons.length })}
                     </span>
                     {(certStatus?.criteria?.progress?.met ?? false) ||
@@ -1305,7 +1305,7 @@ export default function LearnPageClient({
                         <Check size={11} /> {t("criteria_done")}
                       </span>
                     ) : (
-                      <span className="text-stone-500">
+                      <span className="text-slate-400">
                         {t("criteria_min", { pct: certStatus?.criteria?.progress?.required ?? 100 })}
                       </span>
                     )}
@@ -1314,7 +1314,7 @@ export default function LearnPageClient({
                   {certStatus?.criteria?.quizzes?.required &&
                     (certStatus.criteria.quizzes.total > 0 ? (
                       <div className="flex items-center justify-between">
-                        <span className="text-stone-300">
+                        <span className="text-slate-700">
                           • {t("criteria_quiz", { passed: certStatus.criteria.quizzes.passed, total: certStatus.criteria.quizzes.total })}
                         </span>
                         {certStatus.criteria.quizzes.met ? (
@@ -1330,7 +1330,7 @@ export default function LearnPageClient({
                   {certStatus?.criteria?.assignments?.required &&
                     (certStatus.criteria.assignments.total > 0 ? (
                       <div className="flex items-center justify-between">
-                        <span className="text-stone-300">
+                        <span className="text-slate-700">
                           • {t("criteria_assignment", { approved: certStatus.criteria.assignments.approved, total: certStatus.criteria.assignments.total })}
                         </span>
                         {certStatus.criteria.assignments.met ? (
@@ -1352,16 +1352,16 @@ export default function LearnPageClient({
       {/* Main Learning Classroom Panel */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Top Navbar */}
-        <header className="h-14 bg-stone-900/90 border-b border-stone-800 flex items-center justify-between px-4 sm:px-6 shrink-0 z-10">
+        <header className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4 sm:px-6 shrink-0 z-10 shadow-2xs">
           <div className="flex items-center gap-3 min-w-0">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 rounded-xl hover:bg-stone-800 text-stone-400 hover:text-white transition-colors"
+              className="p-2 rounded-xl hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition-colors"
               title={sidebarOpen ? t("close_syllabus") : t("open_syllabus")}
             >
               {sidebarOpen ? <X size={18} /> : <List size={18} />}
             </button>
-            <span className="text-sm font-semibold text-stone-200 truncate">
+            <span className="text-sm font-semibold text-slate-900 truncate">
               {currentLesson.title}
             </span>
           </div>
@@ -1369,7 +1369,7 @@ export default function LearnPageClient({
           <div className="flex items-center gap-3 shrink-0">
             <Link
               href="/dashboard/my-courses"
-              className="text-xs text-stone-400 hover:text-blue-400 font-medium transition-colors inline-flex items-center gap-1"
+              className="text-xs text-slate-500 hover:text-blue-600 font-medium transition-colors inline-flex items-center gap-1"
             >
               <ChevronLeft size={14} />
               <span>{t("back_to_dashboard")}</span>
@@ -1406,14 +1406,14 @@ export default function LearnPageClient({
           )}
 
           {/* Interactive Navigation Bar below player */}
-          <div className="bg-stone-900 border-y border-stone-800 px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
+          <div className="bg-white border-y border-slate-200 px-4 sm:px-6 py-3 flex items-center justify-between gap-3 shadow-2xs">
             <Button
               variant="outline"
               size="sm"
               onClick={() => prevLesson && setCurrentLesson(prevLesson)}
               disabled={!prevLesson}
               leftIcon={<ChevronLeft size={16} />}
-              className="bg-stone-800 border-stone-700 text-stone-200 hover:bg-stone-700 disabled:opacity-40"
+              className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 disabled:opacity-40 shadow-2xs"
             >
               {t("prev")}
             </Button>
@@ -1450,7 +1450,7 @@ export default function LearnPageClient({
               onClick={() => nextLesson && setCurrentLesson(nextLesson)}
               disabled={!nextLesson}
               rightIcon={<ChevronRight size={16} />}
-              className="bg-stone-800 border-stone-700 text-stone-200 hover:bg-stone-700 disabled:opacity-40"
+              className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 disabled:opacity-40 shadow-2xs"
             >
               {t("next")}
             </Button>
@@ -1459,15 +1459,15 @@ export default function LearnPageClient({
           {/* Dicoding-style Tabs: Notes, Study Notes, Resources, Quiz, Assignments, Discussion */}
           <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 w-full">
             {/* Horizontal Scrollable Tab Bar with overflow arrows and indicators */}
-            <div className="relative border-b border-stone-800 mb-6">
+            <div className="relative border-b border-slate-200 mb-6">
               {/* Left Scroll Navigation button if overflowed */}
               {canScrollLeft && (
-                <div className="absolute left-0 top-0 bottom-0 z-10 flex items-center pr-6 bg-gradient-to-r from-stone-950 via-stone-950/90 to-transparent">
+                <div className="absolute left-0 top-0 bottom-0 z-10 flex items-center pr-6 bg-gradient-to-r from-slate-50 via-slate-50/90 to-transparent">
                   <button
                     type="button"
                     onClick={() => tabScrollRef.current?.scrollBy({ left: -220, behavior: "smooth" })}
                     aria-label="Scroll tabs left"
-                    className="p-1.5 rounded-full bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white shadow-lg border border-stone-700/60 transition-all hover:scale-105"
+                    className="p-1.5 rounded-full bg-white hover:bg-slate-100 text-slate-600 hover:text-slate-900 shadow-md border border-slate-200 transition-all hover:scale-105"
                   >
                     <ChevronLeft size={16} />
                   </button>
@@ -1525,16 +1525,16 @@ export default function LearnPageClient({
                     }}
                     className={`flex items-center gap-2 pb-3 px-2 sm:px-3 text-xs sm:text-sm font-semibold transition-all border-b-2 whitespace-nowrap shrink-0 group ${
                       activeTab === key
-                        ? "text-blue-400 border-blue-500"
-                        : "text-stone-400 border-transparent hover:text-stone-200 hover:border-stone-700"
+                        ? "text-blue-600 border-blue-600 font-semibold"
+                        : "text-slate-500 border-transparent hover:text-slate-800 hover:border-slate-300"
                     }`}
                   >
                     <Icon
                       size={16}
                       className={
                         activeTab === key
-                          ? "text-blue-400"
-                          : "text-stone-400 group-hover:text-stone-200 transition-colors"
+                          ? "text-blue-600"
+                          : "text-slate-400 group-hover:text-slate-700 transition-colors"
                       }
                     />
                     <span>{label}</span>
@@ -1542,8 +1542,8 @@ export default function LearnPageClient({
                       <span
                         className={`text-[10px] sm:text-xs font-mono px-1.5 py-0.5 rounded-full transition-colors ${
                           activeTab === key
-                            ? "bg-blue-500/20 text-blue-300 border border-blue-500/30 font-bold"
-                            : "bg-stone-800 text-stone-400 border border-stone-700/60 group-hover:text-stone-300"
+                            ? "bg-blue-50 text-blue-700 border border-blue-200 font-bold"
+                            : "bg-slate-100 text-slate-600 border border-slate-200 group-hover:text-slate-800"
                         }`}
                       >
                         {count}
@@ -1555,12 +1555,12 @@ export default function LearnPageClient({
 
               {/* Right Scroll Navigation button if overflowed */}
               {canScrollRight && (
-                <div className="absolute right-0 top-0 bottom-0 z-10 flex items-center pl-6 bg-gradient-to-l from-stone-950 via-stone-950/90 to-transparent">
+                <div className="absolute right-0 top-0 bottom-0 z-10 flex items-center pl-6 bg-gradient-to-l from-slate-50 via-slate-50/90 to-transparent">
                   <button
                     type="button"
                     onClick={() => tabScrollRef.current?.scrollBy({ left: 220, behavior: "smooth" })}
                     aria-label="Scroll tabs right"
-                    className="p-1.5 rounded-full bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white shadow-lg border border-stone-700/60 transition-all hover:scale-105"
+                    className="p-1.5 rounded-full bg-white hover:bg-slate-100 text-slate-600 hover:text-slate-900 shadow-md border border-slate-200 transition-all hover:scale-105"
                   >
                     <ChevronRight size={16} />
                   </button>
@@ -1571,13 +1571,13 @@ export default function LearnPageClient({
             {/* TAB 1: NOTES & LESSON CONTENT */}
             {activeTab === "notes" && (
               <div className="space-y-4">
-                <h2 className="text-xl font-bold text-stone-100">{currentLesson.title}</h2>
+                <h2 className="text-xl font-bold text-slate-900">{currentLesson.title}</h2>
                 {currentLesson.content ? (
-                  <div className="bg-stone-900 border border-stone-800 rounded-2xl p-6 sm:p-7 text-sm text-stone-200 leading-relaxed shadow-lg">
-                    <MarkdownRenderer content={currentLesson.content} dark={true} />
+                  <div className="bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-7 text-sm text-slate-800 leading-relaxed shadow-sm">
+                    <MarkdownRenderer content={currentLesson.content} dark={false} />
                   </div>
                 ) : (
-                  <div className="bg-stone-900/60 border border-stone-800 rounded-2xl p-6 text-center text-sm text-stone-500">
+                  <div className="bg-white border border-dashed border-slate-200 rounded-2xl p-6 text-center text-sm text-slate-500">
                     {t("no_notes")}
                   </div>
                 )}
@@ -1587,13 +1587,13 @@ export default function LearnPageClient({
             {/* TAB 2: IN-VIDEO TIMESTAMPED STUDY NOTES */}
             {activeTab === "studyNotes" && (
               <div className="space-y-6">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 bg-stone-900 border border-stone-800 rounded-2xl">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 bg-white border border-slate-200/80 rounded-2xl shadow-2xs">
                   <div>
-                    <h3 className="text-base font-bold text-stone-100 flex items-center gap-2">
+                    <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
                       <Bookmark size={18} className="text-blue-400" />
                       {locale === "en" ? "My Timestamped Notes" : "Catatan Belajar Ber-Timestamp"}
                     </h3>
-                    <p className="text-xs text-stone-400 mt-1">
+                    <p className="text-xs text-slate-500 mt-1">
                       {locale === "en"
                         ? "Save personal timestamps & notes while learning. Export anytime to Markdown."
                         : "Tulis catatan dan tandai momen penting pada materi ini. Unduh kapan saja ke format Markdown."}
@@ -1605,7 +1605,7 @@ export default function LearnPageClient({
                       size="sm"
                       onClick={handleExportNotes}
                       leftIcon={<Download size={14} />}
-                      className="bg-stone-800 border-stone-700 text-stone-200 hover:bg-stone-700 text-xs shrink-0"
+                      className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 text-xs shrink-0 shadow-2xs"
                     >
                       {locale === "en" ? "Export to (.md)" : "Unduh Catatan (.md)"}
                     </Button>
@@ -1613,17 +1613,17 @@ export default function LearnPageClient({
                 </div>
 
                 {/* Form Add Note */}
-                <form onSubmit={handleCreateNote} className="bg-stone-900/90 border border-stone-800 p-4 sm:p-5 rounded-2xl space-y-3">
+                <form onSubmit={handleCreateNote} className="bg-white border border-slate-200/80 p-4 sm:p-5 rounded-2xl space-y-3 shadow-2xs">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-stone-300">
+                    <span className="text-xs font-bold text-slate-800">
                       {locale === "en" ? "Add Note for: " : "Tambah Catatan untuk: "}
                       <span className="text-blue-400">{currentLesson.title}</span>
                     </span>
-                    <div className="flex items-center gap-1.5 text-xs text-stone-400 font-mono">
+                    <div className="flex items-center gap-1.5 text-xs text-slate-500 font-mono">
                       <span>⏱️ Detik:</span>
                       <label htmlFor="lesson-note-seconds" className="sr-only">Detik</label>
                       <input id="lesson-note-seconds" name="noteSeconds" type="number" min="0" value={newNoteTimestamp} onChange={(e) => setNewNoteTimestamp(Math.max(0, parseInt(e.target.value) || 0))}
-                        className="w-16 px-2 py-1 rounded bg-stone-800 border border-stone-700 text-stone-200 text-center text-xs focus:outline-none focus:border-blue-500"
+                        className="w-16 px-2 py-1 rounded bg-slate-50 border border-slate-200 text-slate-800 text-center text-xs focus:outline-none focus:border-blue-500"
                         title="Detik dalam video (misal: 60 = 01:00)"
                       />
                     </div>
@@ -1633,7 +1633,7 @@ export default function LearnPageClient({
                   <textarea id="lesson-note-content" name="noteContent" value={newNoteContent} onChange={(e) => setNewNoteContent(e.target.value)}
                     placeholder={locale === "en" ? "Write your key insight, formula, or reminder here..." : "Tulis ringkasan rumus, poin penting, atau pengingat di sini..."}
                     rows={3}
-                    className="w-full p-3 rounded-xl bg-stone-950 border border-stone-800 text-stone-200 text-sm placeholder:text-stone-600 focus:outline-none focus:border-blue-500"
+                    className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-sm placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white"
                   />
 
                   <div className="flex justify-end">
@@ -1652,17 +1652,17 @@ export default function LearnPageClient({
 
                 {/* Notes List */}
                 {loadingNotes ? (
-                  <div className="p-8 text-center bg-stone-900 rounded-2xl border border-stone-800">
+                  <div className="p-8 text-center bg-white rounded-2xl border border-slate-200">
                     <Loader2 className="animate-spin text-blue-500 mx-auto mb-2" size={24} />
-                    <span className="text-xs text-stone-400">{locale === "en" ? "Loading notes..." : "Memuat catatan..."}</span>
+                    <span className="text-xs text-slate-500">{locale === "en" ? "Loading notes..." : "Memuat catatan..."}</span>
                   </div>
                 ) : studyNotes.length === 0 ? (
-                  <div className="bg-stone-900/60 border border-stone-800 rounded-2xl p-8 text-center space-y-2">
-                    <Bookmark className="mx-auto text-stone-600 mb-2" size={32} />
-                    <h4 className="text-sm font-bold text-stone-300">
+                  <div className="bg-white border border-dashed border-slate-200 rounded-2xl p-8 text-center space-y-2">
+                    <Bookmark className="mx-auto text-slate-400 mb-2" size={32} />
+                    <h4 className="text-sm font-bold text-slate-700">
                       {locale === "en" ? "No notes yet" : "Belum ada catatan"}
                     </h4>
-                    <p className="text-xs text-stone-500 max-w-sm mx-auto">
+                    <p className="text-xs text-slate-400 max-w-sm mx-auto">
                       {locale === "en"
                         ? "Take timestamped notes while watching video lessons to retain knowledge better."
                         : "Tuliskan poin penting saat menonton video untuk memperkuat pemahaman materi."}
@@ -1678,25 +1678,25 @@ export default function LearnPageClient({
                       return (
                         <div
                           key={note.id}
-                          className="p-4 rounded-xl bg-stone-900 border border-stone-800/90 flex items-start justify-between gap-3 group"
+                          className="p-4 rounded-xl bg-white border border-slate-200/80 flex items-start justify-between gap-3 group shadow-2xs"
                         >
                           <div className="space-y-1.5 flex-1">
                             <div className="flex items-center gap-2">
-                              <span className="px-2 py-0.5 rounded-md bg-blue-950/60 border border-blue-800/60 text-blue-400 font-mono text-[11px] font-bold">
+                              <span className="px-2 py-0.5 rounded-md bg-blue-50 border border-blue-200 text-blue-700 font-mono text-[11px] font-bold">
                                 ⏱️ {timeStr}
                               </span>
-                              <span className="text-xs font-semibold text-stone-300">
+                              <span className="text-xs font-semibold text-slate-700">
                                 {note.lesson?.title || "Materi"}
                               </span>
                             </div>
-                            <p className="text-xs sm:text-sm text-stone-200 whitespace-pre-wrap leading-relaxed">
+                            <p className="text-xs sm:text-sm text-slate-800 whitespace-pre-wrap leading-relaxed">
                               {note.content}
                             </p>
                           </div>
                           <button
                             type="button"
                             onClick={() => handleDeleteNote(note.id)}
-                            className="text-stone-500 hover:text-red-400 p-1 transition-colors"
+                            className="text-slate-400 hover:text-red-400 p-1 transition-colors"
                             title="Hapus catatan"
                           >
                             <Trash2 size={15} />
@@ -1726,15 +1726,15 @@ export default function LearnPageClient({
                 return (
                   <div
                     key={item.id}
-                    className={`p-5 rounded-2xl bg-stone-900 border flex flex-col justify-between transition-colors ${
+                    className={`p-5 rounded-2xl bg-white border flex flex-col justify-between transition-all ${
                       isCurrentChapter
-                        ? "border-blue-600/60 ring-1 ring-blue-500/20"
-                        : "border-stone-800 hover:border-stone-700"
+                        ? "border-blue-500 ring-2 ring-blue-500/10 shadow-sm"
+                        : "border-slate-200/80 hover:border-slate-300 shadow-2xs"
                     }`}
                   >
                     <div className="space-y-2.5 mb-4">
                       <div className="flex items-center justify-between gap-2 flex-wrap">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-blue-950/60 text-blue-400 border border-blue-800/40">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
                           {item.type}
                         </span>
 
@@ -1744,7 +1744,7 @@ export default function LearnPageClient({
                             className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold truncate max-w-[190px] ${
                               isCurrentChapter
                                 ? "bg-blue-900/60 text-blue-300 border border-blue-700/60"
-                                : "bg-stone-800 text-stone-400 border border-stone-700"
+                                : "bg-slate-100 text-slate-500 border border-slate-200"
                             }`}
                             title={sectionName || ""}
                           >
@@ -1763,13 +1763,13 @@ export default function LearnPageClient({
                         )}
                       </div>
 
-                      <h4 className="text-sm font-bold text-stone-100 leading-snug">{item.title}</h4>
+                      <h4 className="text-sm font-bold text-slate-900 leading-snug">{item.title}</h4>
                       {item.description && (
-                        <p className="text-xs text-stone-400 leading-relaxed">{item.description}</p>
+                        <p className="text-xs text-slate-500 leading-relaxed">{item.description}</p>
                       )}
 
                       {(item.fileName || item.fileSize) && (
-                        <div className="pt-2 border-t border-stone-800/60 flex items-center justify-between text-[11px] text-stone-500 font-mono">
+                        <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-mono">
                           <span className="truncate max-w-[180px]" title={item.fileName || ""}>
                             📄 {item.fileName || "Berkas Terlampir"}
                           </span>
@@ -1782,7 +1782,7 @@ export default function LearnPageClient({
                       href={item.fileUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-semibold transition-colors w-full border border-stone-700"
+                      className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-800 text-xs font-semibold transition-colors w-full border border-slate-200 shadow-2xs"
                     >
                       <Download size={14} />
                       <span>{locale === "en" ? "Download / Open Link" : "Unduh / Akses Berkas"}</span>
@@ -1795,14 +1795,14 @@ export default function LearnPageClient({
               return (
                 <div className="space-y-6">
                   {/* Banner & Scoped Header */}
-                  <div className="p-5 bg-stone-900 border border-stone-800 rounded-2xl">
+                  <div className="p-5 bg-white border border-slate-200/80 rounded-2xl shadow-2xs">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <div>
-                        <h3 className="text-base font-bold text-stone-100 flex items-center gap-2">
+                        <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
                           <FolderDown size={18} className="text-blue-400" />
                           {locale === "en" ? "Course Resources & Starter Files" : "Bahan Belajar & Source Code"}
                         </h3>
-                        <p className="text-xs text-stone-400 mt-1">
+                        <p className="text-xs text-slate-500 mt-1">
                           {locale === "en"
                             ? "Files follow each chapter configuration so you only see materials relevant to your study."
                             : "Bahan ajar otomatis menyesuaikan dengan bab/section yang sedang Anda pelajari."}
@@ -1811,10 +1811,10 @@ export default function LearnPageClient({
 
                       {/* Current Chapter Indicator */}
                       {currentSection && (
-                        <div className="px-3 py-1.5 rounded-xl bg-stone-800/80 border border-stone-700/60 shrink-0 flex items-center gap-2">
+                        <div className="px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 shrink-0 flex items-center gap-2">
                           <Layers size={13} className="text-blue-400 shrink-0" />
                           <div className="text-[11px] leading-tight">
-                            <span className="text-stone-400 block text-[10px]">
+                            <span className="text-slate-500 block text-[10px]">
                               {locale === "en" ? "Active Chapter:" : "Bab yang Dipelajari:"}
                             </span>
                             <span className="text-blue-300 font-semibold truncate max-w-[160px] block" title={currentSection.title}>
@@ -1827,14 +1827,14 @@ export default function LearnPageClient({
 
                     {/* Filter Mode Switcher: Only 2 options, no redundancy */}
                     {resources.length > 0 && (
-                      <div className="flex items-center gap-2 mt-4 pt-4 border-t border-stone-800/80 flex-wrap">
+                      <div className="flex items-center gap-2 mt-4 pt-4 border-t border-slate-100 flex-wrap">
                         <button
                           type="button"
                           onClick={() => setResourceFilter("CHAPTER")}
                           className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
                             resourceFilter === "CHAPTER"
                               ? "bg-blue-600 text-white shadow-xs"
-                              : "bg-stone-800 text-stone-400 hover:text-stone-200 hover:bg-stone-700/80"
+                              : "bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 border border-slate-200"
                           }`}
                         >
                           <Layers size={13} />
@@ -1847,7 +1847,7 @@ export default function LearnPageClient({
                           className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
                             resourceFilter === "GENERAL"
                               ? "bg-blue-600 text-white shadow-xs"
-                              : "bg-stone-800 text-stone-400 hover:text-stone-200 hover:bg-stone-700/80"
+                              : "bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 border border-slate-200"
                           }`}
                         >
                           <Globe size={13} />
@@ -1858,19 +1858,19 @@ export default function LearnPageClient({
                   </div>
 
                   {loadingResources ? (
-                    <div className="p-8 text-center bg-stone-900 rounded-2xl border border-stone-800">
+                    <div className="p-8 text-center bg-white rounded-2xl border border-slate-200">
                       <Loader2 className="animate-spin text-blue-500 mx-auto mb-2" size={24} />
-                      <span className="text-xs text-stone-400">
+                      <span className="text-xs text-slate-500">
                         {locale === "en" ? "Loading resources..." : "Memuat bahan belajar..."}
                       </span>
                     </div>
                   ) : resources.length === 0 ? (
-                    <div className="bg-stone-900/60 border border-stone-800 rounded-2xl p-8 text-center space-y-2">
-                      <FolderDown className="mx-auto text-stone-600 mb-2" size={32} />
-                      <h4 className="text-sm font-bold text-stone-300">
+                    <div className="bg-white border border-dashed border-slate-200 rounded-2xl p-8 text-center space-y-2">
+                      <FolderDown className="mx-auto text-slate-400 mb-2" size={32} />
+                      <h4 className="text-sm font-bold text-slate-700">
                         {locale === "en" ? "No resources available yet" : "Bahan belajar belum tersedia"}
                       </h4>
-                      <p className="text-xs text-stone-500 max-w-sm mx-auto">
+                      <p className="text-xs text-slate-400 max-w-sm mx-auto">
                         {locale === "en"
                           ? "The instructor will upload supplementary assets and project files here."
                           : "Instruktur akan mengunggah aset tambahan dan file proyek di bagian ini."}
@@ -1878,12 +1878,12 @@ export default function LearnPageClient({
                     </div>
                   ) : resourceFilter === "CHAPTER" ? (
                     currentChapterResources.length === 0 ? (
-                      <div className="bg-stone-900/60 border border-stone-800 rounded-2xl p-8 text-center space-y-2">
-                        <Layers className="mx-auto text-stone-600 mb-2" size={32} />
-                        <h4 className="text-sm font-bold text-stone-300">
+                      <div className="bg-white border border-dashed border-slate-200 rounded-2xl p-8 text-center space-y-2">
+                        <Layers className="mx-auto text-slate-400 mb-2" size={32} />
+                        <h4 className="text-sm font-bold text-slate-700">
                           {locale === "en" ? "No specific files for this chapter" : "Belum Ada Bahan Ajar Khusus Bab Ini"}
                         </h4>
-                        <p className="text-xs text-stone-500 max-w-sm mx-auto">
+                        <p className="text-xs text-slate-400 max-w-sm mx-auto">
                           {locale === "en"
                             ? `No files attached specifically for "${currentSection?.title || 'this chapter'}". Check the General Files tab above.`
                             : `Bab "${currentSection?.title || 'Bab ini'}" belum memiliki berkas khusus. Anda dapat memeriksa tab "Bahan Umum".`}
@@ -1896,12 +1896,12 @@ export default function LearnPageClient({
                     )
                   ) : (
                     generalResources.length === 0 ? (
-                      <div className="bg-stone-900/60 border border-stone-800 rounded-2xl p-8 text-center space-y-2">
-                        <Globe className="mx-auto text-stone-600 mb-2" size={32} />
-                        <h4 className="text-sm font-bold text-stone-300">
+                      <div className="bg-white border border-dashed border-slate-200 rounded-2xl p-8 text-center space-y-2">
+                        <Globe className="mx-auto text-slate-400 mb-2" size={32} />
+                        <h4 className="text-sm font-bold text-slate-700">
                           {locale === "en" ? "No general course files" : "Tidak Ada Bahan Belajar Umum"}
                         </h4>
-                        <p className="text-xs text-stone-500 max-w-sm mx-auto">
+                        <p className="text-xs text-slate-400 max-w-sm mx-auto">
                           {locale === "en"
                             ? "All course materials are assigned directly to their specific chapters."
                             : "Semua bahan belajar untuk kelas ini telah dikelompokkan ke dalam bab masing-masing."}
@@ -1921,15 +1921,15 @@ export default function LearnPageClient({
             {activeTab === "quiz" && (
               <div className="space-y-6">
                 {loadingQuizzes ? (
-                  <div className="p-8 text-center bg-stone-900 rounded-2xl border border-stone-800">
+                  <div className="p-8 text-center bg-white rounded-2xl border border-slate-200">
                     <Loader2 className="animate-spin text-blue-500 mx-auto mb-2" size={24} />
-                    <span className="text-xs text-stone-400">{t("loading_quiz")}</span>
+                    <span className="text-xs text-slate-500">{t("loading_quiz")}</span>
                   </div>
                 ) : quizzes.length === 0 ? (
-                  <div className="bg-stone-900 border border-stone-800 rounded-2xl p-8 text-center space-y-2">
-                    <HelpCircle className="mx-auto text-stone-600 mb-2" size={32} />
-                    <h3 className="text-base font-bold text-stone-200">{t("quiz_not_available")}</h3>
-                    <p className="text-xs text-stone-400">
+                  <div className="bg-white border border-slate-200/80 rounded-2xl shadow-2xs p-8 text-center space-y-2">
+                    <HelpCircle className="mx-auto text-slate-400 mb-2" size={32} />
+                    <h3 className="text-base font-bold text-slate-800">{t("quiz_not_available")}</h3>
+                    <p className="text-xs text-slate-500">
                       {t("quiz_not_available_desc")}
                     </p>
                   </div>
@@ -1956,7 +1956,7 @@ export default function LearnPageClient({
                             className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors ${
                               selectedQuizIdx === idx
                                 ? "bg-blue-600 text-white"
-                                : "bg-stone-900 text-stone-400 hover:bg-stone-800"
+                                : "bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 border border-slate-200"
                             }`}
                           >
                             {t("quiz_label", { n: idx + 1 })}: {q.title}
@@ -1988,10 +1988,10 @@ export default function LearnPageClient({
                         return (
                           <div className="space-y-6">
                             {/* Quiz Header Banner */}
-                            <div className="p-5 rounded-2xl bg-stone-900 border border-stone-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div className="p-5 rounded-2xl bg-white border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                               <div>
                                 <div className="flex items-center gap-2 flex-wrap">
-                                  <h3 className="text-base font-bold text-stone-100">{quiz.title}</h3>
+                                  <h3 className="text-base font-bold text-slate-900">{quiz.title}</h3>
                                   <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
                                     📘 Bab: {quizSection.title}
                                   </span>
@@ -2000,21 +2000,21 @@ export default function LearnPageClient({
                                   </span>
                                 </div>
                                 {quiz.description && (
-                                  <p className="text-xs text-stone-400 mt-1">{quiz.description}</p>
+                                  <p className="text-xs text-slate-500 mt-1">{quiz.description}</p>
                                 )}
                               </div>
                             </div>
 
                             {/* Lock Notification Card */}
-                            <div className="p-6 sm:p-8 rounded-2xl bg-gradient-to-b from-stone-900 to-stone-950 border border-amber-500/30 text-center space-y-4">
+                            <div className="p-6 sm:p-8 rounded-2xl bg-white border border-amber-200 text-center space-y-4 shadow-2xs">
                               <div className="w-16 h-16 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center">
                                 <Lock size={32} />
                               </div>
                               <div className="space-y-1.5 max-w-lg mx-auto">
-                                <h4 className="text-base font-bold text-stone-100">
+                                <h4 className="text-base font-bold text-slate-900">
                                   Selesaikan Materi Bab Terlebih Dahulu
                                 </h4>
-                                <p className="text-xs text-stone-400 leading-relaxed">
+                                <p className="text-xs text-slate-500 leading-relaxed">
                                   Kuis ini dikhususkan untuk menguji pemahaman bab{" "}
                                   <span className="text-amber-300 font-semibold">&ldquo;{quizSection.title}&rdquo;</span>.
                                   Anda harus menyelesaikan seluruh materi di bab ini agar kuis terbuka dan dapat dikerjakan.
@@ -2022,14 +2022,14 @@ export default function LearnPageClient({
                               </div>
 
                               {/* Progress in this section */}
-                              <div className="max-w-md mx-auto p-4 rounded-xl bg-stone-900 border border-stone-800 space-y-2">
+                              <div className="max-w-md mx-auto p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
                                 <div className="flex items-center justify-between text-xs">
-                                  <span className="text-stone-400">Progres Pembelajaran Bab Ini:</span>
+                                  <span className="text-slate-500">Progres Pembelajaran Bab Ini:</span>
                                   <span className="text-amber-300 font-bold">
                                     {completedSectionLessonsCount} / {quizSection.lessons.length} Selesai ({Math.round((completedSectionLessonsCount / quizSection.lessons.length) * 100)}%)
                                   </span>
                                 </div>
-                                <div className="w-full bg-stone-800 h-2 rounded-full overflow-hidden">
+                                <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
                                   <div
                                     className="bg-amber-500 h-full rounded-full transition-all duration-300"
                                     style={{
@@ -2041,18 +2041,18 @@ export default function LearnPageClient({
 
                               {/* Incomplete Lessons list */}
                               <div className="max-w-md mx-auto text-left space-y-2 pt-2">
-                                <span className="text-xs font-semibold text-stone-400 block">
+                                <span className="text-xs font-semibold text-slate-500 block">
                                   Materi yang belum diselesaikan ({uncompletedSectionLessons.length}):
                                 </span>
                                 <div className="space-y-1.5 max-h-52 overflow-y-auto pr-1 custom-scrollbar">
                                   {uncompletedSectionLessons.map((l) => (
                                     <div
                                       key={l.id}
-                                      className="flex items-center justify-between p-2.5 rounded-xl bg-stone-900/80 border border-stone-800 text-xs"
+                                      className="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200 text-xs"
                                     >
                                       <div className="flex items-center gap-2 truncate">
-                                        <Play size={12} className="text-stone-500 shrink-0" />
-                                        <span className="truncate text-stone-200">{l.title}</span>
+                                        <Play size={12} className="text-slate-400 shrink-0" />
+                                        <span className="truncate text-slate-800">{l.title}</span>
                                       </div>
                                       <button
                                         type="button"
@@ -2089,10 +2089,10 @@ export default function LearnPageClient({
                       return (
                         <div className="space-y-6">
                           {/* Quiz Header Banner */}
-                          <div className="p-5 rounded-2xl bg-stone-900 border border-stone-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                          <div className="p-5 rounded-2xl bg-white border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             <div>
                               <div className="flex items-center gap-2 flex-wrap">
-                                <h3 className="text-base font-bold text-stone-100">{quiz.title}</h3>
+                                <h3 className="text-base font-bold text-slate-900">{quiz.title}</h3>
                                 {quizSection && (
                                   <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
                                     📘 Bab: {quizSection.title}
@@ -2103,7 +2103,7 @@ export default function LearnPageClient({
                                 </span>
                               </div>
                               {quiz.description && (
-                                <p className="text-xs text-stone-400 mt-1">{quiz.description}</p>
+                                <p className="text-xs text-slate-500 mt-1">{quiz.description}</p>
                               )}
                             </div>
 
@@ -2135,15 +2135,15 @@ export default function LearnPageClient({
                                       ? isCorrect
                                         ? "bg-green-950/20 border-green-800/60"
                                         : "bg-red-950/20 border-red-800/60"
-                                      : "bg-stone-900 border-stone-800"
+                                      : "bg-white border-slate-200/80 shadow-2xs"
                                   }`}
                                 >
                                   <div className="flex items-start gap-3">
-                                    <span className="w-6 h-6 rounded-lg bg-stone-800 text-stone-300 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
+                                    <span className="w-6 h-6 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
                                       {qIndex + 1}
                                     </span>
                                     <div className="space-y-3 flex-1">
-                                      <p className="text-sm font-semibold text-stone-100">
+                                      <p className="text-sm font-semibold text-slate-900">
                                         {q.question}
                                       </p>
 
@@ -2154,7 +2154,7 @@ export default function LearnPageClient({
                                           const isThisCorrect = optIdx === q.correctAnswer;
                                           const label = String.fromCharCode(65 + optIdx);
                                           let optStyle =
-                                            "bg-stone-950/60 border-stone-800 text-stone-300 hover:bg-stone-800/60";
+                                            "bg-slate-50 hover:bg-slate-100/80 border-slate-200 text-slate-700";
 
                                           if (quizSubmitted) {
                                             if (isCorrect) {
@@ -2194,7 +2194,7 @@ export default function LearnPageClient({
                                                         ? "bg-green-600 text-white"
                                                         : "bg-red-600 text-white"
                                                         : "bg-blue-600 text-white"
-                                                    : "bg-stone-800 text-stone-400"
+                                                    : "bg-slate-200 text-slate-700"
                                                 }`}
                                               >
                                                 {label}
@@ -2262,7 +2262,7 @@ export default function LearnPageClient({
                                   setQuizSubmitted(false);
                                 }}
                                 leftIcon={<RotateCcw size={14} />}
-                                className="bg-stone-800 border-stone-700 text-stone-200 hover:bg-stone-700"
+                                className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 shadow-2xs"
                               >
                                 {t("retake_quiz")}
                               </Button>
@@ -2294,15 +2294,15 @@ export default function LearnPageClient({
             {activeTab === "assignment" && (
               <div className="space-y-6">
                 {loadingAssignments ? (
-                  <div className="p-8 text-center bg-stone-900 rounded-2xl border border-stone-800">
+                  <div className="p-8 text-center bg-white rounded-2xl border border-slate-200">
                     <Loader2 className="animate-spin text-blue-500 mx-auto mb-2" size={24} />
-                    <span className="text-xs text-stone-400">{t("loading_assignments")}</span>
+                    <span className="text-xs text-slate-500">{t("loading_assignments")}</span>
                   </div>
                 ) : assignments.length === 0 ? (
-                  <div className="bg-stone-900 border border-stone-800 rounded-2xl p-8 text-center space-y-2">
-                    <FileCode2 className="mx-auto text-stone-600 mb-2" size={32} />
-                    <h3 className="text-base font-bold text-stone-200">{t("no_assignments")}</h3>
-                    <p className="text-xs text-stone-400">
+                  <div className="bg-white border border-slate-200/80 rounded-2xl shadow-2xs p-8 text-center space-y-2">
+                    <FileCode2 className="mx-auto text-slate-400 mb-2" size={32} />
+                    <h3 className="text-base font-bold text-slate-800">{t("no_assignments")}</h3>
+                    <p className="text-xs text-slate-500">
                       {t("no_assignments_desc")}
                     </p>
                   </div>
@@ -2329,15 +2329,15 @@ export default function LearnPageClient({
                       return (
                         <div
                           key={assignment.id}
-                          className="bg-stone-900 border border-stone-800 rounded-2xl overflow-hidden"
+                          className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-2xs"
                         >
-                          <div className="p-5 border-b border-stone-800 flex items-start gap-3">
+                          <div className="p-5 border-b border-slate-100 flex items-start gap-3">
                             <span className="w-8 h-8 rounded-xl bg-blue-600/20 text-blue-400 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
                               {idx + 1}
                             </span>
                             <div className="space-y-2 flex-1">
                               <div className="flex items-center gap-2 flex-wrap">
-                                <h3 className="text-base font-bold text-stone-100">
+                                <h3 className="text-base font-bold text-slate-900">
                                   {assignment.title}
                                 </h3>
                                 {assignSection && (
@@ -2351,7 +2351,7 @@ export default function LearnPageClient({
                                   </span>
                                 )}
                               </div>
-                              <p className="text-xs text-stone-300 whitespace-pre-line leading-relaxed">
+                              <p className="text-xs text-slate-700 whitespace-pre-line leading-relaxed">
                                 {assignment.description}
                               </p>
 
@@ -2373,17 +2373,17 @@ export default function LearnPageClient({
                             </div>
                           </div>
 
-                          <div className="p-5 bg-stone-950/40">
+                          <div className="p-5 bg-slate-50/50">
                             {isAssignLocked && assignSection ? (
-                              <div className="p-6 rounded-xl bg-gradient-to-b from-stone-900 to-stone-950 border border-amber-500/30 text-center space-y-4">
+                              <div className="p-6 rounded-xl bg-gradient-to-b from-white to-slate-50 border border-amber-500/30 text-center space-y-4">
                                 <div className="w-12 h-12 mx-auto rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center">
                                   <Lock size={24} />
                                 </div>
                                 <div className="space-y-1.5 max-w-md mx-auto">
-                                  <h4 className="text-sm font-bold text-stone-100">
+                                  <h4 className="text-sm font-bold text-slate-900">
                                     Selesaikan Seluruh Materi Bab Ini Terlebih Dahulu
                                   </h4>
-                                  <p className="text-xs text-stone-400 leading-relaxed">
+                                  <p className="text-xs text-slate-500 leading-relaxed">
                                     Tugas proyek ini terikat pada bab{" "}
                                     <span className="text-amber-300 font-semibold">&ldquo;{assignSection.title}&rdquo;</span>.
                                     Anda harus menyelesaikan seluruh materi di bab ini terlebih dahulu agar dapat mengumpulkan tugas.
@@ -2391,14 +2391,14 @@ export default function LearnPageClient({
                                 </div>
 
                                 {/* Progress */}
-                                <div className="max-w-sm mx-auto p-3.5 rounded-xl bg-stone-900 border border-stone-800 space-y-1.5">
+                                <div className="max-w-sm mx-auto p-3.5 rounded-xl bg-white border border-slate-200/80 space-y-1.5">
                                   <div className="flex items-center justify-between text-xs">
-                                    <span className="text-stone-400">Progres Pembelajaran Bab:</span>
+                                    <span className="text-slate-500">Progres Pembelajaran Bab:</span>
                                     <span className="text-amber-300 font-bold">
                                       {completedAssignCount} / {assignSection.lessons.length} Selesai ({Math.round((completedAssignCount / assignSection.lessons.length) * 100)}%)
                                     </span>
                                   </div>
-                                  <div className="w-full bg-stone-800 h-2 rounded-full overflow-hidden">
+                                  <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
                                     <div
                                       className="bg-amber-500 h-full rounded-full transition-all duration-300"
                                       style={{
@@ -2410,18 +2410,18 @@ export default function LearnPageClient({
 
                                 {/* Incomplete Lessons list */}
                                 <div className="max-w-sm mx-auto text-left space-y-2 pt-1">
-                                  <span className="text-xs font-semibold text-stone-400 block">
+                                  <span className="text-xs font-semibold text-slate-500 block">
                                     Materi yang belum selesai ({uncompletedAssignLessons.length}):
                                   </span>
                                   <div className="space-y-1.5 max-h-44 overflow-y-auto pr-1 custom-scrollbar">
                                     {uncompletedAssignLessons.map((l) => (
                                       <div
                                         key={l.id}
-                                        className="flex items-center justify-between p-2 rounded-xl bg-stone-900/80 border border-stone-800 text-xs"
+                                        className="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200 text-xs"
                                       >
                                         <div className="flex items-center gap-2 truncate">
-                                          <Play size={12} className="text-stone-500 shrink-0" />
-                                          <span className="truncate text-stone-200">{l.title}</span>
+                                          <Play size={12} className="text-slate-400 shrink-0" />
+                                          <span className="truncate text-slate-800">{l.title}</span>
                                         </div>
                                         <button
                                           type="button"
@@ -2441,7 +2441,7 @@ export default function LearnPageClient({
                             ) : userSub ? (
                               <div className="space-y-3">
                                 <div className="flex items-center justify-between flex-wrap gap-2">
-                                  <span className="text-xs font-bold text-stone-400">
+                                  <span className="text-xs font-bold text-slate-500">
                                     {t("submission_status")}
                                   </span>
                                   {userSub.status === "APPROVED" ? (
@@ -2462,10 +2462,10 @@ export default function LearnPageClient({
                                   )}
                                 </div>
 
-                                <div className="p-3 bg-stone-900 rounded-xl border border-stone-800 text-xs space-y-2">
+                                <div className="p-3 bg-white rounded-xl border border-slate-200 text-xs space-y-2 shadow-2xs">
                                   {userSub.content && (
                                     <div>
-                                      <span className="text-stone-400 block mb-1">
+                                      <span className="text-slate-500 block mb-1">
                                         {t("submission_link_label")}
                                       </span>
                                       {userSub.content.startsWith("http") ? (
@@ -2479,7 +2479,7 @@ export default function LearnPageClient({
                                           <ExternalLink size={12} className="shrink-0" />
                                         </a>
                                       ) : (
-                                        <p className="font-mono text-stone-200">{userSub.content}</p>
+                                        <p className="font-mono text-slate-800">{userSub.content}</p>
                                       )}
                                     </div>
                                   )}
@@ -2487,7 +2487,7 @@ export default function LearnPageClient({
                                   {/* Uploaded File Download */}
                                   {userSub.fileUrl && (
                                     <div className="pt-1">
-                                      <span className="text-stone-400 block mb-1">
+                                      <span className="text-slate-500 block mb-1">
                                         {t("submitted_file_label")}
                                       </span>
                                       <a
@@ -2495,9 +2495,9 @@ export default function LearnPageClient({
                                         download={userSub.fileName || "submission"}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-semibold transition-colors"
+                                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-100 text-slate-800 text-xs font-semibold transition-colors"
                                       >
-                                        <Download size={13} className="text-stone-400" />
+                                        <Download size={13} className="text-slate-500" />
                                         <span>{userSub.fileName || t("download_submission")}</span>
                                       </a>
                                     </div>
@@ -2509,7 +2509,7 @@ export default function LearnPageClient({
                                     <span className="font-bold text-amber-300">
                                       {t("mentor_note")}
                                     </span>
-                                    <p className="text-stone-200 leading-relaxed">
+                                    <p className="text-slate-800 leading-relaxed">
                                       {userSub.feedback}
                                     </p>
                                   </div>
@@ -2517,7 +2517,7 @@ export default function LearnPageClient({
 
                                 {userSub.status === "REJECTED" && (
                                   <div className="pt-2 space-y-3">
-                                    <label htmlFor={"revision-url-" + assignment.id} className="block text-xs font-semibold text-stone-300">{t("submit_revision")}</label>
+                                    <label htmlFor={"revision-url-" + assignment.id} className="block text-xs font-semibold text-slate-700">{t("submit_revision")}</label>
 
                                     <input id={"revision-url-" + assignment.id} name={"revisionUrl_" + assignment.id} type="text" placeholder={t("revision_placeholder")} value={submissionUrlInput[assignment.id] || ""}
                                       onChange={(e) =>
@@ -2526,7 +2526,7 @@ export default function LearnPageClient({
                                           [assignment.id]: e.target.value,
                                         }))
                                       }
-                                      className="w-full text-xs px-3 py-2 rounded-xl bg-stone-900 border border-stone-800 text-stone-100 placeholder:text-stone-600 focus:outline-hidden focus:border-blue-500"
+                                      className="w-full text-xs px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-hidden focus:border-blue-500"
                                     />
 
                                     {/* Revision File Upload */}
@@ -2547,13 +2547,13 @@ export default function LearnPageClient({
                                               return updated;
                                             })
                                           }
-                                          className="text-stone-400 hover:text-red-400 p-1"
+                                          className="text-slate-500 hover:text-red-400 p-1"
                                         >
                                           <X size={14} />
                                         </button>
                                       </div>
                                     ) : (
-                                      <label className="flex items-center justify-center gap-2 p-2.5 rounded-xl border border-dashed border-stone-700 hover:bg-stone-900 cursor-pointer text-xs text-stone-400 hover:text-stone-200 transition-colors">
+                                      <label className="flex items-center justify-center gap-2 p-2.5 rounded-xl border border-dashed border-slate-200 hover:bg-white cursor-pointer text-xs text-slate-500 hover:text-slate-800 transition-colors">
                                         {uploadingForAssignmentId === assignment.id ? (
                                           <span className="flex items-center gap-2 text-blue-400">
                                             <Loader2 size={14} className="animate-spin" />
@@ -2587,7 +2587,7 @@ export default function LearnPageClient({
                             ) : (
                               <div className="space-y-3">
                                 <div>
-                                  <label htmlFor={"assign-url-" + assignment.id} className="block text-xs font-semibold text-stone-300 mb-1">{t("submit_url_placeholder")}</label>
+                                  <label htmlFor={"assign-url-" + assignment.id} className="block text-xs font-semibold text-slate-700 mb-1">{t("submit_url_placeholder")}</label>
                                   <input id={"assign-url-" + assignment.id} name={"assignUrl_" + assignment.id} type="text" placeholder="https://github.com/username/project..." value={submissionUrlInput[assignment.id] || ""}
                                     onChange={(e) =>
                                       setSubmissionUrlInput((prev) => ({
@@ -2595,13 +2595,13 @@ export default function LearnPageClient({
                                         [assignment.id]: e.target.value,
                                       }))
                                     }
-                                    className="w-full text-xs px-3.5 py-2.5 rounded-xl bg-stone-900 border border-stone-800 text-stone-100 placeholder:text-stone-600 focus:outline-hidden focus:border-blue-500"
+                                    className="w-full text-xs px-3.5 py-2.5 rounded-xl bg-white border border-slate-200/80 text-slate-900 placeholder:text-slate-400 focus:outline-hidden focus:border-blue-500"
                                   />
                                 </div>
 
                                 {/* Upload File option */}
                                 <div>
-                                  <label htmlFor={"assign-file-" + assignment.id} className="block text-xs font-semibold text-stone-300 mb-1">{t("upload_file_label")}</label>
+                                  <label htmlFor={"assign-file-" + assignment.id} className="block text-xs font-semibold text-slate-700 mb-1">{t("upload_file_label")}</label>
 
                                   {currentFile ? (
                                     <div className="flex items-center justify-between p-3 rounded-xl bg-blue-500/10 border border-blue-500/30 text-xs">
@@ -2620,13 +2620,13 @@ export default function LearnPageClient({
                                             return updated;
                                           })
                                         }
-                                        className="text-stone-400 hover:text-red-400 p-1"
+                                        className="text-slate-500 hover:text-red-400 p-1"
                                       >
                                         <X size={14} />
                                       </button>
                                     </div>
                                   ) : (
-                                    <label className="flex flex-col items-center justify-center p-4 border border-dashed border-stone-700 rounded-xl hover:bg-stone-900 cursor-pointer transition-colors text-center">
+                                    <label className="flex flex-col items-center justify-center p-4 border border-dashed border-slate-300 rounded-xl hover:bg-slate-100/80 cursor-pointer transition-colors bg-white text-center">
                                       {uploadingForAssignmentId === assignment.id ? (
                                         <div className="flex items-center gap-2 text-xs text-blue-400 font-semibold">
                                           <Loader2 size={16} className="animate-spin" />
@@ -2634,8 +2634,8 @@ export default function LearnPageClient({
                                         </div>
                                       ) : (
                                         <>
-                                          <Upload size={18} className="text-stone-400 mb-1" />
-                                          <span className="text-xs font-semibold text-stone-300">
+                                          <Upload size={18} className="text-slate-500 mb-1" />
+                                          <span className="text-xs font-semibold text-slate-700">
                                             {t("upload_file_label")}
                                           </span>
                                         </>
@@ -2674,15 +2674,15 @@ export default function LearnPageClient({
                 {/* Form Ajukan Pertanyaan */}
                 <form
                   onSubmit={handlePostDiscussion}
-                  className="bg-stone-900 border border-stone-800 rounded-2xl p-5 space-y-3"
+                  className="bg-white border border-slate-200/80 rounded-2xl p-5 space-y-3 shadow-2xs"
                 >
-                  <h3 className="text-sm font-bold text-stone-200">
+                  <h3 className="text-sm font-bold text-slate-900">
                     {t("post_discussion")}
                   </h3>
                   <label htmlFor="learn-discussion-topic" className="sr-only">Topik Diskusi</label>
                   <textarea id="learn-discussion-topic" name="topicContent" rows={3} value={newTopicText} onChange={(e) => setNewTopicText(e.target.value)}
                     placeholder={t("discussion_placeholder")}
-                    className="w-full rounded-xl bg-stone-950 border border-stone-800 p-3 text-xs sm:text-sm text-stone-200 placeholder:text-stone-600 focus:outline-hidden focus:border-blue-500"
+                    className="w-full rounded-xl bg-slate-50 border border-slate-200 p-3 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-hidden focus:border-blue-500 focus:bg-white"
                   />
                   <div className="flex justify-end">
                     <Button
@@ -2698,9 +2698,9 @@ export default function LearnPageClient({
                 </form>
 
                 {loadingDiscussions ? (
-                  <div className="p-8 text-center bg-stone-900 rounded-2xl border border-stone-800">
+                  <div className="p-8 text-center bg-white rounded-2xl border border-slate-200">
                     <Loader2 className="animate-spin text-blue-500 mx-auto mb-2" size={24} />
-                    <span className="text-xs text-stone-400">
+                    <span className="text-xs text-slate-500">
                       {locale === "en" ? "Loading discussions..." : "Memuat diskusi kelas..."}
                     </span>
                   </div>
@@ -2709,22 +2709,22 @@ export default function LearnPageClient({
                     {discussions.map((d) => (
                       <div
                         key={d.id}
-                        className="bg-stone-900 border border-stone-800 rounded-2xl overflow-hidden"
+                        className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-2xs"
                       >
                         {/* Topic Header & Content */}
                         <div className="p-4 sm:p-5 space-y-2">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2.5">
-                              <div className="w-8 h-8 rounded-full bg-stone-800 border border-stone-700 flex items-center justify-center font-bold text-white text-xs overflow-hidden">
+                              <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center font-bold text-slate-600 text-xs overflow-hidden">
                                 {d.user?.image ? (
                                   // eslint-disable-next-line @next/next/no-img-element
                                   <img src={d.user.image} alt={d.user.name || "User"} width={32} height={32} loading="eager" style={{ aspectRatio: "1 / 1" }} className="w-full h-full object-cover aspect-square" />
                                 ) : (
-                                  <UserIcon size={14} className="text-stone-400" />
+                                  <UserIcon size={14} className="text-slate-500" />
                                 )}
                               </div>
                               <div>
-                                <span className="text-xs font-bold text-stone-200">
+                                <span className="text-xs font-bold text-slate-800">
                                   {d.user?.name || (locale === "en" ? "User" : "Pengguna")}
                                 </span>
                                 {d.user?.role === "ADMIN" && (
@@ -2735,7 +2735,7 @@ export default function LearnPageClient({
                                 )}
                               </div>
                             </div>
-                            <span className="text-[11px] text-stone-500">
+                            <span className="text-[11px] text-slate-400">
                               {new Date(d.createdAt).toLocaleDateString(locale === "en" ? "en-US" : "id-ID", {
                                 day: "numeric",
                                 month: "short",
@@ -2744,13 +2744,13 @@ export default function LearnPageClient({
                               })}
                             </span>
                           </div>
-                          <p className="text-xs sm:text-sm text-stone-300 pl-10 leading-relaxed whitespace-pre-wrap">
+                          <p className="text-xs sm:text-sm text-slate-700 pl-10 leading-relaxed whitespace-pre-wrap">
                             {d.content}
                           </p>
                         </div>
 
                         {/* Replies */}
-                        <div className="bg-stone-950/60 border-t border-stone-800/80 p-4 space-y-3">
+                        <div className="bg-slate-50/60 border-t border-slate-100 p-4 space-y-3">
                           {d.replies.length > 0 && (
                             <div className="space-y-2.5 mb-3">
                               {d.replies.map((reply) => {
@@ -2760,21 +2760,21 @@ export default function LearnPageClient({
                                     key={reply.id}
                                     className={`p-3 rounded-xl border text-xs space-y-1 ${
                                       isAdmin
-                                        ? "bg-blue-950/20 border-blue-800/40"
-                                        : "bg-stone-900 border-stone-800"
+                                        ? "bg-blue-50/60 border-blue-200 text-slate-800"
+                                        : "bg-white border-slate-200 text-slate-800 shadow-2xs"
                                     }`}
                                   >
                                     <div className="flex items-center justify-between">
                                       <div className="flex items-center gap-2">
-                                        <div className="w-5 h-5 rounded-full bg-stone-800 flex items-center justify-center text-[10px] font-bold overflow-hidden">
+                                        <div className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-bold overflow-hidden">
                                           {reply.user?.image ? (
                                             // eslint-disable-next-line @next/next/no-img-element
                                             <img src={reply.user.image} alt={reply.user.name || "User"} width={20} height={20} loading="eager" style={{ aspectRatio: "1 / 1" }} className="w-full h-full object-cover aspect-square" />
                                           ) : (
-                                            <UserIcon size={10} className="text-stone-400" />
+                                            <UserIcon size={10} className="text-slate-500" />
                                           )}
                                         </div>
-                                        <span className="font-bold text-stone-200">
+                                        <span className="font-bold text-slate-800">
                                           {reply.user?.name || (locale === "en" ? "User" : "Pengguna")}
                                         </span>
                                         {isAdmin && (
@@ -2783,7 +2783,7 @@ export default function LearnPageClient({
                                           </span>
                                         )}
                                       </div>
-                                      <span className="text-[10px] text-stone-500">
+                                      <span className="text-[10px] text-slate-400">
                                         {new Date(reply.createdAt).toLocaleDateString(locale === "en" ? "en-US" : "id-ID", {
                                           day: "numeric",
                                           month: "short",
@@ -2792,7 +2792,7 @@ export default function LearnPageClient({
                                         })}
                                       </span>
                                     </div>
-                                    <p className="text-stone-300 pl-7 leading-relaxed whitespace-pre-wrap">
+                                    <p className="text-slate-700 pl-7 leading-relaxed whitespace-pre-wrap">
                                       {reply.content}
                                     </p>
                                   </div>
@@ -2814,7 +2814,7 @@ export default function LearnPageClient({
                                   handleSendReply(d.id);
                                 }
                               }}
-                              className="flex-1 text-xs px-3 py-2 rounded-xl bg-stone-900 border border-stone-800 text-stone-100 placeholder:text-stone-600 focus:outline-hidden focus:border-blue-500"
+                              className="flex-1 text-xs px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-800 placeholder:text-slate-400 focus:outline-hidden focus:border-blue-500"
                             />
                             <Button
                               type="button"
@@ -2832,7 +2832,7 @@ export default function LearnPageClient({
                     ))}
                   </div>
                 ) : (
-                  <div className="bg-stone-900/60 border border-stone-800 rounded-2xl p-8 text-center text-xs text-stone-500">
+                  <div className="bg-white border border-dashed border-slate-200 rounded-2xl p-8 text-center text-xs text-slate-400">
                     {t("discussion_empty")}
                   </div>
                 )}
