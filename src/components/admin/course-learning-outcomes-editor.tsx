@@ -5,8 +5,6 @@ import {
   CheckCircle2,
   Plus,
   Trash2,
-  ChevronUp,
-  ChevronDown,
   AlignLeft,
   ListOrdered,
 } from "lucide-react";
@@ -36,24 +34,6 @@ export function CourseLearningOutcomesEditor({
 
   const handleRemoveItem = (index: number) => {
     const updated = value.filter((_, i) => i !== index);
-    onChange(updated);
-  };
-
-  const handleMoveUp = (index: number) => {
-    if (index === 0) return;
-    const updated = [...value];
-    const temp = updated[index - 1];
-    updated[index - 1] = updated[index];
-    updated[index] = temp;
-    onChange(updated);
-  };
-
-  const handleMoveDown = (index: number) => {
-    if (index === value.length - 1) return;
-    const updated = [...value];
-    const temp = updated[index + 1];
-    updated[index + 1] = updated[index];
-    updated[index] = temp;
     onChange(updated);
   };
 
@@ -164,28 +144,6 @@ export function CourseLearningOutcomesEditor({
                     placeholder={`Poin ${index + 1}: Contoh: Memahami konsep dasar dan implementasi nyata...`}
                     className="flex-1 bg-transparent px-2 py-1.5 text-sm text-stone-800 focus:outline-none placeholder:text-stone-400"
                   />
-
-                  {/* Move Up / Down */}
-                  <div className="flex items-center gap-0.5 opacity-60 group-hover:opacity-100 transition-opacity">
-                    <button
-                      type="button"
-                      disabled={index === 0}
-                      onClick={() => handleMoveUp(index)}
-                      className="p-1 rounded hover:bg-stone-100 text-stone-500 disabled:opacity-30 disabled:hover:bg-transparent"
-                      title="Geser ke atas"
-                    >
-                      <ChevronUp size={14} />
-                    </button>
-                    <button
-                      type="button"
-                      disabled={index === value.length - 1}
-                      onClick={() => handleMoveDown(index)}
-                      className="p-1 rounded hover:bg-stone-100 text-stone-500 disabled:opacity-30 disabled:hover:bg-transparent"
-                      title="Geser ke bawah"
-                    >
-                      <ChevronDown size={14} />
-                    </button>
-                  </div>
 
                   {/* Delete */}
                   <button
