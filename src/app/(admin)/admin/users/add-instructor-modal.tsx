@@ -18,8 +18,10 @@ import {
   Shield,
 } from "lucide-react";
 import { dynamicAlert } from "@/components/ui/dynamic-alert-provider";
+import { useTranslations } from "next-intl";
 
 export function AddInstructorModal() {
+  const t = useTranslations("admin");
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -134,10 +136,10 @@ export function AddInstructorModal() {
         onClick={handleOpen}
         type="button"
         className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white text-xs font-semibold shadow-xs hover:shadow transition-all duration-150 active:scale-[0.98] cursor-pointer"
-        aria-label="Tambah Instruktur Baru"
+        aria-label={t("btn_add_instructor")}
       >
         <UserPlus size={15} className="shrink-0" />
-        <span>Tambah Instruktur</span>
+        <span>{t('btn_add_instructor')}</span>
       </button>
 
       {/* Modal Backdrop & Dialog */}
@@ -160,10 +162,10 @@ export function AddInstructorModal() {
                     id="add-instructor-title"
                     className="text-base font-bold text-stone-900 tracking-tight"
                   >
-                    Tambah Instruktur Baru
+                    {t("add_instructor_title")}
                   </h2>
                   <p className="text-xs text-stone-500 mt-0.5">
-                    Buat akun instruktur untuk mengajar kelas di platform
+                    {t("add_instructor_desc")}
                   </p>
                 </div>
               </div>
@@ -196,11 +198,10 @@ export function AddInstructorModal() {
                   <button
                     type="button"
                     onClick={() => setRole("INSTRUCTOR")}
-                    className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${
-                      role === "INSTRUCTOR"
+                    className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${role === "INSTRUCTOR"
                         ? "bg-teal-50 text-teal-800 border-teal-300 ring-2 ring-teal-600/15"
                         : "bg-white text-stone-600 border-stone-200 hover:bg-stone-50"
-                    }`}
+                      }`}
                   >
                     <GraduationCap size={14} className={role === "INSTRUCTOR" ? "text-teal-600" : "text-stone-400"} />
                     <span>Instruktur</span>
@@ -209,11 +210,10 @@ export function AddInstructorModal() {
                   <button
                     type="button"
                     onClick={() => setRole("ADMIN")}
-                    className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${
-                      role === "ADMIN"
+                    className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${role === "ADMIN"
                         ? "bg-blue-50 text-blue-900 border-blue-300 ring-2 ring-blue-600/15"
                         : "bg-white text-stone-600 border-stone-200 hover:bg-stone-50"
-                    }`}
+                      }`}
                   >
                     <Shield size={14} className={role === "ADMIN" ? "text-blue-600" : "text-stone-400"} />
                     <span>Admin</span>
@@ -222,11 +222,10 @@ export function AddInstructorModal() {
                   <button
                     type="button"
                     onClick={() => setRole("USER")}
-                    className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${
-                      role === "USER"
+                    className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${role === "USER"
                         ? "bg-stone-100 text-stone-900 border-stone-300 ring-2 ring-stone-400/20"
                         : "bg-white text-stone-600 border-stone-200 hover:bg-stone-50"
-                    }`}
+                      }`}
                   >
                     <User size={14} className={role === "USER" ? "text-stone-800" : "text-stone-400"} />
                     <span>Siswa</span>
