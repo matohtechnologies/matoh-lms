@@ -1,15 +1,13 @@
 import { cache } from "react";
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
-import { ChevronDown, Play, Lock } from "lucide-react";
+import { Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge, LevelBadge } from "@/components/ui/badge";
 import { StarRating } from "@/components/ui/star-rating";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { formatCurrency, formatDuration } from "@/lib/utils";
-import { resolveThumbnailUrl } from "@/lib/youtube";
 import { CourseHeroMedia } from "@/components/courses/course-hero-media";
 import { CourseCurriculumList } from "@/components/courses/course-curriculum-list";
 import { MobileStickyBar } from "@/components/courses/mobile-sticky-bar";

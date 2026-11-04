@@ -9,15 +9,12 @@ import {
   Edit2,
   Trash2,
   BookOpen,
-  ArrowRight,
   ExternalLink,
-  Layers,
   Copy,
   Check,
   AlertTriangle,
   Loader2,
   X,
-  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { slugify } from "@/lib/utils";
@@ -47,7 +44,6 @@ interface CategoryManagerProps {
 export function CategoryManager({ initialCategories }: CategoryManagerProps) {
   const t = useTranslations("admin");
   const locale = useLocale();
-  const isEn = locale === "en";
   const [categories, setCategories] = useState<CategoryItem[]>(initialCategories);
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState<"ALL" | "WITH_COURSES" | "EMPTY">("ALL");

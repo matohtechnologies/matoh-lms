@@ -3,14 +3,10 @@ import Image from "next/image";
 import {
   ArrowRight,
   ShieldCheck,
-  CheckCircle2,
   Clock,
-  Terminal,
-  Cpu,
   Layers,
   Network,
   MessageSquare,
-  Sparkles,
   Star,
   Globe,
   Code2,
@@ -855,17 +851,6 @@ export default async function HomePage() {
                 </Link>
               </div>
             </div>
-          </div>
-
-          {/* Centered Button "Lihat Semua" */}
-          <div className="text-center mt-12">
-            <Link
-              href="/konsultan"
-              className="inline-flex items-center gap-2 px-7 py-3 rounded-lg border border-slate-300 hover:border-blue-600 bg-white text-slate-800 hover:text-blue-600 font-semibold text-sm sm:text-base transition-colors shadow-2xs"
-            >
-              <span>{isEn ? "View Consulting Services" : "Lihat Semua"}</span>
-              <ArrowRight size={16} />
-            </Link>
           </div>
         </div>
       </section>

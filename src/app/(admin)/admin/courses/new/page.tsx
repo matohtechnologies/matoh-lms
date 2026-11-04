@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Save, CheckCircle2, AlertCircle, Video, Sparkles } from "lucide-react";
+import { ArrowLeft, Save, CheckCircle2, AlertCircle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/input";
 import { extractYouTubeVideoId, getYouTubeThumbnailUrl, isYouTubeUrl, resolveThumbnailUrl } from "@/lib/youtube";

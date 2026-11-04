@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
-import { Users, BookOpen, ShoppingBag, TrendingUp, DollarSign } from "lucide-react";
+import Link from "next/link";
+import { BookOpen, ShoppingBag } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { formatCurrency } from "@/lib/utils";
@@ -105,13 +106,10 @@ export default async function AdminOverviewPage() {
         </div>
 
         <div className="flex items-center gap-2.5">
-          <a
-            href="/admin/courses/new"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold shadow-xs transition-colors"
-          >
+          <Link href="/admin/courses/new" className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold shadow-xs transition-colors">
             <BookOpen size={14} />
             {t("add_course")}
-          </a>
+          </Link>
         </div>
       </div>
 

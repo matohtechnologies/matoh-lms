@@ -797,8 +797,8 @@ export function resolveElementText(
         data.signatory_name1 ||
         data.signatory_name_1 ||
         data.signatoryName1 ||
-        (data as any).instructorName ||
-        (data as any).leadInstructor
+        (data as Record<string, string | undefined>).instructorName ||
+        (data as Record<string, string | undefined>).leadInstructor
       );
     }
     if (key === "signatory_role1") {
@@ -817,7 +817,7 @@ export function resolveElementText(
       return data.course_title || data.courseTitle;
     }
     if (key === "category_name") {
-      return data.category_name || (data as any).categoryName;
+      return data.category_name || (data as Record<string, string | undefined>).categoryName;
     }
     if (key === "certificate_title") {
       return data.certificate_title || data.certificateTitle;
@@ -826,7 +826,7 @@ export function resolveElementText(
       return data.certificate_subtitle || data.subtitle;
     }
     if (key === "issue_date") {
-      return data.issue_date || data.issueDate || (data as any).issueDisplay;
+      return data.issue_date || data.issueDate || (data as Record<string, string | undefined>).issueDisplay;
     }
     if (key === "certificate_code") {
       return data.certificate_code || data.certificateCode;

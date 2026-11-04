@@ -2,10 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  Sparkles,
   Network,
   Layers,
-  TrendingUp,
   ArrowRight,
   CheckCircle2,
   Quote,
@@ -13,11 +11,8 @@ import {
   FileText,
   Building2,
   Users,
-  Compass,
-  Award,
 } from "lucide-react";
 import { getLocale } from "next-intl/server";
-import { Button } from "@/components/ui/button";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -42,11 +37,6 @@ export default async function RisetPage() {
       <section className="bg-gradient-to-b from-blue-50/70 via-white to-white border-b border-slate-200 py-16 sm:py-24 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
           <div className="max-w-3xl mx-auto text-center space-y-4">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold border border-indigo-100">
-              <Sparkles size={13} className="text-indigo-600" />
-              <span>{isEn ? "RnD & Decision Science Division" : "Divisi Riset & Sains Keputusan"}</span>
-            </div>
-
             <h1
               className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}

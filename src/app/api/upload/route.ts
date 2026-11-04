@@ -127,7 +127,7 @@ export async function POST(req: NextRequest) {
     const sanitizedBase = path.basename(file.name, ext).replace(/[^a-zA-Z0-9_-]/g, "_").slice(0, 30);
     
     let finalBuffer: Buffer = rawBuffer;
-    let finalExt = ext;
+    const finalExt = ext;
 
     // 8. If image, process through Sharp to strip malicious metadata and sanitize image binary
     if (mimeType.startsWith("image/") && mimeType !== "image/gif") {

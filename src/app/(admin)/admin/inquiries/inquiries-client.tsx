@@ -2,21 +2,16 @@
 
 import { useState, useEffect, useCallback } from "react";
 import {
-  MessageSquare,
   Search,
   Mail,
   Phone,
   Building,
-  CheckCircle2,
   Clock,
   Trash2,
-  Eye,
   X,
-  ExternalLink,
   RefreshCw,
   Loader2,
   Inbox,
-  Filter,
   Check,
   AlertCircle,
   Copy,

@@ -1,12 +1,9 @@
+import { getLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { getLocale } from "next-intl/server";
 import {
-  FileText,
-  ShieldCheck,
   Building,
-  Scale,
   Calendar,
   AlertCircle,
   ArrowRight,

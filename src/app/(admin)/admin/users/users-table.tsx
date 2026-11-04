@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search, Users, GraduationCap, Shield, User, X } from "lucide-react";
+import { Search, Users, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { UserActions } from "./user-actions";
 import { useTranslations } from "next-intl";

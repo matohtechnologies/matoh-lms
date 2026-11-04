@@ -1,22 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import {
-  BookOpen,
-  Users,
-  Award,
-  Target,
-  Heart,
-  Star,
-  CheckCircle2,
-  ShieldCheck,
-  Code2,
-  Compass,
-  ArrowRight,
-  Sparkles,
-  Building,
-  GraduationCap,
-} from "lucide-react";
-import { getTranslations, getLocale } from "next-intl/server";
+import { CheckCircle2, ShieldCheck, ArrowRight } from "lucide-react";
+import { getLocale } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { LegalTrustCard } from "@/components/about/legal-trust-card";
 import type { Metadata } from "next";

@@ -16,7 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { enUS, id as idLocale } from "date-fns/locale";
-import { useTranslations, useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useAppLocale } from "@/components/providers/locale-provider";
 import { cn } from "@/lib/utils";
 import { CertificateCanvasRenderer } from "@/components/certificates/certificate-canvas-renderer";

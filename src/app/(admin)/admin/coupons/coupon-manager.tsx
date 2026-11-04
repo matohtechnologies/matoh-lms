@@ -16,14 +16,10 @@ import {
   BookOpen,
   Calendar,
   Percent,
-  Coins,
-  ShieldAlert,
   Loader2,
   Clock,
-  ArrowRight,
   UserCheck,
   Globe,
-  Tag,
   Eye,
   X,
 } from "lucide-react";
@@ -94,7 +90,6 @@ export function CouponManager({
   availableUsers: initialAvailableUsers = [],
 }: CouponManagerProps) {
   const t = useTranslations("admin");
-  const locale = useLocale();
   const [coupons, setCoupons] = useState<CouponItem[]>(initialCoupons);
   const [courses, setCourses] = useState<CourseOption[]>(initialCourses);
   const [availableUsers, setAvailableUsers] = useState<UserOption[]>(initialAvailableUsers);

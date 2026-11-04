@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { CertificateView } from "./certificate-view";
+import type { CertificateDesignConfig } from "@/lib/certificate-templates";
 import type { Metadata } from "next";
 import QRCode from "qrcode";
 import { format } from "date-fns";
@@ -323,7 +324,7 @@ export default async function CertificateViewPage({ params, searchParams }: Cert
           certificate.signatoryRole2 || setting?.signatoryRole2 || "Head of Academic Board"
         }
         templateUrl={certificate.templateUrl || setting?.templateUrl || undefined}
-        templateConfig={(certificate as any).templateConfig || (setting as any)?.templateConfig || null}
+        templateConfig={((certificate as { templateConfig?: unknown }).templateConfig || (setting as { templateConfig?: unknown })?.templateConfig || null) as CertificateDesignConfig | null}
         transcriptData={transcriptData}
       />
     );

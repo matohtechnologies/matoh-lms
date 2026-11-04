@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Send, CheckCircle2, Phone, ShieldCheck, Loader2, Sparkles, Building2, ExternalLink, HelpCircle } from "lucide-react";
+import { Send, CheckCircle2, Phone, ShieldCheck, Loader2, Sparkles, Building2, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { useAppLocale } from "@/components/providers/locale-provider";
 

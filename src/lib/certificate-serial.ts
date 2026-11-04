@@ -66,7 +66,7 @@ export function formatCertificateSerialNumber(options: FormatSerialOptions): str
     random4 += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
   }
 
-  let formatted = pattern
+  const formatted = pattern
     .replace(/\{COURSE_CODE\}/gi, courseCode)
     .replace(/\{COURSE\}/gi, courseCode)
     .replace(/\{YEAR\}/gi, year4)

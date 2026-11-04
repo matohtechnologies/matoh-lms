@@ -16,7 +16,7 @@ export function ScrollReveal({
   direction = "up",
 }: ScrollRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(() => typeof window !== "undefined" ? !("IntersectionObserver" in window) : false);
 
   useEffect(() => {
     const node = ref.current;
@@ -24,7 +24,6 @@ export function ScrollReveal({
 
     // Check if IntersectionObserver is supported
     if (!("IntersectionObserver" in window)) {
-      setIsVisible(true);
       return;
     }
 

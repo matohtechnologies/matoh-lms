@@ -78,10 +78,6 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
       <div className="bg-gradient-to-b from-blue-50/70 via-[#f8fafc] to-[#f8fafc] border-b border-slate-200/70 py-12 sm:py-16 bg-dot-matrix relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[280px] bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.12)_0%,transparent_70%)] pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 text-center">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100/70 text-blue-800 text-xs font-semibold mb-3">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-            <span>{isEn ? "Matoh Learning Catalog" : "Katalog Pelatihan Matoh"}</span>
-          </div>
           <h1
             className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 mb-3 tracking-tight"
             style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
@@ -172,11 +168,10 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                 <a
                   key={page}
                   href={`/courses?page=${page}`}
-                  className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-medium transition-colors ${
-                    currentPage === page
+                  className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-medium transition-colors ${currentPage === page
                       ? "bg-blue-600 text-white"
                       : "bg-white border border-slate-300 text-slate-700 hover:border-blue-400"
-                  }`}
+                    }`}
                 >
                   {page}
                 </a>

@@ -11,11 +11,8 @@ import {
   ArrowRight,
   MessageSquare,
   Sparkles,
-  Server,
   Workflow,
-  Search,
   Settings,
-  HelpCircle,
   FileCheck,
 } from "lucide-react";
 import { getLocale } from "next-intl/server";
@@ -132,11 +129,6 @@ export default async function DeveloperPage() {
       <section className="bg-gradient-to-b from-blue-50/70 via-white to-white border-b border-slate-200 py-16 sm:py-24 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
           <div className="max-w-3xl mx-auto text-center space-y-5">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-blue-100/70 text-blue-800 text-xs font-bold border border-blue-200">
-              <Code2 size={14} className="text-blue-600" />
-              <span>{isEn ? "Custom Software & Web Development Services" : "Jasa Pembuatan Website & Sistem Kustom"}</span>
-            </div>
-
             <h1
               className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}

@@ -505,11 +505,7 @@ function HeadingNode({
 }
 
 // Code Block with Copy Button
-function CodeBlockNode({
-  code,
-  language,
-  dark,
-}: {
+function CodeBlockNode({ code, language, dark: _dark }: {
   code: string;
   language?: string;
   dark: boolean;
@@ -707,7 +703,7 @@ function BlockquoteNode({
 // Helper to convert web URLs (like Unsplash photo pages) into direct image URLs
 function normalizeDisplayImageUrl(src: string): string {
   if (!src) return "";
-  let clean = src.trim();
+  const clean = src.trim();
 
   // If user entered an Unsplash photo page link
   // e.g., https://unsplash.com/photos/escalator-with-illuminated-handrails-in-sumida-MZmJf...
@@ -762,7 +758,7 @@ function ImageNode({
         <p className="text-[11px] mt-2 text-stone-500 dark:text-stone-400 max-w-md mx-auto">
           Tautan ini adalah halaman web, bukan file gambar langsung.
           <br />
-          <strong>Tips:</strong> Buka gambar &rarr; Klik kanan pada gambar &rarr; Pilih <strong>"Salin Alamat Gambar" (Copy Image Address)</strong>, lalu tempelkan kembali.
+          <strong>Tips:</strong> Buka gambar &rarr; Klik kanan pada gambar &rarr; Pilih <strong>&ldquo;Salin Alamat Gambar&rdquo; (Copy Image Address)</strong>, lalu tempelkan kembali.
         </p>
       </div>
     );

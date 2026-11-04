@@ -46,7 +46,7 @@ export async function POST(
     }
 
     // Generate unique slug for section
-    let baseSlug = (data.slug || data.title)
+    const baseSlug = (data.slug || data.title)
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-+|-+$/g, "") || "materi";

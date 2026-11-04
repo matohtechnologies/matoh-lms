@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { CheckCircle2, PlayCircle, BookOpen, ArrowRight, Loader2, Award } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 interface VerifiedCourse {
   id: string;

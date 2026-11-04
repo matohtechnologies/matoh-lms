@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Kamu sudah terdaftar di kelas ini" }, { status: 409 });
     }
 
-    let baseAmount = course.discountPrice ?? course.price;
+    const baseAmount = course.discountPrice ?? course.price;
     let discountAmount = 0;
     let appliedCouponId: string | null = null;
 

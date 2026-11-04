@@ -1,15 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  BookOpen,
-  Clock,
-  ArrowRight,
-  Sparkles,
-  Calendar,
-  FileText,
-  User,
-  Search,
-} from "lucide-react";
+import { Clock, ArrowRight } from "lucide-react";
 import { getLocale } from "next-intl/server";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -151,11 +142,6 @@ export default async function PublikasiPage() {
       <section className="bg-gradient-to-b from-blue-50/70 via-white to-white border-b border-slate-200 py-16 sm:py-24 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
           <div className="max-w-3xl mx-auto text-center space-y-4">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-bold border border-blue-100">
-              <BookOpen size={13} className="text-blue-600" />
-              <span>{isEn ? "Publications & Insights" : "Publikasi Riset & Wawasan"}</span>
-            </div>
-
             <h1
               className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}

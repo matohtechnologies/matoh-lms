@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import type { Metadata } from "next";
 import QRCode from "qrcode";
@@ -6,8 +5,6 @@ import { format } from "date-fns";
 import { id as idLocale } from "date-fns/locale";
 import { VerifyClient } from "./verify-client";
 import type { TranscriptAssessmentItem } from "@/components/certificates/certificate-transcript-card";
-import Link from "next/link";
-import { ShieldAlert, ArrowLeft, Search } from "lucide-react";
 
 import { VerifyNotFoundClient } from "./verify-not-found-client";
 import { getAppBaseUrl } from "@/lib/app-url";

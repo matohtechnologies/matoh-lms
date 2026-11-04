@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { BookOpen, LogOut, Shield } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { getTranslations } from "next-intl/server";
 import AdminNavLink, { type AdminNavItem } from "./admin-nav-link";

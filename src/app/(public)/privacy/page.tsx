@@ -1,16 +1,13 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import Image from "next/image";
 import { getLocale } from "next-intl/server";
+import type { Metadata } from "next";
+import Image from "next/image";
 import {
-  ShieldCheck,
   Lock,
   Calendar,
   Building,
   CheckCircle2,
   FileCheck2,
   Database,
-  ArrowRight,
 } from "lucide-react";
 
 export async function generateMetadata(): Promise<Metadata> {
