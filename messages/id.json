@@ -499,7 +499,10 @@
     "lesson_created": "Materi baru berhasil ditambahkan",
     "lesson_deleted": "Materi berhasil dihapus",
     "cancel": "Batal",
-    "save": "Simpan"
+    "save": "Simpan",
+    "btn_add_instructor": "Tambah Instruktur",
+    "add_instructor_title": "Tambah Instruktur Baru",
+    "add_instructor_desc": "Buat akun instruktur baru untuk mengajar kelas di platform"
   },
   "learn": {
     "progress": "Progres Belajar",

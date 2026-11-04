@@ -499,7 +499,10 @@
     "lesson_created": "New lesson added successfully",
     "lesson_deleted": "Lesson deleted successfully",
     "cancel": "Cancel",
-    "save": "Save"
+    "save": "Save",
+    "btn_add_instructor": "Add Instructor",
+    "add_instructor_title": "Add New Instructor",
+    "add_instructor_desc": "Create a new instructor account to teach courses on the platform"
   },
   "learn": {
     "progress": "Learning Progress",
