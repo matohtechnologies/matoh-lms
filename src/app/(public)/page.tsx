@@ -353,8 +353,8 @@ export default async function HomePage() {
                 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-[1.12] tracking-tight text-balance"
                 style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
               >
-                Make You <br />
-                <span className="text-gradient">Ready Digital</span>
+                Make Home <br />
+                <span className="text-gradient">Ready on Digital</span>
               </h1>
 
               {/* Subheadline with high legibility */}
@@ -685,7 +685,7 @@ export default async function HomePage() {
                   <div className="text-right">
                     <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 block">Slogan Resmi</span>
                     <span className="text-xs font-bold text-white bg-slate-800/80 px-3 py-1.5 rounded-xl inline-block mt-1">
-                      &ldquo;Make You Ready Digital&rdquo;
+                      &ldquo;Make Home Ready on Digital&rdquo;
                     </span>
                   </div>
                 </div>

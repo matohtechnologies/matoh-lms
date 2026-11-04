@@ -14,7 +14,7 @@ export function OrganizationJsonLd() {
     url: "https://www.matohtechnologies.com",
     logo: "https://www.matohtechnologies.com/images/matoh-logo-v2.png",
     image: "https://www.matohtechnologies.com/images/matoh-logo-v2.png",
-    slogan: "Make You Ready Digital",
+    slogan: "Make Home Ready on Digital",
     foundingDate: "2000",
     email: "info@matohtechnologies.com",
     telephone: "+62-812-1010-6680",

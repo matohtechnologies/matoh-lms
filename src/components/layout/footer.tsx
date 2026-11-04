@@ -157,7 +157,7 @@ export function Footer() {
             © 2008 - {currentYear} PT. Matoh Technologies Indonesia. {t("rights")}
           </p>
           <div className="flex items-center gap-1 text-sm text-stone-500">
-            <span>Make You Ready Digital</span>
+            <span>Make Home Ready on Digital</span>
             <span className="mx-1">•</span>
             <span>{t("country")}</span>
           </div>

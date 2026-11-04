@@ -117,8 +117,8 @@ export default async function AboutPage() {
             className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 mb-6 tracking-tight"
             style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
-            Make You <br />
-            <span className="text-gradient">Ready Digital</span>
+            Make Home <br />
+            <span className="text-gradient">Ready on Digital</span>
           </h1>
           <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
             {isEn

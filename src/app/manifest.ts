@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "PT. Matoh Technologies Indonesia",
     short_name: "Matoh Tech",
     description:
-      "Platform Resmi Pelatihan & Pembelajaran Digital Terapan — Make You Ready Digital (SK Kemenkumham: AHU-064920.AH.01.30.Tahun 2024)",
+      "Platform Resmi Pelatihan & Pembelajaran Digital Terapan — Make Home Ready on Digital (SK Kemenkumham: AHU-064920.AH.01.30.Tahun 2024)",
     start_url: "/",
     display: "standalone",
     background_color: "#ffffff",

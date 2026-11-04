@@ -175,7 +175,7 @@ export async function middleware(request: NextRequest) {
     <h1>Sistem Sedang Ditingkatkan</h1>
     <p>Kami sedang melakukan pemeliharaan berkala dan peningkatan performa sistem demi kenyamanan belajar Anda. Silakan kembali dalam beberapa saat.</p>
     <div class="brand">
-      PT. Matoh Technologies Indonesia &bull; <strong>Make You Ready Digital</strong>
+      PT. Matoh Technologies Indonesia &bull; <strong>Make Home Ready on Digital</strong>
     </div>
     <a href="/login?admin=1" class="admin-link">Login Administrator &rarr;</a>
   </div>
