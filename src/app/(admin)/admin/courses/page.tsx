@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Plus, Edit, Eye, Search } from "lucide-react";
+import { Plus, Edit, Eye, Search, BookOpen } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { Badge, LevelBadge } from "@/components/ui/badge";
