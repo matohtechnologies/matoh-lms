@@ -99,7 +99,26 @@ export async function POST(req: NextRequest) {
 
     // 6. Whitelisted target folder
     const folder = ALLOWED_FOLDERS.has(requestedFolder) ? requestedFolder : "general";
-    const uploadDir = path.join(process.cwd(), "public", "uploads", folder);
+    
+    // Prioritize persistent shared uploads directory on VPS, fallback to local public/uploads
+    let baseUploadDir: string;
+    if (process.env.UPLOADS_DIR) {
+      baseUploadDir = process.env.UPLOADS_DIR;
+    } else {
+      const vpsSharedDir = "/var/www/lms-platform/shared/uploads";
+      try {
+        const stats = await fs.stat("/var/www/lms-platform/shared").catch(() => null);
+        if (stats && stats.isDirectory()) {
+          baseUploadDir = vpsSharedDir;
+        } else {
+          baseUploadDir = path.join(process.cwd(), "public", "uploads");
+        }
+      } catch {
+        baseUploadDir = path.join(process.cwd(), "public", "uploads");
+      }
+    }
+
+    const uploadDir = path.join(baseUploadDir, folder);
     await fs.mkdir(uploadDir, { recursive: true });
 
     // 7. Sanitize filename and create secure random prefix
@@ -137,6 +156,17 @@ export async function POST(req: NextRequest) {
     const uniqueName = `${Date.now()}_${randomHex}_${sanitizedBase}${finalExt}`;
     const filePath = path.join(uploadDir, uniqueName);
     await fs.writeFile(filePath, finalBuffer);
+
+    // Also mirror to current release public/uploads if different, to ensure immediate availability
+    try {
+      const releasePublicDir = path.join(process.cwd(), "public", "uploads", folder);
+      if (releasePublicDir !== uploadDir) {
+        await fs.mkdir(releasePublicDir, { recursive: true });
+        await fs.writeFile(path.join(releasePublicDir, uniqueName), finalBuffer);
+      }
+    } catch {
+      // Ignore mirror error
+    }
 
     const fileUrl = `/uploads/${folder}/${uniqueName}`;
 

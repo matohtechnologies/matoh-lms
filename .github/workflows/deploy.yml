@@ -181,7 +181,21 @@ jobs:
             ln -sfn "$BASE/shared/.env" "$RELEASE/.env"
           fi
 
-          chown -R lmsapp:lmsapp "$RELEASE"
+          # Pastikan folder shared uploads persisten ada di VPS
+          mkdir -p "$BASE/shared/uploads"
+          mkdir -p "$RELEASE/public"
+
+          # Migrasikan / selamatkan file upload dari release sebelumnya ke shared
+          if [ -n "$OLD_RELEASE" ] && [ -d "$OLD_RELEASE/public/uploads" ]; then
+            echo "Menyinkronkan file upload dari release sebelumnya ke shared..."
+            cp -rn "$OLD_RELEASE/public/uploads/"* "$BASE/shared/uploads/" 2>/dev/null || true
+          fi
+
+          # Tautkan shared uploads ke dalam release aktif
+          rm -rf "$RELEASE/public/uploads"
+          ln -sfn "$BASE/shared/uploads" "$RELEASE/public/uploads"
+
+          chown -R lmsapp:lmsapp "$BASE/shared/uploads" "$RELEASE"
 
           ln -sfn "$RELEASE" "$CURRENT"
 
