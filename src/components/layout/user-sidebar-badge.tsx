@@ -2,6 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 interface UserSidebarBadgeProps {
   initialUser?: {
@@ -15,8 +16,9 @@ interface UserSidebarBadgeProps {
 
 export function UserSidebarBadge({ initialUser, variant = "dashboard" }: UserSidebarBadgeProps) {
   const { data: session } = useSession();
+  const tNav = useTranslations("nav");
 
-  const name = session?.user?.name ?? initialUser?.name ?? "Pengguna";
+  const name = session?.user?.name ?? initialUser?.name ?? tNav("user_fallback");
   const email = session?.user?.email ?? initialUser?.email ?? "";
   const image = session?.user?.image ?? initialUser?.image ?? null;
   const role = session?.user?.role ?? initialUser?.role ?? "USER";
@@ -27,8 +29,8 @@ export function UserSidebarBadge({ initialUser, variant = "dashboard" }: UserSid
     return (
       <Link
         href="/dashboard/profile"
-        className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-sky-500 flex items-center justify-center text-white font-bold text-xs shadow-2xs overflow-hidden ring-1 ring-slate-200/60 hover:opacity-90 transition-opacity"
-        title="Buka Profil"
+        className="w-8 h-8 rounded-lg bg-gradient-to-br from-teal-600 to-sky-500 flex items-center justify-center text-white font-bold text-xs shadow-2xs overflow-hidden ring-1 ring-slate-200/60 hover:opacity-90 transition-opacity"
+        title={tNav("open_profile")}
       >
         {image ? (
           <img
@@ -52,7 +54,7 @@ export function UserSidebarBadge({ initialUser, variant = "dashboard" }: UserSid
         href="/dashboard/profile"
         className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50/80 border border-slate-200/60 hover:bg-slate-100/70 transition-colors group"
       >
-        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-sky-500 flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-2xs overflow-hidden ring-1 ring-slate-200/60">
+        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-600 to-sky-500 flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-2xs overflow-hidden ring-1 ring-slate-200/60">
           {image ? (
             <img
               src={image}
@@ -67,7 +69,7 @@ export function UserSidebarBadge({ initialUser, variant = "dashboard" }: UserSid
           )}
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-xs font-bold text-slate-900 truncate group-hover:text-blue-600 transition-colors">
+          <p className="text-xs font-bold text-slate-900 truncate group-hover:text-teal-600 transition-colors">
             {name}
           </p>
           <p className="text-[11px] text-slate-500 truncate">Super Administrator</p>
@@ -82,7 +84,7 @@ export function UserSidebarBadge({ initialUser, variant = "dashboard" }: UserSid
       href="/dashboard/profile"
       className="flex items-center gap-3 p-2 rounded-xl bg-slate-50/70 border border-slate-200/60 hover:bg-slate-100/70 transition-colors group"
     >
-      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-sky-500 flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-2xs overflow-hidden ring-1 ring-slate-200/60">
+      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-600 to-sky-500 flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-2xs overflow-hidden ring-1 ring-slate-200/60">
         {image ? (
           <img
             src={image}
@@ -98,11 +100,11 @@ export function UserSidebarBadge({ initialUser, variant = "dashboard" }: UserSid
       </div>
       <div className="overflow-hidden min-w-0 flex-1">
         <div className="flex items-center gap-1.5">
-          <p className="text-xs font-bold text-slate-900 truncate group-hover:text-blue-600 transition-colors">
+          <p className="text-xs font-bold text-slate-900 truncate group-hover:text-teal-600 transition-colors">
             {name}
           </p>
           {isAdmin && (
-            <span className="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-blue-50 text-blue-700 border border-blue-200/60 shrink-0">
+            <span className="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-teal-50 text-teal-700 border border-teal-200/60 shrink-0">
               ADMIN
             </span>
           )}

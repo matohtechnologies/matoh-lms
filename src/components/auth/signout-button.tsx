@@ -4,6 +4,7 @@ import { useState } from "react";
 import { signOut } from "next-auth/react";
 import { LogOut, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface SignOutButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
@@ -20,6 +21,8 @@ export default function SignOutButton({
   ...props
 }: SignOutButtonProps) {
   const [isPending, setIsPending] = useState(false);
+  const t = useTranslations("nav");
+  const logoutText = t("logout");
 
   const handleSignOut = async () => {
     try {
@@ -56,9 +59,9 @@ export default function SignOutButton({
       {children !== undefined ? (
         children
       ) : variant === "icon" ? (
-        <span className="sr-only">Keluar</span>
+        <span className="sr-only">{logoutText}</span>
       ) : (
-        <span>Keluar</span>
+        <span>{logoutText}</span>
       )}
     </button>
   );

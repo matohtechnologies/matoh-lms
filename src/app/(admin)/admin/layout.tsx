@@ -26,7 +26,7 @@ export default async function AdminLayout({
     { href: "/admin/users", label: tAdmin("nav_users") },
     { href: "/admin/orders", label: tAdmin("nav_orders") },
     { href: "/admin/coupons", label: tAdmin("nav_coupons") },
-    { href: "/admin/inquiries", label: "Pesan Konsultasi" },
+    { href: "/admin/inquiries", label: tAdmin("nav_inquiries") },
   ];
 
   return (
@@ -50,7 +50,7 @@ export default async function AdminLayout({
               className="font-bold text-slate-900 text-sm block leading-none"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
-              Matoh<span className="text-blue-600">Admin</span>
+              Matoh<span className="text-[#2C7E8C]">Technologies</span>
             </span>
           </div>
         </Link>
@@ -65,7 +65,7 @@ export default async function AdminLayout({
             variant="admin"
             className="w-auto p-1.5 rounded-lg text-slate-500 hover:text-red-600 hover:bg-red-50"
           >
-            <span className="sr-only">Keluar</span>
+            <span className="sr-only">{tAdmin("logout")}</span>
           </SignOutButton>
           <UserSidebarBadge
             initialUser={{
@@ -91,7 +91,7 @@ export default async function AdminLayout({
         {/* Brand Header */}
         <div className="p-5 border-b border-slate-100 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl bg-white border border-slate-200/80 shadow-2xs flex items-center justify-center p-1.5 group-hover:border-blue-400 group-hover:scale-105 transition-all">
+            <div className="w-9 h-9 rounded-xl bg-white border border-slate-200/80 shadow-2xs flex items-center justify-center p-1.5 group-hover:border-teal-400 group-hover:scale-105 transition-all">
               <Image
                 src="/images/matoh-logo-v2.png"
                 alt="Matoh Technologies"
@@ -109,7 +109,7 @@ export default async function AdminLayout({
               >
                 Matoh<span className="text-[#2C7E8C]">Technologies</span>
               </span>
-              <span className="inline-block text-[10px] text-blue-700 font-bold uppercase tracking-wider bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200/60 mt-0.5">
+              <span className="inline-block text-[10px] text-teal-700 font-bold uppercase tracking-wider bg-teal-50 px-1.5 py-0.5 rounded border border-teal-200/60 mt-0.5">
                 Admin Console
               </span>
             </div>
@@ -132,7 +132,7 @@ export default async function AdminLayout({
         {/* Navigation Menu */}
         <nav className="flex-1 p-3.5 overflow-y-auto space-y-1">
           <p className="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
-            Menu Utama
+            {tAdmin("main_menu")}
           </p>
           {adminNavItems.map((item) => (
             <AdminNavLink key={item.href} item={item} />
@@ -144,7 +144,7 @@ export default async function AdminLayout({
             </p>
             <Link
               href="/dashboard?view=student"
-              className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:text-blue-700 hover:bg-blue-50/60 transition-colors border border-transparent hover:border-blue-200/60"
+              className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:text-teal-700 hover:bg-teal-50/60 transition-colors border border-transparent hover:border-teal-200/60"
             >
               <BookOpen size={14} className="text-slate-400" />
               {tAdmin("student_preview")}
@@ -154,7 +154,7 @@ export default async function AdminLayout({
 
         {/* Sign Out Button */}
         <div className="p-3 border-t border-stone-100">
-          <SignOutButton variant="admin" />
+          <SignOutButton variant="admin">{tAdmin("logout")}</SignOutButton>
         </div>
       </aside>
 

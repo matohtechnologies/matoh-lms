@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { slugify } from "@/lib/utils";
+import { useTranslations, useLocale } from "next-intl";
 
 export interface CategoryItem {
   id: string;
@@ -44,6 +45,9 @@ interface CategoryManagerProps {
 }
 
 export function CategoryManager({ initialCategories }: CategoryManagerProps) {
+  const t = useTranslations("admin");
+  const locale = useLocale();
+  const isEn = locale === "en";
   const [categories, setCategories] = useState<CategoryItem[]>(initialCategories);
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState<"ALL" | "WITH_COURSES" | "EMPTY">("ALL");
@@ -263,14 +267,11 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
               className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
-              Manajemen Kategori Kelas
+              {t("categories_title")}
             </h1>
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200/60">
-              CRUD Dinamis
-            </span>
           </div>
           <p className="text-stone-500 text-xs sm:text-sm mt-1">
-            Kelola kategori secara dinamis untuk mega-dropdown navbar, filter katalog program, dan relasi kelas.
+            {t("categories_subtitle")}
           </p>
         </div>
 
@@ -280,28 +281,28 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
           className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition-colors shrink-0 cursor-pointer"
         >
           <Plus size={16} />
-          <span>Tambah Kategori Baru</span>
+          <span>{t("btn_add_category")}</span>
         </button>
       </div>
 
       {/* Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white p-4 rounded-2xl border border-stone-200/80 shadow-2xs">
-          <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">Total Kategori</span>
+          <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">{t("cat_stat_total")}</span>
           <p className="text-2xl font-black text-stone-900 mt-2">{totalCategories}</p>
-          <p className="text-[11px] text-stone-500 mt-0.5">Disediakan di navbar dan pencarian</p>
+          <p className="text-[11px] text-stone-500 mt-0.5">{t("cat_stat_total_sub")}</p>
         </div>
 
         <div className="bg-white p-4 rounded-2xl border border-stone-200/80 shadow-2xs">
-          <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">Kategori Aktif</span>
+          <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">{t("cat_stat_active")}</span>
           <p className="text-2xl font-black text-emerald-700 mt-2">{categoriesWithCourses}</p>
-          <p className="text-[11px] text-stone-500 mt-0.5">Memiliki minimal 1 kelas aktif</p>
+          <p className="text-[11px] text-stone-500 mt-0.5">{t("cat_stat_active_sub")}</p>
         </div>
 
         <div className="bg-white p-4 rounded-2xl border border-stone-200/80 shadow-2xs">
-          <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">Total Kelas Terkait</span>
+          <span className="text-xs font-bold text-stone-500 uppercase tracking-wider">{t("cat_stat_courses")}</span>
           <p className="text-2xl font-black text-purple-700 mt-2">{totalCourses}</p>
-          <p className="text-[11px] text-stone-500 mt-0.5">Terdistribusi di semua kategori</p>
+          <p className="text-[11px] text-stone-500 mt-0.5">{t("cat_stat_courses_sub")}</p>
         </div>
       </div>
 
@@ -317,7 +318,7 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Cari berdasarkan nama, nama Inggris, atau slug..."
+            placeholder={t("search_categories")}
             aria-label="Cari kategori"
             className="flex-1 text-xs bg-transparent text-stone-800 placeholder:text-stone-400 focus:outline-none"
           />
@@ -342,18 +343,18 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
             onChange={(e) => setFilterType(e.target.value as "ALL" | "WITH_COURSES" | "EMPTY")}
             className="text-xs font-semibold text-stone-700 bg-stone-50 hover:bg-stone-100 border border-stone-200/70 rounded-xl px-3 py-2 focus:outline-none cursor-pointer"
           >
-            <option value="ALL">Semua Kategori ({totalCategories})</option>
-            <option value="WITH_COURSES">Ada Kelas ({categoriesWithCourses})</option>
-            <option value="EMPTY">Belum Ada Kelas ({totalCategories - categoriesWithCourses})</option>
+            <option value="ALL">{t("filter_all")} ({totalCategories})</option>
+            <option value="WITH_COURSES">{t("filter_with_courses")} ({categoriesWithCourses})</option>
+            <option value="EMPTY">{t("filter_empty_courses")} ({totalCategories - categoriesWithCourses})</option>
           </select>
 
           {/* Sort Filter */}
           <select id="admin-categories-sort" name="sortBy" aria-label="Urutkan Kategori" value={sortBy} onChange={(e) => setSortBy(e.target.value as "name_asc" | "name_desc" | "courses_desc")}
             className="text-xs font-semibold text-stone-700 bg-stone-50 hover:bg-stone-100 border border-stone-200/70 rounded-xl px-3 py-2 focus:outline-none cursor-pointer"
           >
-            <option value="name_asc">Urut: Nama (A-Z)</option>
-            <option value="name_desc">Urut: Nama (Z-A)</option>
-            <option value="courses_desc">Urut: Kelas Terbanyak</option>
+            <option value="name_asc">{t("sort_name_asc")}</option>
+            <option value="name_desc">{t("sort_name_desc")}</option>
+            <option value="courses_desc">{t("sort_courses_desc")}</option>
           </select>
         </div>
       </div>
@@ -396,11 +397,11 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-stone-100 bg-stone-50/70 text-[11px] font-bold text-stone-500 uppercase tracking-wider">
-                  <th className="py-3 px-4">Kategori (ID / EN)</th>
-                  <th className="py-3 px-4">Slug URL</th>
-                  <th className="py-3 px-4">Jumlah Kelas</th>
-                  <th className="py-3 px-4">Pratinjau Navigasi</th>
-                  <th className="py-3 px-4 text-right">Aksi</th>
+                  <th className="py-3 px-4">{t("th_category")}</th>
+                  <th className="py-3 px-4">{t("th_slug")}</th>
+                  <th className="py-3 px-4">{t("th_course_count")}</th>
+                  <th className="py-3 px-4">{t("th_linked_courses")}</th>
+                  <th className="py-3 px-4 text-right">{t("th_action")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-stone-100 text-xs">
@@ -450,11 +451,10 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
                         <Link
                           href={`/courses?category=${encodeURIComponent(cat.name)}`}
                           target="_blank"
-                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold transition-all ${
-                            cat._count.courses > 0
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold transition-all ${cat._count.courses > 0
                               ? "bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200/60"
                               : "bg-stone-100 text-stone-500 border border-stone-200/50"
-                          }`}
+                            }`}
                         >
                           <BookOpen size={12} />
                           <span>{cat._count.courses} Kelas</span>
@@ -492,11 +492,10 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
                             setDeleteTarget(cat);
                             setDeleteError("");
                           }}
-                          className={`p-1.5 rounded-lg transition-colors ${
-                            cat._count.courses > 0
+                          className={`p-1.5 rounded-lg transition-colors ${cat._count.courses > 0
                               ? "text-stone-300 hover:text-amber-600 hover:bg-amber-50"
                               : "text-stone-500 hover:text-red-600 hover:bg-red-50"
-                          }`}
+                            }`}
                           title={
                             cat._count.courses > 0
                               ? "Kategori ini masih digunakan oleh kelas"
@@ -557,7 +556,7 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
               {/* Nama Kategori (ID) */}
               <div>
                 <label htmlFor="modal-cat-name" className="block text-xs font-bold text-stone-700 mb-1.5">
-                  Nama Kategori (Bahasa Indonesia) <span className="text-red-500">*</span>
+                  {t("label_cat_name_id")} <span className="text-red-500">*</span>
                 </label>
                 <input id="modal-cat-name" name="categoryName" autoComplete="off" type="text" required value={modalName} onChange={(e) => handleNameChange(e.target.value)}
                   placeholder="Contoh: Kecerdasan Buatan & Robotika"
@@ -569,7 +568,7 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
               <div>
                 <div className="flex items-center justify-between mb-1.5">
                   <label htmlFor="modal-cat-name-en" className="block text-xs font-bold text-stone-700">
-                    Nama Kategori (English)
+                    {t("label_cat_name_en")}
                   </label>
                   <button
                     type="button"
@@ -589,7 +588,7 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
               <div>
                 <div className="flex items-center justify-between mb-1.5">
                   <label htmlFor="modal-cat-slug" className="block text-xs font-bold text-stone-700">
-                    Slug URL <span className="text-stone-400 font-normal">(identifier unik)</span>
+                    {t("label_cat_slug")}
                   </label>
                   <label htmlFor="modal-cat-autoslug" className="flex items-center gap-1.5 text-[10px] text-stone-500 cursor-pointer">
                     <input id="modal-cat-autoslug" name="autoSlug" type="checkbox" checked={autoSlug}
@@ -606,9 +605,9 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
                 </div>
                 <div className="relative">
                   <input id="modal-cat-slug" name="slug" autoComplete="off" type="text" value={modalSlug} onChange={(e) => {
-                      setAutoSlug(false);
-                      setModalSlug(slugify(e.target.value));
-                    }}
+                    setAutoSlug(false);
+                    setModalSlug(slugify(e.target.value));
+                  }}
                     placeholder="contoh-kategori"
                     className="w-full text-xs font-mono px-3.5 py-2.5 rounded-xl border border-stone-200 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all text-stone-800"
                   />

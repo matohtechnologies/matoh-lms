@@ -29,6 +29,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { dynamicConfirm } from "@/components/ui/dynamic-alert-provider";
+import { useTranslations, useLocale } from "next-intl";
 
 export interface CourseOption {
   id: string;
@@ -87,10 +88,13 @@ interface CouponManagerProps {
 }
 
 export function CouponManager({
+
   initialCoupons = [],
   courses: initialCourses = [],
   availableUsers: initialAvailableUsers = [],
 }: CouponManagerProps) {
+  const t = useTranslations("admin");
+  const locale = useLocale();
   const [coupons, setCoupons] = useState<CouponItem[]>(initialCoupons);
   const [courses, setCourses] = useState<CourseOption[]>(initialCourses);
   const [availableUsers, setAvailableUsers] = useState<UserOption[]>(initialAvailableUsers);
@@ -189,7 +193,7 @@ export function CouponManager({
     setMaxDiscount(item.maxDiscount ? item.maxDiscount.toString() : "");
     setMaxUsage(item.maxUsage ? item.maxUsage.toString() : "");
     setMaxUsagePerUser(item.maxUsagePerUser ? item.maxUsagePerUser.toString() : "1");
-    
+
     if (item.courseId) {
       setCourseTargetType("SPECIFIC");
       setTargetCourseId(item.courseId);
@@ -365,15 +369,14 @@ export function CouponManager({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100 shadow-2xs">
-              <Ticket size={20} />
-            </div>
             <div>
-              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
-                Manajemen Kupon Diskon
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight"
+                style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+              >
+                {t("coupons_title")}
               </h1>
-              <p className="text-xs sm:text-sm text-slate-500">
-                Kelola kupon promo, atur batas kelas tertentu, dan batasi akses ke pengguna terpilih.
+              <p className="text-xs sm:text-sm text-stone-500 mt-1">
+                {t("coupons_subtitle")}
               </p>
             </div>
           </div>
@@ -392,11 +395,10 @@ export function CouponManager({
       {/* Notifications */}
       {notification && (
         <div
-          className={`p-4 rounded-xl border text-sm flex items-center gap-2.5 transition-all animate-in fade-in ${
-            notification.type === "success"
-              ? "bg-emerald-50 border-emerald-200 text-emerald-800"
-              : "bg-red-50 border-red-200 text-red-800"
-          }`}
+          className={`p-4 rounded-xl border text-sm flex items-center gap-2.5 transition-all animate-in fade-in ${notification.type === "success"
+            ? "bg-emerald-50 border-emerald-200 text-emerald-800"
+            : "bg-red-50 border-red-200 text-red-800"
+            }`}
         >
           {notification.type === "success" ? (
             <CheckCircle2 size={16} className="text-emerald-600 shrink-0" />
@@ -410,34 +412,34 @@ export function CouponManager({
       {/* Summary Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
-          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Kupon</span>
+          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{t("coupon_stat_total")}</span>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-extrabold text-slate-900">{coupons.length}</span>
-            <span className="text-xs text-emerald-600 font-semibold">{totalActiveCoupons} aktif</span>
+            <span className="text-xs text-emerald-600 font-semibold">{t("coupon_stat_active", { count: totalActiveCoupons })}</span>
           </div>
         </div>
 
         <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
-          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Khusus Kelas</span>
+          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{t("coupon_stat_course")}</span>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-extrabold text-slate-900">{totalCourseSpecific}</span>
-            <span className="text-xs text-slate-400">kupon terikat</span>
+            <span className="text-xs text-slate-400">{t("coupon_stat_course_sub")}</span>
           </div>
         </div>
 
         <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
-          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Khusus User</span>
+          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{t("coupon_stat_user")}</span>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-extrabold text-slate-900">{totalUserRestricted}</span>
-            <span className="text-xs text-purple-600 font-semibold">akses terbatas</span>
+            <span className="text-xs text-purple-600 font-semibold">{t("coupon_stat_user_sub")}</span>
           </div>
         </div>
 
         <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
-          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Terpakai</span>
+          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{t("coupon_stat_used")}</span>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-extrabold text-slate-900">{totalRedemptions}</span>
-            <span className="text-xs text-slate-400">kali klaim</span>
+            <span className="text-xs text-slate-400">{t("coupon_stat_used_sub")}</span>
           </div>
         </div>
       </div>
@@ -452,7 +454,7 @@ export function CouponManager({
             name="search"
             autoComplete="off"
             type="text"
-            placeholder="Cari kode kupon atau email pengguna..."
+            placeholder={t("search_coupons")}
             aria-label="Cari kode kupon"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -463,12 +465,12 @@ export function CouponManager({
         {/* Filters */}
         <div className="flex items-center gap-2 flex-wrap">
           <Filter size={14} className="text-slate-400 shrink-0" />
-          
+
           {/* Target Course Filter */}
           <select id="coupon-course-filter" name="courseFilter" aria-label="Filter Kupon Kelas" value={courseFilter} onChange={(e) => setCourseFilter(e.target.value)}
             className="text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white font-medium text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20"
           >
-            <option value="ALL">Semua Kelas</option>
+            <option value="ALL">{t("filter_all_courses")}</option>
             <option value="GLOBAL">🌐 Kupon Global (Semua Kelas)</option>
             {courses.map((c) => (
               <option key={c.id} value={c.id}>
@@ -481,9 +483,9 @@ export function CouponManager({
           <select id="coupon-status-filter" name="statusFilter" aria-label="Filter Status Kupon" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}
             className="text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white font-medium text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20"
           >
-            <option value="ALL">Semua Status</option>
-            <option value="ACTIVE">Aktif</option>
-            <option value="INACTIVE">Nonaktif</option>
+            <option value="ALL">{t("filter_all")}</option>
+            <option value="ACTIVE">{t("filter_status_active")}</option>
+            <option value="INACTIVE">{t("filter_status_inactive")}</option>
             <option value="EXPIRED">Kedaluwarsa</option>
           </select>
         </div>
@@ -514,10 +516,10 @@ export function CouponManager({
             <table className="w-full text-left border-collapse text-xs">
               <thead>
                 <tr className="border-b border-slate-200 bg-slate-50/70 text-slate-600 font-semibold">
-                  <th className="py-3 px-4">Kode Kupon</th>
-                  <th className="py-3 px-4">Nilai Diskon</th>
-                  <th className="py-3 px-4">Target Kursus</th>
-                  <th className="py-3 px-4">Hak Akses User</th>
+                  <th className="py-3 px-4">{t("th_coupon_code")}</th>
+                  <th className="py-3 px-4">{t("th_discount")}</th>
+                  <th className="py-3 px-4">{t("th_restrictions")}</th>
+                  <th className="py-3 px-4">{t("col_user")}</th>
                   <th className="py-3 px-4 text-center">Penggunaan</th>
                   <th className="py-3 px-4">Masa Berlaku</th>
                   <th className="py-3 px-4 text-center">Status</th>
@@ -530,9 +532,9 @@ export function CouponManager({
                   const isQuotaExceeded = !!(item.maxUsage && item.usedCount >= item.maxUsage);
                   const allowedList = item.allowedEmails
                     ? item.allowedEmails
-                        .split(/[\n,;]+/)
-                        .map((e) => e.trim())
-                        .filter(Boolean)
+                      .split(/[\n,;]+/)
+                      .map((e) => e.trim())
+                      .filter(Boolean)
                     : [];
 
                   return (
@@ -725,7 +727,7 @@ export function CouponManager({
             <div className="flex items-start justify-between gap-3 mb-4 border-b border-slate-100 pb-3">
               <div>
                 <h3 className="text-base font-bold text-slate-900">
-                  {editingCoupon ? "Edit Kupon Diskon" : "Buat Kupon Diskon Baru"}
+                  {editingCoupon ? t("modal_edit_coupon_title") : t("modal_create_coupon_title")}
                 </h3>
                 <p className="text-xs text-slate-500 mt-0.5">
                   Atur kode promo, target kelas tertentu, dan batas pengguna yang berhak mengklaim.
@@ -833,11 +835,10 @@ export function CouponManager({
                   <button
                     type="button"
                     onClick={() => setCourseTargetType("ALL")}
-                    className={`py-2 px-3 rounded-lg border text-left font-semibold transition-all ${
-                      courseTargetType === "ALL"
-                        ? "bg-white border-blue-600 text-blue-700 shadow-2xs"
-                        : "bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200/60"
-                    }`}
+                    className={`py-2 px-3 rounded-lg border text-left font-semibold transition-all ${courseTargetType === "ALL"
+                      ? "bg-white border-blue-600 text-blue-700 shadow-2xs"
+                      : "bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200/60"
+                      }`}
                   >
                     🌐 Semua Kelas (Global)
                   </button>
@@ -845,11 +846,10 @@ export function CouponManager({
                   <button
                     type="button"
                     onClick={() => setCourseTargetType("SPECIFIC")}
-                    className={`py-2 px-3 rounded-lg border text-left font-semibold transition-all ${
-                      courseTargetType === "SPECIFIC"
-                        ? "bg-white border-blue-600 text-blue-700 shadow-2xs"
-                        : "bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200/60"
-                    }`}
+                    className={`py-2 px-3 rounded-lg border text-left font-semibold transition-all ${courseTargetType === "SPECIFIC"
+                      ? "bg-white border-blue-600 text-blue-700 shadow-2xs"
+                      : "bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200/60"
+                      }`}
                   >
                     📘 Hanya Kelas Tertentu
                   </button>
@@ -887,11 +887,10 @@ export function CouponManager({
                   <button
                     type="button"
                     onClick={() => setUserRestrictionType("ALL")}
-                    className={`py-2 px-3 rounded-lg border text-left font-semibold transition-all ${
-                      userRestrictionType === "ALL"
-                        ? "bg-white border-purple-600 text-purple-700 shadow-2xs"
-                        : "bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200/60"
-                    }`}
+                    className={`py-2 px-3 rounded-lg border text-left font-semibold transition-all ${userRestrictionType === "ALL"
+                      ? "bg-white border-purple-600 text-purple-700 shadow-2xs"
+                      : "bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200/60"
+                      }`}
                   >
                     👥 Siapa Saja (Publik)
                   </button>
@@ -899,11 +898,10 @@ export function CouponManager({
                   <button
                     type="button"
                     onClick={() => setUserRestrictionType("RESTRICTED")}
-                    className={`py-2 px-3 rounded-lg border text-left font-semibold transition-all ${
-                      userRestrictionType === "RESTRICTED"
-                        ? "bg-white border-purple-600 text-purple-700 shadow-2xs"
-                        : "bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200/60"
-                    }`}
+                    className={`py-2 px-3 rounded-lg border text-left font-semibold transition-all ${userRestrictionType === "RESTRICTED"
+                      ? "bg-white border-purple-600 text-purple-700 shadow-2xs"
+                      : "bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200/60"
+                      }`}
                   >
                     👤 Khusus User Terpilih
                   </button>

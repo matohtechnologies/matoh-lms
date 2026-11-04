@@ -24,6 +24,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { dynamicConfirm } from "@/components/ui/dynamic-alert-provider";
+import { useTranslations } from "next-intl";
 
 interface ContactInquiry {
   id: string;
@@ -45,6 +46,7 @@ interface Stats {
 }
 
 export function InquiriesClient() {
+  const t = useTranslations("admin");
   const [inquiries, setInquiries] = useState<ContactInquiry[]>([]);
   const [stats, setStats] = useState<Stats>({ total: 0, unread: 0, read: 0 });
   const [loading, setLoading] = useState(true);
@@ -188,13 +190,13 @@ export function InquiriesClient() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1
-            className="text-2xl font-bold text-slate-900 tracking-tight"
+            className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight"
             style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
-            Pesan Konsultasi & Bantuan
+            {t("inquiries_title")}
           </h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Kelola pertanyaan dan konsultasi yang masuk dari formulir website secara terpusat.
+          <p className="text-xs sm:text-sm text-stone-500 mt-1">
+            {t("inquiries_subtitle")}
           </p>
         </div>
         <Button
@@ -204,7 +206,7 @@ export function InquiriesClient() {
           className="self-start sm:self-auto gap-2 text-slate-700 bg-white border-slate-200 hover:bg-slate-50 cursor-pointer"
         >
           <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
-          <span>Muat Ulang</span>
+          <span>{t("reload")}</span>
         </Button>
       </div>
 
@@ -212,7 +214,7 @@ export function InquiriesClient() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-2xs">
           <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-            Total Pesan Masuk
+            {t("total_inquiries")}
           </p>
           <p className="text-2xl font-bold text-slate-900 mt-1">
             {stats.total}
@@ -221,7 +223,7 @@ export function InquiriesClient() {
 
         <div className="bg-white p-5 rounded-2xl border border-amber-200/80 shadow-2xs">
           <p className="text-xs font-semibold text-amber-700 uppercase tracking-wider">
-            Belum Dibaca
+            {t("unread_inquiries")}
           </p>
           <p className="text-2xl font-bold text-amber-900 mt-1">
             {stats.unread}
@@ -230,7 +232,7 @@ export function InquiriesClient() {
 
         <div className="bg-white p-5 rounded-2xl border border-emerald-200/80 shadow-2xs">
           <p className="text-xs font-semibold text-emerald-700 uppercase tracking-wider">
-            Sudah Ditinjau
+            {t("reviewed_inquiries")}
           </p>
           <p className="text-2xl font-bold text-emerald-900 mt-1">
             {stats.read}
@@ -245,28 +247,25 @@ export function InquiriesClient() {
           <button
             type="button"
             onClick={() => setFilter("all")}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-              filter === "all"
-                ? "bg-white text-slate-900 shadow-2xs"
-                : "text-slate-600 hover:text-slate-900"
-            }`}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${filter === "all"
+              ? "bg-white text-slate-900 shadow-2xs"
+              : "text-slate-600 hover:text-slate-900"
+              }`}
           >
             Semua ({stats.total})
           </button>
           <button
             type="button"
             onClick={() => setFilter("unread")}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-              filter === "unread"
-                ? "bg-amber-500 text-white shadow-2xs"
-                : "text-slate-600 hover:text-slate-900"
-            }`}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${filter === "unread"
+              ? "bg-amber-500 text-white shadow-2xs"
+              : "text-slate-600 hover:text-slate-900"
+              }`}
           >
             <span>Belum Dibaca</span>
             {stats.unread > 0 && (
-              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
-                filter === "unread" ? "bg-white text-amber-600" : "bg-amber-100 text-amber-800"
-              }`}>
+              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${filter === "unread" ? "bg-white text-amber-600" : "bg-amber-100 text-amber-800"
+                }`}>
                 {stats.unread}
               </span>
             )}
@@ -274,11 +273,10 @@ export function InquiriesClient() {
           <button
             type="button"
             onClick={() => setFilter("read")}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-              filter === "read"
-                ? "bg-white text-slate-900 shadow-2xs"
-                : "text-slate-600 hover:text-slate-900"
-            }`}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${filter === "read"
+              ? "bg-white text-slate-900 shadow-2xs"
+              : "text-slate-600 hover:text-slate-900"
+              }`}
           >
             Sudah Dibaca ({stats.read})
           </button>
@@ -293,7 +291,7 @@ export function InquiriesClient() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Cari nama, email, hp, pesan..."
+            placeholder={t("search_inquiries")}
             className="w-full pl-9 pr-4 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-slate-900"
           />
           {search && (
@@ -341,8 +339,8 @@ export function InquiriesClient() {
                 {search
                   ? `Tidak ditemukan pesan dengan kata kunci "${search}".`
                   : filter === "unread"
-                  ? "Semua pesan konsultasi sudah dibaca dan ditindaklanjuti."
-                  : "Pesan yang dikirim oleh pengunjung melalui formulir kontak akan tampil di sini."}
+                    ? "Semua pesan konsultasi sudah dibaca dan ditindaklanjuti."
+                    : "Pesan yang dikirim oleh pengunjung melalui formulir kontak akan tampil di sini."}
               </p>
             </div>
           </div>
@@ -362,9 +360,8 @@ export function InquiriesClient() {
                 <div
                   key={inquiry.id}
                   onClick={() => openDetailModal(inquiry)}
-                  className={`p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors cursor-pointer hover:bg-slate-50/80 ${
-                    !inquiry.isRead ? "bg-blue-50/30 font-medium" : ""
-                  }`}
+                  className={`p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors cursor-pointer hover:bg-slate-50/80 ${!inquiry.isRead ? "bg-blue-50/30 font-medium" : ""
+                    }`}
                 >
                   {/* Left Column: Status indicator & Sender Info */}
                   <div className="flex items-start gap-3.5 min-w-0">

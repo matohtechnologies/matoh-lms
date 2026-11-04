@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { PAYMENT_METHODS } from "@/components/layout/payment-logos";
 
 function InstagramIcon({ className }: { className?: string }) {
@@ -30,6 +31,8 @@ function LinkedInIcon({ className }: { className?: string }) {
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const tFooter = useTranslations("footer");
+  const tNav = useTranslations("nav");
 
   return (
     <footer className="bg-slate-950 text-slate-400 border-t border-slate-800">
@@ -39,7 +42,7 @@ export function Footer() {
           {/* Column 1: Brand & Copyright (Kiri) */}
           <div className="md:col-span-5 space-y-3">
             <Link href="/" className="inline-flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center p-1.5 transition-colors group-hover:border-blue-500">
+              <div className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center p-1.5 transition-colors group-hover:border-teal-500">
                 <Image
                   src="/images/matoh-logo-white-v2.png"
                   alt="PT. Matoh Technologies Indonesia"
@@ -71,7 +74,7 @@ export function Footer() {
           {/* Column 2: Social Media - Cukup Logo / Icon Saja (Tengah) */}
           <div className="md:col-span-3 space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300">
-              Media Sosial
+              {tFooter("social_media")}
             </h4>
             <div className="flex items-center gap-2.5 pt-1">
               <a
@@ -102,7 +105,7 @@ export function Footer() {
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
                 title="LinkedIn"
-                className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 hover:border-blue-500/60 hover:bg-slate-800 hover:text-blue-400 flex items-center justify-center transition-all duration-200 text-slate-300 shadow-2xs hover:scale-105"
+                className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 hover:border-teal-500/60 hover:bg-slate-800 hover:text-teal-400 flex items-center justify-center transition-all duration-200 text-slate-300 shadow-2xs hover:scale-105"
               >
                 <LinkedInIcon />
               </a>
@@ -112,32 +115,32 @@ export function Footer() {
           {/* Column 3: Quick Navigation Links - About, Kontak, etc. (Kanan) */}
           <div className="md:col-span-4 space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300">
-              Tautan Navigasi
+              {tFooter("navigation")}
             </h4>
             <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
               <Link href="/about" className="text-slate-400 hover:text-white transition-colors py-0.5">
-                About
+                {tNav("about")}
               </Link>
               <Link href="/contact" className="text-slate-400 hover:text-white transition-colors py-0.5">
-                Kontak
+                {tNav("contact")}
               </Link>
               <Link href="/courses" className="text-slate-400 hover:text-white transition-colors py-0.5">
-                Course
+                {tNav("courses")}
               </Link>
               <Link href="/riset" className="text-slate-400 hover:text-white transition-colors py-0.5">
-                Riset
+                {tNav("research")}
               </Link>
               <Link href="/publikasi" className="text-slate-400 hover:text-white transition-colors py-0.5">
-                Publikasi
+                {tNav("publications")}
               </Link>
               <Link href="/developer" className="text-slate-400 hover:text-white transition-colors py-0.5">
-                Developer
+                {tNav("developer")}
               </Link>
               <Link href="/konsultan" className="text-slate-400 hover:text-white transition-colors py-0.5">
-                Konsultan
+                {tNav("consultant")}
               </Link>
               <Link href="/terms" className="text-slate-400 hover:text-white transition-colors py-0.5">
-                Syarat &amp; Privasi
+                {tFooter("terms_privacy")}
               </Link>
             </div>
           </div>
@@ -146,7 +149,7 @@ export function Footer() {
         {/* Payment Methods Section */}
         <div className="mt-12 pt-8 border-t border-slate-900 space-y-3.5">
           <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-            Metode Pembayaran Resmi
+            {tFooter("payment_methods_title")}
           </p>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-1">
             {PAYMENT_METHODS.map(({ name, component: Component, opticalHeight }) => (
@@ -161,18 +164,17 @@ export function Footer() {
           </div>
         </div>
 
-{/* Bottom Sub-strip */}
+        {/* Bottom Sub-strip */}
         <div className="mt-8 pt-6 border-t border-slate-900/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-500">
-          <p>© {currentYear} PT. Matoh Technologies Indonesia. All rights reserved.</p>
+          <p>© {currentYear} PT. Matoh Technologies Indonesia. {tFooter("all_rights_reserved")}</p>
           <div className="flex items-center gap-3">
             <Link href="/terms" className="hover:text-slate-400 transition-colors">
-              Terms of Service
+              {tFooter("terms_of_service")}
             </Link>
             <span>•</span>
             <Link href="/privacy" className="hover:text-slate-400 transition-colors">
-              Privacy Policy
+              {tFooter("privacy_policy")}
             </Link>
-
           </div>
         </div>
       </div>

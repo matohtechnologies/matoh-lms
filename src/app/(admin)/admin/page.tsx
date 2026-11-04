@@ -1,59 +1,65 @@
 import { redirect } from "next/navigation";
-import { BookOpen, ShoppingBag } from "lucide-react";
+import { Users, BookOpen, ShoppingBag, TrendingUp, DollarSign } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { formatCurrency } from "@/lib/utils";
 import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Admin Dashboard" };
+export const metadata: Metadata = { title: "Admin Overview — Matoh Technologies" };
+export const dynamic = "force-dynamic";
 
-async function getAdminStats() {
+export default async function AdminOverviewPage() {
+  const session = await auth();
+  if (!session || session.user?.role !== "ADMIN") redirect("/dashboard");
+
+  const t = await getTranslations("admin");
+
+  // Fetch real statistics from database
+  let stats = {
+    totalUsers: 0,
+    totalCourses: 0,
+    totalOrders: 0,
+    revenue: 0,
+    recentOrders: [] as {
+      id: string;
+      amount: number;
+      createdAt: Date;
+      user: { name: string | null; email: string };
+      course: { title: string };
+    }[],
+  };
+
   try {
-    const [totalUsers, totalCourses, totalOrders, revenue, recentOrders] = await Promise.all([
-      prisma.user.count({ where: { role: "USER" } }),
+    const [userCount, courseCount, paidOrders] = await Promise.all([
+      prisma.user.count(),
       prisma.course.count({ where: { published: true } }),
-      prisma.order.count({ where: { status: "PAID" } }),
-      prisma.order.aggregate({
-        where: { status: "PAID" },
-        _sum: { amount: true },
-      }),
       prisma.order.findMany({
         where: { status: "PAID" },
         include: {
           user: { select: { name: true, email: true } },
           course: { select: { title: true } },
         },
-        orderBy: { paidAt: "desc" },
+        orderBy: { createdAt: "desc" },
         take: 5,
       }),
     ]);
 
-    return {
-      totalUsers,
-      totalCourses,
-      totalOrders,
-      revenue: revenue._sum.amount ?? 0,
-      recentOrders,
+    const totalRevenue = await prisma.order.aggregate({
+      where: { status: "PAID" },
+      _sum: { amount: true },
+    });
+
+    stats = {
+      totalUsers: userCount,
+      totalCourses: courseCount,
+      totalOrders: paidOrders.length,
+      revenue: totalRevenue._sum.amount ?? 0,
+      recentOrders: paidOrders,
     };
-  } catch (error) {
-    console.error("Error fetching admin stats:", error);
-    return {
-      totalUsers: 0,
-      totalCourses: 0,
-      totalOrders: 0,
-      revenue: 0,
-      recentOrders: [],
-    };
+  } catch (err) {
+    console.error("Failed to load admin overview stats:", err);
   }
-}
-
-export default async function AdminDashboardPage() {
-  const session = await auth();
-  if (!session || session.user?.role !== "ADMIN") redirect("/dashboard");
-
-  const t = await getTranslations("admin");
-  const stats = await getAdminStats();
 
   const statCards = [
     {
@@ -86,7 +92,7 @@ export default async function AdminDashboardPage() {
           <div className="flex items-center gap-2 mb-1">
             <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-emerald-700 px-2 py-0.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              Sistem Aktif
+              {t("system_online")}
             </span>
           </div>
           <h1
@@ -101,7 +107,7 @@ export default async function AdminDashboardPage() {
         <div className="flex items-center gap-2.5">
           <a
             href="/admin/courses/new"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold shadow-xs transition-colors"
           >
             <BookOpen size={14} />
             {t("add_course")}
@@ -144,11 +150,11 @@ export default async function AdminDashboardPage() {
             >
               {t("recent_transactions")}
             </h2>
-            <p className="text-xs text-stone-500 mt-0.5">5 transaksi pembayaran kelas terbaru</p>
+            <p className="text-xs text-stone-500 mt-0.5">{t("recent_transactions_desc")}</p>
           </div>
           <a
             href="/admin/orders"
-            className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors border border-blue-200/60"
+            className="inline-flex items-center gap-1 text-xs font-semibold text-teal-600 hover:text-teal-700 bg-teal-50 hover:bg-teal-100/70 px-3 py-1.5 rounded-lg transition-colors border border-teal-200/60"
           >
             {t("view_all")}
           </a>
@@ -169,7 +175,7 @@ export default async function AdminDashboardPage() {
                   <tr key={order.id} className="hover:bg-stone-50/80 transition-colors">
                     <td className="py-3">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 font-bold text-[11px] flex items-center justify-center shrink-0">
+                        <div className="w-7 h-7 rounded-lg bg-teal-100 text-teal-800 font-bold text-[11px] flex items-center justify-center shrink-0">
                           {order.user.name?.[0]?.toUpperCase() || "U"}
                         </div>
                         <div>
@@ -204,12 +210,12 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* Tips Pengelolaan */}
-      <div className="bg-gradient-to-br from-blue-50 via-sky-50/60 to-blue-50/40 rounded-2xl border border-blue-200/60 p-4.5 text-xs space-y-1.5">
-        <p className="font-bold text-blue-950 flex items-center gap-1.5">
-          <span>💡</span> Tips Pengelolaan
+      <div className="bg-gradient-to-br from-teal-50/80 via-sky-50/40 to-teal-50/50 rounded-2xl border border-teal-200/60 p-4.5 text-xs space-y-1.5">
+        <p className="font-bold text-teal-950 flex items-center gap-1.5">
+          <span>💡</span> {t("management_tips")}
         </p>
         <p className="text-stone-600 leading-relaxed text-[11px]">
-          Gunakan Studio Sertifikat di dalam masing-masing halaman kelas untuk merancang tata letak dan syarat kelulusan otomatis bagi peserta didik.
+          {t("management_tips_desc")}
         </p>
       </div>
     </div>

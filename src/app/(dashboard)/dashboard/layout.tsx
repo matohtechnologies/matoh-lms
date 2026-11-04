@@ -82,7 +82,7 @@ export default async function DashboardLayout({
             <div className="mb-4 p-3.5 rounded-2xl bg-gradient-to-br from-blue-50 to-sky-50/80 border border-blue-200/80 shadow-2xs space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-bold text-blue-950 uppercase tracking-wider flex items-center gap-1.5">
-                  <Shield size={13} className="text-blue-600" /> Mode Administrator
+                  <Shield size={13} className="text-blue-600" /> {tDash("admin_mode")}
                 </span>
               </div>
               <p className="text-[11px] text-slate-600 leading-snug">

@@ -11,7 +11,6 @@ import { auth } from "@/lib/auth";
 import { formatCurrency, formatDuration } from "@/lib/utils";
 import { resolveThumbnailUrl } from "@/lib/youtube";
 import { CourseHeroMedia } from "@/components/courses/course-hero-media";
-import { CourseCompetencyBadges } from "@/components/courses/course-competency-badges";
 import { CourseCurriculumList } from "@/components/courses/course-curriculum-list";
 import { MobileStickyBar } from "@/components/courses/mobile-sticky-bar";
 import { getTranslations, getLocale } from "next-intl/server";
@@ -259,14 +258,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
               />
             </div>
 
-            {/* Competency & Career Outcomes Bar */}
-            <CourseCompetencyBadges
-              categoryName={displayCourse.category.name}
-              courseTitle={displayCourse.title}
-              whatYouLearn={whatYouLearn}
-              locale={locale}
-            />
-
+            
             {/* Playable Course Hero Media */}
             <CourseHeroMedia
               title={displayCourse.title}
