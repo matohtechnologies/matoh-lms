@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Plus, Edit, Eye, Search, BookOpen } from "lucide-react";
+import { Plus, Edit, Eye, Search } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { Badge, LevelBadge } from "@/components/ui/badge";
@@ -149,21 +149,6 @@ export default async function AdminCoursesPage() {
                     </td>
                     <td className="px-5 py-4 text-right">
                       <div className="inline-flex items-center gap-1.5">
-                        <Link
-                          href={`/admin/courses/${course.id}?tab=curriculum`}
-                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold transition-colors border border-blue-200/60 text-[11px]"
-                          title="Kelola Materi Kurikulum"
-                        >
-                          <BookOpen size={13} />
-                          <span>Kurikulum</span>
-                        </Link>
-                        <Link
-                          href={`/admin/courses/${course.id}?tab=certificates`}
-                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-sky-50 hover:bg-sky-100 text-sky-800 font-bold transition-colors border border-sky-200/60 text-[11px]"
-                          title="Studio Sertifikat"
-                        >
-                          <span>Sertifikat</span>
-                        </Link>
                         <Link
                           href={`/admin/courses/${course.id}?tab=settings`}
                           className="p-1.5 rounded-lg text-stone-500 hover:text-stone-900 hover:bg-stone-100 transition-colors border border-stone-200/60"
