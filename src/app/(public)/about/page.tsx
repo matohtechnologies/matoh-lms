@@ -21,36 +21,26 @@ import { prisma } from "@/lib/prisma";
 import { LegalTrustCard } from "@/components/about/legal-trust-card";
 import type { Metadata } from "next";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale();
-  return {
-    title: locale === "en" ? "About Us | PT. Matoh Technologies Indonesia" : "Tentang Kami | PT. Matoh Technologies Indonesia",
-    description:
-      locale === "en"
-        ? "Discover the history, vision, mission, and expert board behind PT. Matoh Technologies Indonesia (AHU-064920.AH.01.30.Tahun 2024) — empowering MSMEs and academia through applied digital technology."
-        : "Kenali sejarah, visi, misi, dan tim ahli di balik PT. Matoh Technologies Indonesia (SK Menkumham: AHU-064920.AH.01.30.Tahun 2024) — memberdayakan UMKM dan insan akademik melalui literasi teknologi digital terapan.",
-  };
-}
+export const metadata: Metadata = {
+  title: "Tentang Kami | PT. Matoh Technologies Indonesia",
+  description:
+    "Kenali sejarah, visi, misi, dan tim pendiri di balik PT. Matoh Technologies Indonesia (SK Menkumham: AHU-064920.AH.01.30.Tahun 2024) — memberdayakan UMKM dan insan akademik melalui literasi teknologi digital terapan.",
+};
 
 export default async function AboutPage() {
   const locale = await getLocale();
   const isEn = locale === "en";
 
-  const [studentsCount, coursesCount, lessonsCount, certsCount, dbInstructors] = await Promise.all([
+  const [studentsCount, coursesCount, lessonsCount, certsCount] = await Promise.all([
     prisma.user.count({ where: { role: "USER" } }).catch(() => 0),
     prisma.course.count({ where: { published: true } }).catch(() => 0),
     prisma.lesson.count().catch(() => 0),
     prisma.certificate.count().catch(() => 0),
-    prisma.user.findMany({
-      where: { role: { in: ["INSTRUCTOR", "ADMIN"] } },
-      select: { id: true, name: true, image: true, bio: true, role: true },
-      take: 8,
-    }).catch(() => []),
   ]);
 
   const statsList = [
     { value: studentsCount.toLocaleString(), label: isEn ? "Registered Learners" : "Siswa & Peserta Didik" },
-    { value: coursesCount.toLocaleString(), label: isEn ? "Published Programs" : "Program Pelatihan" },
+    { value: coursesCount.toLocaleString(), label: isEn ? "Published Courses" : "Kelas Tersedia" },
     { value: lessonsCount.toLocaleString(), label: isEn ? "Learning Modules" : "Modul Pembelajaran" },
     { value: certsCount.toLocaleString(), label: isEn ? "Verified Certificates" : "Sertifikat Kelulusan" },
   ];
@@ -86,14 +76,48 @@ export default async function AboutPage() {
     },
   ];
 
-  const leadership = dbInstructors.map((user) => ({
-    id: user.id,
-    name: user.name || (user.role === "ADMIN" ? "Admin Matoh Technologies" : "Instruktur"),
-    role: user.role === "ADMIN" ? (isEn ? "Platform Administrator" : "Administrator Platform") : (isEn ? "Expert Instructor" : "Dewan Pengajar & Peneliti"),
-    experience: isEn ? "Certified Expert" : "Praktisi & Akademisi Terverifikasi",
-    bio: user.bio || (isEn ? "Dedicated expert fostering digital literacy and research excellence." : "Pakar dan pembimbing kurikulum terapan PT. Matoh Technologies Indonesia."),
-    image: user.image,
-  }));
+  const founders = [
+    {
+      name: "Dr. G. Prabantoro, SE., MM., CBec.",
+      role: isEn ? "Founder & RnD Director" : "Pendiri & Direktur RnD",
+      badge: "Founder",
+      expertise: isEn ? "Decision Science (AHP & ISM)" : "Pakar Sains Keputusan (AHP & ISM)",
+      bio: isEn
+        ? "Pioneered Matoh Technologies over two decades. Renowned specialist in scientific decision methodologies (AHP/ISM), public policy prioritization, and MSME growth."
+        : "Pelopor utama perjalanan Matoh Technologies sejak tahun 2000. Pakar metodologi sains keputusan (AHP/ISM), perumusan kebijakan institusi, dan akselerasi UMKM.",
+      avatar: "/images/avatars/founder-prabantoro.svg",
+    },
+    {
+      name: "Dr. E. Lovita, SE., Ak., M.Si., CA., CSRS., CSRA., CBec.",
+      role: isEn ? "Co-Founder & Accounting Board" : "Co-Founder & Dewan Pakar Akuntansi",
+      badge: "Co-Founder",
+      expertise: isEn ? "Sustainability & Financial Valuation" : "Akuntansi Keberlanjutan & Kelayakan Finansial",
+      bio: isEn
+        ? "Distinguished scholar and certified specialist in corporate sustainability reporting (CSRS/CSRA), financial feasibility studies, and academic governance."
+        : "Akademisi senior dan pakar tersertifikasi pelaporan keberlanjutan perusahaan (CSRS/CSRA), studi kelayakan finansial, dan tata kelola akuntansi strategis.",
+      avatar: "/images/avatars/founder-lovita.svg",
+    },
+    {
+      name: "Dr. T. Aminoto, S.Fis., M.Si.",
+      role: isEn ? "Co-Founder & Data Science Board" : "Co-Founder & Dewan Pakar Sains Data",
+      badge: "Co-Founder",
+      expertise: isEn ? "Quantitative Modeling & Higher Ed" : "Pemodelan Kuantitatif & Riset Sains",
+      bio: isEn
+        ? "Senior scholar spearheading quantitative data modeling, scientific inquiry methodology, and modern pedagogical digitization for researchers and educators."
+        : "Akademisi senior yang mengawal metodologi pemodelan data kuantitatif, protokol riset ilmiah terapan, serta inovasi pembelajaran digital perguruan tinggi.",
+      avatar: "/images/avatars/founder-aminoto.svg",
+    },
+    {
+      name: "E. Hermawan, ST., M.Kom.",
+      role: isEn ? "Co-Founder & IT Engineering Board" : "Co-Founder & Dewan Pakar Rekayasa TI",
+      badge: "Co-Founder",
+      expertise: isEn ? "Software Architecture & Cloud" : "Arsitektur Perangkat Lunak & Jaringan",
+      bio: isEn
+        ? "Technology veteran managing scalable cloud architectures, high-availability LMS platform reliability, and secure cryptographic credential infrastructures."
+        : "Praktisi teknologi senior yang memimpin arsitektur komputasi awan, keandalan platform LMS asinkron, dan sistem keamanan registri kredensial digital.",
+      avatar: "/images/avatars/founder-hermawan.svg",
+    },
+  ];
 
   return (
     <div className="pt-20 bg-[#f8fafc] min-h-screen">
@@ -280,74 +304,84 @@ export default async function AboutPage() {
           </div>
         </div>
       </section>
-      {/* Leadership & Instructors */}
-      <section className="py-20 bg-white border-t border-slate-200/70">
+
+      {/* Founders & Leadership Board with Large Profile Photos (No Background Banner) */}
+      <section className="py-20 sm:py-28 bg-white border-t border-slate-200/70">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center max-w-2xl mx-auto mb-14">
+          <div className="text-center max-w-3xl mx-auto mb-16">
             <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded-full inline-block mb-3">
-              {isEn ? "Instructors & Leadership" : "Tim Akademik & Instruktur"}
+              {isEn ? "Founders & Academic Board" : "Dewan Pendiri & Tokoh Akademik"}
             </span>
             <h2
-              className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
+              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
-              {isEn ? "Mentored Directly by Industry Practitioners" : "Dibimbing Langsung oleh Praktisi Berpengalaman"}
+              {isEn ? "Founders of Matoh Technologies" : "Tokoh Pendiri PT. Matoh Technologies Indonesia"}
             </h2>
-            <p className="text-slate-500 text-sm mt-2">
+            <p className="text-slate-500 text-sm sm:text-base mt-3 leading-relaxed">
               {isEn
-                ? "Our mentors come from top engineering organizations and have solved real-world scaling challenges."
-                : "Pengajar kami adalah praktisi aktif yang berkecimpung langsung dalam pengembangan aplikasi skala besar."}
+                ? "Scholars, researchers, and technology pioneers who laid the foundational principles and curriculum standards of our institution."
+                : "Para akademisi, peneliti senior, dan praktisi teknologi yang merumuskan pondasi ilmiah serta standar kurikulum pembelajaran terapan kami."}
             </p>
           </div>
 
-          {leadership.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {leadership.map((person) => (
-                <div
-                  key={person.id}
-                  className="bg-white rounded-3xl shadow-sm hover:shadow-md p-6 flex flex-col justify-between transition-all group"
-                >
-                  <div>
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-sky-500 text-white flex items-center justify-center font-bold text-2xl mb-4 shadow-xs overflow-hidden">
-                      {person.image ? (
-                        <img
-                          src={person.image}
-                          alt={person.name}
-                          width={64}
-                          height={64}
-                          style={{ aspectRatio: "1 / 1" }}
-                          className="w-full h-full object-cover aspect-square"
-                        />
-                      ) : (
-                        <span>{person.name.charAt(0)}</span>
-                      )}
-                    </div>
-                    <h4 className="font-bold text-slate-900 text-base group-hover:text-blue-600 transition-colors">
-                      {person.name}
-                    </h4>
-                    <p className="text-xs font-semibold text-blue-700 mt-0.5">{person.role}</p>
-                    <div className="flex items-center gap-1.5 mt-2">
-                      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
-                        <CheckCircle2 size={11} className="text-emerald-600" />
-                        <span>{person.experience}</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7">
+            {founders.map((person, idx) => (
+              <div
+                key={idx}
+                className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between group"
+              >
+                <div>
+                  {/* Large Profile Photo - Clean & Dominant (Tanpa background banner) */}
+                  <div className="relative w-full aspect-square bg-slate-900 overflow-hidden border-b border-slate-100">
+                    <Image
+                      src={person.avatar}
+                      alt={person.name}
+                      fill
+                      priority
+                      className="object-cover group-hover:scale-103 transition-transform duration-500"
+                    />
+                    <div className="absolute top-3 right-3">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white/95 text-blue-700 shadow-sm backdrop-blur-sm">
+                        {person.badge}
                       </span>
                     </div>
-                    <p className="text-xs text-slate-600 leading-relaxed mt-3 pt-3 border-t border-slate-100">
+                  </div>
+
+                  {/* Body Content */}
+                  <div className="p-6 space-y-3">
+                    <div>
+                      <h3 className="font-extrabold text-slate-900 text-lg leading-snug group-hover:text-blue-600 transition-colors">
+                        {person.name}
+                      </h3>
+                      <p className="text-xs font-bold text-blue-700 mt-1">
+                        {person.role}
+                      </p>
+                    </div>
+
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 text-xs font-semibold text-slate-700">
+                      <CheckCircle2 size={13} className="text-emerald-600 shrink-0" />
+                      <span className="truncate">{person.expertise}</span>
+                    </div>
+
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed pt-2 border-t border-slate-100">
                       {person.bio}
                     </p>
                   </div>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div className="bg-[#f8fafc] rounded-3xl shadow-2xs p-12 text-center max-w-xl mx-auto">
-              <p className="text-slate-600 text-sm">
-                {isEn
-                  ? "Instructor profiles are currently being updated by the administration team."
-                  : "Profil tim pengajar dan instruktur sedang dalam proses sinkronisasi oleh pihak administrasi."}
-              </p>
-            </div>
-          )}
+
+                <div className="px-6 pb-6 pt-1">
+                  <div className="flex items-center justify-between text-xs font-medium text-slate-400 border-t border-slate-100 pt-3">
+                    <span>Dewan Kehormatan</span>
+                    <span className="text-emerald-600 font-semibold flex items-center gap-1">
+                      <ShieldCheck size={13} />
+                      <span>Resmi Terdaftar</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -370,7 +404,7 @@ export default async function AboutPage() {
               href="/courses"
               className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-white text-blue-600 font-bold hover:bg-blue-50 transition-colors shadow-sm text-sm"
             >
-              <span>{isEn ? "Explore Programs" : "Jelajahi Katalog Program"}</span>
+              <span>{isEn ? "Explore Courses" : "Jelajahi Katalog Kelas"}</span>
               <ArrowRight size={16} />
             </Link>
             <Link

@@ -1,8 +1,12 @@
 {
   "nav": {
     "home": "Home",
-    "programs": "Programs",
-    "courses": "All Courses",
+    "programs": "Courses",
+    "courses": "Courses",
+    "research": "Research",
+    "publications": "Publications",
+    "developer": "Developer",
+    "consultant": "Consultant",
     "about": "About Us",
     "contact": "Contact",
     "verify_certificate": "Verify Certificate",
@@ -604,7 +608,7 @@
     "valid_authenticated": "Valid & Authenticated",
     "validity_period": "Validity Period:",
     "lifetime": "Lifetime Validity",
-    "training_program": "Training Program",
+    "training_program": "Course",
     "learning_workload": "Learning Workload:",
     "jp_unit": "{hours} Hours (JP)",
     "graduation_date": "Graduation Date:",

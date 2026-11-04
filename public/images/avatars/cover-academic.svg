@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg-banner" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="50%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="accent-cyan" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.15"/>
+    </linearGradient>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#334155" stroke-width="0.75" stroke-opacity="0.5"/>
+    </pattern>
+  </defs>
+  <rect width="600" height="200" fill="url(#bg-banner)"/>
+  <rect width="600" height="200" fill="url(#grid)"/>
+  <circle cx="500" cy="40" r="120" fill="url(#accent-cyan)"/>
+  <circle cx="100" cy="180" r="90" fill="#2563eb" fill-opacity="0.12"/>
+  <path d="M 0 160 Q 200 120 400 170 T 600 140" fill="none" stroke="#60a5fa" stroke-opacity="0.25" stroke-width="1.5"/>
+</svg>
+

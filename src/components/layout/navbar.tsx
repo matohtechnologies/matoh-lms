@@ -28,7 +28,6 @@ import { LanguageSwitcher } from "./language-switcher";
 import { useAppLocale } from "@/components/providers/locale-provider";
 import { useSession } from "next-auth/react";
 import SignOutButton from "@/components/auth/signout-button";
-import { CertificateVerificationModal } from "@/components/certificates/certificate-verification-modal";
 
 interface NavbarCategoryItem {
   id: string;
@@ -70,8 +69,17 @@ export function Navbar({ user, categories }: NavbarProps) {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isProgramDropdownOpen, setIsProgramDropdownOpen] = useState(false);
   const [isMobileProgramOpen, setIsMobileProgramOpen] = useState(false);
-  const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false);
   const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const navItems = [
+    { href: "/", label: isEn ? "Home" : "Home", exact: true },
+    { href: "/courses", label: isEn ? "Courses" : "Kelas", exact: false },
+    { href: "/riset", label: isEn ? "Research" : "Riset", exact: false },
+    { href: "/publikasi", label: isEn ? "Publications" : "Publikasi", exact: false, prefixes: ["/publikasi", "/blog"] },
+    { href: "/developer", label: isEn ? "Developer" : "Developer", exact: false },
+    { href: "/konsultan", label: isEn ? "Consultant" : "Konsultan", exact: false },
+    { href: "/about", label: isEn ? "About Us" : "Tentang Kami", exact: true },
+  ];
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -104,13 +112,13 @@ export function Navbar({ user, categories }: NavbarProps) {
       name: isEn ? (cat.nameEn || cat.name) : cat.name,
       desc: cat._count?.courses !== undefined
         ? (isEn ? `${cat._count.courses} active courses available` : `${cat._count.courses} kelas tersedia`)
-        : (isEn ? "Curated learning track" : "Program belajar terstruktur"),
+        : (isEn ? "Curated learning track" : "Kurikulum kelas terstruktur"),
       href: `/courses?category=${encodeURIComponent(cat.name)}`,
       badge: cat._count?.courses && cat._count.courses > 0 ? (isEn ? `${cat._count.courses} Kelas` : `${cat._count.courses} Kelas`) : undefined,
     }))
     : [
       {
-        name: isEn ? "All Programs" : "Semua Program",
+        name: isEn ? "All Courses" : "Semua Kelas",
         desc: isEn ? "Browse all available courses in database" : "Jelajahi semua kelas di database",
         href: "/courses",
         badge: undefined,
@@ -160,7 +168,7 @@ export function Navbar({ user, categories }: NavbarProps) {
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center shrink-0 group py-1"
+          className="flex items-center gap-2.5 shrink-0 group py-1"
           aria-label="PT. Matoh Technologies Indonesia"
         >
           <Image
@@ -170,216 +178,40 @@ export function Navbar({ user, categories }: NavbarProps) {
             height={44}
             priority
             style={{ aspectRatio: "1 / 1" }}
-            className="h-10 w-10 sm:h-11 sm:w-11 object-contain transition-transform duration-200 group-hover:scale-105 aspect-square"
+            className="h-9 w-9 sm:h-10 sm:w-10 object-contain transition-transform duration-200 group-hover:scale-105 aspect-square"
           />
+          <span
+            className="font-extrabold text-base sm:text-lg tracking-tight text-teal-600 transition-colors group-hover:text-teal-700"
+            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+          >
+            MatohTechnologies
+          </span>
         </Link>
 
         {/* Desktop Nav Links */}
-        <div className="hidden md:flex items-center gap-1 xl:gap-1.5 shrink-0">
-          {/* 1. Beranda */}
-          <Link
-            href="/"
-            className={cn(
-              "px-2.5 xl:px-3.5 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-colors whitespace-nowrap shrink-0",
-              pathname === "/"
-                ? "bg-blue-50 text-blue-700 font-bold"
-                : "text-stone-600 hover:text-stone-900 hover:bg-stone-100/80"
-            )}
-          >
-            <span className="whitespace-nowrap">{t("home")}</span>
-          </Link>
+        <div className="hidden md:flex items-center gap-1 xl:gap-2 shrink-0">
+          {navItems.map((item) => {
+            const isActive = item.exact
+              ? pathname === item.href
+              : item.prefixes
+                ? item.prefixes.some((p) => pathname.startsWith(p))
+                : pathname.startsWith(item.href);
 
-          {/* 2. Dropdown Program */}
-          <div
-            className="relative shrink-0"
-            onMouseEnter={handleMouseEnterProgram}
-            onMouseLeave={handleMouseLeaveProgram}
-          >
-            <button
-              type="button"
-              onClick={() => setIsProgramDropdownOpen(!isProgramDropdownOpen)}
-              className={cn(
-                "flex items-center gap-1 px-2.5 xl:px-3.5 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-colors whitespace-nowrap shrink-0",
-                pathname.startsWith("/courses") || isProgramDropdownOpen
-                  ? "bg-blue-50 text-blue-700 font-bold"
-                  : "text-stone-600 hover:text-stone-900 hover:bg-stone-100/80"
-              )}
-            >
-              <span className="whitespace-nowrap">{t("programs")}</span>
-              <ChevronDown
-                size={14}
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
                 className={cn(
-                  "transition-transform duration-200 shrink-0",
-                  isProgramDropdownOpen && "rotate-180"
+                  "px-3 py-2 rounded-lg text-xs xl:text-sm font-semibold transition-colors whitespace-nowrap shrink-0",
+                  isActive
+                    ? "bg-blue-50 text-blue-700 font-bold"
+                    : "text-stone-600 hover:text-stone-900 hover:bg-stone-100/80"
                 )}
-              />
-            </button>
-
-            {/* Mega Dropdown Menu */}
-            {isProgramDropdownOpen && (
-              <div
-                className="absolute top-full -left-20 w-[780px] bg-white rounded-3xl border border-stone-200/90 shadow-warm-xl p-6 z-50 animate-in fade-in slide-in-from-top-2 duration-200"
-                onMouseEnter={handleMouseEnterProgram}
-                onMouseLeave={handleMouseLeaveProgram}
               >
-                {/* Header within dropdown */}
-                <div className="flex items-center justify-between pb-4 mb-4 border-b border-stone-100">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-stone-500 font-medium">
-                      {isEn ? "Choose your dream course category & career path" : "Pilih kategori kelas & jalur karir impian Anda"}
-                    </span>
-                  </div>
-                  <Link
-                    href="/courses"
-                    className="text-xs font-bold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1 group"
-                    onClick={() => setIsProgramDropdownOpen(false)}
-                  >
-                    <span>{isEn ? "Browse All Courses" : "Katalog Semua Kelas"}</span>
-                    <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
-                  </Link>
-                </div>
-
-                <div className="grid grid-cols-12 gap-6">
-                  {/* Left Column: Categories (7 cols) */}
-                  <div className="col-span-7 space-y-2 border-r border-stone-100 pr-5">
-                    <div className="flex items-center justify-between mb-1">
-                      <p className="text-[11px] font-extrabold uppercase tracking-wider text-stone-400">
-                        {t("career_tracks")}
-                      </p>
-                      <span className="text-[10px] font-semibold text-stone-400">
-                        {programCategories.length} {isEn ? "Categories" : "Kategori"}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-1.5 max-h-[360px] overflow-y-auto pr-1">
-                      {programCategories.map((cat) => (
-                        <Link
-                          key={cat.name}
-                          href={cat.href}
-                          className="flex flex-col justify-center p-2.5 rounded-xl hover:bg-blue-50/60 transition-all group"
-                          onClick={() => setIsProgramDropdownOpen(false)}
-                        >
-                          <div className="flex items-center justify-between gap-1">
-                            <p className="text-xs font-bold text-stone-900 group-hover:text-blue-600 transition-colors truncate">
-                              {cat.name}
-                            </p>
-                            {cat.badge && (
-                              <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-blue-50 text-blue-700 shrink-0">
-                                {cat.badge}
-                              </span>
-                            )}
-                          </div>
-                          <p className="text-[10px] text-stone-500 line-clamp-1 mt-0.5 group-hover:text-stone-600">
-                            {cat.desc}
-                          </p>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Right Column: Learning Formats (5 cols) */}
-                  <div className="col-span-5 space-y-3">
-                    <p className="text-[11px] font-extrabold uppercase tracking-wider text-stone-400 mb-2">
-                      {t("learning_formats")}
-                    </p>
-                    <div className="space-y-2">
-                      {programFormats.map((fmt) => {
-                        const Icon = fmt.icon;
-                        return (
-                          <Link
-                            key={fmt.title}
-                            href={fmt.href}
-                            className="block p-3 rounded-2xl hover:bg-blue-50/50 transition-all group"
-                            onClick={() => setIsProgramDropdownOpen(false)}
-                          >
-                            <div className="flex items-center gap-2 mb-1">
-                              <Icon size={15} className="text-blue-600" />
-                              <h4 className="text-xs font-bold text-stone-900 group-hover:text-blue-600 transition-colors">
-                                {fmt.title}
-                              </h4>
-                            </div>
-                            <p className="text-[11px] text-stone-500 line-clamp-2 leading-relaxed mb-2">
-                              {fmt.desc}
-                            </p>
-                            <span className="text-[10px] font-bold text-stone-600 bg-stone-100 px-2 py-0.5 rounded-md">
-                              {fmt.tag}
-                            </span>
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Dropdown Bottom Banner */}
-                <div className="mt-5 pt-3 border-t border-stone-100 flex items-center justify-between text-xs text-stone-500 bg-stone-50/80 -mx-6 -mb-6 p-4 rounded-b-3xl">
-                  <div className="flex items-center gap-4">
-                    <span className="flex items-center gap-1.5 font-medium text-stone-700">
-                      <CheckCircle2 size={13} className="text-emerald-600" />
-                      {isEn ? "QR-Verified Certificate" : "Sertifikat Terverifikasi QR"}
-                    </span>
-                    <span className="flex items-center gap-1.5 font-medium text-stone-700">
-                      <CheckCircle2 size={13} className="text-emerald-600" />
-                      {isEn ? "1-on-1 Portfolio Review" : "Review Portofolio 1-on-1"}
-                    </span>
-                    <span className="flex items-center gap-1.5 font-medium text-stone-700">
-                      <CheckCircle2 size={13} className="text-emerald-600" />
-                      {isEn ? "Lifetime Access" : "Akses Selamanya"}
-                    </span>
-                  </div>
-
-                  <Link
-                    href="/courses"
-                    className="font-bold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1"
-                    onClick={() => setIsProgramDropdownOpen(false)}
-                  >
-                    <span>{t("explore_all_programs")}</span>
-                    <ChevronRight size={13} />
-                  </Link>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* 3. Verifikasi Sertifikat */}
-          <button
-            type="button"
-            onClick={() => setIsVerifyModalOpen(true)}
-            className={cn(
-              "flex items-center gap-1.5 px-2.5 xl:px-3.5 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-colors cursor-pointer whitespace-nowrap shrink-0",
-              pathname.startsWith("/verify")
-                ? "bg-emerald-50 text-emerald-700 font-bold"
-                : "text-stone-600 hover:text-stone-900 hover:bg-stone-100/80"
-            )}
-            title={isEn ? "Verify certificate by serial ID" : "Verifikasi keaslian sertifikat dengan nomor seri"}
-          >
-            <span className="whitespace-nowrap">{isEn ? "Verify Certificate" : "Verifikasi Sertifikat"}</span>
-          </button>
-
-          {/* 4. Tentang Kami */}
-          <Link
-            href="/about"
-            className={cn(
-              "px-2.5 xl:px-3.5 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-colors whitespace-nowrap shrink-0",
-              pathname === "/about"
-                ? "bg-blue-50 text-blue-700 font-bold"
-                : "text-stone-600 hover:text-stone-900 hover:bg-stone-100/80"
-            )}
-          >
-            <span className="whitespace-nowrap">{t("about")}</span>
-          </Link>
-
-          {/* 5. Kontak */}
-          <Link
-            href="/contact"
-            className={cn(
-              "px-2.5 xl:px-3.5 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-colors whitespace-nowrap shrink-0",
-              pathname === "/contact"
-                ? "bg-blue-50 text-blue-700 font-bold"
-                : "text-stone-600 hover:text-stone-900 hover:bg-stone-100/80"
-            )}
-          >
-            <span className="whitespace-nowrap">{t("contact")}</span>
-          </Link>
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
         </div>
 
         {/* Right side: Language Switcher & Auth */}
@@ -517,112 +349,37 @@ export function Navbar({ user, categories }: NavbarProps) {
       {/* Mobile Drawer Menu */}
       {isMobileOpen && (
         <div className="md:hidden bg-white border-t border-stone-200 px-4 py-5 space-y-2 shadow-warm-xl max-h-[calc(100vh-4rem)] overflow-y-auto">
-          {/* 1. Beranda */}
-          <Link
-            href="/"
-            className={cn(
-              "block px-4 py-2.5 rounded-xl text-sm font-bold transition-colors",
-              pathname === "/" ? "bg-blue-50 text-blue-700" : "text-stone-800 hover:bg-stone-50"
-            )}
-            onClick={() => setIsMobileOpen(false)}
-          >
-            {t("home")}
-          </Link>
+          {/* 1. Nav Links based on Wireframe */}
+          {navItems.map((item) => {
+            const isActive = item.exact
+              ? pathname === item.href
+              : item.prefixes
+                ? item.prefixes.some((p) => pathname.startsWith(p))
+                : pathname.startsWith(item.href);
 
-          {/* 2. Program Accordion */}
-          <div className="rounded-xl border border-stone-200/80 overflow-hidden bg-stone-50/50">
-            <button
-              type="button"
-              onClick={() => setIsMobileProgramOpen(!isMobileProgramOpen)}
-              className="w-full flex items-center justify-between px-4 py-3 text-sm font-bold text-stone-800 hover:bg-stone-100/70 transition-colors"
-            >
-              <span className="flex items-center gap-2">
-                <Compass size={16} className="text-blue-600" />
-                <span>{t("programs")}</span>
-              </span>
-              <ChevronDown
-                size={16}
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
                 className={cn(
-                  "text-stone-500 transition-transform duration-200",
-                  isMobileProgramOpen && "rotate-180"
+                  "block px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors",
+                  isActive
+                    ? "bg-blue-50 text-blue-700 font-bold"
+                    : "text-stone-800 hover:bg-stone-50"
                 )}
-              />
-            </button>
+                onClick={() => setIsMobileOpen(false)}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
 
-            {isMobileProgramOpen && (
-              <div className="px-3 pb-3 pt-1 space-y-1 bg-white border-t border-stone-200/70">
-                <p className="px-3 pt-2 text-[10px] font-extrabold uppercase tracking-wider text-stone-400">
-                  {isEn ? "Main Categories" : "Kategori Utama"}
-                </p>
-                {programCategories.map((cat) => (
-                  <Link
-                    key={cat.name}
-                    href={cat.href}
-                    className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-stone-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
-                    onClick={() => setIsMobileOpen(false)}
-                  >
-                    <span className="truncate">{cat.name}</span>
-                    {cat.badge && (
-                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-50 text-blue-700">
-                        {cat.badge}
-                      </span>
-                    )}
-                  </Link>
-                ))}
-
-                <div className="pt-2 border-t border-stone-100">
-                  <Link
-                    href="/courses"
-                    className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-blue-600 bg-blue-50/80"
-                    onClick={() => setIsMobileOpen(false)}
-                  >
-                    <span>{isEn ? "Browse All Courses Catalog" : "Lihat Semua Katalog Kelas"}</span>
-                    <ArrowRight size={13} />
-                  </Link>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* 3. Verifikasi Sertifikat */}
-          <button
-            type="button"
-            onClick={() => {
-              setIsMobileOpen(false);
-              setIsVerifyModalOpen(true);
-            }}
-            className={cn(
-              "w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-bold transition-colors cursor-pointer",
-              pathname.startsWith("/verify")
-                ? "bg-emerald-50 text-emerald-800"
-                : "text-stone-800 hover:bg-stone-50"
-            )}
-          >
-            <span className="flex items-center gap-2">
-              <ShieldCheck size={16} className="text-emerald-600" />
-              <span>{isEn ? "Verify Certificate" : "Verifikasi Sertifikat"}</span>
-            </span>
-            <ArrowRight size={14} className="text-stone-400" />
-          </button>
-
-          {/* 4. Tentang Kami */}
-          <Link
-            href="/about"
-            className={cn(
-              "block px-4 py-2.5 rounded-xl text-sm font-bold transition-colors",
-              pathname === "/about" ? "bg-blue-50 text-blue-700" : "text-stone-800 hover:bg-stone-50"
-            )}
-            onClick={() => setIsMobileOpen(false)}
-          >
-            {t("about")}
-          </Link>
-
-          {/* 5. Kontak */}
+          {/* Kontak */}
           <Link
             href="/contact"
             className={cn(
-              "block px-4 py-2.5 rounded-xl text-sm font-bold transition-colors",
-              pathname === "/contact" ? "bg-blue-50 text-blue-700" : "text-stone-800 hover:bg-stone-50"
+              "block px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors",
+              pathname === "/contact" ? "bg-blue-50 text-blue-700 font-bold" : "text-stone-800 hover:bg-stone-50"
             )}
             onClick={() => setIsMobileOpen(false)}
           >
@@ -688,12 +445,6 @@ export function Navbar({ user, categories }: NavbarProps) {
         </div>
       )}
 
-      {/* Interactive Certificate Verification Modal */}
-      <CertificateVerificationModal
-        isOpen={isVerifyModalOpen}
-        onClose={() => setIsVerifyModalOpen(false)}
-        isEn={isEn}
-      />
     </header>
   );
 }

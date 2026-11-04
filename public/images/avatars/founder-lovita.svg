@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <!-- Background Studio Lighting Gradient (Indigo/Violet) -->
+    <radialGradient id="studio-spotlight-fem" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#818cf8" stop-opacity="0.35"/>
+      <stop offset="45%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#09071c"/>
+    </radialGradient>
+    <linearGradient id="rim-light-fem" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c7d2fe" stop-opacity="0.85"/>
+      <stop offset="50%" stop-color="#a5b4fc" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#3730a3" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="blazer-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#312e81"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="hijab-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <radialGradient id="vignette-fem" cx="50%" cy="50%" r="50%">
+      <stop offset="70%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.45"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Studio Background -->
+  <rect width="400" height="400" fill="url(#studio-spotlight-fem)"/>
+  <rect width="400" height="400" fill="url(#vignette-fem)"/>
+
+  <!-- Subtle Pattern Rings -->
+  <circle cx="200" cy="180" r="140" fill="none" stroke="#a5b4fc" stroke-opacity="0.08" stroke-width="1.5" stroke-dasharray="4 6"/>
+  <circle cx="200" cy="180" r="115" fill="none" stroke="#c7d2fe" stroke-opacity="0.05" stroke-width="1"/>
+
+  <!-- Female Executive Silhouette / Hijab & Blazer -->
+  <!-- Shoulders & Blazer Base -->
+  <path d="M 65 400 L 98 330 C 118 285 155 268 200 268 C 245 268 282 285 302 330 L 335 400 Z" fill="url(#blazer-grad)"/>
+
+  <!-- Blazer Lapels -->
+  <path d="M 98 330 C 118 285 155 268 200 268 L 175 355 L 135 400 L 65 400 Z" fill="#2e1065"/>
+  <path d="M 302 330 C 282 285 245 268 200 268 L 225 355 L 265 400 L 335 400 Z" fill="#2e1065"/>
+
+  <!-- Inner Blouse / Scarf Accent -->
+  <polygon points="180,265 220,265 200,345" fill="#e0e7ff"/>
+
+  <!-- Hijab / Elegant Headwrap Silhouette -->
+  <path d="M 148 185 C 146 130 168 112 200 112 C 232 112 254 130 252 185 C 252 235 235 275 200 275 C 165 275 148 235 148 185 Z" fill="url(#hijab-grad)"/>
+
+  <!-- Face Oval Inner Frame -->
+  <ellipse cx="200" cy="185" rx="36" ry="46" fill="#334155"/>
+
+  <!-- Hijab Drape Highlights -->
+  <path d="M 160 215 C 170 255 185 275 200 275 C 215 275 230 255 240 215" fill="none" stroke="#64748b" stroke-width="2"/>
+  <path d="M 150 170 C 152 125 172 115 200 114 C 228 115 248 125 250 170" fill="none" stroke="url(#rim-light-fem)" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Shoulder Rim Light -->
+  <path d="M 85 365 C 112 305 150 272 195 270" fill="none" stroke="url(#rim-light-fem)" stroke-width="2" stroke-linecap="round"/>
+  <path d="M 315 365 C 288 305 250 272 205 270" fill="none" stroke="url(#rim-light-fem)" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Bottom Badge: Sustainability & Finance Star -->
+  <g transform="translate(182, 350)">
+    <circle cx="18" cy="18" r="16" fill="#4338ca" stroke="#ffffff" stroke-width="2"/>
+    <path d="M 18 10 L 20.5 15.5 L 26.5 16.2 L 22 20.3 L 23.2 26.2 L 18 23.2 L 12.8 26.2 L 14 20.3 L 9.5 16.2 L 15.5 15.5 Z" fill="#fbbf24"/>
+  </g>
+</svg>
+
