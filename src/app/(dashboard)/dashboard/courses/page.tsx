@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     "Katalog resmi dan pembelian program pelatihan sertifikasi PT. Matoh Technologies Indonesia langsung dari dasbor pengguna.",
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function DashboardCoursesPage() {
   const session = await auth();
   if (!session?.user?.id) {
@@ -132,4 +135,3 @@ export default async function DashboardCoursesPage() {
     />
   );
 }
-
