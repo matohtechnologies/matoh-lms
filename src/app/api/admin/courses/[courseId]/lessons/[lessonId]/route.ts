@@ -3,10 +3,30 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
 
+const mediaUrlSchema = z
+  .string()
+  .refine(
+    (val) => {
+      if (!val || val.trim() === "") return true;
+      const trimmed = val.trim();
+      if (trimmed.startsWith("/") && !trimmed.startsWith("//")) return true;
+      try {
+        const parsed = new URL(trimmed);
+        return parsed.protocol === "http:" || parsed.protocol === "https:";
+      } catch {
+        return false;
+      }
+    },
+    { message: "URL media tidak valid (harus berupa link valid atau file yang diunggah)" }
+  )
+  .optional()
+  .nullable()
+  .or(z.literal(""));
+
 const lessonUpdateSchema = z.object({
   title: z.string().min(2, "Judul materi minimal 2 karakter").max(200).optional(),
   slug: z.string().optional(),
-  videoUrl: z.string().url("URL video tidak valid").optional().or(z.literal("")).nullable(),
+  videoUrl: mediaUrlSchema,
   duration: z.number().min(0).optional(),
   isFree: z.boolean().optional(),
   order: z.number().int().optional(),

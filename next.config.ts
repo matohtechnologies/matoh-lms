@@ -9,7 +9,7 @@ const cspHeader = `
   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
   img-src 'self' data: blob: https://images.unsplash.com https://ui-avatars.com https://lh3.googleusercontent.com https://img.youtube.com https://i.ytimg.com;
   font-src 'self' https://fonts.gstatic.com data:;
-  frame-src 'self' https://app.sandbox.midtrans.com https://app.midtrans.com https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com;
+  frame-src 'self' https://app.sandbox.midtrans.com https://app.midtrans.com https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com https://docs.google.com https://drive.google.com https://*.google.com https://www.canva.com https://view.officeapps.live.com;
   connect-src 'self' https://app.sandbox.midtrans.com https://api.sandbox.midtrans.com https://app.midtrans.com https://api.midtrans.com;
   media-src 'self' data: blob: https:;
   object-src 'none';

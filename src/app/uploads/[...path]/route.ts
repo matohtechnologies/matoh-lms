@@ -137,13 +137,17 @@ export async function GET(
     // Standard static file response
     const fileBuffer = fs.readFileSync(targetFilePath);
 
+    const isDownloadOnly = [".ppt", ".pptx", ".zip", ".rar"].includes(ext);
+
     return new NextResponse(fileBuffer, {
       status: 200,
       headers: {
         "Content-Type": contentType,
         "Content-Length": stat.size.toString(),
+        "Content-Disposition": isDownloadOnly ? `attachment; filename="${path.basename(targetFilePath)}"` : "inline",
         "Cache-Control": "public, max-age=31536000, immutable",
         "Accept-Ranges": "bytes",
+        "X-Content-Type-Options": "nosniff",
       },
     });
   } catch (err) {

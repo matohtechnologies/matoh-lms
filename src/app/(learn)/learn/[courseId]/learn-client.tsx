@@ -48,7 +48,21 @@ import { triggerCelebrationConfetti, triggerMicroConfetti } from "@/lib/confetti
 import { playPopSound, playSuccessChime, playFanfareSound } from "@/lib/sound-effects";
 import { GraduationCelebrationModal } from "@/components/gamification/graduation-celebration-modal";
 import { MarkdownRenderer } from "@/components/ui/markdown-renderer";
-import { isPdfUrl, isPptUrl, isGoogleSlidesUrl, isCanvaPresentationUrl } from "@/lib/youtube";
+import { CustomPdfViewer } from "@/components/courses/custom-pdf-viewer";
+import {
+  isPdfUrl,
+  isPptUrl,
+  isGoogleSlidesUrl,
+  isCanvaPresentationUrl,
+  isGoogleDriveUrl,
+  getGoogleDriveEmbedUrl,
+  isGoogleDocsUrl,
+  getGoogleDocsEmbedUrl,
+  getGoogleSlidesEmbedUrl,
+  getPdfEmbedUrl,
+  isYouTubeVideoUrl,
+  isVideoUrl,
+} from "@/lib/youtube";
 
 export interface LearnLesson {
   id: string;
@@ -257,7 +271,14 @@ export default function LearnPageClient({
     new Set(initialCompletedLessonIds)
   );
   const [savingProgress, setSavingProgress] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    // Open syllabus sidebar by default only on desktop screens (>= 1024px)
+    if (typeof window !== "undefined" && window.innerWidth >= 1024) {
+      setSidebarOpen(true);
+    }
+  }, []);
   const [activeTab, setActiveTab] = useState<
     "notes" | "studyNotes" | "resources" | "quiz" | "assignment" | "discussion"
   >("notes");
@@ -292,6 +313,58 @@ export default function LearnPageClient({
       });
     }, 18000);
     return () => clearInterval(timer);
+  }, []);
+
+  // Screen Orientation Lock on Fullscreen (Rotates mobile screen to landscape on Android / supported devices)
+  useEffect(() => {
+    const handleFullscreenChange = async () => {
+      const isFs = !!(
+        document.fullscreenElement ||
+        (document as any).webkitFullscreenElement ||
+        (document as any).mozFullScreenElement ||
+        (document as any).msFullscreenElement
+      );
+
+      if (isFs) {
+        if (
+          typeof window !== "undefined" &&
+          window.screen?.orientation &&
+          typeof (window.screen.orientation as any).lock === "function"
+        ) {
+          try {
+            await (window.screen.orientation as any).lock("landscape");
+          } catch {
+            // Silently ignore if not supported or rejected
+          }
+        }
+      } else {
+        if (
+          typeof window !== "undefined" &&
+          window.screen?.orientation &&
+          typeof window.screen.orientation.unlock === "function"
+        ) {
+          try {
+            window.screen.orientation.unlock();
+          } catch {}
+        }
+      }
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      document.removeEventListener("webkitfullscreenchange", handleFullscreenChange);
+      if (
+        typeof window !== "undefined" &&
+        window.screen?.orientation &&
+        typeof window.screen.orientation.unlock === "function"
+      ) {
+        try {
+          window.screen.orientation.unlock();
+        } catch {}
+      }
+    };
   }, []);
 
   // In-Video Study Notes State
@@ -903,38 +976,60 @@ export default function LearnPageClient({
   };
 
   return (
-    <div className="flex h-screen bg-slate-50 text-slate-800 overflow-hidden font-sans">
-      {/* Sidebar: Lessons Navigation */}
+    <div className="relative flex h-screen h-[100dvh] bg-slate-50 text-slate-800 overflow-hidden font-sans">
+      {/* Mobile Drawer Backdrop */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-40 lg:hidden transition-opacity duration-300"
+          onClick={() => setSidebarOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Sidebar: Lessons Navigation (Responsive Drawer on Mobile, In-Flow on Desktop) */}
       <aside
-        className={`${
-          sidebarOpen ? "w-80" : "w-0"
-        } shrink-0 bg-white border-r border-slate-200 transition-all duration-300 overflow-hidden flex flex-col z-20 shadow-xs`}
+        className={`fixed inset-y-0 left-0 z-50 w-80 max-w-[85vw] sm:max-w-xs bg-white border-r border-slate-200 transition-all duration-300 ease-in-out flex flex-col shadow-2xl lg:shadow-xs lg:static lg:inset-auto lg:h-full lg:z-20 ${
+          sidebarOpen
+            ? "translate-x-0 lg:w-80"
+            : "-translate-x-full lg:translate-x-0 lg:w-0 lg:border-r-0"
+        }`}
       >
         {/* Brand & Course Title */}
         <div className="p-4 border-b border-slate-200 bg-white/95 backdrop-blur-md">
-          <Link href="/" className="flex items-center gap-2 mb-3 group">
-            <div className="w-7 h-7 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center p-1 group-hover:border-slate-300 transition-colors">
-              <Image
-                src="/images/matoh-logo-v2.png"
-                alt="Matoh Technologies"
-                width={18}
-                height={18}
-                priority
-                style={{ aspectRatio: "1 / 1" }}
-                className="object-contain aspect-square"
-              />
-            </div>
-            <span className="text-sm font-bold text-slate-900 tracking-tight">
-              Matoh<span className="text-teal-400">Technologies</span>
-            </span>
-          </Link>
+          <div className="flex items-center justify-between gap-2 mb-3">
+            <Link href="/" className="flex items-center gap-2 group">
+              <div className="w-7 h-7 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center p-1 group-hover:border-slate-300 transition-colors">
+                <Image
+                  src="/images/matoh-logo-v2.png"
+                  alt="Matoh Technologies"
+                  width={18}
+                  height={18}
+                  priority
+                  style={{ aspectRatio: "1 / 1" }}
+                  className="object-contain aspect-square"
+                />
+              </div>
+              <span className="text-sm font-bold text-slate-900 tracking-tight">
+                Matoh<span className="text-teal-400">Technologies</span>
+              </span>
+            </Link>
+            {/* Dedicated Mobile Close Button */}
+            <button
+              type="button"
+              onClick={() => setSidebarOpen(false)}
+              className="lg:hidden w-8 h-8 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-800 hover:bg-slate-100 transition-colors"
+              aria-label="Tutup Menu Kurikulum"
+            >
+              <X size={18} />
+            </button>
+          </div>
           <h2 className="text-sm font-bold text-slate-900 leading-snug line-clamp-2" title={course.title}>
             {course.title}
           </h2>
           <div className="mt-3 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
             <div className="flex items-center justify-between text-xs text-slate-600 mb-1.5 font-medium">
               <span>{t("progress")}</span>
-              <span className="text-blue-400 font-bold">{t("done_pct", { pct: progress })}</span>
+              <span className="text-blue-500 font-bold">{t("done_pct", { pct: progress })}</span>
             </div>
             <Progress value={progress} size="sm" />
           </div>
@@ -997,8 +1092,13 @@ export default function LearnPageClient({
                         </button>
                         <button
                           type="button"
-                          onClick={() => setCurrentLesson(lesson)}
-                          className="text-xs truncate flex-1 text-left hover:text-blue-600 text-slate-700 transition-colors"
+                          onClick={() => {
+                            setCurrentLesson(lesson);
+                            if (typeof window !== "undefined" && window.innerWidth < 1024) {
+                              setSidebarOpen(false);
+                            }
+                          }}
+                          className="text-xs truncate flex-1 text-left hover:text-blue-600 text-slate-700 transition-colors py-1"
                         >
                           {lesson.title}
                         </button>
@@ -1352,29 +1452,33 @@ export default function LearnPageClient({
       </aside>
 
       {/* Main Learning Classroom Panel */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden w-full">
         {/* Top Navbar */}
-        <header className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4 sm:px-6 shrink-0 z-10 shadow-2xs">
-          <div className="flex items-center gap-3 min-w-0">
+        <header className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-3 sm:px-6 shrink-0 z-10 shadow-2xs">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 rounded-xl hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition-colors"
+              className="w-10 h-10 rounded-xl flex items-center justify-center hover:bg-slate-100 active:bg-slate-200 text-slate-700 hover:text-slate-900 transition-colors shrink-0"
               title={sidebarOpen ? t("close_syllabus") : t("open_syllabus")}
+              aria-label="Toggle Kurikulum"
             >
               {sidebarOpen ? <X size={18} /> : <List size={18} />}
             </button>
-            <span className="text-sm font-semibold text-slate-900 truncate">
-              {currentLesson.title}
-            </span>
+            <div className="min-w-0 flex items-center gap-1.5">
+              <span className="text-xs sm:text-sm font-semibold text-slate-900 truncate">
+                {currentLesson.title}
+              </span>
+            </div>
           </div>
 
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             <Link
               href="/dashboard/my-courses"
-              className="text-xs text-slate-500 hover:text-blue-600 font-medium transition-colors inline-flex items-center gap-1"
+              className="text-xs text-slate-600 hover:text-blue-600 font-medium transition-colors inline-flex items-center gap-1 py-1.5 px-2.5 rounded-xl hover:bg-slate-100 active:bg-slate-200 border border-slate-200 sm:border-transparent"
             >
-              <ChevronLeft size={14} />
-              <span>{t("back_to_dashboard")}</span>
+              <ChevronLeft size={15} />
+              <span className="hidden sm:inline">{t("back_to_dashboard")}</span>
+              <span className="sm:hidden font-semibold">Dashboard</span>
             </Link>
           </div>
         </header>
@@ -1386,50 +1490,123 @@ export default function LearnPageClient({
             const mediaUrl = currentLesson.videoUrl!.trim();
             const isPdf = isPdfUrl(mediaUrl);
             const isPpt = isPptUrl(mediaUrl);
+            const isGoogleDrive = isGoogleDriveUrl(mediaUrl);
+            const isGoogleDocs = isGoogleDocsUrl(mediaUrl);
             const isSlideEmbed = isGoogleSlidesUrl(mediaUrl) || isCanvaPresentationUrl(mediaUrl);
+            const isYouTube = isYouTubeVideoUrl(mediaUrl);
+            const isDirectVideo = isVideoUrl(mediaUrl) || /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(mediaUrl);
 
-            // 1. PDF Document Reader
-            if (isPdf) {
+            // 1. Google Drive Shared Document / PDF / Presentation Reader
+            if (isGoogleDrive) {
+              const driveEmbedUrl = getGoogleDriveEmbedUrl(mediaUrl);
               return (
-                <div className="w-full bg-slate-100 flex flex-col h-[520px] sm:h-[600px] border-b border-slate-200">
-                  <div className="bg-white border-b border-slate-200 px-4 py-2.5 flex items-center justify-between gap-2 text-xs">
-                    <span className="font-semibold text-slate-800 flex items-center gap-1.5 truncate">
-                      <FileText size={15} className="text-red-500 shrink-0" />
-                      <span className="truncate">{currentLesson.title} — Dokumen Materi PDF</span>
+                <div className="w-full bg-slate-900 flex flex-col h-[520px] sm:h-[620px] border-b border-slate-800 shadow-2xl">
+                  <div className="bg-slate-900 border-b border-slate-800 px-4 py-2.5 flex items-center justify-between gap-2 text-xs text-white">
+                    <span className="font-semibold flex items-center gap-1.5 truncate">
+                      <FileText size={15} className="text-blue-400 shrink-0" />
+                      <span className="truncate">{currentLesson.title} — Google Drive Viewer</span>
                     </span>
                     <div className="flex items-center gap-2 shrink-0">
                       <a
                         href={mediaUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium transition-colors"
-                        title="Buka dokumen PDF di tab baru"
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium transition-colors"
+                        title="Buka dokumen di Google Drive"
                       >
                         <ExternalLink size={13} />
-                        <span className="hidden sm:inline">Buka Tab Baru</span>
-                      </a>
-                      <a
-                        href={mediaUrl}
-                        download
-                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold transition-colors"
-                        title="Unduh file PDF"
-                      >
-                        <Download size={13} />
-                        <span>Unduh PDF</span>
+                        <span className="hidden sm:inline">Buka Dokumen Asli</span>
                       </a>
                     </div>
                   </div>
                   <iframe
-                    src={`${mediaUrl}#toolbar=1`}
+                    src={driveEmbedUrl || mediaUrl}
                     className="w-full flex-1 border-0"
+                    allow="autoplay"
+                    allowFullScreen
                     title={currentLesson.title}
                   />
                 </div>
               );
             }
 
-            // 2. PowerPoint Presentation (.ppt / .pptx)
+            // 2. Google Docs Embed
+            if (isGoogleDocs) {
+              const docsEmbedUrl = getGoogleDocsEmbedUrl(mediaUrl);
+              return (
+                <div className="w-full bg-slate-100 flex flex-col h-[520px] sm:h-[620px] border-b border-slate-200 shadow-2xl">
+                  <div className="bg-white border-b border-slate-200 px-4 py-2.5 flex items-center justify-between gap-2 text-xs">
+                    <span className="font-semibold text-slate-800 flex items-center gap-1.5 truncate">
+                      <FileText size={15} className="text-blue-600 shrink-0" />
+                      <span className="truncate">{currentLesson.title} — Dokumen Google Docs</span>
+                    </span>
+                    <a
+                      href={mediaUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium transition-colors"
+                    >
+                      <ExternalLink size={13} />
+                      <span className="hidden sm:inline">Buka Tab Baru</span>
+                    </a>
+                  </div>
+                  <iframe
+                    src={docsEmbedUrl || mediaUrl}
+                    className="w-full flex-1 border-0"
+                    allow="autoplay"
+                    allowFullScreen
+                    title={currentLesson.title}
+                  />
+                </div>
+              );
+            }
+
+            // 3. Custom Canvas PDF Document Reader (Interactive Zoom, Page Navigation, Fullscreen & Anti-Download Protection)
+            if (isPdf) {
+              return (
+                <div className="w-full">
+                  <CustomPdfViewer
+                    url={mediaUrl}
+                    title={currentLesson.title}
+                    userIdentifier={session?.user?.email || session?.user?.name || "Peserta Matoh Technologies"}
+                  />
+                </div>
+              );
+            }
+
+            // 4. PowerPoint Presentation (.ppt / .pptx)
             if (isPpt) {
+              const isRemoteHttp = mediaUrl.startsWith("http") && !mediaUrl.includes("localhost");
+              const officeEmbedUrl = isRemoteHttp
+                ? `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(mediaUrl)}`
+                : null;
+
+              if (officeEmbedUrl) {
+                return (
+                  <div className="w-full bg-slate-900 flex flex-col h-[520px] sm:h-[600px] border-b border-slate-800 shadow-2xl">
+                    <div className="bg-slate-900 border-b border-slate-800 px-4 py-2.5 flex items-center justify-between gap-2 text-xs text-white">
+                      <span className="font-semibold flex items-center gap-1.5 truncate">
+                        <Presentation size={15} className="text-orange-400 shrink-0" />
+                        <span className="truncate">{currentLesson.title} — Slide PowerPoint (PPTX)</span>
+                      </span>
+                      <a
+                        href={mediaUrl}
+                        download
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-semibold transition-colors"
+                      >
+                        <Download size={13} /> Unduh PPTX
+                      </a>
+                    </div>
+                    <iframe
+                      src={officeEmbedUrl}
+                      className="w-full flex-1 border-0"
+                      allowFullScreen
+                      title={currentLesson.title}
+                    />
+                  </div>
+                );
+              }
+
               return (
                 <div className="w-full bg-gradient-to-br from-amber-50/80 via-white to-orange-50/60 border-b border-orange-200/50 p-6 sm:p-10 flex flex-col items-center justify-center text-center">
                   <div className="w-16 h-16 rounded-2xl bg-orange-500 text-white flex items-center justify-center shadow-lg shadow-orange-500/20 mb-3.5">
@@ -1449,25 +1626,15 @@ export default function LearnPageClient({
                     >
                       <Download size={14} /> Unduh Slide Presentasi (.pptx)
                     </a>
-                    {mediaUrl.startsWith("http") && !mediaUrl.includes("localhost") && (
-                      <a
-                        href={`https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(mediaUrl)}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-orange-200 text-orange-700 hover:bg-orange-50 font-semibold text-xs transition-colors"
-                      >
-                        <ExternalLink size={13} /> Buka Web Viewer
-                      </a>
-                    )}
                   </div>
                 </div>
               );
             }
 
-            // 3. Google Slides / Canva Presentation Embed
+            // 5. Google Slides / Canva Presentation Embed
             if (isSlideEmbed) {
-              const embedSrc = mediaUrl.includes("docs.google.com/presentation")
-                ? mediaUrl.replace(/\/pub(\?.*)?$/, "/embed?start=false&loop=false&delayms=3000").replace(/\/edit(\?.*)?$/, "/embed?start=false&loop=false&delayms=3000")
+              const embedSrc = isGoogleSlidesUrl(mediaUrl)
+                ? getGoogleSlidesEmbedUrl(mediaUrl) || mediaUrl
                 : mediaUrl;
               return (
                 <div className="w-full bg-black flex items-center justify-center aspect-video max-h-[520px] shadow-2xl">
@@ -1481,7 +1648,34 @@ export default function LearnPageClient({
               );
             }
 
-            // 4. Video Player (YouTube or direct video file)
+            // 6. Direct Video File (Uploaded MP4/WebM or direct link)
+            if (isDirectVideo) {
+              return (
+                <div className="w-full bg-black flex items-center justify-center relative aspect-video max-h-[520px] shadow-2xl">
+                  {session?.user && (
+                    <div
+                      className="absolute pointer-events-none select-none z-20 text-[10px] font-mono tracking-widest px-2.5 py-0.5 rounded-full bg-black/40 text-white/30 backdrop-blur-2xs transition-all duration-1000 ease-in-out border border-white/5"
+                      style={{
+                        top: `${watermarkPos.y}%`,
+                        left: `${watermarkPos.x}%`,
+                      }}
+                    >
+                      🔒 {session.user.email || session.user.name} • Matoh Technologies
+                    </div>
+                  )}
+                  <video
+                    src={mediaUrl}
+                    controls
+                    autoPlay
+                    controlsList="nodownload"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              );
+            }
+
+            // 7. Video Player (YouTube or iframe embed)
+            const ytEmbedUrl = isYouTube ? getEmbedUrl(mediaUrl) : null;
             return (
               <div className="w-full bg-black flex items-center justify-center relative aspect-video max-h-[520px] shadow-2xl">
                 {/* Dynamic Forensic Watermark for Anti-Piracy */}
@@ -1498,8 +1692,8 @@ export default function LearnPageClient({
                 )}
 
                 <iframe
-                  src={getEmbedUrl(mediaUrl) || ""}
-                  className="w-full h-full"
+                  src={ytEmbedUrl || mediaUrl}
+                  className="w-full h-full border-0"
                   allowFullScreen
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   title={currentLesson.title}
@@ -1509,16 +1703,17 @@ export default function LearnPageClient({
           })()}
 
           {/* Interactive Navigation Bar below player */}
-          <div className="bg-white border-y border-slate-200 px-4 sm:px-6 py-3 flex items-center justify-between gap-3 shadow-2xs">
+          <div className="bg-white border-y border-slate-200 px-3 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-2 shadow-2xs">
             <Button
               variant="outline"
               size="sm"
               onClick={() => prevLesson && setCurrentLesson(prevLesson)}
               disabled={!prevLesson}
               leftIcon={<ChevronLeft size={16} />}
-              className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 disabled:opacity-40 shadow-2xs"
+              className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 disabled:opacity-40 shadow-2xs min-h-[42px] px-3 sm:px-4 text-xs font-semibold"
             >
-              {t("prev")}
+              <span className="hidden xs:inline">{t("prev")}</span>
+              <span className="xs:hidden">Prev</span>
             </Button>
 
             <Button
@@ -1532,18 +1727,18 @@ export default function LearnPageClient({
                   <CheckCircle size={15} />
                 )
               }
-              className={
+              className={`min-h-[42px] px-3 sm:px-5 text-xs font-bold shadow-sm ${
                 completedLessons.has(currentLesson.id)
-                  ? "bg-green-600 hover:bg-green-700 text-white shadow-sm"
-                  : "bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
-              }
+                  ? "bg-green-600 hover:bg-green-700 text-white"
+                  : "bg-blue-600 hover:bg-blue-700 text-white"
+              }`}
             >
               {savingProgress
                 ? t("saving")
                 : completedLessons.has(currentLesson.id)
                 ? t("done_check")
                 : nextLesson
-                ? t("mark_done_next")
+                ? <span className="truncate max-w-[140px] xs:max-w-none">{t("mark_done_next")}</span>
                 : t("mark_done")}
             </Button>
 
@@ -1553,16 +1748,17 @@ export default function LearnPageClient({
               onClick={() => nextLesson && setCurrentLesson(nextLesson)}
               disabled={!nextLesson}
               rightIcon={<ChevronRight size={16} />}
-              className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 disabled:opacity-40 shadow-2xs"
+              className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 disabled:opacity-40 shadow-2xs min-h-[42px] px-3 sm:px-4 text-xs font-semibold"
             >
-              {t("next")}
+              <span className="hidden xs:inline">{t("next")}</span>
+              <span className="xs:hidden">Next</span>
             </Button>
           </div>
 
           {/* Dicoding-style Tabs: Notes, Study Notes, Resources, Quiz, Assignments, Discussion */}
-          <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 w-full">
+          <div className="max-w-7xl mx-auto p-3 sm:p-6 lg:p-8 w-full">
             {/* Horizontal Scrollable Tab Bar with overflow arrows and indicators */}
-            <div className="relative border-b border-slate-200 mb-6">
+            <div className="relative border-b border-slate-200 mb-5 sm:mb-6">
               {/* Left Scroll Navigation button if overflowed */}
               {canScrollLeft && (
                 <div className="absolute left-0 top-0 bottom-0 z-10 flex items-center pr-6 bg-gradient-to-r from-slate-50 via-slate-50/90 to-transparent">
@@ -1581,7 +1777,8 @@ export default function LearnPageClient({
               <div
                 ref={tabScrollRef}
                 onScroll={checkTabScroll}
-                className="flex items-center gap-1.5 sm:gap-2 lg:gap-3 overflow-x-auto no-scrollbar scroll-smooth py-1"
+                className="flex items-center gap-1 sm:gap-2 lg:gap-3 overflow-x-auto no-scrollbar scroll-smooth py-1 touch-pan-x"
+                style={{ WebkitOverflowScrolling: "touch" }}
               >
                 {[
                   {

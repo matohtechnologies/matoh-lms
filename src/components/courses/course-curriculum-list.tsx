@@ -9,7 +9,15 @@ import {
   isVideoUrl,
   isYouTubeVideoUrl,
   isPlayableVideo,
+  isPdfUrl,
+  getPdfEmbedUrl,
+  isGoogleDriveUrl,
+  getGoogleDriveEmbedUrl,
+  isGoogleSlidesUrl,
+  getGoogleSlidesEmbedUrl,
+  isCanvaPresentationUrl,
 } from "@/lib/youtube";
+import { CustomPdfViewer } from "./custom-pdf-viewer";
 
 interface LessonItem {
   id: string;
@@ -172,12 +180,16 @@ export function CourseCurriculumList({
               </button>
             </div>
 
-            {/* Video Player */}
+            {/* Media Player / Document Viewer */}
             <div className="relative aspect-video bg-black w-full">
               {(() => {
                 const url = activePreviewLesson.videoUrl || "";
                 const isYouTube = isYouTubeVideoUrl(url);
-                const isDirect = isVideoUrl(url);
+                const isDirect = isVideoUrl(url) || /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url);
+                const isGoogleDrive = isGoogleDriveUrl(url);
+                const isGoogleSlides = isGoogleSlidesUrl(url);
+                const isCanva = isCanvaPresentationUrl(url);
+                const isPdf = isPdfUrl(url);
                 const ytEmbed = isYouTube ? getEmbedUrl(url, true) : null;
 
                 if (isYouTube && ytEmbed) {
@@ -198,8 +210,46 @@ export function CourseCurriculumList({
                       src={url}
                       controls
                       autoPlay
+                      controlsList="nodownload"
                       className="w-full h-full object-contain"
                     />
+                  );
+                }
+
+                if (isGoogleDrive) {
+                  const driveEmbed = getGoogleDriveEmbedUrl(url);
+                  return (
+                    <iframe
+                      src={driveEmbed || url}
+                      title={activePreviewLesson.title}
+                      className="w-full h-full border-0"
+                      allow="autoplay"
+                      allowFullScreen
+                    />
+                  );
+                }
+
+                if (isGoogleSlides || isCanva) {
+                  const slideEmbed = isGoogleSlides ? getGoogleSlidesEmbedUrl(url) || url : url;
+                  return (
+                    <iframe
+                      src={slideEmbed}
+                      title={activePreviewLesson.title}
+                      className="w-full h-full border-0"
+                      allowFullScreen
+                    />
+                  );
+                }
+
+                if (isPdf) {
+                  return (
+                    <div className="w-full h-full min-h-[380px]">
+                      <CustomPdfViewer
+                        url={url}
+                        title={activePreviewLesson.title}
+                        userIdentifier="Pratinjau Materi Gratis"
+                      />
+                    </div>
                   );
                 }
 
@@ -208,8 +258,8 @@ export function CourseCurriculumList({
                     <Video size={48} className="text-slate-600 mb-3" />
                     <p className="text-sm text-slate-400">
                       {isEn
-                        ? "Video format is ready for playback."
-                        : "Video pratinjau dapat diputar langsung."}
+                        ? "Media format is ready for preview."
+                        : "Format materi siap diputar atau dilihat langsung."}
                     </p>
                   </div>
                 );

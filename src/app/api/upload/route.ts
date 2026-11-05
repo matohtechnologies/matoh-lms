@@ -13,8 +13,13 @@ const ALLOWED_MIME_TYPES = new Set([
   "image/webp",
   "image/gif",
   "application/pdf",
+  "application/x-pdf",
   "application/vnd.ms-powerpoint",
+  "application/x-mspowerpoint",
+  "application/powerpoint",
   "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  "application/x-zip-compressed",
+  "application/octet-stream",
   "video/mp4",
   "video/webm",
   "video/ogg",
@@ -44,8 +49,9 @@ const ALLOWED_FOLDERS = new Set([
   "general",
 ]);
 
-const MAX_IMAGE_SIZE = 15 * 1024 * 1024; // 15MB for images/PDFs
-const MAX_VIDEO_SIZE = 100 * 1024 * 1024; // 100MB for videos
+const MAX_IMAGE_SIZE = 15 * 1024 * 1024; // 15MB for images
+const MAX_DOC_SIZE = 60 * 1024 * 1024; // 60MB for PDFs & PPTX
+const MAX_VIDEO_SIZE = 250 * 1024 * 1024; // 250MB for videos
 
 export async function POST(req: NextRequest) {
   // 1. Rate Limiting: 20 uploads per minute per user/IP
@@ -73,30 +79,32 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "File tidak ditemukan" }, { status: 400 });
     }
 
-    // 3. MIME type check
-    const mimeType = file.type?.toLowerCase();
-    if (!ALLOWED_MIME_TYPES.has(mimeType)) {
-      return NextResponse.json(
-        { error: "Tipe file tidak didukung. Hanya gambar (JPEG, PNG, WebP, GIF), video (MP4, WebM, OGG, MOV), dan PDF yang diperbolehkan." },
-        { status: 400 }
-      );
-    }
-
-    // 4. File size check based on type
-    const isVideo = mimeType.startsWith("video/");
-    const maxAllowedSize = isVideo ? MAX_VIDEO_SIZE : MAX_IMAGE_SIZE;
-    if (file.size > maxAllowedSize) {
-      return NextResponse.json(
-        { error: `Ukuran file melebihi batas maksimal (${isVideo ? "100MB untuk video" : "15MB untuk gambar"})` },
-        { status: 400 }
-      );
-    }
-
-    // 5. File extension check
+    // 3. File extension check first
     const ext = path.extname(file.name).toLowerCase();
     if (!ALLOWED_EXTENSIONS.has(ext)) {
       return NextResponse.json(
-        { error: "Ekstensi file tidak valid atau berpotensi membahayakan." },
+        { error: "Ekstensi file tidak valid atau tidak didukung (gunakan .pdf, .ppt, .pptx, .mp4, .webm, gambar)." },
+        { status: 400 }
+      );
+    }
+
+    // 4. MIME type check (tolerant for Windows registry variations when extension is valid)
+    const mimeType = file.type?.toLowerCase() || "application/octet-stream";
+    if (!ALLOWED_MIME_TYPES.has(mimeType) && mimeType !== "application/octet-stream") {
+      return NextResponse.json(
+        { error: "Tipe file tidak didukung. Hanya gambar (JPEG, PNG, WebP), dokumen (PDF, PPT, PPTX), dan video (MP4, WebM) yang diperbolehkan." },
+        { status: 400 }
+      );
+    }
+
+    // 5. File size check based on category
+    const isVideo = mimeType.startsWith("video/") || [".mp4", ".webm", ".ogg", ".mov"].includes(ext);
+    const isDoc = [".pdf", ".ppt", ".pptx"].includes(ext);
+    const maxAllowedSize = isVideo ? MAX_VIDEO_SIZE : isDoc ? MAX_DOC_SIZE : MAX_IMAGE_SIZE;
+    if (file.size > maxAllowedSize) {
+      const limitLabel = isVideo ? "250MB untuk video" : isDoc ? "60MB untuk dokumen/PPT" : "15MB untuk gambar";
+      return NextResponse.json(
+        { error: `Ukuran file melebihi batas maksimal (${limitLabel})` },
         { status: 400 }
       );
     }

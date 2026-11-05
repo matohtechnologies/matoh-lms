@@ -143,11 +143,79 @@ export function resolveThumbnailUrl(url?: string | null): string {
 }
 
 /**
- * Checks whether the URL is a PDF file.
+ * Extracts a Google Drive file ID from various URL patterns.
+ * Supports:
+ * - https://drive.google.com/file/d/{FILE_ID}/view
+ * - https://drive.google.com/file/d/{FILE_ID}/preview
+ * - https://drive.google.com/file/d/{FILE_ID}/edit
+ * - https://drive.google.com/open?id={FILE_ID}
+ * - https://drive.google.com/uc?id={FILE_ID}
+ */
+export function extractGoogleDriveFileId(url?: string | null): string | null {
+  if (!url) return null;
+  const trimmed = url.trim();
+  const matchFile = trimmed.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/i);
+  if (matchFile && matchFile[1]) return matchFile[1];
+  const matchOpen = trimmed.match(/drive\.google\.com\/(?:open|uc)\?(?:[^&]*&)*id=([a-zA-Z0-9_-]+)/i);
+  if (matchOpen && matchOpen[1]) return matchOpen[1];
+  return null;
+}
+
+/**
+ * Checks whether the URL is a Google Drive file link.
+ */
+export function isGoogleDriveUrl(url?: string | null): boolean {
+  return extractGoogleDriveFileId(url) !== null;
+}
+
+/**
+ * Converts any Google Drive link to its official, iframe-embeddable preview URL.
+ * e.g. https://drive.google.com/file/d/{id}/preview
+ */
+export function getGoogleDriveEmbedUrl(url?: string | null): string | null {
+  const fileId = extractGoogleDriveFileId(url);
+  if (!fileId) return null;
+  return `https://drive.google.com/file/d/${fileId}/preview`;
+}
+
+/**
+ * Checks whether the URL is a Google Docs document.
+ */
+export function isGoogleDocsUrl(url?: string | null): boolean {
+  if (!url) return false;
+  return /docs\.google\.com\/document\/d\/([a-zA-Z0-9_-]+)/i.test(url.trim());
+}
+
+/**
+ * Converts a Google Docs document link to its embeddable preview URL.
+ */
+export function getGoogleDocsEmbedUrl(url?: string | null): string | null {
+  if (!url) return null;
+  const trimmed = url.trim();
+  const match = trimmed.match(/docs\.google\.com\/document\/d\/([a-zA-Z0-9_-]+)/i);
+  if (!match || !match[1]) return null;
+  return `https://docs.google.com/document/d/${match[1]}/preview`;
+}
+
+/**
+ * Converts Google Slides URL to its embed URL.
+ */
+export function getGoogleSlidesEmbedUrl(url?: string | null): string | null {
+  if (!url) return null;
+  const trimmed = url.trim();
+  if (!isGoogleSlidesUrl(trimmed)) return null;
+  return trimmed
+    .replace(/\/pub(\?.*)?$/, "/embed?start=false&loop=false&delayms=3000")
+    .replace(/\/edit(\?.*)?$/, "/embed?start=false&loop=false&delayms=3000");
+}
+
+/**
+ * Checks whether the URL is a PDF file (by extension or PDF-serving path).
  */
 export function isPdfUrl(url?: string | null): boolean {
   if (!url) return false;
-  return /\.pdf(\?.*)?$/i.test(url.trim());
+  const trimmed = url.trim();
+  return /\.pdf(\?.*)?$/i.test(trimmed);
 }
 
 /**
@@ -182,9 +250,46 @@ export function isPresentationUrl(url?: string | null): boolean {
 }
 
 /**
+ * Resolves the best embeddable URL for a PDF document or document viewer.
+ * - Local files (/uploads/...) are embedded directly with `#toolbar=1`
+ * - Google Drive files are embedded with `/preview`
+ * - Google Docs are embedded with `/preview`
+ * - Remote external PDFs use Google Docs Viewer proxy for 100% iframe compatibility
+ */
+export function getPdfEmbedUrl(url?: string | null): string {
+  if (!url) return "";
+  const trimmed = url.trim();
+  if (isGoogleDriveUrl(trimmed)) {
+    return getGoogleDriveEmbedUrl(trimmed) || trimmed;
+  }
+  if (isGoogleDocsUrl(trimmed)) {
+    return getGoogleDocsEmbedUrl(trimmed) || trimmed;
+  }
+  if (trimmed.startsWith("/") || trimmed.startsWith("blob:")) {
+    return `${trimmed}#toolbar=1`;
+  }
+  // If already a Google Docs Viewer URL, keep it
+  if (trimmed.includes("docs.google.com/viewer")) {
+    return trimmed;
+  }
+  // For external remote HTTP/HTTPS PDF links, wrap with Google Docs Viewer
+  return `https://docs.google.com/viewer?url=${encodeURIComponent(trimmed)}&embedded=true`;
+}
+
+/**
  * Detects the specific media kind for lessons.
  */
-export type LessonMediaKind = "youtube" | "video" | "pdf" | "powerpoint" | "slides-embed" | "image" | "none";
+export type LessonMediaKind =
+  | "youtube"
+  | "video"
+  | "pdf"
+  | "google-drive"
+  | "google-docs"
+  | "google-slides"
+  | "powerpoint"
+  | "slides-embed"
+  | "image"
+  | "none";
 
 export function getLessonMediaKind(url?: string | null): LessonMediaKind {
   if (!url || !url.trim()) return "none";
@@ -192,9 +297,12 @@ export function getLessonMediaKind(url?: string | null): LessonMediaKind {
 
   if (isYouTubeVideoUrl(trimmed)) return "youtube";
   if (isVideoUrl(trimmed)) return "video";
+  if (isGoogleSlidesUrl(trimmed)) return "google-slides";
+  if (isCanvaPresentationUrl(trimmed)) return "slides-embed";
+  if (isGoogleDriveUrl(trimmed)) return "google-drive";
+  if (isGoogleDocsUrl(trimmed)) return "google-docs";
   if (isPdfUrl(trimmed)) return "pdf";
   if (isPptUrl(trimmed)) return "powerpoint";
-  if (isGoogleSlidesUrl(trimmed) || isCanvaPresentationUrl(trimmed)) return "slides-embed";
   if (/\.(png|jpg|jpeg|webp|gif|svg)(\?.*)?$/i.test(trimmed)) return "image";
 
   return "video";

@@ -26,7 +26,15 @@ import { Input, Textarea } from "@/components/ui/input";
 import { MarkdownEditor } from "@/components/ui/markdown-editor";
 import { useTranslations } from "next-intl";
 import { dynamicConfirm } from "@/components/ui/dynamic-alert-provider";
-import { isYouTubeVideoUrl, isPdfUrl, isPptUrl } from "@/lib/youtube";
+import {
+  isYouTubeVideoUrl,
+  isPdfUrl,
+  isPptUrl,
+  isGoogleDriveUrl,
+  isGoogleSlidesUrl,
+  isGoogleDocsUrl,
+  isCanvaPresentationUrl,
+} from "@/lib/youtube";
 
 export interface LessonData {
   id: string;
@@ -247,7 +255,10 @@ export function CurriculumManager({
             content: lessonContent.trim() || null,
           }),
         });
-        if (!res.ok) throw new Error("Gagal menyimpan perubahan materi");
+        if (!res.ok) {
+          const errData = await res.json().catch(() => null);
+          throw new Error(errData?.error || "Gagal menyimpan perubahan materi");
+        }
         showNotification("success", t("lesson_saved"));
       } else {
         // Create lesson under section
@@ -265,7 +276,10 @@ export function CurriculumManager({
             }),
           }
         );
-        if (!res.ok) throw new Error("Gagal menambahkan materi baru");
+        if (!res.ok) {
+          const errData = await res.json().catch(() => null);
+          throw new Error(errData?.error || "Gagal menambahkan materi baru");
+        }
         showNotification("success", t("lesson_created"));
       }
       setLessonModalOpen(false);
@@ -646,7 +660,19 @@ export function CurriculumManager({
                   {lessonVideoUrl.trim() && (
                     <div className="flex items-center justify-between gap-2 p-2.5 rounded-xl bg-stone-50 border border-stone-200/80 text-xs text-stone-700">
                       <div className="flex items-center gap-2 truncate">
-                        {isPdfUrl(lessonVideoUrl) ? (
+                        {isGoogleDriveUrl(lessonVideoUrl) ? (
+                          <span className="inline-flex items-center gap-1 font-semibold text-sky-700 bg-sky-50 px-2 py-0.5 rounded-md">
+                            <FileText size={12} /> Google Drive (Otomatis Embed)
+                          </span>
+                        ) : isGoogleSlidesUrl(lessonVideoUrl) ? (
+                          <span className="inline-flex items-center gap-1 font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">
+                            <Presentation size={12} /> Google Slides (Embed)
+                          </span>
+                        ) : isGoogleDocsUrl(lessonVideoUrl) ? (
+                          <span className="inline-flex items-center gap-1 font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md">
+                            <FileText size={12} /> Google Docs
+                          </span>
+                        ) : isPdfUrl(lessonVideoUrl) ? (
                           <span className="inline-flex items-center gap-1 font-semibold text-red-600 bg-red-50 px-2 py-0.5 rounded-md">
                             <FileText size={12} /> Dokumen PDF
                           </span>
