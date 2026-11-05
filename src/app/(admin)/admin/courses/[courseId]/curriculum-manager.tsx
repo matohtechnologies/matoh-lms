@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   Plus,
   Trash2,
@@ -18,12 +18,15 @@ import {
   FolderPlus,
   PlayCircle,
   ExternalLink,
+  Presentation,
+  Upload,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/input";
 import { MarkdownEditor } from "@/components/ui/markdown-editor";
 import { useTranslations } from "next-intl";
 import { dynamicConfirm } from "@/components/ui/dynamic-alert-provider";
+import { isYouTubeVideoUrl, isPdfUrl, isPptUrl } from "@/lib/youtube";
 
 export interface LessonData {
   id: string;
@@ -80,6 +83,37 @@ export function CurriculumManager({
   const [lessonDuration, setLessonDuration] = useState("10");
   const [lessonIsFree, setLessonIsFree] = useState(false);
   const [lessonContent, setLessonContent] = useState("");
+  const [isUploadingMedia, setIsUploadingMedia] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleMediaUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploadingMedia(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folder", "courses");
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Gagal mengunggah file");
+
+      setLessonVideoUrl(data.url);
+      showNotification("success", `File "${file.name}" berhasil diunggah.`);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Gagal upload";
+      showNotification("error", msg);
+    } finally {
+      setIsUploadingMedia(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
 
   // Keep local sections synced with prop updates
   if (JSON.stringify(sections) !== JSON.stringify(initialSections)) {
@@ -422,7 +456,13 @@ export function CurriculumManager({
                             </span>
                             <div className="w-8 h-8 rounded-xl bg-stone-100 text-stone-600 flex items-center justify-center shrink-0">
                               {lesson.videoUrl ? (
-                                <Video size={15} className="text-blue-600" />
+                                isPptUrl(lesson.videoUrl) ? (
+                                  <Presentation size={15} className="text-orange-600" />
+                                ) : isPdfUrl(lesson.videoUrl) ? (
+                                  <FileText size={15} className="text-red-600" />
+                                ) : (
+                                  <Video size={15} className="text-blue-600" />
+                                )
                               ) : (
                                 <FileText size={15} className="text-stone-500" />
                               )}
@@ -567,13 +607,74 @@ export function CurriculumManager({
                   </div>
                 </div>
 
-                <Input
-                  label={t("video_url_label")}
-                  placeholder={t("lesson_video_placeholder")}
-                  value={lessonVideoUrl}
-                  onChange={(e) => setLessonVideoUrl(e.target.value)}
-                  hint={t("video_url_hint")}
-                />
+                {/* Media Materi: Video, Slide PPTX, atau PDF */}
+                <div className="space-y-2">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <label className="text-sm font-semibold text-stone-800">
+                      Media Pelajaran (Video, Slide PowerPoint PPTX, atau Dokumen PDF)
+                    </label>
+                    <div className="shrink-0">
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept=".pdf,.ppt,.pptx,.mp4,.webm,.png,.jpg,.jpeg"
+                        className="hidden"
+                        onChange={handleMediaUpload}
+                      />
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={isUploadingMedia}
+                        leftIcon={isUploadingMedia ? <Loader2 size={13} className="animate-spin text-blue-600" /> : <Upload size={13} />}
+                        className="rounded-xl text-xs font-semibold text-blue-700 bg-blue-50/70 border-blue-200 hover:bg-blue-100"
+                      >
+                        {isUploadingMedia ? "Mengunggah..." : "Upload File (PDF / PPTX / Video)"}
+                      </Button>
+                    </div>
+                  </div>
+
+                  <Input
+                    placeholder="https://... (YouTube, link video, link Google Slides/Canva, atau hasil upload file)"
+                    value={lessonVideoUrl}
+                    onChange={(e) => setLessonVideoUrl(e.target.value)}
+                    hint="Bisa berupa link YouTube, link video langsung, link slide Google Slides/Canva, atau upload file PDF & PowerPoint sendiri."
+                  />
+
+                  {/* Detected Media Preview Badge */}
+                  {lessonVideoUrl.trim() && (
+                    <div className="flex items-center justify-between gap-2 p-2.5 rounded-xl bg-stone-50 border border-stone-200/80 text-xs text-stone-700">
+                      <div className="flex items-center gap-2 truncate">
+                        {isPdfUrl(lessonVideoUrl) ? (
+                          <span className="inline-flex items-center gap-1 font-semibold text-red-600 bg-red-50 px-2 py-0.5 rounded-md">
+                            <FileText size={12} /> Dokumen PDF
+                          </span>
+                        ) : isPptUrl(lessonVideoUrl) ? (
+                          <span className="inline-flex items-center gap-1 font-semibold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-md">
+                            <Presentation size={12} /> Slide PowerPoint (PPTX)
+                          </span>
+                        ) : isYouTubeVideoUrl(lessonVideoUrl) ? (
+                          <span className="inline-flex items-center gap-1 font-semibold text-red-600 bg-red-50 px-2 py-0.5 rounded-md">
+                            <PlayCircle size={12} /> Video YouTube
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">
+                            <FileText size={12} /> Berkas Materi
+                          </span>
+                        )}
+                        <span className="truncate font-mono text-[11px] text-stone-500">{lessonVideoUrl}</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setLessonVideoUrl("")}
+                        className="text-stone-400 hover:text-red-600 transition-colors shrink-0 text-xs font-medium"
+                      >
+                        Hapus Media
+                      </button>
+                    </div>
+                  )}
+                </div>
 
                 {/* Rich Markdown Editor with formatting toolbar */}
                 <div className="space-y-1.5">

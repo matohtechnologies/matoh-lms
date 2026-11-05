@@ -32,6 +32,7 @@ import {
   RotateCcw,
   Upload,
   Download,
+  Presentation,
   Paperclip,
   Bookmark,
   FolderDown,
@@ -47,6 +48,7 @@ import { triggerCelebrationConfetti, triggerMicroConfetti } from "@/lib/confetti
 import { playPopSound, playSuccessChime, playFanfareSound } from "@/lib/sound-effects";
 import { GraduationCelebrationModal } from "@/components/gamification/graduation-celebration-modal";
 import { MarkdownRenderer } from "@/components/ui/markdown-renderer";
+import { isPdfUrl, isPptUrl, isGoogleSlidesUrl, isCanvaPresentationUrl } from "@/lib/youtube";
 
 export interface LearnLesson {
   id: string;
@@ -1379,31 +1381,132 @@ export default function LearnPageClient({
 
         {/* Scrollable Stage: Video + Tabbed Content */}
         <div className="flex-1 overflow-y-auto custom-scrollbar">
-          {/* Video Player Stage (only rendered if lesson has a video) */}
-          {Boolean(currentLesson.videoUrl?.trim()) && (
-            <div className="w-full bg-black flex items-center justify-center relative aspect-video max-h-[520px] shadow-2xl">
-              {/* Dynamic Forensic Watermark for Anti-Piracy */}
-              {session?.user && (
-                <div
-                  className="absolute pointer-events-none select-none z-20 text-[10px] font-mono tracking-widest px-2.5 py-0.5 rounded-full bg-black/40 text-white/30 backdrop-blur-2xs transition-all duration-1000 ease-in-out border border-white/5"
-                  style={{
-                    top: `${watermarkPos.y}%`,
-                    left: `${watermarkPos.x}%`,
-                  }}
-                >
-                  🔒 {session.user.email || session.user.name} • Matoh Technologies
-                </div>
-              )}
+          {/* Media Player Stage: Video, PDF Document, or PowerPoint Presentation */}
+          {Boolean(currentLesson.videoUrl?.trim()) && (() => {
+            const mediaUrl = currentLesson.videoUrl!.trim();
+            const isPdf = isPdfUrl(mediaUrl);
+            const isPpt = isPptUrl(mediaUrl);
+            const isSlideEmbed = isGoogleSlidesUrl(mediaUrl) || isCanvaPresentationUrl(mediaUrl);
 
-              <iframe
-                src={getEmbedUrl(currentLesson.videoUrl!) || ""}
-                className="w-full h-full"
-                allowFullScreen
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                title={currentLesson.title}
-              />
-            </div>
-          )}
+            // 1. PDF Document Reader
+            if (isPdf) {
+              return (
+                <div className="w-full bg-slate-100 flex flex-col h-[520px] sm:h-[600px] border-b border-slate-200">
+                  <div className="bg-white border-b border-slate-200 px-4 py-2.5 flex items-center justify-between gap-2 text-xs">
+                    <span className="font-semibold text-slate-800 flex items-center gap-1.5 truncate">
+                      <FileText size={15} className="text-red-500 shrink-0" />
+                      <span className="truncate">{currentLesson.title} — Dokumen Materi PDF</span>
+                    </span>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <a
+                        href={mediaUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium transition-colors"
+                        title="Buka dokumen PDF di tab baru"
+                      >
+                        <ExternalLink size={13} />
+                        <span className="hidden sm:inline">Buka Tab Baru</span>
+                      </a>
+                      <a
+                        href={mediaUrl}
+                        download
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold transition-colors"
+                        title="Unduh file PDF"
+                      >
+                        <Download size={13} />
+                        <span>Unduh PDF</span>
+                      </a>
+                    </div>
+                  </div>
+                  <iframe
+                    src={`${mediaUrl}#toolbar=1`}
+                    className="w-full flex-1 border-0"
+                    title={currentLesson.title}
+                  />
+                </div>
+              );
+            }
+
+            // 2. PowerPoint Presentation (.ppt / .pptx)
+            if (isPpt) {
+              return (
+                <div className="w-full bg-gradient-to-br from-amber-50/80 via-white to-orange-50/60 border-b border-orange-200/50 p-6 sm:p-10 flex flex-col items-center justify-center text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-orange-500 text-white flex items-center justify-center shadow-lg shadow-orange-500/20 mb-3.5">
+                    <Presentation size={32} />
+                  </div>
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-1 max-w-lg">
+                    {currentLesson.title}
+                  </h3>
+                  <p className="text-xs text-slate-500 max-w-md mb-5 leading-relaxed">
+                    Materi presentasi PowerPoint telah disiapkan untuk sesi pembelajaran ini. Anda dapat mengunduh dan membukanya di aplikasi PowerPoint atau Google Slides.
+                  </p>
+                  <div className="flex flex-wrap items-center justify-center gap-2.5">
+                    <a
+                      href={mediaUrl}
+                      download
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-semibold text-xs shadow-md transition-all hover:scale-105"
+                    >
+                      <Download size={14} /> Unduh Slide Presentasi (.pptx)
+                    </a>
+                    {mediaUrl.startsWith("http") && !mediaUrl.includes("localhost") && (
+                      <a
+                        href={`https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(mediaUrl)}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-orange-200 text-orange-700 hover:bg-orange-50 font-semibold text-xs transition-colors"
+                      >
+                        <ExternalLink size={13} /> Buka Web Viewer
+                      </a>
+                    )}
+                  </div>
+                </div>
+              );
+            }
+
+            // 3. Google Slides / Canva Presentation Embed
+            if (isSlideEmbed) {
+              const embedSrc = mediaUrl.includes("docs.google.com/presentation")
+                ? mediaUrl.replace(/\/pub(\?.*)?$/, "/embed?start=false&loop=false&delayms=3000").replace(/\/edit(\?.*)?$/, "/embed?start=false&loop=false&delayms=3000")
+                : mediaUrl;
+              return (
+                <div className="w-full bg-black flex items-center justify-center aspect-video max-h-[520px] shadow-2xl">
+                  <iframe
+                    src={embedSrc}
+                    className="w-full h-full border-0"
+                    allowFullScreen
+                    title={currentLesson.title}
+                  />
+                </div>
+              );
+            }
+
+            // 4. Video Player (YouTube or direct video file)
+            return (
+              <div className="w-full bg-black flex items-center justify-center relative aspect-video max-h-[520px] shadow-2xl">
+                {/* Dynamic Forensic Watermark for Anti-Piracy */}
+                {session?.user && (
+                  <div
+                    className="absolute pointer-events-none select-none z-20 text-[10px] font-mono tracking-widest px-2.5 py-0.5 rounded-full bg-black/40 text-white/30 backdrop-blur-2xs transition-all duration-1000 ease-in-out border border-white/5"
+                    style={{
+                      top: `${watermarkPos.y}%`,
+                      left: `${watermarkPos.x}%`,
+                    }}
+                  >
+                    🔒 {session.user.email || session.user.name} • Matoh Technologies
+                  </div>
+                )}
+
+                <iframe
+                  src={getEmbedUrl(mediaUrl) || ""}
+                  className="w-full h-full"
+                  allowFullScreen
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  title={currentLesson.title}
+                />
+              </div>
+            );
+          })()}
 
           {/* Interactive Navigation Bar below player */}
           <div className="bg-white border-y border-slate-200 px-4 sm:px-6 py-3 flex items-center justify-between gap-3 shadow-2xs">

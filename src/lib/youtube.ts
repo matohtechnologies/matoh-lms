@@ -141,3 +141,61 @@ export function resolveThumbnailUrl(url?: string | null): string {
 
   return trimmed;
 }
+
+/**
+ * Checks whether the URL is a PDF file.
+ */
+export function isPdfUrl(url?: string | null): boolean {
+  if (!url) return false;
+  return /\.pdf(\?.*)?$/i.test(url.trim());
+}
+
+/**
+ * Checks whether the URL is a PowerPoint presentation file (.ppt or .pptx).
+ */
+export function isPptUrl(url?: string | null): boolean {
+  if (!url) return false;
+  return /\.(ppt|pptx)(\?.*)?$/i.test(url.trim());
+}
+
+/**
+ * Checks whether the URL is an embeddable Google Slides presentation.
+ */
+export function isGoogleSlidesUrl(url?: string | null): boolean {
+  if (!url) return false;
+  return /docs\.google\.com\/presentation/i.test(url.trim());
+}
+
+/**
+ * Checks whether the URL is an embeddable Canva presentation design.
+ */
+export function isCanvaPresentationUrl(url?: string | null): boolean {
+  if (!url) return false;
+  return /canva\.com\/design/i.test(url.trim());
+}
+
+/**
+ * Checks whether the URL is any presentation (PowerPoint, Google Slides, Canva).
+ */
+export function isPresentationUrl(url?: string | null): boolean {
+  return isPptUrl(url) || isGoogleSlidesUrl(url) || isCanvaPresentationUrl(url);
+}
+
+/**
+ * Detects the specific media kind for lessons.
+ */
+export type LessonMediaKind = "youtube" | "video" | "pdf" | "powerpoint" | "slides-embed" | "image" | "none";
+
+export function getLessonMediaKind(url?: string | null): LessonMediaKind {
+  if (!url || !url.trim()) return "none";
+  const trimmed = url.trim();
+
+  if (isYouTubeVideoUrl(trimmed)) return "youtube";
+  if (isVideoUrl(trimmed)) return "video";
+  if (isPdfUrl(trimmed)) return "pdf";
+  if (isPptUrl(trimmed)) return "powerpoint";
+  if (isGoogleSlidesUrl(trimmed) || isCanvaPresentationUrl(trimmed)) return "slides-embed";
+  if (/\.(png|jpg|jpeg|webp|gif|svg)(\?.*)?$/i.test(trimmed)) return "image";
+
+  return "video";
+}
