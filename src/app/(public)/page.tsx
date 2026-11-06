@@ -615,7 +615,7 @@ export default async function HomePage() {
                   </div>
 
                   <h3 className="font-bold text-slate-900 text-base leading-snug line-clamp-3 group-hover:text-blue-600 transition-colors">
-                    <Link href={`/blog/${post.slug}`}>
+                    <Link href={`/publikasi/${post.slug}`}>
                       {post.title}
                     </Link>
                   </h3>
@@ -624,7 +624,7 @@ export default async function HomePage() {
                 <div className="pt-4 mt-6 border-t border-slate-100 flex items-center justify-between text-xs">
                   <span className="text-slate-500 truncate max-w-[150px] font-medium">{post.author}</span>
                   <Link
-                    href={`/blog/${post.slug}`}
+                    href={`/publikasi/${post.slug}`}
                     className="text-blue-600 font-semibold inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform"
                   >
                     <span>{isEn ? "Read" : "Baca"}</span>

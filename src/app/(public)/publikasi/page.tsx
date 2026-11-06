@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Clock, ArrowRight } from "lucide-react";
 import { getLocale } from "next-intl/server";
+import { PUBLICATIONS } from "@/lib/publications";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -15,122 +16,6 @@ export async function generateMetadata(): Promise<Metadata> {
       : "Kumpulan artikel publikasi riset terapan, sains keputusan ilmiah (AHP & ISM), dan arsitektur rekayasa teknologi PT. Matoh Technologies Indonesia.",
   };
 }
-
-interface PublicationItem {
-  slug: string;
-  titleId: string;
-  titleEn: string;
-  excerptId: string;
-  excerptEn: string;
-  categoryId: string;
-  categoryEn: string;
-  author: string;
-  authorRole: string;
-  dateId: string;
-  dateEn: string;
-  readTimeId: string;
-  readTimeEn: string;
-  tags: string[];
-}
-
-const PUBLICATIONS: PublicationItem[] = [
-  {
-    slug: "penerapan-ahp-ism-prioritas-digitalisasi-umkm",
-    titleId: "Penerapan Metodologi AHP dan ISM dalam Menentukan Prioritas Digitalisasi UMKM Indonesia",
-    titleEn: "Applying AHP and ISM Methodologies to Prioritize Indonesian MSME Digitalization Strategies",
-    excerptId: "Bagaimana kombinasi Analytic Hierarchy Process (AHP) dan Interpretive Structural Modeling (ISM) membantu para pengambil kebijakan memetakan strategi digitalisasi yang paling berdampak langsung pada peningkatan omzet.",
-    excerptEn: "How combining the Analytic Hierarchy Process (AHP) and Interpretive Structural Modeling (ISM) empowers policymakers and business leaders to identify high-impact digital transformation priorities.",
-    categoryId: "Decision Science",
-    categoryEn: "Decision Science",
-    author: "Dr. G. Prabantoro, SE., MM., CBec.",
-    authorRole: "RnD Director PT. Matoh Technologies Indonesia",
-    dateId: "18 Oktober 2026",
-    dateEn: "October 18, 2026",
-    readTimeId: "7 menit baca",
-    readTimeEn: "7 min read",
-    tags: ["AHP", "ISM", "UMKM", "Decision Science"],
-  },
-  {
-    slug: "strategi-transformasi-digital-umkm-2026",
-    titleId: "Roadmap Transformasi Digital UMKM: Dari Pemasaran AI hingga Otomasi Manajemen Inventori",
-    titleEn: "MSME Digital Transformation Roadmap: From AI Marketing to Inventory Automation",
-    excerptId: "Panduan komprehensif bagi pelaku usaha kecil dan menengah untuk mengadopsi platform digital secara efisien tanpa pembengkakan biaya modal maupun operasional.",
-    excerptEn: "A comprehensive roadmap for small and medium enterprises to adopt modern digital workflows efficiently without ballooning capital and operational expenses.",
-    categoryId: "Transformasi Digital",
-    categoryEn: "Digital Transformation",
-    author: "Tim Konsultan Matoh Tech",
-    authorRole: "Divisi Konsultasi Bisnis & UMKM",
-    dateId: "14 Oktober 2026",
-    dateEn: "October 14, 2026",
-    tags: ["E-Commerce", "Otomasi", "Strategi Bisnis"],
-    readTimeId: "5 menit baca",
-    readTimeEn: "5 min read",
-  },
-  {
-    slug: "arsitektur-web-modern-nextjs-app-router",
-    titleId: "Membangun Platform Web Skalabel dengan Next.js App Router dan Standalone Container",
-    titleEn: "Architecting Scalable Enterprise Web Platforms with Next.js App Router and Containers",
-    excerptId: "Eksplorasi teknis mengenai performa streaming SSR, Content Security Policy (CSP) ketat, dan optimasi aset untuk performa loading di bawah 1 detik.",
-    excerptEn: "A technical deep-dive into streaming server components, hardened Content Security Policies (CSP), and asset optimizations for sub-second page loads.",
-    categoryId: "Rekayasa Web",
-    categoryEn: "Web Engineering",
-    author: "Ir. Agung Prasetyo, M.Cs.",
-    authorRole: "Lead Software Architect",
-    dateId: "10 Oktober 2026",
-    dateEn: "October 10, 2026",
-    tags: ["Next.js", "TypeScript", "Performance"],
-    readTimeId: "6 menit baca",
-    readTimeEn: "6 min read",
-  },
-  {
-    slug: "pentingnya-sertifikasi-kompetensi-terverifikasi",
-    titleId: "Mengapa Sertifikat Digital Berbasis QR Code dan SK Kemenkumham Krusial bagi Lulusan?",
-    titleEn: "Why QR-Verifiable Certificates with Legal Corporate Backing Matter to Recruiters",
-    excerptId: "Menganalisis pergeseran paradigma rekrutmen industri saat ini terhadap verifikasi keabsahan sertifikat portofolio kandidat secara instan dan permanen.",
-    excerptEn: "Examining why modern industry recruiters prioritize tamper-proof digital credentials verified by legal corporate registries over unverified certificates.",
-    categoryId: "Sertifikasi",
-    categoryEn: "Certification",
-    author: "Dr. Retno Wulandari, M.Si.",
-    authorRole: "Senior Academic Advisor",
-    dateId: "05 Oktober 2026",
-    dateEn: "October 05, 2026",
-    tags: ["Sertifikasi", "Verifikasi QR", "Standar Industri"],
-    readTimeId: "4 menit baca",
-    readTimeEn: "4 min read",
-  },
-  {
-    slug: "audit-keamanan-api-dan-autentikasi",
-    titleId: "Praktik Terbaik Mengamankan API Endpoint & Manajemen Token Sesi pada Aplikasi Enterprise",
-    titleEn: "Best Practices for Hardening API Endpoints and Session Token Security in Enterprise Apps",
-    excerptId: "Langkah-langkah mitigasi serangan path traversal, null byte injection, serta implementasi rate limiting adaptif pada REST/RPC API modern.",
-    excerptEn: "Defensive engineering techniques to mitigate path traversal, null byte injection, and adaptive rate limiting across mission-critical REST/RPC APIs.",
-    categoryId: "Keamanan Sistem",
-    categoryEn: "System Security",
-    author: "Budi Santoso, M.Kom.",
-    authorRole: "Senior DevOps & Cloud Engineer",
-    dateId: "28 September 2026",
-    dateEn: "September 28, 2026",
-    tags: ["Cybersecurity", "Rate Limiting", "API Protection"],
-    readTimeId: "8 menit baca",
-    readTimeEn: "8 min read",
-  },
-  {
-    slug: "penerbitan-riset-akademik-dan-haki",
-    titleId: "Panduan Menjembatani Riset Akademik Kampus Menjadi Produk Teknologi yang Berkelanjutan",
-    titleEn: "Bridging Academic Research to Market-Ready Technological Solutions",
-    excerptId: "Tahapan perlindungan hak kekayaan intelektual (HAKI) dan strategi hilirisasi penelitian dosen/mahasiswa agar siap diadopsi oleh pasar industri.",
-    excerptEn: "Essential steps for Intellectual Property protection (IP) and commercialization strategies for academic research into viable industry products.",
-    categoryId: "Riset & Inovasi",
-    categoryEn: "Research & Innovation",
-    author: "Dr. G. Prabantoro, SE., MM., CBec.",
-    authorRole: "RnD Director PT. Matoh Technologies Indonesia",
-    dateId: "20 September 2026",
-    dateEn: "September 20, 2026",
-    tags: ["HAKI", "Hilirisasi Riset", "Akademisi"],
-    readTimeId: "6 menit baca",
-    readTimeEn: "6 min read",
-  },
-];
 
 export default async function PublikasiPage() {
   const locale = await getLocale();
@@ -172,11 +57,11 @@ export default async function PublikasiPage() {
               return (
                 <article
                   key={post.slug}
-                  className="border border-slate-200 rounded-xl p-6 hover:border-slate-400 transition-colors flex flex-col justify-between h-full bg-white group shadow-2xs"
+                  className="border border-slate-200 rounded-2xl p-6 hover:border-slate-400 transition-colors flex flex-col justify-between h-full bg-white group shadow-2xs"
                 >
                   <div className="space-y-4">
                     <div className="flex items-center justify-between text-xs text-slate-400">
-                      <span className="font-semibold text-blue-700 bg-blue-50 px-2.5 py-1 rounded">
+                      <span className="font-semibold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-lg">
                         {category}
                       </span>
                       <span className="flex items-center gap-1">
@@ -186,7 +71,7 @@ export default async function PublikasiPage() {
                     </div>
 
                     <h2 className="text-lg font-bold text-slate-900 leading-snug group-hover:text-blue-600 transition-colors">
-                      <Link href={`/blog/${post.slug}`}>
+                      <Link href={`/publikasi/${post.slug}`}>
                         {title}
                       </Link>
                     </h2>
@@ -211,8 +96,8 @@ export default async function PublikasiPage() {
                     </div>
 
                     <Link
-                      href={`/blog/${post.slug}`}
-                      className="inline-flex items-center gap-1 font-semibold text-blue-600 group-hover:translate-x-0.5 transition-transform"
+                      href={`/publikasi/${post.slug}`}
+                      className="inline-flex items-center gap-1 font-semibold text-blue-600 group-hover:translate-x-0.5 transition-transform py-1 px-2 rounded-lg hover:bg-blue-50"
                     >
                       <span>{isEn ? "Read Article" : "Baca Artikel"}</span>
                       <ArrowRight size={13} />
@@ -227,4 +112,3 @@ export default async function PublikasiPage() {
     </div>
   );
 }
-
