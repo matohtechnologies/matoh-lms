@@ -10,7 +10,6 @@ import {
   CheckCircle,
   Check,
   Play,
-  BookOpen,
   Award,
   List,
   X,
@@ -39,6 +38,7 @@ import {
   Trash2,
   Globe,
   Layers,
+  ArrowDown,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { Progress } from "@/components/ui/progress";
@@ -59,7 +59,6 @@ import {
   isGoogleDocsUrl,
   getGoogleDocsEmbedUrl,
   getGoogleSlidesEmbedUrl,
-  getPdfEmbedUrl,
   isYouTubeVideoUrl,
   isVideoUrl,
 } from "@/lib/youtube";
@@ -265,13 +264,71 @@ export default function LearnPageClient({
     content: "Instruktur sedang mempersiapkan materi pembelajaran untuk kelas ini.",
   };
 
+  const initialLesson: LearnLesson =
+    allLessons.find((l) => !initialCompletedLessonIds.includes(l.id)) ||
+    allLessons[0] ||
+    defaultLesson;
+
   const { data: session } = useSession();
-  const [currentLesson, setCurrentLesson] = useState<LearnLesson>(defaultLesson);
+  const [currentLesson, setCurrentLesson] = useState<LearnLesson>(initialLesson);
   const [completedLessons, setCompletedLessons] = useState<Set<string>>(
     new Set(initialCompletedLessonIds)
   );
   const [savingProgress, setSavingProgress] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<
+    "notes" | "studyNotes" | "resources" | "quiz" | "assignment" | "discussion"
+  >("notes");
+
+  // Scroll completion requirement
+  const mainScrollRef = useRef<HTMLDivElement>(null);
+  const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
+
+  const handleScrollToBottom = () => {
+    if (mainScrollRef.current) {
+      mainScrollRef.current.scrollTo({
+        top: mainScrollRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  // Evaluate scroll requirement on lesson or tab change
+  useEffect(() => {
+    // If already completed, reading requirement is already satisfied
+    if (completedLessons.has(currentLesson.id)) {
+      setHasScrolledToBottom(true);
+      return;
+    }
+
+    setHasScrolledToBottom(false);
+    if (mainScrollRef.current) {
+      mainScrollRef.current.scrollTop = 0;
+    }
+
+    const timer = setTimeout(() => {
+      const el = mainScrollRef.current;
+      if (el) {
+        if (el.scrollHeight <= el.clientHeight + 60) {
+          setHasScrolledToBottom(true);
+        }
+      }
+    }, 250);
+
+    return () => clearTimeout(timer);
+  }, [currentLesson.id, activeTab, completedLessons]);
+
+  const handleMainScroll = useCallback(() => {
+    if (hasScrolledToBottom) return;
+    const el = mainScrollRef.current;
+    if (!el) return;
+
+    const threshold = 75; // px from bottom
+    const isAtBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - threshold;
+    if (isAtBottom) {
+      setHasScrolledToBottom(true);
+    }
+  }, [hasScrolledToBottom]);
 
   useEffect(() => {
     // Open syllabus sidebar by default only on desktop screens (>= 1024px)
@@ -279,9 +336,6 @@ export default function LearnPageClient({
       setSidebarOpen(true);
     }
   }, []);
-  const [activeTab, setActiveTab] = useState<
-    "notes" | "studyNotes" | "resources" | "quiz" | "assignment" | "discussion"
-  >("notes");
 
   // Tab scroll overflow state for responsive horizontal scroll navigation
   const tabScrollRef = useRef<HTMLDivElement>(null);
@@ -345,7 +399,7 @@ export default function LearnPageClient({
         ) {
           try {
             window.screen.orientation.unlock();
-          } catch {}
+          } catch { }
         }
       }
     };
@@ -362,7 +416,7 @@ export default function LearnPageClient({
       ) {
         try {
           window.screen.orientation.unlock();
-        } catch {}
+        } catch { }
       }
     };
   }, []);
@@ -437,6 +491,104 @@ export default function LearnPageClient({
     : [];
   const generalResources = resources.filter((r) => !r.sectionId);
   const relevantResourcesCount = currentChapterResources.length + generalResources.length;
+
+  // Check if a section's required tests and submissions are completed
+  const isSectionRequirementsMet = useCallback(
+    (secId: string): boolean => {
+      // 1. Quizzes: All quizzes belonging to this section must be passed
+      const secQuizzes = quizzes.filter((q) => q.sectionId === secId);
+      const allQuizzesPassed = secQuizzes.every((q) =>
+        q.attempts?.some((att) => att.passed)
+      );
+      if (!allQuizzesPassed) return false;
+
+      // 2. Assignments: All assignments belonging to this section must have a submission
+      const secAssignments = assignments.filter((a) => a.sectionId === secId);
+      const allAssignmentsSubmitted = secAssignments.every((a) =>
+        a.submissions &&
+        a.submissions.length > 0 &&
+        a.submissions.some((s) => s.status === "APPROVED" || s.status === "PENDING")
+      );
+      if (!allAssignmentsSubmitted) return false;
+
+      return true;
+    },
+    [quizzes, assignments]
+  );
+
+  // Check if a lesson is locked:
+  // - First lesson (index 0) is never locked
+  // - Any lesson already marked completed is unlocked
+  // - A lesson is locked if any preceding lesson in the sequence is not yet completed
+  // - A lesson is locked if any preceding section's tests/submissions are not yet completed
+  const isLessonLocked = useCallback(
+    (lessonId: string): boolean => {
+      const targetIndex = allLessons.findIndex((l) => l.id === lessonId);
+      if (targetIndex <= 0) return false;
+      if (completedLessons.has(lessonId)) return false;
+
+      // Rule 1: Every lesson before targetIndex must be marked completed
+      for (let i = 0; i < targetIndex; i++) {
+        if (!completedLessons.has(allLessons[i].id)) {
+          return true;
+        }
+      }
+
+      // Rule 2: If target lesson belongs to a different (subsequent) section,
+      // all previous sections must have their tests/submissions completed!
+      const targetLesson = allLessons[targetIndex];
+      const targetSectionIndex = sections.findIndex(
+        (s) =>
+          (targetLesson.sectionId && s.id === targetLesson.sectionId) ||
+          s.lessons?.some((l) => l.id === targetLesson.id)
+      );
+
+      if (targetSectionIndex > 0) {
+        for (let sIdx = 0; sIdx < targetSectionIndex; sIdx++) {
+          const prevSec = sections[sIdx];
+          if (!isSectionRequirementsMet(prevSec.id)) {
+            return true;
+          }
+        }
+      }
+
+      return false;
+    },
+    [allLessons, completedLessons, sections, isSectionRequirementsMet]
+  );
+
+  // Section Assessment Status for the Active Section
+  const currentSecQuizzes = currentSectionId
+    ? quizzes.filter((q) => q.sectionId === currentSectionId)
+    : [];
+  const unpassedSecQuizzes = currentSecQuizzes.filter(
+    (q) => !q.attempts?.some((att) => att.passed)
+  );
+
+  const currentSecAssignments = currentSectionId
+    ? assignments.filter((a) => a.sectionId === currentSectionId)
+    : [];
+  const unsubmittedSecAssignments = currentSecAssignments.filter(
+    (a) =>
+      !a.submissions?.some((s) => s.status === "APPROVED" || s.status === "PENDING")
+  );
+
+  const currentSectionLessons = currentSection?.lessons || [];
+  const isCurrentSectionLessonsCompleted =
+    currentSectionLessons.length > 0 &&
+    currentSectionLessons.every((l) => completedLessons.has(l.id));
+
+  // Determine if this section has pending tests/submissions required before moving to the next section
+  const currentSecIdx = sections.findIndex((s) => s.id === currentSectionId);
+  const nextSection =
+    currentSecIdx !== -1 && currentSecIdx < sections.length - 1
+      ? sections[currentSecIdx + 1]
+      : null;
+
+  const hasPendingChapterTests =
+    isCurrentSectionLessonsCompleted &&
+    nextSection !== null &&
+    (unpassedSecQuizzes.length > 0 || unsubmittedSecAssignments.length > 0);
 
   const [submittingQuiz, setSubmittingQuiz] = useState(false);
 
@@ -730,7 +882,20 @@ export default function LearnPageClient({
 
   const toggleLessonComplete = async (targetLessonId?: string) => {
     const lessonId = targetLessonId || currentLesson.id;
+
+    // Prevent completing a locked lesson
+    if (isLessonLocked(lessonId)) {
+      return;
+    }
+
     const isCurrentlyCompleted = completedLessons.has(lessonId);
+
+    // If attempting to complete current lesson, require scrolling to bottom first
+    if (!isCurrentlyCompleted && lessonId === currentLesson.id && !hasScrolledToBottom) {
+      handleScrollToBottom();
+      return;
+    }
+
     const newCompleted = !isCurrentlyCompleted;
 
     // Optimistically update completedLessons in state
@@ -806,9 +971,11 @@ export default function LearnPageClient({
       setSavingProgress(false);
     }
 
-    // If marked as completed on current lesson and there is a next lesson, advance to next
+    // If marked as completed on current lesson and there is a next lesson, advance to next if unlocked
     if (newCompleted && lessonId === currentLesson.id && nextLesson) {
-      setCurrentLesson(nextLesson);
+      if (!isLessonLocked(nextLesson.id)) {
+        setCurrentLesson(nextLesson);
+      }
     }
   };
 
@@ -988,468 +1155,479 @@ export default function LearnPageClient({
 
       {/* Sidebar: Lessons Navigation (Responsive Drawer on Mobile, In-Flow on Desktop) */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-80 max-w-[85vw] sm:max-w-xs bg-white border-r border-slate-200 transition-all duration-300 ease-in-out flex flex-col shadow-2xl lg:shadow-xs lg:static lg:inset-auto lg:h-full lg:z-20 overflow-hidden ${
-          sidebarOpen
-            ? "translate-x-0 lg:w-80 opacity-100 visible"
-            : "-translate-x-full lg:translate-x-0 lg:w-0 lg:border-r-0 opacity-0 pointer-events-none invisible"
-        }`}
+        className={`fixed inset-y-0 left-0 z-50 w-80 max-w-[85vw] sm:max-w-xs bg-white border-r border-slate-200 transition-all duration-300 ease-in-out flex flex-col shadow-2xl lg:shadow-xs lg:static lg:inset-auto lg:h-full lg:z-20 overflow-hidden ${sidebarOpen
+          ? "translate-x-0 lg:w-80 opacity-100 visible"
+          : "-translate-x-full lg:translate-x-0 lg:w-0 lg:border-r-0 opacity-0 pointer-events-none invisible"
+          }`}
       >
         <div className="w-80 min-w-[20rem] flex flex-col h-full shrink-0">
-        {/* Brand & Course Title */}
-        <div className="p-4 border-b border-slate-200 bg-white/95 backdrop-blur-md">
-          <div className="flex items-center justify-between gap-2 mb-3">
-            <Link href="/" className="flex items-center gap-2 group">
-              <div className="w-7 h-7 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center p-1 group-hover:border-slate-300 transition-colors">
-                <Image
-                  src="/images/matoh-logo-v2.png"
-                  alt="Matoh Technologies"
-                  width={18}
-                  height={18}
-                  priority
-                  style={{ aspectRatio: "1 / 1" }}
-                  className="object-contain aspect-square"
-                />
-              </div>
-              <span className="text-sm font-bold text-slate-900 tracking-tight">
-                Matoh<span className="text-teal-400">Technologies</span>
-              </span>
-            </Link>
-            {/* Dedicated Mobile Close Button */}
-            <button
-              type="button"
-              onClick={() => setSidebarOpen(false)}
-              className="lg:hidden w-8 h-8 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-800 hover:bg-slate-100 transition-colors"
-              aria-label="Tutup Menu Kurikulum"
-            >
-              <X size={18} />
-            </button>
-          </div>
-          <h2 className="text-sm font-bold text-slate-900 leading-snug line-clamp-2" title={course.title}>
-            {course.title}
-          </h2>
-          <div className="mt-3 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
-            <div className="flex items-center justify-between text-xs text-slate-600 mb-1.5 font-medium">
-              <span>{t("progress")}</span>
-              <span className="text-blue-500 font-bold">{t("done_pct", { pct: progress })}</span>
-            </div>
-            <Progress value={progress} size="sm" />
-          </div>
-        </div>
-
-        {/* Sections & Lessons Playlist */}
-        <div className="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar">
-          {sections.map((section) => {
-            const secResources = resources.filter((r) => r.sectionId === section.id);
-            const secLessons = section.lessons || [];
-            const isSecCompleted = secLessons.length > 0 && secLessons.every((l) => completedLessons.has(l.id));
-            const completedSecCount = secLessons.filter((l) => completedLessons.has(l.id)).length;
-            const secQuizzes = quizzes.filter((q) => q.sectionId === section.id);
-            const secAssignments = assignments.filter((a) => a.sectionId === section.id);
-            return (
-              <details
-                key={section.id}
-                open
-                className="group rounded-xl border border-slate-200 overflow-hidden bg-white shadow-2xs"
-              >
-                <summary className="flex items-center justify-between px-3.5 py-2.5 cursor-pointer hover:bg-slate-50 bg-slate-50/60 list-none select-none transition-colors">
-                  <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
-                    {section.title}
-                  </span>
-                  <ChevronDown size={14} className="text-slate-400 group-open:rotate-180 transition-transform" />
-                </summary>
-                <div className="divide-y divide-slate-100">
-                  {section.lessons.map((lesson) => {
-                    const isActive = lesson.id === currentLesson.id;
-                    const isCompleted = completedLessons.has(lesson.id);
-                    return (
-                      <div
-                        key={lesson.id}
-                        className={`w-full flex items-center gap-3 px-3.5 py-2.5 text-left transition-all ${
-                          isActive
-                            ? "bg-blue-50 text-blue-700 font-semibold border-l-2 border-blue-600"
-                            : "hover:bg-slate-50 text-slate-700 border-l-2 border-transparent"
-                        }`}
-                      >
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleLessonComplete(lesson.id);
-                          }}
-                          className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-transform hover:scale-110 ${
-                            isCompleted
-                              ? "bg-green-600 text-white"
-                              : isActive
-                              ? "border-2 border-blue-600 text-blue-600 bg-white"
-                              : "border border-slate-300 text-slate-400 bg-white"
-                          }`}
-                          title={
-                            isCompleted
-                              ? t("toggle_complete")
-                              : t("toggle_incomplete")
-                          }
-                        >
-                          {isCompleted ? <CheckCircle size={12} /> : <Play size={8} />}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setCurrentLesson(lesson);
-                            if (typeof window !== "undefined" && window.innerWidth < 1024) {
-                              setSidebarOpen(false);
-                            }
-                          }}
-                          className="text-xs truncate flex-1 text-left hover:text-blue-600 text-slate-700 transition-colors py-1"
-                        >
-                          {lesson.title}
-                        </button>
-                      </div>
-                    );
-                  })}
-
-                  {/* Specific Learning Materials for this Section */}
-                  {secResources.length > 0 && (
-                    <div className="p-2.5 bg-slate-50/70 border-t border-slate-200/80 space-y-1.5">
-                      <div className="flex items-center justify-between text-[11px] font-semibold text-slate-600 px-1">
-                        <span className="flex items-center gap-1.5 text-blue-400">
-                          <FolderDown size={12} />
-                          <span>Bahan Bab Ini ({secResources.length})</span>
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setActiveTab("resources");
-                            setResourceFilter("CHAPTER");
-                          }}
-                          className="text-[10px] text-blue-400 hover:text-blue-300 transition-colors"
-                        >
-                          Buka Tab &rarr;
-                        </button>
-                      </div>
-                      <div className="space-y-1">
-                        {secResources.map((res) => (
-                          <a
-                            key={res.id}
-                            href={res.fileUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center justify-between p-1.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-[11px] text-slate-700 hover:text-slate-900 transition-colors group"
-                            title={res.title}
-                          >
-                            <span className="truncate flex items-center gap-1.5">
-                              <Paperclip size={11} className="text-slate-400 group-hover:text-blue-400 shrink-0" />
-                              <span className="truncate">{res.title}</span>
-                            </span>
-                            <Download size={11} className="text-slate-400 group-hover:text-blue-400 shrink-0 ml-1.5" />
-                          </a>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Quizzes specifically for this section */}
-                  {secQuizzes.length > 0 && (
-                    <div className="p-2.5 bg-slate-50/70 border-t border-slate-200/80 space-y-1.5">
-                      <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500 px-1">
-                        <span className="flex items-center gap-1.5 text-amber-400">
-                          <HelpCircle size={12} />
-                          <span>Tes Bab Ini ({secQuizzes.length})</span>
-                        </span>
-                        {!isSecCompleted && (
-                          <span className="text-[10px] text-amber-500/90 font-medium flex items-center gap-1">
-                            <Lock size={10} /> Terkunci
-                          </span>
-                        )}
-                      </div>
-                      <div className="space-y-1">
-                        {secQuizzes.map((q) => {
-                          const latestAttempt = q.attempts?.[0];
-                          const passed = latestAttempt?.passed;
-                          const qGlobalIdx = quizzes.findIndex((item) => item.id === q.id);
-
-                          return (
-                            <button
-                              key={q.id}
-                              type="button"
-                              onClick={() => {
-                                if (qGlobalIdx !== -1) setSelectedQuizIdx(qGlobalIdx);
-                                setActiveTab("quiz");
-                              }}
-                              className={`w-full flex items-center justify-between p-2 rounded-lg border text-left text-xs transition-colors group ${
-                                isSecCompleted
-                                  ? "bg-white hover:bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900"
-                                  : "bg-slate-100/50 border-slate-200/50 text-slate-400 hover:bg-slate-100"
-                              }`}
-                            >
-                              <div className="flex items-center gap-2 min-w-0">
-                                {isSecCompleted ? (
-                                  passed ? (
-                                    <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
-                                  ) : (
-                                    <HelpCircle size={13} className="text-amber-400 shrink-0" />
-                                  )
-                                ) : (
-                                  <Lock size={13} className="text-slate-400 shrink-0" />
-                                )}
-                                <span className="truncate font-medium">{q.title}</span>
-                              </div>
-                              <span
-                                className={`text-[10px] px-1.5 py-0.5 rounded-full shrink-0 font-medium ${
-                                  !isSecCompleted
-                                    ? "bg-slate-100 text-slate-400"
-                                    : passed
-                                    ? "bg-emerald-500/20 text-emerald-300"
-                                    : "bg-amber-500/20 text-amber-300"
-                                }`}
-                              >
-                                {!isSecCompleted
-                                  ? `${completedSecCount}/${secLessons.length}`
-                                  : passed
-                                  ? "Lulus"
-                                  : "Kerjakan"}
-                              </span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Assignments specifically for this section */}
-                  {secAssignments.length > 0 && (
-                    <div className="p-2.5 bg-slate-50/70 border-t border-slate-200/80 space-y-1.5">
-                      <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500 px-1">
-                        <span className="flex items-center gap-1.5 text-indigo-400">
-                          <FileCode2 size={12} />
-                          <span>Tugas Bab Ini ({secAssignments.length})</span>
-                        </span>
-                        {!isSecCompleted && (
-                          <span className="text-[10px] text-amber-500/90 font-medium flex items-center gap-1">
-                            <Lock size={10} /> Terkunci
-                          </span>
-                        )}
-                      </div>
-                      <div className="space-y-1">
-                        {secAssignments.map((a) => {
-                          const sub = a.submissions?.[0];
-                          return (
-                            <button
-                              key={a.id}
-                              type="button"
-                              onClick={() => {
-                                setActiveTab("assignment");
-                              }}
-                              className={`w-full flex items-center justify-between p-2 rounded-lg border text-left text-xs transition-colors group ${
-                                isSecCompleted
-                                  ? "bg-white hover:bg-slate-50 border-slate-200 text-slate-800 hover:text-slate-900"
-                                  : "bg-slate-50/50 border-slate-200 text-slate-500 hover:bg-slate-50/60"
-                              }`}
-                            >
-                              <div className="flex items-center gap-2 min-w-0">
-                                {isSecCompleted ? (
-                                  sub?.status === "APPROVED" ? (
-                                    <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
-                                  ) : (
-                                    <FileCode2 size={13} className="text-indigo-400 shrink-0" />
-                                  )
-                                ) : (
-                                  <Lock size={13} className="text-slate-400 shrink-0" />
-                                )}
-                                <span className="truncate font-medium">{a.title}</span>
-                              </div>
-                              <span
-                                className={`text-[10px] px-1.5 py-0.5 rounded-full shrink-0 font-medium ${
-                                  !isSecCompleted
-                                    ? "bg-slate-100 text-slate-400"
-                                    : sub?.status === "APPROVED"
-                                    ? "bg-emerald-500/20 text-emerald-300"
-                                    : sub?.status === "PENDING"
-                                    ? "bg-amber-500/20 text-amber-300"
-                                    : "bg-indigo-500/20 text-indigo-300"
-                                }`}
-                              >
-                                {!isSecCompleted
-                                  ? `${completedSecCount}/${secLessons.length}`
-                                  : sub?.status === "APPROVED"
-                                  ? "Disetujui"
-                                  : sub?.status === "PENDING"
-                                  ? "Menunggu"
-                                  : "Kerjakan"}
-                              </span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
+          {/* Brand & Course Title */}
+          <div className="p-4 border-b border-slate-200 bg-white/95 backdrop-blur-md">
+            <div className="flex items-center justify-between gap-2 mb-3">
+              <Link href="/" className="flex items-center gap-2 group">
+                <div className="w-7 h-7 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center p-1 group-hover:border-slate-300 transition-colors">
+                  <Image
+                    src="/images/matoh-logo-v2.png"
+                    alt="Matoh Technologies"
+                    width={18}
+                    height={18}
+                    priority
+                    style={{ aspectRatio: "1 / 1" }}
+                    className="object-contain aspect-square"
+                  />
                 </div>
-              </details>
-            );
-          })}
-
-          {/* General Course Materials in Sidebar */}
-          {generalResources.length > 0 && (
-            <details
-              open
-              className="group rounded-xl border border-slate-200/70 overflow-hidden bg-slate-50/60"
-            >
-              <summary className="flex items-center justify-between px-3.5 py-2.5 cursor-pointer hover:bg-slate-100/60 list-none select-none transition-colors">
-                <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
-                  <Globe size={13} />
-                  Bahan Belajar Umum ({generalResources.length})
+                <span className="text-sm font-bold text-slate-900 tracking-tight">
+                  Matoh<span className="text-teal-400">Technologies</span>
                 </span>
-                <div className="flex items-center gap-1.5">
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setActiveTab("resources");
-                      setResourceFilter("GENERAL");
-                    }}
-                    className="text-[10px] text-emerald-400 hover:text-emerald-300 transition-colors"
-                  >
-                    Buka Tab &rarr;
-                  </button>
-                  <ChevronDown size={14} className="text-slate-400 group-open:rotate-180 transition-transform" />
-                </div>
-              </summary>
-              <div className="p-2 space-y-1 bg-slate-50/70">
-                {generalResources.map((res) => (
-                  <a
-                    key={res.id}
-                    href={res.fileUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-between p-1.5 rounded-lg bg-white hover:bg-slate-50 border border-slate-200 text-[11px] text-slate-700 hover:text-slate-900 transition-colors group"
-                    title={res.title}
-                  >
-                    <span className="truncate flex items-center gap-1.5">
-                      <Paperclip size={11} className="text-slate-400 group-hover:text-emerald-400 shrink-0" />
-                      <span className="truncate">{res.title}</span>
-                    </span>
-                    <Download size={11} className="text-slate-400 group-hover:text-emerald-400 shrink-0 ml-1.5" />
-                  </a>
-                ))}
-              </div>
-            </details>
-          )}
-        </div>
-
-        {/* Certificate Section at Sidebar Bottom */}
-        <div className="p-4 border-t border-slate-200 bg-white">
-          {certStatus?.isEnabled === false ? (
-            <div className="p-3 rounded-xl bg-slate-100 border border-slate-200 text-slate-500 text-[11px] text-center">
-              {t("cert_not_enabled")}
-            </div>
-          ) : certStatus?.isIssued ? (
-            <div className="space-y-2">
-              <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 flex items-center gap-2">
-                <Award size={18} className="text-emerald-400 shrink-0" />
-                <div className="min-w-0">
-                  <p className="text-xs font-bold text-emerald-300">{t("cert_issued_title")}</p>
-                  <p className="text-[10px] text-emerald-400/80 font-mono truncate">
-                    #{certStatus.certificate?.code}
-                  </p>
-                </div>
-              </div>
-              <a
-                href={`/certificates/${certStatus.certificate?.code || course.slug || course.id}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white text-xs font-bold shadow-md transition-all"
-              >
-                <ExternalLink size={14} />
-                <span>{t("cert_view")}</span>
-              </a>
-            </div>
-          ) : certStatus?.isEligible ? (
-            <div className="space-y-2">
-              <div className="p-2.5 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-300 flex items-start gap-2">
-                <Sparkles size={17} className="text-amber-400 shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-xs font-bold text-amber-200">{t("cert_eligible_title")}</p>
-                  <p className="text-[10px] text-amber-300/80 leading-tight mt-0.5">
-                    {t("cert_eligible_desc")}
-                  </p>
-                </div>
-              </div>
+              </Link>
+              {/* Dedicated Mobile Close Button */}
               <button
                 type="button"
-                onClick={handleClaimCertificate}
-                disabled={claimingCert}
-                className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-sky-600 to-blue-700 hover:from-blue-500 hover:to-sky-500 text-white text-xs font-bold shadow-lg shadow-blue-950/40 transition-all animate-pulse disabled:opacity-50"
+                onClick={() => setSidebarOpen(false)}
+                className="lg:hidden w-8 h-8 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-800 hover:bg-slate-100 transition-colors"
+                aria-label="Tutup Menu Kurikulum"
               >
-                {claimingCert ? <Loader2 size={14} className="animate-spin" /> : <Award size={14} />}
-                <span>{t("cert_claim")}</span>
+                <X size={18} />
               </button>
             </div>
-          ) : (
-            <div className="space-y-2">
-              <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-600">
-                <div className="flex items-center justify-between mb-1.5">
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-800">
-                    <Lock size={13} className="text-amber-500" />
-                    <span>{t("cert_locked")}</span>
-                  </div>
-                  <span className="text-[11px] font-semibold text-amber-400">
-                    {progress}%
-                  </span>
-                </div>
+            <h2 className="text-sm font-bold text-slate-900 leading-snug line-clamp-2" title={course.title}>
+              {course.title}
+            </h2>
+            <div className="mt-3 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+              <div className="flex items-center justify-between text-xs text-slate-600 mb-1.5 font-medium">
+                <span>{t("progress")}</span>
+                <span className="text-blue-500 font-bold">{t("done_pct", { pct: progress })}</span>
+              </div>
+              <Progress value={progress} size="sm" />
+            </div>
+          </div>
 
-                {/* Criteria Checklist */}
-                <div className="space-y-1 pt-1.5 border-t border-slate-200 text-[10px]">
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-700">
-                      • {t("criteria_material", { done: completedLessons.size, total: allLessons.length })}
+          {/* Sections & Lessons Playlist */}
+          <div className="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar">
+            {sections.map((section) => {
+              const secResources = resources.filter((r) => r.sectionId === section.id);
+              const secLessons = section.lessons || [];
+              const isSecCompleted = secLessons.length > 0 && secLessons.every((l) => completedLessons.has(l.id));
+              const completedSecCount = secLessons.filter((l) => completedLessons.has(l.id)).length;
+              const secQuizzes = quizzes.filter((q) => q.sectionId === section.id);
+              const secAssignments = assignments.filter((a) => a.sectionId === section.id);
+              return (
+                <details
+                  key={section.id}
+                  open
+                  className="group rounded-xl border border-slate-200 overflow-hidden bg-white shadow-2xs"
+                >
+                  <summary className="flex items-center justify-between px-3.5 py-2.5 cursor-pointer hover:bg-slate-50 bg-slate-50/60 list-none select-none transition-colors">
+                    <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                      {section.title}
                     </span>
-                    {(certStatus?.criteria?.progress?.met ?? false) ||
-                    progress >= (certStatus?.criteria?.progress?.required ?? 100) ? (
-                      <span className="text-green-400 flex items-center gap-0.5 font-semibold">
-                        <Check size={11} /> {t("criteria_done")}
-                      </span>
-                    ) : (
-                      <span className="text-slate-400">
-                        {t("criteria_min", { pct: certStatus?.criteria?.progress?.required ?? 100 })}
-                      </span>
+                    <ChevronDown size={14} className="text-slate-400 group-open:rotate-180 transition-transform" />
+                  </summary>
+                  <div className="divide-y divide-slate-100">
+                    {section.lessons.map((lesson) => {
+                      const isActive = lesson.id === currentLesson.id;
+                      const isCompleted = completedLessons.has(lesson.id);
+                      const isLocked = isLessonLocked(lesson.id);
+                      return (
+                        <div
+                          key={lesson.id}
+                          className={`w-full flex items-center gap-3 px-3.5 py-2.5 text-left transition-all ${isActive
+                            ? "bg-blue-50 text-blue-700 font-semibold border-l-2 border-blue-600"
+                            : isLocked
+                              ? "text-slate-400 bg-slate-50/40 border-l-2 border-transparent"
+                              : "hover:bg-slate-50 text-slate-700 border-l-2 border-transparent"
+                            }`}
+                        >
+                          {isLocked ? (
+                            <div
+                              className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 border border-slate-200 bg-slate-100 text-slate-400 cursor-not-allowed"
+                              title="Terkunci: Selesaikan materi sebelumnya terlebih dahulu"
+                            >
+                              <Lock size={10} />
+                            </div>
+                          ) : (
+                            <div
+                              className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${isCompleted
+                                ? "bg-green-600 text-white"
+                                : isActive
+                                  ? "border-2 border-blue-600 text-blue-600 bg-white"
+                                  : "border border-slate-300 text-slate-400 bg-white"
+                                }`}
+                              title={
+                                isCompleted
+                                  ? "Materi telah selesai"
+                                  : "Materi belum selesai"
+                              }
+                            >
+                              {isCompleted ? <CheckCircle size={12} /> : <Play size={8} />}
+                            </div>
+                          )}
+                          <button
+                            type="button"
+                            disabled={isLocked}
+                            onClick={() => {
+                              if (isLocked) return;
+                              setCurrentLesson(lesson);
+                              if (typeof window !== "undefined" && window.innerWidth < 1024) {
+                                setSidebarOpen(false);
+                              }
+                            }}
+                            className={`text-xs truncate flex-1 text-left transition-colors py-1 flex items-center justify-between ${isLocked
+                              ? "text-slate-400 cursor-not-allowed select-none"
+                              : "hover:text-blue-600 text-slate-700"
+                              }`}
+                            title={isLocked ? "Terkunci: Selesaikan materi sebelumnya terlebih dahulu" : lesson.title}
+                          >
+                            <span className="truncate">{lesson.title}</span>
+                            {isLocked && (
+                              <span className="flex items-center gap-1 text-[10px] text-slate-400 shrink-0 ml-1.5 font-normal">
+                                <Lock size={11} className="opacity-70" />
+                              </span>
+                            )}
+                          </button>
+                        </div>
+                      );
+                    })}
+
+                    {/* Specific Learning Materials for this Section */}
+                    {secResources.length > 0 && (
+                      <div className="p-2.5 bg-slate-50/70 border-t border-slate-200/80 space-y-1.5">
+                        <div className="flex items-center justify-between text-[11px] font-semibold text-slate-600 px-1">
+                          <span className="flex items-center gap-1.5 text-blue-400">
+                            <FolderDown size={12} />
+                            <span>Bahan Bab Ini ({secResources.length})</span>
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setActiveTab("resources");
+                              setResourceFilter("CHAPTER");
+                            }}
+                            className="text-[10px] text-blue-400 hover:text-blue-300 transition-colors"
+                          >
+                            Buka Tab &rarr;
+                          </button>
+                        </div>
+                        <div className="space-y-1">
+                          {secResources.map((res) => (
+                            <a
+                              key={res.id}
+                              href={res.fileUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center justify-between p-1.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-[11px] text-slate-700 hover:text-slate-900 transition-colors group"
+                              title={res.title}
+                            >
+                              <span className="truncate flex items-center gap-1.5">
+                                <Paperclip size={11} className="text-slate-400 group-hover:text-blue-400 shrink-0" />
+                                <span className="truncate">{res.title}</span>
+                              </span>
+                              <Download size={11} className="text-slate-400 group-hover:text-blue-400 shrink-0 ml-1.5" />
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Quizzes specifically for this section */}
+                    {secQuizzes.length > 0 && (
+                      <div className="p-2.5 bg-slate-50/70 border-t border-slate-200/80 space-y-1.5">
+                        <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500 px-1">
+                          <span className="flex items-center gap-1.5 text-amber-400">
+                            <HelpCircle size={12} />
+                            <span>Tes Bab Ini ({secQuizzes.length})</span>
+                          </span>
+                          {!isSecCompleted && (
+                            <span className="text-[10px] text-amber-500/90 font-medium flex items-center gap-1">
+                              <Lock size={10} /> Terkunci
+                            </span>
+                          )}
+                        </div>
+                        <div className="space-y-1">
+                          {secQuizzes.map((q) => {
+                            const latestAttempt = q.attempts?.[0];
+                            const passed = latestAttempt?.passed;
+                            const qGlobalIdx = quizzes.findIndex((item) => item.id === q.id);
+
+                            return (
+                              <button
+                                key={q.id}
+                                type="button"
+                                onClick={() => {
+                                  if (qGlobalIdx !== -1) setSelectedQuizIdx(qGlobalIdx);
+                                  setActiveTab("quiz");
+                                }}
+                                className={`w-full flex items-center justify-between p-2 rounded-lg border text-left text-xs transition-colors group ${isSecCompleted
+                                  ? "bg-white hover:bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900"
+                                  : "bg-slate-100/50 border-slate-200/50 text-slate-400 hover:bg-slate-100"
+                                  }`}
+                              >
+                                <div className="flex items-center gap-2 min-w-0">
+                                  {isSecCompleted ? (
+                                    passed ? (
+                                      <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
+                                    ) : (
+                                      <HelpCircle size={13} className="text-amber-400 shrink-0" />
+                                    )
+                                  ) : (
+                                    <Lock size={13} className="text-slate-400 shrink-0" />
+                                  )}
+                                  <span className="truncate font-medium">{q.title}</span>
+                                </div>
+                                <span
+                                  className={`text-[10px] px-1.5 py-0.5 rounded-full shrink-0 font-medium ${!isSecCompleted
+                                    ? "bg-slate-100 text-slate-400"
+                                    : passed
+                                      ? "bg-emerald-500/20 text-emerald-300"
+                                      : "bg-amber-500/20 text-amber-300"
+                                    }`}
+                                >
+                                  {!isSecCompleted
+                                    ? `${completedSecCount}/${secLessons.length}`
+                                    : passed
+                                      ? "Lulus"
+                                      : "Kerjakan"}
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Assignments specifically for this section */}
+                    {secAssignments.length > 0 && (
+                      <div className="p-2.5 bg-slate-50/70 border-t border-slate-200/80 space-y-1.5">
+                        <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500 px-1">
+                          <span className="flex items-center gap-1.5 text-indigo-400">
+                            <FileCode2 size={12} />
+                            <span>Tugas Bab Ini ({secAssignments.length})</span>
+                          </span>
+                          {!isSecCompleted && (
+                            <span className="text-[10px] text-amber-500/90 font-medium flex items-center gap-1">
+                              <Lock size={10} /> Terkunci
+                            </span>
+                          )}
+                        </div>
+                        <div className="space-y-1">
+                          {secAssignments.map((a) => {
+                            const sub = a.submissions?.[0];
+                            return (
+                              <button
+                                key={a.id}
+                                type="button"
+                                onClick={() => {
+                                  setActiveTab("assignment");
+                                }}
+                                className={`w-full flex items-center justify-between p-2 rounded-lg border text-left text-xs transition-colors group ${isSecCompleted
+                                  ? "bg-white hover:bg-slate-50 border-slate-200 text-slate-800 hover:text-slate-900"
+                                  : "bg-slate-50/50 border-slate-200 text-slate-500 hover:bg-slate-50/60"
+                                  }`}
+                              >
+                                <div className="flex items-center gap-2 min-w-0">
+                                  {isSecCompleted ? (
+                                    sub?.status === "APPROVED" ? (
+                                      <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
+                                    ) : (
+                                      <FileCode2 size={13} className="text-indigo-400 shrink-0" />
+                                    )
+                                  ) : (
+                                    <Lock size={13} className="text-slate-400 shrink-0" />
+                                  )}
+                                  <span className="truncate font-medium">{a.title}</span>
+                                </div>
+                                <span
+                                  className={`text-[10px] px-1.5 py-0.5 rounded-full shrink-0 font-medium ${!isSecCompleted
+                                    ? "bg-slate-100 text-slate-400"
+                                    : sub?.status === "APPROVED"
+                                      ? "bg-emerald-500/20 text-emerald-300"
+                                      : sub?.status === "PENDING"
+                                        ? "bg-amber-500/20 text-amber-300"
+                                        : "bg-indigo-500/20 text-indigo-300"
+                                    }`}
+                                >
+                                  {!isSecCompleted
+                                    ? `${completedSecCount}/${secLessons.length}`
+                                    : sub?.status === "APPROVED"
+                                      ? "Disetujui"
+                                      : sub?.status === "PENDING"
+                                        ? "Menunggu"
+                                        : "Kerjakan"}
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
                     )}
                   </div>
+                </details>
+              );
+            })}
 
-                  {certStatus?.criteria?.quizzes?.required &&
-                    (certStatus.criteria.quizzes.total > 0 ? (
-                      <div className="flex items-center justify-between">
-                        <span className="text-slate-700">
-                          • {t("criteria_quiz", { passed: certStatus.criteria.quizzes.passed, total: certStatus.criteria.quizzes.total })}
-                        </span>
-                        {certStatus.criteria.quizzes.met ? (
-                          <span className="text-green-400 flex items-center gap-0.5 font-semibold">
-                            <Check size={11} /> {t("criteria_passed")}
-                          </span>
-                        ) : (
-                          <span className="text-amber-400 font-semibold">{t("criteria_not_passed")}</span>
-                        )}
-                      </div>
-                    ) : null)}
+            {/* General Course Materials in Sidebar */}
+            {generalResources.length > 0 && (
+              <details
+                open
+                className="group rounded-xl border border-slate-200/70 overflow-hidden bg-slate-50/60"
+              >
+                <summary className="flex items-center justify-between px-3.5 py-2.5 cursor-pointer hover:bg-slate-100/60 list-none select-none transition-colors">
+                  <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <Globe size={13} />
+                    Bahan Belajar Umum ({generalResources.length})
+                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveTab("resources");
+                        setResourceFilter("GENERAL");
+                      }}
+                      className="text-[10px] text-emerald-400 hover:text-emerald-300 transition-colors"
+                    >
+                      Buka Tab &rarr;
+                    </button>
+                    <ChevronDown size={14} className="text-slate-400 group-open:rotate-180 transition-transform" />
+                  </div>
+                </summary>
+                <div className="p-2 space-y-1 bg-slate-50/70">
+                  {generalResources.map((res) => (
+                    <a
+                      key={res.id}
+                      href={res.fileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between p-1.5 rounded-lg bg-white hover:bg-slate-50 border border-slate-200 text-[11px] text-slate-700 hover:text-slate-900 transition-colors group"
+                      title={res.title}
+                    >
+                      <span className="truncate flex items-center gap-1.5">
+                        <Paperclip size={11} className="text-slate-400 group-hover:text-emerald-400 shrink-0" />
+                        <span className="truncate">{res.title}</span>
+                      </span>
+                      <Download size={11} className="text-slate-400 group-hover:text-emerald-400 shrink-0 ml-1.5" />
+                    </a>
+                  ))}
+                </div>
+              </details>
+            )}
+          </div>
 
-                  {certStatus?.criteria?.assignments?.required &&
-                    (certStatus.criteria.assignments.total > 0 ? (
-                      <div className="flex items-center justify-between">
-                        <span className="text-slate-700">
-                          • {t("criteria_assignment", { approved: certStatus.criteria.assignments.approved, total: certStatus.criteria.assignments.total })}
+          {/* Certificate Section at Sidebar Bottom */}
+          <div className="p-4 border-t border-slate-200 bg-white">
+            {certStatus?.isEnabled === false ? (
+              <div className="p-3 rounded-xl bg-slate-100 border border-slate-200 text-slate-500 text-[11px] text-center">
+                {t("cert_not_enabled")}
+              </div>
+            ) : certStatus?.isIssued ? (
+              <div className="space-y-2">
+                <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 flex items-center gap-2">
+                  <Award size={18} className="text-emerald-400 shrink-0" />
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold text-emerald-300">{t("cert_issued_title")}</p>
+                    <p className="text-[10px] text-emerald-400/80 font-mono truncate">
+                      #{certStatus.certificate?.code}
+                    </p>
+                  </div>
+                </div>
+                <a
+                  href={`/certificates/${certStatus.certificate?.code || course.slug || course.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white text-xs font-bold shadow-md transition-all"
+                >
+                  <ExternalLink size={14} />
+                  <span>{t("cert_view")}</span>
+                </a>
+              </div>
+            ) : certStatus?.isEligible ? (
+              <div className="space-y-2">
+                <div className="p-2.5 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-300 flex items-start gap-2">
+                  <Sparkles size={17} className="text-amber-400 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-xs font-bold text-amber-200">{t("cert_eligible_title")}</p>
+                    <p className="text-[10px] text-amber-300/80 leading-tight mt-0.5">
+                      {t("cert_eligible_desc")}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleClaimCertificate}
+                  disabled={claimingCert}
+                  className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-sky-600 to-blue-700 hover:from-blue-500 hover:to-sky-500 text-white text-xs font-bold shadow-lg shadow-blue-950/40 transition-all animate-pulse disabled:opacity-50"
+                >
+                  {claimingCert ? <Loader2 size={14} className="animate-spin" /> : <Award size={14} />}
+                  <span>{t("cert_claim")}</span>
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-600">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-800">
+                      <Lock size={13} className="text-amber-500" />
+                      <span>{t("cert_locked")}</span>
+                    </div>
+                    <span className="text-[11px] font-semibold text-amber-400">
+                      {progress}%
+                    </span>
+                  </div>
+
+                  {/* Criteria Checklist */}
+                  <div className="space-y-1 pt-1.5 border-t border-slate-200 text-[10px]">
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-700">
+                        • {t("criteria_material", { done: completedLessons.size, total: allLessons.length })}
+                      </span>
+                      {(certStatus?.criteria?.progress?.met ?? false) ||
+                        progress >= (certStatus?.criteria?.progress?.required ?? 100) ? (
+                        <span className="text-green-400 flex items-center gap-0.5 font-semibold">
+                          <Check size={11} /> {t("criteria_done")}
                         </span>
-                        {certStatus.criteria.assignments.met ? (
-                          <span className="text-green-400 flex items-center gap-0.5 font-semibold">
-                            <Check size={11} /> {t("criteria_approved")}
+                      ) : (
+                        <span className="text-slate-400">
+                          {t("criteria_min", { pct: certStatus?.criteria?.progress?.required ?? 100 })}
+                        </span>
+                      )}
+                    </div>
+
+                    {certStatus?.criteria?.quizzes?.required &&
+                      (certStatus.criteria.quizzes.total > 0 ? (
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-700">
+                            • {t("criteria_quiz", { passed: certStatus.criteria.quizzes.passed, total: certStatus.criteria.quizzes.total })}
                           </span>
-                        ) : (
-                          <span className="text-amber-400 font-semibold">{t("criteria_needs_review")}</span>
-                        )}
-                      </div>
-                    ) : null)}
+                          {certStatus.criteria.quizzes.met ? (
+                            <span className="text-green-400 flex items-center gap-0.5 font-semibold">
+                              <Check size={11} /> {t("criteria_passed")}
+                            </span>
+                          ) : (
+                            <span className="text-amber-400 font-semibold">{t("criteria_not_passed")}</span>
+                          )}
+                        </div>
+                      ) : null)}
+
+                    {certStatus?.criteria?.assignments?.required &&
+                      (certStatus.criteria.assignments.total > 0 ? (
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-700">
+                            • {t("criteria_assignment", { approved: certStatus.criteria.assignments.approved, total: certStatus.criteria.assignments.total })}
+                          </span>
+                          {certStatus.criteria.assignments.met ? (
+                            <span className="text-green-400 flex items-center gap-0.5 font-semibold">
+                              <Check size={11} /> {t("criteria_approved")}
+                            </span>
+                          ) : (
+                            <span className="text-amber-400 font-semibold">{t("criteria_needs_review")}</span>
+                          )}
+                        </div>
+                      ) : null)}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
         </div>
       </aside>
 
@@ -1486,7 +1664,11 @@ export default function LearnPageClient({
         </header>
 
         {/* Scrollable Stage: Video + Tabbed Content */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar">
+        <div
+          ref={mainScrollRef}
+          onScroll={handleMainScroll}
+          className="flex-1 overflow-y-auto custom-scrollbar"
+        >
           {/* Media Player Stage: Video, PDF Document, or PowerPoint Presentation */}
           {Boolean(currentLesson.videoUrl?.trim()) && (() => {
             const mediaUrl = currentLesson.videoUrl!.trim();
@@ -1719,38 +1901,23 @@ export default function LearnPageClient({
             </Button>
 
             <Button
-              size="sm"
-              onClick={() => toggleLessonComplete()}
-              disabled={savingProgress}
-              leftIcon={
-                savingProgress ? (
-                  <Loader2 size={15} className="animate-spin" />
-                ) : (
-                  <CheckCircle size={15} />
-                )
-              }
-              className={`min-h-[42px] px-3 sm:px-5 text-xs font-bold shadow-sm ${
-                completedLessons.has(currentLesson.id)
-                  ? "bg-green-600 hover:bg-green-700 text-white"
-                  : "bg-blue-600 hover:bg-blue-700 text-white"
-              }`}
-            >
-              {savingProgress
-                ? t("saving")
-                : completedLessons.has(currentLesson.id)
-                ? t("done_check")
-                : nextLesson
-                ? <span className="truncate max-w-[140px] xs:max-w-none">{t("mark_done_next")}</span>
-                : t("mark_done")}
-            </Button>
-
-            <Button
               variant="outline"
               size="sm"
-              onClick={() => nextLesson && setCurrentLesson(nextLesson)}
-              disabled={!nextLesson}
-              rightIcon={<ChevronRight size={16} />}
+              onClick={() => nextLesson && !isLessonLocked(nextLesson.id) && setCurrentLesson(nextLesson)}
+              disabled={!nextLesson || isLessonLocked(nextLesson.id)}
+              rightIcon={
+                nextLesson && isLessonLocked(nextLesson.id) ? (
+                  <Lock size={14} className="text-slate-400" />
+                ) : (
+                  <ChevronRight size={16} />
+                )
+              }
               className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 disabled:opacity-40 shadow-2xs min-h-[42px] px-3 sm:px-4 text-xs font-semibold"
+              title={
+                nextLesson && isLessonLocked(nextLesson.id)
+                  ? "Materi selanjutnya terkunci sampai materi ini selesai"
+                  : undefined
+              }
             >
               <span className="hidden xs:inline">{t("next")}</span>
               <span className="xs:hidden">Next</span>
@@ -1825,11 +1992,10 @@ export default function LearnPageClient({
                     onClick={() => {
                       setActiveTab(key as typeof activeTab);
                     }}
-                    className={`flex items-center gap-2 pb-3 px-2 sm:px-3 text-xs sm:text-sm font-semibold transition-all border-b-2 whitespace-nowrap shrink-0 group ${
-                      activeTab === key
-                        ? "text-blue-600 border-blue-600 font-semibold"
-                        : "text-slate-500 border-transparent hover:text-slate-800 hover:border-slate-300"
-                    }`}
+                    className={`flex items-center gap-2 pb-3 px-2 sm:px-3 text-xs sm:text-sm font-semibold transition-all border-b-2 whitespace-nowrap shrink-0 group ${activeTab === key
+                      ? "text-blue-600 border-blue-600 font-semibold"
+                      : "text-slate-500 border-transparent hover:text-slate-800 hover:border-slate-300"
+                      }`}
                   >
                     <Icon
                       size={16}
@@ -1842,11 +2008,10 @@ export default function LearnPageClient({
                     <span>{label}</span>
                     {typeof count === "number" && (
                       <span
-                        className={`text-[10px] sm:text-xs font-mono px-1.5 py-0.5 rounded-full transition-colors ${
-                          activeTab === key
-                            ? "bg-blue-50 text-blue-700 border border-blue-200 font-bold"
-                            : "bg-slate-100 text-slate-600 border border-slate-200 group-hover:text-slate-800"
-                        }`}
+                        className={`text-[10px] sm:text-xs font-mono px-1.5 py-0.5 rounded-full transition-colors ${activeTab === key
+                          ? "bg-blue-50 text-blue-700 border border-blue-200 font-bold"
+                          : "bg-slate-100 text-slate-600 border border-slate-200 group-hover:text-slate-800"
+                          }`}
                       >
                         {count}
                       </span>
@@ -1883,6 +2048,115 @@ export default function LearnPageClient({
                     {t("no_notes")}
                   </div>
                 )}
+
+                {/* Chapter End Assessment Directive Card */}
+                {hasPendingChapterTests && nextSection && (
+                  <div className="rounded-2xl border-2 border-amber-300 bg-amber-50/70 p-5 sm:p-6 space-y-4 shadow-sm mt-4">
+                    <div className="flex items-start gap-3.5">
+                      <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-xs">
+                        <AlertCircle size={22} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-base font-bold text-amber-950">
+                          Selesaikan Tes / Tugas Bab Ini Terlebih Dahulu
+                        </h4>
+                        <p className="text-xs text-amber-800/90 mt-1 leading-relaxed">
+                          Anda telah membaca seluruh materi pada bab <strong className="font-semibold text-amber-950">&quot;{currentSection?.title}&quot;</strong>. 
+                          Untuk membuka materi pada bab selanjutnya (<strong className="font-semibold text-amber-950">&quot;{nextSection.title}&quot;</strong>), 
+                          silakan selesaikan tes/tugas evaluasi berikut terlebih dahulu:
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                      {unpassedSecQuizzes.length > 0 && (
+                        <div className="p-3.5 bg-white border border-amber-200 rounded-xl flex items-center justify-between gap-2 shadow-2xs">
+                          <div className="min-w-0">
+                            <span className="text-[11px] font-bold text-amber-600 uppercase tracking-wider block">
+                              Tes / Kuis Bab
+                            </span>
+                            <span className="text-xs font-semibold text-slate-800 truncate block mt-0.5">
+                              {unpassedSecQuizzes[0].title}
+                            </span>
+                            <span className="text-[10px] text-slate-500">
+                              {unpassedSecQuizzes.length} tes belum diselesaikan
+                            </span>
+                          </div>
+                          <Button
+                            size="sm"
+                            onClick={() => {
+                              const qIdx = quizzes.findIndex((q) => q.id === unpassedSecQuizzes[0].id);
+                              if (qIdx !== -1) setSelectedQuizIdx(qIdx);
+                              setActiveTab("quiz");
+                            }}
+                            rightIcon={<ChevronRight size={14} />}
+                            className="bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shrink-0 shadow-xs"
+                          >
+                            Kerjakan Kuis
+                          </Button>
+                        </div>
+                      )}
+
+                      {unsubmittedSecAssignments.length > 0 && (
+                        <div className="p-3.5 bg-white border border-amber-200 rounded-xl flex items-center justify-between gap-2 shadow-2xs">
+                          <div className="min-w-0">
+                            <span className="text-[11px] font-bold text-indigo-600 uppercase tracking-wider block">
+                              Tugas / Submission
+                            </span>
+                            <span className="text-xs font-semibold text-slate-800 truncate block mt-0.5">
+                              {unsubmittedSecAssignments[0].title}
+                            </span>
+                            <span className="text-[10px] text-slate-500">
+                              {unsubmittedSecAssignments.length} tugas belum dikirim
+                            </span>
+                          </div>
+                          <Button
+                            size="sm"
+                            onClick={() => {
+                              setActiveTab("assignment");
+                            }}
+                            rightIcon={<ChevronRight size={14} />}
+                            className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shrink-0 shadow-xs"
+                          >
+                            Kirim Tugas
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Bottom Continue Action */}
+                {!completedLessons.has(currentLesson.id) ? (
+                  <div className="flex justify-end pt-2">
+                    <Button
+                      size="sm"
+                      onClick={() => toggleLessonComplete()}
+                      disabled={savingProgress}
+                      leftIcon={
+                        savingProgress ? (
+                          <Loader2 size={15} className="animate-spin" />
+                        ) : (
+                          <CheckCircle size={15} />
+                        )
+                      }
+                      className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs min-h-[42px] px-5 shadow-sm"
+                    >
+                      {savingProgress ? t("saving") : nextLesson ? t("mark_done_next") : t("mark_done")}
+                    </Button>
+                  </div>
+                ) : nextLesson && !isLessonLocked(nextLesson.id) ? (
+                  <div className="flex justify-end pt-2">
+                    <Button
+                      size="sm"
+                      onClick={() => setCurrentLesson(nextLesson)}
+                      rightIcon={<ChevronRight size={15} />}
+                      className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs min-h-[42px] px-5 shadow-sm"
+                    >
+                      {t("next")}
+                    </Button>
+                  </div>
+                ) : null}
               </div>
             )}
 
@@ -2028,11 +2302,10 @@ export default function LearnPageClient({
                 return (
                   <div
                     key={item.id}
-                    className={`p-5 rounded-2xl bg-white border flex flex-col justify-between transition-all ${
-                      isCurrentChapter
-                        ? "border-blue-500 ring-2 ring-blue-500/10 shadow-sm"
-                        : "border-slate-200/80 hover:border-slate-300 shadow-2xs"
-                    }`}
+                    className={`p-5 rounded-2xl bg-white border flex flex-col justify-between transition-all ${isCurrentChapter
+                      ? "border-blue-500 ring-2 ring-blue-500/10 shadow-sm"
+                      : "border-slate-200/80 hover:border-slate-300 shadow-2xs"
+                      }`}
                   >
                     <div className="space-y-2.5 mb-4">
                       <div className="flex items-center justify-between gap-2 flex-wrap">
@@ -2043,11 +2316,10 @@ export default function LearnPageClient({
                         {/* Chapter Scope Badge */}
                         {item.sectionId ? (
                           <span
-                            className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold truncate max-w-[190px] ${
-                              isCurrentChapter
-                                ? "bg-blue-900/60 text-blue-300 border border-blue-700/60"
-                                : "bg-slate-100 text-slate-500 border border-slate-200"
-                            }`}
+                            className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold truncate max-w-[190px] ${isCurrentChapter
+                              ? "bg-blue-900/60 text-blue-300 border border-blue-700/60"
+                              : "bg-slate-100 text-slate-500 border border-slate-200"
+                              }`}
                             title={sectionName || ""}
                           >
                             <Layers size={10} className="shrink-0" />
@@ -2133,11 +2405,10 @@ export default function LearnPageClient({
                         <button
                           type="button"
                           onClick={() => setResourceFilter("CHAPTER")}
-                          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
-                            resourceFilter === "CHAPTER"
-                              ? "bg-blue-600 text-white shadow-xs"
-                              : "bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 border border-slate-200"
-                          }`}
+                          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${resourceFilter === "CHAPTER"
+                            ? "bg-blue-600 text-white shadow-xs"
+                            : "bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 border border-slate-200"
+                            }`}
                         >
                           <Layers size={13} />
                           <span>{locale === "en" ? "This Chapter" : "Khusus Bab Ini"} ({currentChapterResources.length})</span>
@@ -2146,11 +2417,10 @@ export default function LearnPageClient({
                         <button
                           type="button"
                           onClick={() => setResourceFilter("GENERAL")}
-                          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
-                            resourceFilter === "GENERAL"
-                              ? "bg-blue-600 text-white shadow-xs"
-                              : "bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 border border-slate-200"
-                          }`}
+                          className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${resourceFilter === "GENERAL"
+                            ? "bg-blue-600 text-white shadow-xs"
+                            : "bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 border border-slate-200"
+                            }`}
                         >
                           <Globe size={13} />
                           <span>{locale === "en" ? "General Files" : "Bahan Umum"} ({generalResources.length})</span>
@@ -2255,11 +2525,10 @@ export default function LearnPageClient({
                                 setQuizSubmitted(false);
                               }
                             }}
-                            className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors ${
-                              selectedQuizIdx === idx
-                                ? "bg-blue-600 text-white"
-                                : "bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 border border-slate-200"
-                            }`}
+                            className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors ${selectedQuizIdx === idx
+                              ? "bg-blue-600 text-white"
+                              : "bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 border border-slate-200"
+                              }`}
                           >
                             {t("quiz_label", { n: idx + 1 })}: {q.title}
                           </button>
@@ -2277,7 +2546,7 @@ export default function LearnPageClient({
                         : null;
                       const isQuizLocked = quizSection
                         ? quizSection.lessons.length > 0 &&
-                          !quizSection.lessons.every((l) => completedLessons.has(l.id))
+                        !quizSection.lessons.every((l) => completedLessons.has(l.id))
                         : false;
                       const uncompletedSectionLessons = quizSection
                         ? (quizSection.lessons || []).filter((l) => !completedLessons.has(l.id))
@@ -2358,13 +2627,18 @@ export default function LearnPageClient({
                                       </div>
                                       <button
                                         type="button"
+                                        disabled={isLessonLocked(l.id)}
                                         onClick={() => {
+                                          if (isLessonLocked(l.id)) return;
                                           setCurrentLesson(l);
                                           setActiveTab("notes");
                                         }}
-                                        className="px-2.5 py-1 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 hover:text-blue-300 text-[11px] font-semibold shrink-0 transition-colors"
+                                        className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold shrink-0 transition-colors ${isLessonLocked(l.id)
+                                          ? "bg-slate-100 text-slate-400 cursor-not-allowed"
+                                          : "bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 hover:text-blue-300"
+                                          }`}
                                       >
-                                        Pelajari &rarr;
+                                        {isLessonLocked(l.id) ? "Terkunci" : "Pelajari →"}
                                       </button>
                                     </div>
                                   ))}
@@ -2411,11 +2685,10 @@ export default function LearnPageClient({
 
                             {quizSubmitted && (
                               <div
-                                className={`px-4 py-2 rounded-xl border text-xs font-bold flex items-center gap-2 ${
-                                  isPassed
-                                    ? "bg-green-500/10 border-green-500/30 text-green-400"
-                                    : "bg-red-500/10 border-red-500/30 text-red-400"
-                                }`}
+                                className={`px-4 py-2 rounded-xl border text-xs font-bold flex items-center gap-2 ${isPassed
+                                  ? "bg-green-500/10 border-green-500/30 text-green-400"
+                                  : "bg-red-500/10 border-red-500/30 text-red-400"
+                                  }`}
                               >
                                 {isPassed ? <CheckCircle2 size={16} /> : <XCircle size={16} />}
                                 {t("score_label", { score: currentScore, status: isPassed ? t("passed") : t("not_passed") })}
@@ -2432,13 +2705,12 @@ export default function LearnPageClient({
                               return (
                                 <div
                                   key={q.id}
-                                  className={`p-5 rounded-2xl border transition-all ${
-                                    quizSubmitted
-                                      ? isCorrect
-                                        ? "bg-green-950/20 border-green-800/60"
-                                        : "bg-red-950/20 border-red-800/60"
-                                      : "bg-white border-slate-200/80 shadow-2xs"
-                                  }`}
+                                  className={`p-5 rounded-2xl border transition-all ${quizSubmitted
+                                    ? isCorrect
+                                      ? "bg-green-950/20 border-green-800/60"
+                                      : "bg-red-950/20 border-red-800/60"
+                                    : "bg-white border-slate-200/80 shadow-2xs"
+                                    }`}
                                 >
                                   <div className="flex items-start gap-3">
                                     <span className="w-6 h-6 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
@@ -2489,15 +2761,14 @@ export default function LearnPageClient({
                                               className={`flex items-center gap-2.5 p-3 rounded-xl border text-xs text-left transition-colors ${optStyle}`}
                                             >
                                               <span
-                                                className={`w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold shrink-0 ${
-                                                  isSelected
-                                                    ? quizSubmitted
-                                                      ? isCorrect
-                                                        ? "bg-green-600 text-white"
-                                                        : "bg-red-600 text-white"
-                                                        : "bg-blue-600 text-white"
-                                                    : "bg-slate-200 text-slate-700"
-                                                }`}
+                                                className={`w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold shrink-0 ${isSelected
+                                                  ? quizSubmitted
+                                                    ? isCorrect
+                                                      ? "bg-green-600 text-white"
+                                                      : "bg-red-600 text-white"
+                                                    : "bg-blue-600 text-white"
+                                                  : "bg-slate-200 text-slate-700"
+                                                  }`}
                                               >
                                                 {label}
                                               </span>
@@ -2619,7 +2890,7 @@ export default function LearnPageClient({
                         : null;
                       const isAssignLocked = assignSection
                         ? assignSection.lessons.length > 0 &&
-                          !assignSection.lessons.every((l) => completedLessons.has(l.id))
+                        !assignSection.lessons.every((l) => completedLessons.has(l.id))
                         : false;
                       const uncompletedAssignLessons = assignSection
                         ? (assignSection.lessons || []).filter((l) => !completedLessons.has(l.id))
@@ -2727,13 +2998,18 @@ export default function LearnPageClient({
                                         </div>
                                         <button
                                           type="button"
+                                          disabled={isLessonLocked(l.id)}
                                           onClick={() => {
+                                            if (isLessonLocked(l.id)) return;
                                             setCurrentLesson(l);
                                             setActiveTab("notes");
                                           }}
-                                          className="px-2.5 py-1 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 hover:text-blue-300 text-[11px] font-semibold shrink-0 transition-colors"
+                                          className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold shrink-0 transition-colors ${isLessonLocked(l.id)
+                                            ? "bg-slate-100 text-slate-400 cursor-not-allowed"
+                                            : "bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 hover:text-blue-300"
+                                            }`}
                                         >
-                                          Pelajari &rarr;
+                                          {isLessonLocked(l.id) ? "Terkunci" : "Pelajari →"}
                                         </button>
                                       </div>
                                     ))}
@@ -3060,11 +3336,10 @@ export default function LearnPageClient({
                                 return (
                                   <div
                                     key={reply.id}
-                                    className={`p-3 rounded-xl border text-xs space-y-1 ${
-                                      isAdmin
-                                        ? "bg-blue-50/60 border-blue-200 text-slate-800"
-                                        : "bg-white border-slate-200 text-slate-800 shadow-2xs"
-                                    }`}
+                                    className={`p-3 rounded-xl border text-xs space-y-1 ${isAdmin
+                                      ? "bg-blue-50/60 border-blue-200 text-slate-800"
+                                      : "bg-white border-slate-200 text-slate-800 shadow-2xs"
+                                      }`}
                                   >
                                     <div className="flex items-center justify-between">
                                       <div className="flex items-center gap-2">
