@@ -49,12 +49,12 @@ export function CertificateDesigner({
   onSave,
   courseTitle,
 }: CertificateDesignerProps) {
-  // Setup config with fallback to Classic Gold preset
+  // Setup config with fallback to Matoh Official preset
   const defaultInitial = initialConfig && initialConfig.elements?.length > 0
     ? initialConfig
     : {
         ...DEFAULT_DESIGN_PRESETS[0].config,
-        backgroundUrl: initialTemplateUrl || null,
+        backgroundUrl: initialTemplateUrl || DEFAULT_DESIGN_PRESETS[0].config.backgroundUrl || null,
       };
 
   const [config, setConfig] = useState<CertificateDesignConfig>(defaultInitial);

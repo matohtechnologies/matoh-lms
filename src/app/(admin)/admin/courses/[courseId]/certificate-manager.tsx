@@ -41,6 +41,7 @@ import {
   CertificateDesignConfig,
   CertificateBackDesignConfig,
   CertificateDataValues,
+  DEFAULT_CERTIFICATE_CONFIG,
 } from "@/lib/certificate-templates";
 import {
   formatCertificateSerialNumber,
@@ -110,8 +111,8 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
     signatoryRole1: "Lead Instructor & RnD Director",
     signatoryName2: "Dr. E. Lovita, SE., Ak., M.Si., CA.",
     signatoryRole2: "Head of Academic Board",
-    templateUrl: null,
-    templateConfig: null,
+    templateUrl: "/images/certificates/matoh-official-certificate.jpg",
+    templateConfig: DEFAULT_CERTIFICATE_CONFIG,
     minProgress: 100,
     requireQuizPassed: true,
     requireAssignmentApproved: true,

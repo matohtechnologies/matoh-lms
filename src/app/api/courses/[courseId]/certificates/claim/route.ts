@@ -10,6 +10,7 @@ function generateCertificateCode(): string {
 
 import { formatCertificateSerialNumber } from "@/lib/certificate-serial";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { DEFAULT_CERTIFICATE_CONFIG } from "@/lib/certificate-templates";
 
 export async function POST(
   req: NextRequest,
@@ -56,8 +57,8 @@ export async function POST(
       signatoryRole1: "Lead Instructor & RnD Director",
       signatoryName2: "Dr. E. Lovita, SE., Ak., M.Si., CA.",
       signatoryRole2: "Head of Academic Board",
-      templateUrl: null as string | null,
-      templateConfig: null as any,
+      templateUrl: "/images/certificates/matoh-official-certificate.jpg" as string | null,
+      templateConfig: DEFAULT_CERTIFICATE_CONFIG as any,
       minProgress: 100,
       requireQuizPassed: true,
       requireAssignmentApproved: true,
@@ -229,8 +230,8 @@ export async function POST(
         signatoryRole1: setting.signatoryRole1 || "Lead Instructor",
         signatoryName2: setting.signatoryName2 || "Dr. Santoso W.",
         signatoryRole2: setting.signatoryRole2 || "Head of Curriculum",
-        templateUrl: setting.templateUrl ?? null,
-        templateConfig: (setting as any).templateConfig ?? undefined,
+        templateUrl: setting.templateUrl || "/images/certificates/matoh-official-certificate.jpg",
+        templateConfig: (setting as any).templateConfig || (DEFAULT_CERTIFICATE_CONFIG as any),
       } as any,
     });
 

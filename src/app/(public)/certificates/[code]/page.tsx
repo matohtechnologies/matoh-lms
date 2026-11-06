@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { CertificateView } from "./certificate-view";
-import type { CertificateDesignConfig } from "@/lib/certificate-templates";
+import { CertificateDesignConfig, DEFAULT_CERTIFICATE_CONFIG } from "@/lib/certificate-templates";
 import type { Metadata } from "next";
 import QRCode from "qrcode";
 import { format } from "date-fns";
@@ -323,8 +323,12 @@ export default async function CertificateViewPage({ params, searchParams }: Cert
         signatoryRole2={
           certificate.signatoryRole2 || setting?.signatoryRole2 || "Head of Academic Board"
         }
-        templateUrl={certificate.templateUrl || setting?.templateUrl || undefined}
-        templateConfig={((certificate as { templateConfig?: unknown }).templateConfig || (setting as { templateConfig?: unknown })?.templateConfig || null) as CertificateDesignConfig | null}
+        templateUrl={certificate.templateUrl || setting?.templateUrl || "/images/certificates/matoh-official-certificate.jpg"}
+        templateConfig={
+          (((certificate as { templateConfig?: unknown }).templateConfig ||
+            (setting as { templateConfig?: unknown })?.templateConfig ||
+            DEFAULT_CERTIFICATE_CONFIG)) as CertificateDesignConfig
+        }
         transcriptData={transcriptData}
       />
     );

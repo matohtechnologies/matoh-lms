@@ -24,7 +24,11 @@ import {
   CertificateTranscriptCard,
   CertificateTranscriptData,
 } from "@/components/certificates/certificate-transcript-card";
-import { CertificateDesignConfig, CertificateDataValues } from "@/lib/certificate-templates";
+import {
+  CertificateDesignConfig,
+  CertificateDataValues,
+  DEFAULT_CERTIFICATE_CONFIG,
+} from "@/lib/certificate-templates";
 import { AddToLinkedInButton, LinkedInIcon } from "@/components/certificates/add-to-linkedin-button";
 
 interface CertificateViewProps {
@@ -112,6 +116,14 @@ export function CertificateView({
     certificate_subtitle: subtitle,
     subtitle: subtitle,
   };
+
+  const effectiveConfig: CertificateDesignConfig =
+    templateConfig && templateConfig.elements?.length > 0
+      ? templateConfig
+      : {
+          ...DEFAULT_CERTIFICATE_CONFIG,
+          backgroundUrl: templateUrl || DEFAULT_CERTIFICATE_CONFIG.backgroundUrl,
+        };
 
   // Fallback transcript data with guaranteed matching signatory
   const resolvedTranscript: CertificateTranscriptData = transcriptData
@@ -313,145 +325,14 @@ export function CertificateView({
             activeSide === "front" ? "flex" : "hidden"
           )}
         >
-          {templateConfig && templateConfig.elements?.length > 0 ? (
-            <div className="certificate-card w-full max-w-4xl mx-auto rounded-2xl shadow-warm-lg overflow-hidden bg-white print:w-full print:max-w-none print:shadow-none print:rounded-none print:m-0 print:break-inside-avoid print:page-break-inside-avoid">
-              <CertificateCanvasRenderer
-                config={templateConfig}
-                data={certData}
-                isInteractive={false}
-                className="w-full h-auto mx-auto"
-              />
-            </div>
-          ) : (
-            <div
-              className={cn(
-                "certificate-card w-full max-w-4xl mx-auto rounded-3xl p-8 sm:p-12 shadow-warm-lg relative overflow-hidden print:w-full print:max-w-none print:rounded-2xl print:p-6 print:shadow-none print:m-0 print:break-inside-avoid print:page-break-inside-avoid",
-                templateUrl
-                  ? "bg-stone-900 border-4 border-stone-800/40 print:border-none"
-                  : "bg-white border-8 border-amber-900/15 print:border-4 print:border-amber-800/40"
-              )}
-            >
-              {templateUrl ? (
-                <img
-                  src={templateUrl}
-                  alt="Certificate Background Template"
-                  width={1123}
-                  height={794}
-                  style={{ aspectRatio: "1123 / 794" }}
-                  className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none"
-                />
-              ) : (
-                <>
-                  <div className="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-blue-100/40 pointer-events-none blur-3xl print:hidden" />
-                  <div className="absolute -left-20 -bottom-20 w-80 h-80 rounded-full bg-amber-100/40 pointer-events-none blur-3xl print:hidden" />
-                </>
-              )}
-
-              {/* Inner Gold / Frosted Border */}
-              <div
-                className={cn(
-                  "rounded-2xl p-6 sm:p-10 text-center relative z-10 print:p-5",
-                  templateUrl
-                    ? "bg-white/90 backdrop-blur-xs border border-white/60 shadow-sm print:bg-white/90"
-                    : "border-2 border-dashed border-amber-600/30"
-                )}
-              >
-                {/* Header Brand */}
-                <div className="flex flex-col items-center justify-center mb-6 print:mb-3">
-                  <div className="w-14 h-14 rounded-2xl bg-white border border-stone-200/90 flex items-center justify-center shadow-md p-2.5 mb-3 print:mb-1.5 print:w-11 print:h-11">
-                    <Image
-                      src="/images/matoh-logo-v2.png"
-                      alt={issuerName}
-                      width={38}
-                      height={38}
-                      priority
-                      style={{ aspectRatio: "1 / 1" }}
-                      className="object-contain aspect-square"
-                    />
-                  </div>
-                  <h2
-                    className="text-lg font-bold tracking-widest uppercase text-stone-800 print:text-base"
-                    style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
-                  >
-                    {issuerName}
-                  </h2>
-                  <p className="text-xs uppercase tracking-widest text-stone-500 font-semibold mt-0.5 print:text-[10px]">
-                    {certificateTitle}
-                  </p>
-                </div>
-
-                <div className="my-6 print:my-3">
-                  <p className="text-xs uppercase tracking-wider text-stone-500 font-medium print:text-[11px]">
-                    {t("awarded_to")}
-                  </p>
-                  <h1
-                    className="text-3xl sm:text-4xl font-extrabold text-stone-900 mt-2 mb-1 print:text-2xl print:mt-1 print:mb-0.5"
-                    style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
-                  >
-                    {studentName}
-                  </h1>
-                  <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-sky-500 mx-auto my-3 rounded-full print:my-1.5" />
-                </div>
-
-                <p className="text-sm text-stone-600 max-w-xl mx-auto leading-relaxed mb-6 print:text-xs print:mb-3 print:max-w-2xl">
-                  {subtitle}
-                </p>
-
-                <div className="bg-blue-50/70 border border-blue-200/80 rounded-2xl py-4 px-6 inline-block max-w-2xl mb-8 print:py-2 print:px-5 print:mb-3">
-                  {categoryName && (
-                    <p className="text-xs text-blue-600 font-medium mb-1 uppercase tracking-wider print:text-[10px]">
-                      {categoryName}
-                    </p>
-                  )}
-                  <h3
-                    className="text-xl sm:text-2xl font-bold text-blue-950 print:text-lg"
-                    style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
-                  >
-                    {courseTitle}
-                  </h3>
-                </div>
-
-                {/* Signatures Row */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-6 border-t border-stone-200 items-end print:grid-cols-2 print:gap-4 print:pt-3">
-                  <div className="text-center sm:text-left print:text-left">
-                    <p className="font-serif italic text-lg text-stone-800 mb-1 print:text-base">
-                      {instructorName}
-                    </p>
-                    <div className="w-32 h-px bg-stone-300 mx-auto sm:mx-0 print:mx-0 mb-1" />
-                    <p className="text-xs font-semibold text-stone-700 print:text-[11px]">
-                      {signatoryRole1}
-                    </p>
-                    <p className="text-[11px] text-stone-400 print:text-[10px]">{issuerName}</p>
-                  </div>
-
-                  <div className="text-center sm:text-right print:text-right">
-                    <p className="font-serif italic text-lg text-stone-800 mb-1 print:text-base">
-                      {signatoryName2}
-                    </p>
-                    <div className="w-32 h-px bg-stone-300 mx-auto sm:ml-auto sm:mr-0 print:ml-auto print:mr-0 mb-1" />
-                    <p className="text-xs font-semibold text-stone-700 print:text-[11px]">
-                      {signatoryRole2}
-                    </p>
-                    <p className="text-[11px] text-stone-400 print:text-[10px]">{issuerName}</p>
-                  </div>
-                </div>
-
-                {/* Verification Code Footer */}
-                <div className="mt-8 pt-4 border-t border-dashed border-stone-200 flex flex-col sm:flex-row items-center justify-between text-[11px] text-stone-500 gap-2 print:mt-3 print:pt-2 print:flex-row print:text-[10px]">
-                  <span>
-                    {t("credential_id")}{" "}
-                    <strong className="text-stone-700 font-mono">
-                      {displayCode.toUpperCase()}
-                    </strong>
-                  </span>
-                  <span>
-                    {t("issued_on")} <strong className="text-stone-700">{issueDisplay}</strong>
-                  </span>
-                  <span className="text-green-700 font-medium">{t("verified")}</span>
-                </div>
-              </div>
-            </div>
-          )}
+          <div className="certificate-card w-full max-w-4xl mx-auto rounded-2xl shadow-warm-lg overflow-hidden bg-white print:w-full print:max-w-none print:shadow-none print:rounded-none print:m-0 print:break-inside-avoid print:page-break-inside-avoid">
+            <CertificateCanvasRenderer
+              config={effectiveConfig}
+              data={certData}
+              isInteractive={false}
+              className="w-full h-auto mx-auto"
+            />
+          </div>
         </div>
 
         {/* ================= SISI BELAKANG ================= */}
@@ -464,7 +345,7 @@ export function CertificateView({
           <div className="w-full max-w-4xl mx-auto flex justify-center">
             <CertificateTranscriptCard
               data={resolvedTranscript}
-              backConfig={templateConfig?.backConfig}
+              backConfig={effectiveConfig?.backConfig}
               className="mx-auto"
             />
           </div>

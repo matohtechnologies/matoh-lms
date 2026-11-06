@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
+import { DEFAULT_CERTIFICATE_CONFIG } from "@/lib/certificate-templates";
 
 const certificateSettingSchema = z.object({
   isEnabled: z.boolean().default(true),
@@ -74,8 +75,8 @@ export async function GET(
       signatoryRole1: "Lead Instructor & RnD Director",
       signatoryName2: "Dr. E. Lovita, SE., Ak., M.Si., CA.",
       signatoryRole2: "Head of Academic Board",
-      templateUrl: null,
-      templateConfig: null,
+      templateUrl: "/images/certificates/matoh-official-certificate.jpg",
+      templateConfig: DEFAULT_CERTIFICATE_CONFIG,
       minProgress: 100,
       requireQuizPassed: true,
       requireAssignmentApproved: true,
@@ -88,6 +89,11 @@ export async function GET(
     const setting = course.certificateSetting
       ? {
           ...course.certificateSetting,
+          templateUrl:
+            course.certificateSetting.templateUrl ||
+            "/images/certificates/matoh-official-certificate.jpg",
+          templateConfig:
+            course.certificateSetting.templateConfig || DEFAULT_CERTIFICATE_CONFIG,
           signatoryName1:
             course.certificateSetting.signatoryName1 || course.instructor?.name || "Ahmad Fadhil",
           serialPattern:
