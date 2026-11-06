@@ -988,12 +988,13 @@ export default function LearnPageClient({
 
       {/* Sidebar: Lessons Navigation (Responsive Drawer on Mobile, In-Flow on Desktop) */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-80 max-w-[85vw] sm:max-w-xs bg-white border-r border-slate-200 transition-all duration-300 ease-in-out flex flex-col shadow-2xl lg:shadow-xs lg:static lg:inset-auto lg:h-full lg:z-20 ${
+        className={`fixed inset-y-0 left-0 z-50 w-80 max-w-[85vw] sm:max-w-xs bg-white border-r border-slate-200 transition-all duration-300 ease-in-out flex flex-col shadow-2xl lg:shadow-xs lg:static lg:inset-auto lg:h-full lg:z-20 overflow-hidden ${
           sidebarOpen
-            ? "translate-x-0 lg:w-80"
-            : "-translate-x-full lg:translate-x-0 lg:w-0 lg:border-r-0"
+            ? "translate-x-0 lg:w-80 opacity-100 visible"
+            : "-translate-x-full lg:translate-x-0 lg:w-0 lg:border-r-0 opacity-0 pointer-events-none invisible"
         }`}
       >
+        <div className="w-80 min-w-[20rem] flex flex-col h-full shrink-0">
         {/* Brand & Course Title */}
         <div className="p-4 border-b border-slate-200 bg-white/95 backdrop-blur-md">
           <div className="flex items-center justify-between gap-2 mb-3">
@@ -1448,6 +1449,7 @@ export default function LearnPageClient({
               </div>
             </div>
           )}
+        </div>
         </div>
       </aside>
 

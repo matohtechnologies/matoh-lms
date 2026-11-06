@@ -11,7 +11,6 @@ import {
   RotateCcw,
   FileText,
   Loader2,
-  Lock,
 } from "lucide-react";
 
 interface CustomPdfViewerProps {
@@ -33,7 +32,7 @@ export function CustomPdfViewer({
   const [pdfDoc, setPdfDoc] = useState<any>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
-  const [scale, setScale] = useState<number>(1.0);
+  const [scale, setScale] = useState<number>(0.25);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
@@ -65,7 +64,7 @@ export function CustomPdfViewer({
       ) {
         window.screen.orientation.unlock();
       }
-    } catch {}
+    } catch { }
   }, []);
 
   // Track portrait vs landscape orientation
@@ -101,21 +100,41 @@ export function CustomPdfViewer({
     return () => clearInterval(interval);
   }, []);
 
-  // Calculate auto-fit width scale based on current container size
-  const calculateFitScale = useCallback(() => {
-    if (!stageRef.current) return 1.0;
+  // Calculate default scale:
+  // - Fullscreen mode: default is zoomed out 13 times (9 + 4 = 13 steps of 0.15 = 1.95 decrease)
+  // - Normal view mode (tidak fullscreen): default is zoomed out 12 times (5 + 7 = 12 steps of 0.15 = 1.80 decrease)
+  const calculateFitScale = useCallback((forceFullscreen?: boolean) => {
+    if (!stageRef.current) return 0.25;
     const stageWidth = stageRef.current.clientWidth;
     // Mobile padding 16px each side (32px), Desktop 48px
     const padding = stageWidth < 640 ? 24 : 48;
     const availableWidth = stageWidth - padding;
+    const isFs =
+      forceFullscreen !== undefined
+        ? forceFullscreen
+        : !!(
+          (typeof document !== "undefined" && document.fullscreenElement) ||
+          (typeof document !== "undefined" && (document as any).webkitFullscreenElement) ||
+          isFullscreen
+        );
+
     if (availableWidth > 200) {
       // Standard A4 width at scale 1.0 is ~595px
       const computedScale = parseFloat((availableWidth / 595).toFixed(2));
-      // Clamp between 0.45 and 2.0
-      return Math.max(0.45, Math.min(computedScale, 2.0));
+
+      if (isFs) {
+        // Fullscreen mode: default zoom out 13 times (9 + 4 = 13 steps of 0.15 = 1.95 decrease)
+        const fsScale = parseFloat((computedScale - 13 * 0.15).toFixed(2));
+        return Math.max(0.15, Math.min(fsScale, 2.5));
+      }
+
+      // Normal embedded mode (layar tidak fullscreen):
+      // Zoom out 12 kali (5 + 7 = 12 x 0.15 = 1.80 decrease) dari lebar kontainer
+      const normalScale = parseFloat((computedScale - 12 * 0.15).toFixed(2));
+      return Math.max(0.20, Math.min(normalScale, 1.8));
     }
-    return 1.0;
-  }, []);
+    return isFs ? 0.30 : 0.25;
+  }, [isFullscreen]);
 
   // 1. Load PDF Document via PDF.js
   useEffect(() => {
@@ -265,7 +284,7 @@ export function CustomPdfViewer({
   };
 
   const handleZoomOut = () => {
-    setScale((prev) => Math.max(parseFloat((prev - 0.15).toFixed(2)), 0.45));
+    setScale((prev) => Math.max(parseFloat((prev - 0.15).toFixed(2)), 0.05));
   };
 
   const handleResetZoom = () => {
@@ -273,7 +292,12 @@ export function CustomPdfViewer({
   };
 
   const handleFitWidth = () => {
-    setScale(calculateFitScale());
+    if (!stageRef.current) return;
+    const stageWidth = stageRef.current.clientWidth;
+    const padding = stageWidth < 640 ? 24 : 48;
+    const availableWidth = stageWidth - padding;
+    const fullFit = parseFloat((availableWidth / 595).toFixed(2));
+    setScale(Math.max(0.35, Math.min(fullFit, 2.5)));
   };
 
   // Fullscreen handlers with Screen Orientation locking for mobile devices
@@ -296,6 +320,9 @@ export function CustomPdfViewer({
 
         // Lock mobile screen orientation to landscape
         await lockOrientationLandscape();
+        setTimeout(() => {
+          setScale(calculateFitScale(true));
+        }, 150);
       } catch (err) {
         console.error("Fullscreen error:", err);
       }
@@ -311,6 +338,9 @@ export function CustomPdfViewer({
       }
       setIsFullscreen(false);
       unlockOrientation();
+      setTimeout(() => {
+        setScale(calculateFitScale(false));
+      }, 150);
     }
   };
 
@@ -324,14 +354,14 @@ export function CustomPdfViewer({
 
       if (isNowFullscreen) {
         await lockOrientationLandscape();
-        // Give time for layout reflow then fit scale
+        // Give time for layout reflow then fit scale with 13x zoom out
         setTimeout(() => {
-          setScale(calculateFitScale());
+          setScale(calculateFitScale(true));
         }, 150);
       } else {
         unlockOrientation();
         setTimeout(() => {
-          setScale(calculateFitScale());
+          setScale(calculateFitScale(false));
         }, 150);
       }
     };
@@ -400,11 +430,10 @@ export function CustomPdfViewer({
   return (
     <div
       ref={containerRef}
-      className={`relative w-full flex flex-col bg-slate-900 border border-slate-800 text-slate-100 overflow-hidden select-none ${
-        isFullscreen
-          ? "fixed inset-0 z-50 h-screen h-[100dvh] w-screen rounded-none"
-          : "h-[75vh] min-h-[460px] sm:h-[660px] rounded-2xl shadow-xl border-b border-slate-200"
-      }`}
+      className={`relative w-full flex flex-col bg-slate-900 border border-slate-800 text-slate-100 overflow-hidden select-none ${isFullscreen
+        ? "fixed inset-0 z-50 h-screen h-[100dvh] w-screen rounded-none"
+        : "h-[75vh] min-h-[460px] sm:h-[660px] rounded-2xl shadow-xl border-b border-slate-200"
+        }`}
       onContextMenu={(e) => e.preventDefault()} // Anti-inspect / save image
     >
       {/* ── Top Interactive Toolbar (Fully Responsive) ────────────────────────────────── */}
@@ -418,13 +447,6 @@ export function CustomPdfViewer({
             <h4 className="text-xs sm:text-sm font-semibold text-slate-200 truncate max-w-[130px] xs:max-w-[170px] sm:max-w-xs md:max-w-md">
               {title}
             </h4>
-            <div className="flex items-center gap-1.5 text-[10px] text-slate-400">
-              <span className="inline-flex items-center gap-1 text-emerald-400 font-medium">
-                <Lock size={10} /> Mode Baca Aman
-              </span>
-              <span className="hidden sm:inline">•</span>
-              <span className="hidden sm:inline">Proteksi Unduhan Aktif</span>
-            </div>
           </div>
         </div>
 
@@ -475,7 +497,7 @@ export function CustomPdfViewer({
           <button
             type="button"
             onClick={handleZoomOut}
-            disabled={scale <= 0.45 || isLoading}
+            disabled={scale <= 0.05 || isLoading}
             className="w-9 h-9 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center text-slate-300 hover:text-white hover:bg-slate-800/80 active:bg-slate-700 disabled:opacity-30 transition-colors"
             title="Perkecil Tampilan (Zoom Out)"
             aria-label="Perkecil"
