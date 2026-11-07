@@ -84,16 +84,6 @@ Buka [http://localhost:3000](http://localhost:3000) di browser Anda.
 
 ---
 
-## 👤 Akun Bawaan (Default Seed Credentials)
-
-| Role | Email | Password |
-|---|---|---|
-| **Admin** | `admin@earthyacademy.com` | `Admin@123456` |
-| **Instruktur** | `ahmad@earthyacademy.com` | `Instructor@123` |
-| **Pelajar** | `user@earthyacademy.com` | `User@123456` |
-
----
-
 ## 📦 Build untuk Production
 
 ```bash
