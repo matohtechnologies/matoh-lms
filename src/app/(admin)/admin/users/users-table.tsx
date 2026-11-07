@@ -12,6 +12,8 @@ export interface UserRowData {
   email: string;
   role: string;
   headline?: string | null;
+  bio?: string | null;
+  image?: string | null;
   createdAtFormatted: string;
   enrolledCount: number;
   status: string;
@@ -20,6 +22,45 @@ export interface UserRowData {
 interface UsersTableProps {
   initialUsers: UserRowData[];
   currentUserId: string;
+}
+
+function UserAvatar({
+  name,
+  image,
+  role,
+}: {
+  name: string;
+  image?: string | null;
+  role: string;
+}) {
+  const [error, setError] = useState(false);
+
+  const bgGradient =
+    role === "INSTRUCTOR"
+      ? "bg-gradient-to-br from-teal-600 to-emerald-600"
+      : role === "ADMIN"
+      ? "bg-gradient-to-br from-amber-600 to-orange-600"
+      : "bg-gradient-to-br from-blue-600 to-sky-600";
+
+  return (
+    <div
+      className={`w-9 h-9 rounded-xl text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-2xs overflow-hidden ring-1 ring-stone-200/60 ${bgGradient}`}
+    >
+      {image && !error ? (
+        <img
+          src={image}
+          alt=""
+          width={36}
+          height={36}
+          onError={() => setError(true)}
+          style={{ aspectRatio: "1 / 1" }}
+          className="w-full h-full object-cover aspect-square"
+        />
+      ) : (
+        <span>{name[0]?.toUpperCase() || "U"}</span>
+      )}
+    </div>
+  );
 }
 
 export function UsersTable({ initialUsers, currentUserId }: UsersTableProps) {
@@ -178,15 +219,11 @@ export function UsersTable({ initialUsers, currentUserId }: UsersTableProps) {
                 <tr key={user.id} className="hover:bg-stone-50/80 transition-colors">
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-3">
-                      <div className={`w-9 h-9 rounded-xl text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-2xs ${
-                        user.role === "INSTRUCTOR"
-                          ? "bg-gradient-to-br from-teal-600 to-emerald-600"
-                          : user.role === "ADMIN"
-                          ? "bg-gradient-to-br from-amber-600 to-orange-600"
-                          : "bg-gradient-to-br from-blue-600 to-sky-600"
-                      }`}>
-                        {user.name[0]?.toUpperCase() || "U"}
-                      </div>
+                      <UserAvatar
+                        name={user.name}
+                        image={user.image}
+                        role={user.role}
+                      />
                       <div>
                         <div className="flex items-center gap-2">
                           <p className="font-bold text-stone-900">{user.name}</p>
@@ -224,9 +261,14 @@ export function UsersTable({ initialUsers, currentUserId }: UsersTableProps) {
                   </td>
                   <td className="px-5 py-4 text-right">
                     <UserActions
+                      user={user}
                       userId={user.id}
                       userName={user.name}
+                      userEmail={user.email}
                       currentRole={user.role}
+                      headline={user.headline}
+                      bio={user.bio}
+                      image={user.image}
                       isSelf={user.id === currentUserId}
                     />
                   </td>

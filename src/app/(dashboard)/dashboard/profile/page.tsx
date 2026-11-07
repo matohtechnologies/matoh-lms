@@ -20,7 +20,8 @@ export default function ProfilePage() {
 
   const profileSchema = z.object({
     name: z.string().min(2, isEn ? "Name must be at least 2 characters" : "Nama minimal 2 karakter").max(50),
-    bio: z.string().max(300, isEn ? "Bio must be at most 300 characters" : "Bio maksimal 300 karakter").optional(),
+    headline: z.string().max(200, isEn ? "Headline must be at most 200 characters" : "Headline maksimal 200 karakter").optional(),
+    bio: z.string().max(3000, isEn ? "Bio must be at most 3000 characters" : "Bio maksimal 3000 karakter").optional(),
   });
 
   const passwordSchema = z
@@ -87,6 +88,7 @@ export default function ProfilePage() {
           if (data.user) {
             reset({
               name: data.user.name ?? session.user?.name ?? "",
+              headline: data.user.headline ?? "",
               bio: data.user.bio ?? "",
             });
             if (data.user.image) {
@@ -101,7 +103,7 @@ export default function ProfilePage() {
           }
         })
         .catch(() => {
-          reset({ name: session.user?.name ?? "", bio: "" });
+          reset({ name: session.user?.name ?? "", headline: "", bio: "" });
         });
     }
   }, [session, reset, isEn]);
@@ -472,6 +474,22 @@ export default function ProfilePage() {
                   </span>
                 </div>
               </div>
+
+              {(session?.user?.role === "INSTRUCTOR" || session?.user?.role === "ADMIN") && (
+                <div>
+                  <Input
+                    id="profile-headline"
+                    label={isEn ? "Instructor Title / Headline" : "Gelar / Jabatan / Headline Instruktur"}
+                    autoComplete="off"
+                    placeholder={isEn ? "e.g. Lead Instructor & RnD Director" : "Contoh: Lead Instructor & RnD Director"}
+                    error={errors.headline?.message}
+                    {...register("headline")}
+                  />
+                  <p className="text-[11px] text-stone-400 mt-1">
+                    {isEn ? "Displayed under your name on course landing pages" : "Tampil di bawah nama Anda pada halaman kelas dan kartu instruktur"}
+                  </p>
+                </div>
+              )}
 
               <Textarea
                 id="profile-bio"

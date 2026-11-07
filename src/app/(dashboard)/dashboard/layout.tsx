@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { BookOpen, Shield, Compass } from "lucide-react";
 import { auth } from "@/lib/auth";
+import prisma from "@/lib/prisma";
 import { getTranslations, getLocale } from "next-intl/server";
 import DashboardNavLink from "./nav-link";
 import SignOutButton from "@/components/auth/signout-button";
@@ -31,10 +32,22 @@ export default async function DashboardLayout({
     { href: "/dashboard/profile", label: tDash("profile") },
   ];
 
-  const userName = session.user?.name ?? (isEn ? "User" : "Pengguna");
-  const userEmail = session.user?.email ?? "";
+  let dbUser = null;
+  try {
+    dbUser = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { name: true, email: true, image: true, role: true },
+    });
+  } catch {
+    // fallback to session
+  }
+
+  const userName = dbUser?.name ?? session.user?.name ?? (isEn ? "User" : "Pengguna");
+  const userEmail = dbUser?.email ?? session.user?.email ?? "";
+  const userImage = dbUser?.image ?? session.user?.image ?? null;
+  const userRole = dbUser?.role ?? session.user?.role ?? "USER";
   const userInitial = userName[0]?.toUpperCase() ?? "U";
-  const isAdmin = session.user?.role === "ADMIN";
+  const isAdmin = userRole === "ADMIN";
 
   return (
     <div className="min-h-screen bg-[#f8fafc] flex">
@@ -69,8 +82,8 @@ export default async function DashboardLayout({
             initialUser={{
               name: userName,
               email: userEmail,
-              image: session.user?.image,
-              role: session.user?.role,
+              image: userImage,
+              role: userRole,
             }}
             variant="dashboard"
           />
@@ -168,8 +181,8 @@ export default async function DashboardLayout({
               initialUser={{
                 name: userName,
                 email: userEmail,
-                image: session.user?.image,
-                role: session.user?.role,
+                image: userImage,
+                role: userRole,
               }}
               variant="mobile-dashboard"
             />

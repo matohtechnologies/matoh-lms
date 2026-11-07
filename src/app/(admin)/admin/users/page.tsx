@@ -33,6 +33,8 @@ export default async function AdminUsersPage() {
       email: u.email ?? "-",
       role: u.role,
       headline: u.headline ?? null,
+      bio: u.bio ?? null,
+      image: u.image ?? null,
       createdAtFormatted: u.createdAt.toLocaleDateString(
         locale === "en" ? "en-US" : "id-ID",
         {

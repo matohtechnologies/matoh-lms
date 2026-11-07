@@ -89,6 +89,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (token.name) {
           session.user.name = token.name;
         }
+
+        // Always sync with latest database user record to avoid stale avatar/name in session
+        if (token.id) {
+          try {
+            const dbUser = await prisma.user.findUnique({
+              where: { id: token.id as string },
+              select: { image: true, name: true, role: true },
+            });
+            if (dbUser) {
+              if (dbUser.image !== undefined) session.user.image = dbUser.image;
+              if (dbUser.name) session.user.name = dbUser.name;
+              if (dbUser.role) session.user.role = dbUser.role;
+            }
+          } catch {
+            // Keep token fallback
+          }
+        }
       }
       return session;
     },

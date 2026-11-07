@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -18,12 +19,43 @@ export function UserSidebarBadge({ initialUser, variant = "dashboard" }: UserSid
   const { data: session } = useSession();
   const tNav = useTranslations("nav");
 
+  const [imageError, setImageError] = useState(false);
+  const [profileImage, setProfileImage] = useState<string | null>(
+    initialUser?.image ?? session?.user?.image ?? null
+  );
+
+  // Sync state if initialUser or session updates
+  useEffect(() => {
+    if (initialUser?.image) {
+      setProfileImage(initialUser.image);
+      setImageError(false);
+    } else if (session?.user?.image) {
+      setProfileImage(session.user.image);
+      setImageError(false);
+    }
+  }, [initialUser?.image, session?.user?.image]);
+
+  // Always fetch latest profile data from database on mount to guarantee fresh image
+  useEffect(() => {
+    fetch("/api/user/profile")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.user?.image) {
+          setProfileImage(data.user.image);
+          setImageError(false);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   const name = session?.user?.name ?? initialUser?.name ?? tNav("user_fallback");
   const email = session?.user?.email ?? initialUser?.email ?? "";
-  const image = session?.user?.image ?? initialUser?.image ?? null;
   const role = session?.user?.role ?? initialUser?.role ?? "USER";
   const isAdmin = role === "ADMIN";
   const userInitial = name?.[0]?.toUpperCase() ?? "U";
+
+  // Use profileImage, fallback to initialUser or session, or null if error occurred
+  const effectiveImage = !imageError ? (profileImage || initialUser?.image || session?.user?.image || null) : null;
 
   if (variant === "mobile-dashboard" || variant === "mobile-admin") {
     return (
@@ -32,12 +64,13 @@ export function UserSidebarBadge({ initialUser, variant = "dashboard" }: UserSid
         className="w-8 h-8 rounded-lg bg-gradient-to-br from-teal-600 to-sky-500 flex items-center justify-center text-white font-bold text-xs shadow-2xs overflow-hidden ring-1 ring-slate-200/60 hover:opacity-90 transition-opacity"
         title={tNav("open_profile")}
       >
-        {image ? (
+        {effectiveImage ? (
           <img
-            src={image}
-            alt={name}
-            width={36}
-            height={36}
+            src={effectiveImage}
+            alt=""
+            width={32}
+            height={32}
+            onError={() => setImageError(true)}
             style={{ aspectRatio: "1 / 1" }}
             className="w-full h-full object-cover aspect-square"
           />
@@ -55,12 +88,13 @@ export function UserSidebarBadge({ initialUser, variant = "dashboard" }: UserSid
         className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-50/80 border border-slate-200/60 hover:bg-slate-100/70 transition-colors group"
       >
         <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-600 to-sky-500 flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-2xs overflow-hidden ring-1 ring-slate-200/60">
-          {image ? (
+          {effectiveImage ? (
             <img
-              src={image}
-              alt={name}
+              src={effectiveImage}
+              alt=""
               width={36}
               height={36}
+              onError={() => setImageError(true)}
               style={{ aspectRatio: "1 / 1" }}
               className="w-full h-full object-cover aspect-square"
             />
@@ -85,12 +119,13 @@ export function UserSidebarBadge({ initialUser, variant = "dashboard" }: UserSid
       className="flex items-center gap-3 p-2 rounded-xl bg-slate-50/70 border border-slate-200/60 hover:bg-slate-100/70 transition-colors group"
     >
       <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-teal-600 to-sky-500 flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-2xs overflow-hidden ring-1 ring-slate-200/60">
-        {image ? (
+        {effectiveImage ? (
           <img
-            src={image}
-            alt={name}
+            src={effectiveImage}
+            alt=""
             width={36}
             height={36}
+            onError={() => setImageError(true)}
             style={{ aspectRatio: "1 / 1" }}
             className="w-full h-full object-cover aspect-square"
           />

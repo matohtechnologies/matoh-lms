@@ -12,7 +12,7 @@ export async function GET() {
 
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
-      select: { id: true, name: true, email: true, image: true, bio: true, createdAt: true },
+      select: { id: true, name: true, email: true, image: true, role: true, headline: true, bio: true, createdAt: true },
     });
 
     if (!user) {
@@ -28,7 +28,8 @@ export async function GET() {
 
 const profileUpdateSchema = z.object({
   name: z.string().min(2).max(50).optional(),
-  bio: z.string().max(300).optional(),
+  headline: z.string().max(200).nullable().optional(),
+  bio: z.string().max(3000).nullable().optional(),
   image: z.string().nullable().optional(),
 });
 
@@ -45,7 +46,7 @@ export async function PATCH(req: NextRequest) {
     const user = await prisma.user.update({
       where: { id: session.user.id },
       data,
-      select: { id: true, name: true, bio: true, image: true },
+      select: { id: true, name: true, headline: true, bio: true, image: true },
     });
 
     return NextResponse.json({ user });

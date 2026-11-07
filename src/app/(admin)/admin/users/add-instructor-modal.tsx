@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
   UserPlus,
@@ -16,6 +16,9 @@ import {
   Briefcase,
   FileText,
   Shield,
+  Upload,
+  Trash2,
+  Link as LinkIcon,
 } from "lucide-react";
 import { dynamicAlert } from "@/components/ui/dynamic-alert-provider";
 import { useTranslations } from "next-intl";
@@ -24,7 +27,9 @@ export function AddInstructorModal() {
   const t = useTranslations("admin");
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   // Form State
@@ -34,6 +39,7 @@ export function AddInstructorModal() {
   const [role, setRole] = useState<"INSTRUCTOR" | "ADMIN" | "USER">("INSTRUCTOR");
   const [headline, setHeadline] = useState("");
   const [bio, setBio] = useState("");
+  const [image, setImage] = useState("");
   const [error, setError] = useState("");
 
   // Handle escape key
@@ -64,13 +70,59 @@ export function AddInstructorModal() {
     setRole("INSTRUCTOR");
     setHeadline("");
     setBio("");
+    setImage("");
     setError("");
     setShowPassword(false);
+    setUploadingImage(false);
   };
 
   const handleOpen = () => {
     resetForm();
     setIsOpen(true);
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setError("Hanya file gambar (JPEG, PNG, WebP) yang diperbolehkan.");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setError("Ukuran gambar maksimal 5MB.");
+      return;
+    }
+
+    setUploadingImage(true);
+    setError("");
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folder", "avatars");
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.url) {
+        throw new Error(data.error || "Gagal mengunggah foto profil dari perangkat.");
+      }
+
+      setImage(data.url);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Gagal mengunggah foto profil.";
+      setError(msg);
+    } finally {
+      setUploadingImage(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -103,6 +155,7 @@ export function AddInstructorModal() {
           role,
           headline: headline.trim() || null,
           bio: bio.trim() || null,
+          image: image.trim() || null,
         }),
       });
 
@@ -315,6 +368,100 @@ export function AddInstructorModal() {
                   >
                     {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                   </button>
+                </div>
+              </div>
+
+              {/* Foto Profil / Avatar */}
+              <div>
+                <label className="block text-xs font-semibold text-stone-700 mb-1.5">
+                  Foto Profil / Avatar <span className="text-stone-400 font-normal">(Opsional)</span>
+                </label>
+
+                <div className="p-3.5 rounded-xl border border-stone-200/90 bg-stone-50/70 flex items-center gap-3.5">
+                  {/* Preview Thumbnail */}
+                  <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-teal-600 to-emerald-600 flex items-center justify-center text-white text-lg font-bold shrink-0 shadow-2xs overflow-hidden ring-2 ring-white border border-stone-200/80">
+                    {image ? (
+                      <img
+                        src={image}
+                        alt={name || "Avatar"}
+                        width={56}
+                        height={56}
+                        style={{ aspectRatio: "1 / 1" }}
+                        className="w-full h-full object-cover aspect-square"
+                      />
+                    ) : (
+                      <span>{(name || "U")[0]?.toUpperCase()}</span>
+                    )}
+                    {uploadingImage && (
+                      <div className="absolute inset-0 bg-stone-900/60 flex items-center justify-center text-white">
+                        <Loader2 size={18} className="animate-spin" />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Upload Controls */}
+                  <div className="flex-1 min-w-0 space-y-1.5">
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      onChange={handleFileChange}
+                      accept="image/jpeg,image/png,image/webp,image/gif"
+                      className="hidden"
+                    />
+
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={uploadingImage || loading}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-stone-800 bg-white hover:bg-stone-50 border border-stone-200 shadow-2xs transition-all cursor-pointer disabled:opacity-50 hover:border-teal-500"
+                      >
+                        {uploadingImage ? (
+                          <Loader2 size={13} className="animate-spin text-teal-600" />
+                        ) : (
+                          <Upload size={13} className="text-teal-600" />
+                        )}
+                        <span>{uploadingImage ? "Mengunggah..." : "Pilih dari Perangkat"}</span>
+                      </button>
+
+                      {image && (
+                        <button
+                          type="button"
+                          onClick={() => setImage("")}
+                          disabled={uploadingImage || loading}
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-medium text-rose-600 hover:bg-rose-50 border border-rose-200 transition-colors cursor-pointer"
+                          title="Hapus foto profil"
+                        >
+                          <Trash2 size={12} />
+                          <span>Hapus</span>
+                        </button>
+                      )}
+                    </div>
+
+                    <p className="text-[10px] text-stone-400">
+                      Mendukung JPG, PNG, atau WebP (Maks. 5MB)
+                    </p>
+                  </div>
+                </div>
+
+                {/* Optional URL input toggle */}
+                <div className="mt-2">
+                  <details className="text-[11px] text-stone-500 group">
+                    <summary className="cursor-pointer hover:text-stone-700 font-medium select-none flex items-center gap-1">
+                      <LinkIcon size={11} className="text-stone-400" />
+                      <span>Atau masukkan tautan URL gambar...</span>
+                    </summary>
+                    <div className="relative mt-1.5">
+                      <input
+                        id="instructor-image"
+                        type="text"
+                        value={image}
+                        onChange={(e) => setImage(e.target.value)}
+                        placeholder="https://... atau /uploads/avatars/..."
+                        className="w-full px-3 py-1.5 rounded-lg text-xs bg-white border border-stone-200 text-stone-800 placeholder:text-stone-400 focus:outline-none focus:border-teal-500 font-mono"
+                      />
+                    </div>
+                  </details>
                 </div>
               </div>
 

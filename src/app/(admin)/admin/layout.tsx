@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { BookOpen } from "lucide-react";
 import { auth } from "@/lib/auth";
+import prisma from "@/lib/prisma";
 import { getTranslations } from "next-intl/server";
 import AdminNavLink, { type AdminNavItem } from "./admin-nav-link";
 import SignOutButton from "@/components/auth/signout-button";
@@ -16,6 +17,21 @@ export default async function AdminLayout({
   const session = await auth();
   if (!session) redirect("/login");
   if (session.user?.role !== "ADMIN") redirect("/dashboard");
+
+  let dbUser = null;
+  try {
+    dbUser = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { name: true, email: true, image: true, role: true },
+    });
+  } catch {
+    // fallback
+  }
+
+  const userName = dbUser?.name ?? session.user?.name;
+  const userEmail = dbUser?.email ?? session.user?.email;
+  const userImage = dbUser?.image ?? session.user?.image ?? null;
+  const userRole = dbUser?.role ?? session.user?.role;
 
   const tAdmin = await getTranslations("admin");
 
@@ -69,10 +85,10 @@ export default async function AdminLayout({
           </SignOutButton>
           <UserSidebarBadge
             initialUser={{
-              name: session.user?.name,
-              email: session.user?.email,
-              image: session.user?.image,
-              role: session.user?.role,
+              name: userName,
+              email: userEmail,
+              image: userImage,
+              role: userRole,
             }}
             variant="mobile-admin"
           />
@@ -120,10 +136,10 @@ export default async function AdminLayout({
         <div className="p-4 border-b border-slate-100">
           <UserSidebarBadge
             initialUser={{
-              name: session.user?.name,
-              email: session.user?.email,
-              image: session.user?.image,
-              role: session.user?.role,
+              name: userName,
+              email: userEmail,
+              image: userImage,
+              role: userRole,
             }}
             variant="admin"
           />
