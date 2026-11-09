@@ -19,9 +19,12 @@ import {
   getDbPublications,
   getDbPublicationBySlug,
   getDbRelatedPublications,
+  checkUserPublicationAccess,
 } from "@/lib/publications";
+import { auth } from "@/lib/auth";
 import { MarkdownRenderer } from "@/components/ui/markdown-renderer";
 import { ArticleActions, CopyCitationButton } from "@/components/public/article-actions";
+import { PublicationResourceCard } from "@/components/public/publication-resource-card";
 
 interface PageProps {
   params: Promise<{
@@ -96,6 +99,14 @@ export default async function PublicationDetailPage({ params }: PageProps) {
   const authorBio = isEn ? post.authorBioEn : post.authorBioId;
 
   const related = await getDbRelatedPublications(post.slug, 3);
+
+  const session = await auth();
+  const isLoggedIn = !!session?.user?.id;
+  const initialHasAccess = await checkUserPublicationAccess(
+    session?.user?.id,
+    post.id || post.slug,
+    session?.user?.role
+  );
 
   // Suggested APA citation text
   const apaCitation = `${post.author} (${post.publishedAt.slice(0, 4)}). ${title}. PT. Matoh Technologies Indonesia Research & Engineering Publications. https://matoh.id/publikasi/${post.slug}`;
@@ -285,6 +296,25 @@ export default async function PublicationDetailPage({ params }: PageProps) {
         <article className="prose-container">
           <MarkdownRenderer content={content} />
         </article>
+
+        {/* Gated Resource / Paywall & Download Card */}
+        <PublicationResourceCard
+          publication={{
+            id: post.id,
+            slug: post.slug,
+            title,
+            type: post.type,
+            isPaid: post.isPaid,
+            price: post.price,
+            fileUrl: post.fileUrl,
+            fileName: post.fileName,
+            fileSize: post.fileSize,
+            externalUrl: post.externalUrl,
+          }}
+          initialHasAccess={initialHasAccess}
+          isLoggedIn={isLoggedIn}
+          isEn={isEn}
+        />
 
         {/* Tags */}
         <section aria-label="Topic Tags" className="pt-6 border-t border-slate-200">

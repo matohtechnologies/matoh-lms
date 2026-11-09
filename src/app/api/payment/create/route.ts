@@ -7,10 +7,15 @@ import { nanoid } from "nanoid";
 
 import { checkRateLimit } from "@/lib/rate-limit";
 
-const createPaymentSchema = z.object({
-  courseId: z.string(),
-  couponCode: z.string().optional().nullable(),
-});
+const createPaymentSchema = z
+  .object({
+    courseId: z.string().optional(),
+    publicationId: z.string().optional(),
+    couponCode: z.string().optional().nullable(),
+  })
+  .refine((data) => data.courseId || data.publicationId, {
+    message: "Harap pilih kelas atau publikasi yang ingin dibeli",
+  });
 
 export async function POST(req: NextRequest) {
   // Rate limit: 15 order creation attempts per minute
@@ -30,7 +35,153 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { courseId, couponCode } = createPaymentSchema.parse(body);
+    const { courseId, publicationId, couponCode } = createPaymentSchema.parse(body);
+
+    // ==========================================
+    // A. Handle Publication / Research Purchase
+    // ==========================================
+    if (publicationId) {
+      const pub = await prisma.publication.findFirst({
+        where: {
+          OR: [{ id: publicationId }, { slug: publicationId }],
+          published: true,
+        },
+      });
+
+      if (!pub) {
+        return NextResponse.json(
+          { error: "Konten riset/publikasi tidak ditemukan" },
+          { status: 404 }
+        );
+      }
+
+      // Check if already has access
+      const existingAccess = await prisma.publicationAccess.findUnique({
+        where: {
+          userId_publicationId: {
+            userId: session.user.id,
+            publicationId: pub.id,
+          },
+        },
+      });
+
+      if (existingAccess || session.user.role === "ADMIN") {
+        return NextResponse.json(
+          { error: "Anda sudah memiliki akses penuh ke berkas ini" },
+          { status: 409 }
+        );
+      }
+
+      const finalAmount = pub.isPaid ? pub.price : 0;
+
+      // If free publication or 0 price, grant access immediately
+      if (finalAmount === 0 || !pub.isPaid) {
+        await prisma.publicationAccess.create({
+          data: {
+            userId: session.user.id,
+            publicationId: pub.id,
+          },
+        });
+
+        const orderId = `PUB-FREE-${Date.now()}-${nanoid(6).toUpperCase()}`;
+        await prisma.order.create({
+          data: {
+            userId: session.user.id,
+            publicationId: pub.id,
+            amount: 0,
+            midtransOrderId: orderId,
+            status: "PAID",
+            paidAt: new Date(),
+          },
+        });
+
+        return NextResponse.json({
+          success: true,
+          type: "free",
+          publicationId: pub.id,
+        });
+      }
+
+      // Idempotency: reuse active pending order created within last 15 minutes
+      const activePendingOrder = await prisma.order.findFirst({
+        where: {
+          userId: session.user.id,
+          publicationId: pub.id,
+          status: "PENDING",
+          amount: finalAmount,
+          paymentToken: { not: null },
+          createdAt: { gte: new Date(Date.now() - 15 * 60 * 1000) },
+        },
+        select: {
+          id: true,
+          midtransOrderId: true,
+          paymentToken: true,
+        },
+      });
+
+      if (activePendingOrder?.paymentToken && activePendingOrder?.midtransOrderId) {
+        return NextResponse.json({
+          success: true,
+          type: "paid",
+          token: activePendingOrder.paymentToken,
+          orderId: activePendingOrder.midtransOrderId,
+          reused: true,
+        });
+      }
+
+      const orderId = `PUB-${Date.now()}-${nanoid(6).toUpperCase()}`;
+
+      const user = await prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { name: true, email: true },
+      }).catch(() => ({ name: session.user?.name, email: session.user?.email }));
+
+      const transaction = await createMidtransTransaction({
+        orderId,
+        grossAmount: Math.round(finalAmount),
+        items: [
+          {
+            id: pub.id,
+            price: Math.round(finalAmount),
+            quantity: 1,
+            name: (pub.titleId || "Akses Berkas Riset").slice(0, 50),
+          },
+        ],
+        customer: {
+          first_name: user?.name?.split(" ")[0] ?? "User",
+          last_name: user?.name?.split(" ").slice(1).join(" "),
+          email: user?.email ?? "",
+        },
+      });
+
+      await prisma.order.create({
+        data: {
+          userId: session.user.id,
+          publicationId: pub.id,
+          amount: finalAmount,
+          midtransOrderId: orderId,
+          paymentToken: transaction.token,
+          status: "PENDING",
+        },
+      });
+
+      return NextResponse.json({
+        success: true,
+        type: "paid",
+        token: transaction.token,
+        orderId,
+      });
+    }
+
+    // ==========================================
+    // B. Handle Course Purchase (Default)
+    // ==========================================
+    if (!courseId) {
+      return NextResponse.json(
+        { error: "Kelas tidak ditentukan" },
+        { status: 400 }
+      );
+    }
 
     // Get course from DB
     const course = await prisma.course.findFirst({

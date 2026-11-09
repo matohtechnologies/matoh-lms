@@ -56,6 +56,7 @@ model User {
   quizAttempts      QuizAttempt[]
   notes             StudyNote[]
   couponUsages      CouponUsage[]
+  publicationAccess PublicationAccess[]
 
   @@map("users")
 }
@@ -233,7 +234,8 @@ model Progress {
 model Order {
   id               String      @id @default(cuid())
   userId           String
-  courseId         String
+  courseId         String?
+  publicationId    String?
   amount           Float
   status           OrderStatus @default(PENDING)
   midtransOrderId  String?     @unique
@@ -243,14 +245,16 @@ model Order {
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user             User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course           Course?      @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  publication      Publication? @relation(fields: [publicationId], references: [id], onDelete: Cascade)
   couponId        String?
   discountAmount  Float?      @default(0)
   coupon          Coupon?     @relation(fields: [couponId], references: [id], onDelete: SetNull)
 
   @@index([userId])
   @@index([courseId])
+  @@index([publicationId])
   @@index([status])
   @@index([createdAt])
   @@map("orders")
@@ -586,12 +590,41 @@ model Publication {
   published   Boolean         @default(true)
   featured    Boolean         @default(false)
   views       Int             @default(0)
+
+  // Gated Resource / Paywall fields
+  isPaid      Boolean         @default(false)
+  price       Float           @default(0)
+  fileUrl     String?
+  fileName    String?
+  fileSize    String?
+  externalUrl String?
+
+  orders      Order[]
+  accessList  PublicationAccess[]
+
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
 
   @@index([type])
   @@index([published, featured])
   @@index([categoryId])
+  @@index([isPaid])
   @@index([createdAt])
   @@map("publications")
+}
+
+model PublicationAccess {
+  id            String      @id @default(cuid())
+  userId        String
+  publicationId String
+  orderId       String?
+  createdAt     DateTime    @default(now())
+
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  publication   Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, publicationId])
+  @@index([userId])
+  @@index([publicationId])
+  @@map("publication_access")
 }

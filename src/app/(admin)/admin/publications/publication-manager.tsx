@@ -55,6 +55,12 @@ export interface PublicationItemAdmin {
   published: boolean;
   featured: boolean;
   views: number;
+  isPaid?: boolean;
+  price?: number;
+  fileUrl?: string | null;
+  fileName?: string | null;
+  fileSize?: string | null;
+  externalUrl?: string | null;
   createdAt: string | Date;
   updatedAt: string | Date;
 }
@@ -590,10 +596,27 @@ export function PublicationManager({
                               </span>
                             )}
                           </div>
-                          <div>
+                          <div className="flex flex-wrap items-center gap-1">
                             <span className="text-[11px] font-semibold text-slate-600 bg-slate-50 px-2 py-0.5 rounded border border-slate-200/60">
                               {item.categoryId}
                             </span>
+                            {item.isPaid ? (
+                              <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
+                                🔒 Rp {Number(item.price || 0).toLocaleString("id-ID")}
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
+                                🔓 Gratis
+                              </span>
+                            )}
+                            {(item.fileUrl || item.externalUrl) && (
+                              <span
+                                className="inline-flex items-center gap-0.5 text-[10px] font-medium text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded"
+                                title={item.fileName || "Terdapat berkas lampiran"}
+                              >
+                                📎 Lampiran
+                              </span>
+                            )}
                           </div>
                         </div>
                       </td>

@@ -109,6 +109,12 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
       references,
       published,
       featured,
+      isPaid,
+      price,
+      fileUrl,
+      fileName,
+      fileSize,
+      externalUrl,
     } = body;
 
     const dataToUpdate: any = {};
@@ -210,6 +216,12 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
 
     if (published !== undefined) dataToUpdate.published = Boolean(published);
     if (featured !== undefined) dataToUpdate.featured = Boolean(featured);
+    if (isPaid !== undefined) dataToUpdate.isPaid = Boolean(isPaid);
+    if (price !== undefined) dataToUpdate.price = Math.max(0, Number(price) || 0);
+    if (fileUrl !== undefined) dataToUpdate.fileUrl = fileUrl?.trim() || null;
+    if (fileName !== undefined) dataToUpdate.fileName = fileName?.trim() || null;
+    if (fileSize !== undefined) dataToUpdate.fileSize = fileSize?.trim() || null;
+    if (externalUrl !== undefined) dataToUpdate.externalUrl = externalUrl?.trim() || null;
 
     const updated = await prisma.publication.update({
       where: { id },

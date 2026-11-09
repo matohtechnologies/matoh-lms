@@ -49,6 +49,12 @@ export interface PublicationFormData {
   references: Array<{ id: string; citation: string; link?: string }>;
   published: boolean;
   featured: boolean;
+  isPaid?: boolean;
+  price?: number;
+  fileUrl?: string | null;
+  fileName?: string | null;
+  fileSize?: string | null;
+  externalUrl?: string | null;
 }
 
 interface PublicationFormModalProps {
@@ -141,6 +147,16 @@ export function PublicationFormModal({
   const [published, setPublished] = useState(true);
   const [featured, setFeatured] = useState(false);
 
+  // Gated Resource / Paywall & Attachment state
+  const [isPaid, setIsPaid] = useState(false);
+  const [price, setPrice] = useState<number>(0);
+  const [fileUrl, setFileUrl] = useState<string | null>(null);
+  const [fileName, setFileName] = useState<string | null>(null);
+  const [fileSize, setFileSize] = useState<string | null>(null);
+  const [externalUrl, setExternalUrl] = useState<string | null>(null);
+  const [uploadingAttachment, setUploadingAttachment] = useState(false);
+  const attachmentInputRef = useRef<HTMLInputElement>(null);
+
   // Dynamic tags
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
@@ -206,6 +222,12 @@ export function PublicationFormModal({
         );
         setPublished(initialData.published ?? true);
         setFeatured(initialData.featured ?? false);
+        setIsPaid(Boolean(initialData.isPaid));
+        setPrice(initialData.price ?? 0);
+        setFileUrl(initialData.fileUrl || null);
+        setFileName(initialData.fileName || null);
+        setFileSize(initialData.fileSize || null);
+        setExternalUrl(initialData.externalUrl || null);
         setTags(Array.isArray(initialData.tags) ? initialData.tags : []);
         setReferences(Array.isArray(initialData.references) ? initialData.references : []);
       } else {
@@ -232,6 +254,12 @@ export function PublicationFormModal({
         setPublishedAt(new Date().toISOString().split("T")[0]);
         setPublished(true);
         setFeatured(false);
+        setIsPaid(false);
+        setPrice(0);
+        setFileUrl(null);
+        setFileName(null);
+        setFileSize(null);
+        setExternalUrl(null);
         setTags(["AHP", "ISM", "Decision Science"]);
         setReferences([]);
       }
@@ -337,6 +365,60 @@ export function PublicationFormModal({
     }
   };
 
+  // Upload attachment file (PDF, ZIP, Dataset, etc.)
+  const handleAttachmentUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 60 * 1024 * 1024) {
+      dynamicAlert({
+        title: "File Terlalu Besar",
+        message: "Ukuran berkas lampiran maksimal 60MB.",
+        variant: "danger",
+      });
+      return;
+    }
+
+    try {
+      setUploadingAttachment(true);
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folder", "publications");
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Gagal mengunggah berkas");
+      }
+
+      setFileUrl(data.url);
+      setFileName(data.fileName || file.name);
+
+      const sizeMb = (file.size / (1024 * 1024)).toFixed(1);
+      const sizeKb = (file.size / 1024).toFixed(0);
+      setFileSize(file.size > 1024 * 1024 ? `${sizeMb} MB` : `${sizeKb} KB`);
+
+      dynamicAlert({
+        title: "Berkas Dilampirkan",
+        message: `Berkas "${file.name}" berhasil diunggah.`,
+        variant: "success",
+      });
+    } catch (err: any) {
+      dynamicAlert({
+        title: "Unggah Gagal",
+        message: err.message || "Terjadi kesalahan saat mengunggah berkas.",
+        variant: "danger",
+      });
+    } finally {
+      setUploadingAttachment(false);
+      if (attachmentInputRef.current) attachmentInputRef.current.value = "";
+    }
+  };
+
   // Form submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -418,6 +500,12 @@ export function PublicationFormModal({
         references,
         published,
         featured,
+        isPaid,
+        price: isPaid ? Math.max(0, Number(price) || 0) : 0,
+        fileUrl: fileUrl || null,
+        fileName: fileName || null,
+        fileSize: fileSize || null,
+        externalUrl: externalUrl?.trim() || null,
       };
 
       const url = isEditing
@@ -1011,6 +1099,177 @@ export function PublicationFormModal({
                     className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-200 text-slate-800 outline-hidden"
                   />
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Berkas Lampiran & Monetisasi (Paywall) */}
+          <div className="border border-slate-200 rounded-xl p-4 sm:p-5 bg-gradient-to-br from-slate-50/80 to-blue-50/20 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200/80">
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-md bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs">
+                    <FileText size={14} />
+                  </span>
+                  <label className="text-xs sm:text-sm font-bold text-slate-900">
+                    Berkas Lampiran &amp; Monetisasi Akses
+                  </label>
+                </div>
+                <p className="text-[11px] text-slate-500">
+                  Tautkan file naskah (PDF), dataset (Excel/CSV/ZIP), atau URL eksternal, dan atur apakah user harus membayar terlebih dahulu.
+                </p>
+              </div>
+
+              {/* Toggle Akses Gratis vs Berbayar */}
+              <div className="inline-flex items-center p-1 bg-slate-200/70 rounded-xl text-xs font-semibold shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setIsPaid(false)}
+                  className={`px-3 py-1.5 rounded-lg text-xs transition-all cursor-pointer ${
+                    !isPaid
+                      ? "bg-white text-emerald-700 shadow-2xs font-bold"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  🔓 Gratis (Terbuka)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsPaid(true)}
+                  className={`px-3 py-1.5 rounded-lg text-xs transition-all cursor-pointer ${
+                    isPaid
+                      ? "bg-blue-600 text-white shadow-2xs font-bold"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  🔒 Berbayar (Paywall)
+                </button>
+              </div>
+            </div>
+
+            {/* If Berbayar, show Price Input */}
+            {isPaid && (
+              <div className="p-3.5 rounded-xl bg-blue-50/60 border border-blue-200/80 space-y-2 animate-in fade-in duration-150">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div>
+                    <label className="block text-xs font-bold text-blue-950">
+                      Harga Akses Dokumen (IDR) <span className="text-red-500">*</span>
+                    </label>
+                    <p className="text-[11px] text-blue-700">
+                      Pengguna harus membayar nominal ini via Midtrans (QRIS, VA Bank, GoPay) untuk membuka tautan dan unduh berkas.
+                    </p>
+                  </div>
+                  <div className="relative w-full sm:w-48">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">
+                      Rp
+                    </span>
+                    <input
+                      type="number"
+                      min={1000}
+                      step={1000}
+                      value={price || ""}
+                      onChange={(e) => setPrice(Math.max(0, parseInt(e.target.value) || 0))}
+                      placeholder="50000"
+                      required={isPaid}
+                      className="w-full pl-9 pr-3 py-2 rounded-lg border border-blue-300 bg-white text-xs sm:text-sm font-bold text-slate-900 focus:border-blue-600 outline-hidden"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* File Upload & External URL */}
+            <div className="grid grid-cols-1 gap-4 pt-1">
+              {/* Option A: Upload Physical File */}
+              <div className="space-y-2">
+                <label className="block text-xs font-bold text-slate-700">
+                  1. Unggah Berkas Dokumen / Dataset (PDF, ZIP, Excel, Word - Maks 60MB)
+                </label>
+
+                <input
+                  type="file"
+                  ref={attachmentInputRef}
+                  onChange={handleAttachmentUpload}
+                  accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.zip,.rar,.ppt,.pptx"
+                  className="hidden"
+                />
+
+                {fileUrl ? (
+                  <div className="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between gap-3 shadow-2xs">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                        <FileText size={16} />
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-slate-800 truncate">
+                          {fileName || fileUrl.split("/").pop()}
+                        </p>
+                        <p className="text-[10px] text-slate-400">
+                          {fileSize ? `${fileSize} • ` : ""}Tersimpan aman di server
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 shrink-0">
+                      <a
+                        href={fileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-2.5 py-1 text-[11px] font-semibold text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      >
+                        Pratinjau
+                      </a>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFileUrl(null);
+                          setFileName(null);
+                          setFileSize(null);
+                        }}
+                        className="p-1.5 text-slate-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors cursor-pointer"
+                        title="Hapus berkas ini"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => attachmentInputRef.current?.click()}
+                    disabled={uploadingAttachment}
+                    className="w-full py-3 px-4 rounded-xl border border-dashed border-slate-300 hover:border-blue-500 bg-white hover:bg-blue-50/40 text-slate-700 text-xs font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-2xs"
+                  >
+                    {uploadingAttachment ? (
+                      <>
+                        <Loader2 size={15} className="animate-spin text-blue-600" />
+                        <span>Mengunggah berkas lampiran...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload size={15} className="text-blue-600" />
+                        <span>Klik untuk Unggah Berkas PDF / Dataset</span>
+                      </>
+                    )}
+                  </button>
+                )}
+              </div>
+
+              {/* Option B: External URL */}
+              <div className="space-y-1">
+                <label className="block text-xs font-bold text-slate-700">
+                  2. Tautan URL Eksternal Khusus (Opsional)
+                </label>
+                <input
+                  type="url"
+                  value={externalUrl || ""}
+                  onChange={(e) => setExternalUrl(e.target.value)}
+                  placeholder="Contoh: https://drive.google.com/... atau https://github.com/..."
+                  className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs sm:text-sm bg-white text-slate-800 focus:border-blue-600 outline-hidden"
+                />
+                <p className="text-[11px] text-slate-400">
+                  Jika diisi dan status Berbayar, tautan ini hanya akan dibuka untuk pembeli yang sah.
+                </p>
               </div>
             </div>
           </div>

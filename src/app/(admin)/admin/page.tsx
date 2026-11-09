@@ -40,6 +40,7 @@ export default async function AdminOverviewPage() {
         include: {
           user: { select: { name: true, email: true } },
           course: { select: { title: true } },
+          publication: { select: { titleId: true } },
         },
         orderBy: { createdAt: "desc" },
         take: 5,
@@ -56,7 +57,13 @@ export default async function AdminOverviewPage() {
       totalCourses: courseCount,
       totalOrders: paidOrders.length,
       revenue: totalRevenue._sum.amount ?? 0,
-      recentOrders: paidOrders,
+      recentOrders: paidOrders.map((o) => ({
+        id: o.id,
+        amount: o.amount,
+        createdAt: o.createdAt,
+        user: o.user,
+        course: { title: o.course?.title || o.publication?.titleId || "Item Pembelian" },
+      })),
     };
   } catch (err) {
     console.error("Failed to load admin overview stats:", err);

@@ -30,6 +30,7 @@ export default async function AdminOrdersPage() {
       include: {
         user: { select: { name: true, email: true } },
         course: { select: { title: true, slug: true } },
+        publication: { select: { titleId: true, slug: true } },
       },
       orderBy: { createdAt: "desc" },
     });
@@ -40,7 +41,10 @@ export default async function AdminOrdersPage() {
       paymentType: o.paymentMethod ?? "midtrans",
       createdAt: o.createdAt,
       user: { name: o.user.name ?? "Pengguna", email: o.user.email ?? "-" },
-      course: { title: o.course.title, slug: o.course.slug },
+      course: {
+        title: o.course?.title || o.publication?.titleId || "Item Pembelian",
+        slug: o.course?.slug ? `/courses/${o.course.slug}` : `/publikasi/${o.publication?.slug || ""}`,
+      },
     }));
   } catch {
     orders = [];

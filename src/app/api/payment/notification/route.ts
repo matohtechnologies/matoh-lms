@@ -36,6 +36,7 @@ export async function POST(req: NextRequest) {
       include: {
         user: { select: { email: true, name: true } },
         course: { select: { title: true } },
+        publication: { select: { titleId: true } },
       },
     });
 
@@ -62,21 +63,47 @@ export async function POST(req: NextRequest) {
             paidAt: new Date(),
           },
         }),
-        prisma.enrollment.upsert({
-          where: {
-            userId_courseId: {
-              userId: order.userId,
-              courseId: order.courseId,
-            },
-          },
-          create: { userId: order.userId, courseId: order.courseId },
-          update: {},
-        }),
-        prisma.course.update({
-          where: { id: order.courseId },
-          data: { enrollCount: { increment: 1 } },
-        }),
       ];
+
+      // A. Course purchase fulfillment
+      if (order.courseId) {
+        txOperations.push(
+          prisma.enrollment.upsert({
+            where: {
+              userId_courseId: {
+                userId: order.userId,
+                courseId: order.courseId,
+              },
+            },
+            create: { userId: order.userId, courseId: order.courseId },
+            update: {},
+          }),
+          prisma.course.update({
+            where: { id: order.courseId },
+            data: { enrollCount: { increment: 1 } },
+          })
+        );
+      }
+
+      // B. Publication purchase fulfillment
+      if (order.publicationId) {
+        txOperations.push(
+          prisma.publicationAccess.upsert({
+            where: {
+              userId_publicationId: {
+                userId: order.userId,
+                publicationId: order.publicationId,
+              },
+            },
+            create: {
+              userId: order.userId,
+              publicationId: order.publicationId,
+              orderId: order.id,
+            },
+            update: {},
+          })
+        );
+      }
 
       // If coupon was applied, record coupon usage exactly once upon settlement
       if (order.couponId) {
@@ -98,12 +125,13 @@ export async function POST(req: NextRequest) {
       await prisma.$transaction(txOperations.filter(Boolean));
 
       // Send transactional receipt email asynchronously exactly once
-      if (order.user?.email && order.course?.title) {
+      const itemTitle = order.course?.title || order.publication?.titleId;
+      if (order.user?.email && itemTitle) {
         sendOrderReceiptEmail({
           to: order.user.email,
           name: order.user.name,
           orderId: order.midtransOrderId || order.id,
-          courseTitle: order.course.title,
+          courseTitle: itemTitle,
           amount: order.amount,
         }).catch((err) => console.error("[Receipt Email Error]:", err));
       }

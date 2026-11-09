@@ -14,19 +14,21 @@ async function getMyCoursesData(userId: string) {
   try {
     // Self-healing: auto-enroll any course with PAID order status
     const paidOrders = await prisma.order.findMany({
-      where: { userId, status: "PAID" },
+      where: { userId, status: "PAID", courseId: { not: null } },
       select: { courseId: true },
     }).catch(() => []);
 
     if (paidOrders.length > 0) {
       await Promise.all(
-        paidOrders.map((o) =>
-          prisma.enrollment.upsert({
-            where: { userId_courseId: { userId, courseId: o.courseId } },
-            create: { userId, courseId: o.courseId },
-            update: {},
-          }).catch(() => null)
-        )
+        paidOrders
+          .filter((o) => Boolean(o.courseId))
+          .map((o) =>
+            prisma.enrollment.upsert({
+              where: { userId_courseId: { userId, courseId: o.courseId! } },
+              create: { userId, courseId: o.courseId! },
+              update: {},
+            }).catch(() => null)
+          )
       );
     }
 

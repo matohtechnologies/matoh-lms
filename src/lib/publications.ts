@@ -42,6 +42,12 @@ export interface PublicationItem {
   published?: boolean;
   featured?: boolean;
   views?: number;
+  isPaid?: boolean;
+  price?: number;
+  fileUrl?: string | null;
+  fileName?: string | null;
+  fileSize?: string | null;
+  externalUrl?: string | null;
   createdAt?: string | Date;
   updatedAt?: string | Date;
 }
@@ -1054,6 +1060,12 @@ function mapDbToItem(row: any): PublicationItem {
     published: row.published ?? true,
     featured: row.featured ?? false,
     views: row.views ?? 0,
+    isPaid: row.isPaid ?? false,
+    price: row.price ?? 0,
+    fileUrl: row.fileUrl || null,
+    fileName: row.fileName || null,
+    fileSize: row.fileSize || null,
+    externalUrl: row.externalUrl || null,
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
   };
@@ -1150,5 +1162,31 @@ export async function getDbRelatedPublications(currentSlug: string, limit = 3): 
     })
     .slice(0, limit);
 }
+
+export async function checkUserPublicationAccess(
+  userId: string | undefined | null,
+  publicationId: string,
+  userRole?: string
+): Promise<boolean> {
+  if (!userId) return false;
+  if (userRole === "ADMIN") return true;
+
+  try {
+    const prisma = (await import("@/lib/prisma")).default;
+    const access = await prisma.publicationAccess.findUnique({
+      where: {
+        userId_publicationId: {
+          userId,
+          publicationId,
+        },
+      },
+    });
+    return !!access;
+  } catch (err) {
+    console.warn("Error checking publication access:", err);
+    return false;
+  }
+}
+
 
 

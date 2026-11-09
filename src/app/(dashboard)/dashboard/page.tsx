@@ -17,19 +17,23 @@ async function getDashboardData(userId: string) {
   try {
     // Self-healing: ensure any paid order has an enrollment
     const paidOrderList = await prisma.order.findMany({
-      where: { userId, status: "PAID" },
+      where: { userId, status: "PAID", courseId: { not: null } },
       select: { courseId: true },
     }).catch(() => []);
 
     if (paidOrderList.length > 0) {
       await Promise.all(
-        paidOrderList.map((o) =>
-          prisma.enrollment.upsert({
-            where: { userId_courseId: { userId, courseId: o.courseId } },
-            create: { userId, courseId: o.courseId },
-            update: {},
-          }).catch(() => null)
-        )
+        paidOrderList
+          .filter((o) => Boolean(o.courseId))
+          .map((o) =>
+            prisma.enrollment
+              .upsert({
+                where: { userId_courseId: { userId, courseId: o.courseId! } },
+                create: { userId, courseId: o.courseId! },
+                update: {},
+              })
+              .catch(() => null)
+          )
       );
     }
 

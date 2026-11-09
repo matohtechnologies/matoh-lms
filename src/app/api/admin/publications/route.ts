@@ -138,6 +138,12 @@ export async function POST(req: NextRequest) {
       references = [],
       published = true,
       featured = false,
+      isPaid = false,
+      price = 0,
+      fileUrl,
+      fileName,
+      fileSize,
+      externalUrl,
     } = body;
 
     // Resolve composite author string
@@ -216,6 +222,12 @@ export async function POST(req: NextRequest) {
         references: Array.isArray(references) ? references : [],
         published: Boolean(published),
         featured: Boolean(featured),
+        isPaid: Boolean(isPaid),
+        price: typeof price === "number" ? Math.max(0, price) : Number(price) || 0,
+        fileUrl: fileUrl?.trim() || null,
+        fileName: fileName?.trim() || null,
+        fileSize: fileSize?.trim() || null,
+        externalUrl: externalUrl?.trim() || null,
       },
     });
 

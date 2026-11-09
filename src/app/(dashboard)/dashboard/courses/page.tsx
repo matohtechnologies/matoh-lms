@@ -29,26 +29,28 @@ export default async function DashboardCoursesPage() {
   // Self-healing: auto-enroll any course with PAID order status
   try {
     const paidOrders = await prisma.order.findMany({
-      where: { userId: session.user.id, status: "PAID" },
+      where: { userId: session.user.id, status: "PAID", courseId: { not: null } },
       select: { courseId: true },
     });
 
     if (paidOrders.length > 0) {
       await Promise.all(
-        paidOrders.map((o) =>
-          prisma.enrollment
-            .upsert({
-              where: {
-                userId_courseId: {
-                  userId: session.user!.id!,
-                  courseId: o.courseId,
+        paidOrders
+          .filter((o): o is { courseId: string } => typeof o.courseId === "string")
+          .map((o) =>
+            prisma.enrollment
+              .upsert({
+                where: {
+                  userId_courseId: {
+                    userId: session.user!.id!,
+                    courseId: o.courseId,
+                  },
                 },
-              },
-              create: { userId: session.user!.id!, courseId: o.courseId },
-              update: {},
-            })
-            .catch(() => null)
-        )
+                create: { userId: session.user!.id!, courseId: o.courseId },
+                update: {},
+              })
+              .catch(() => null)
+          )
       );
     }
   } catch (err) {
@@ -84,7 +86,7 @@ export default async function DashboardCoursesPage() {
         select: { courseId: true },
       }),
       prisma.order.findMany({
-        where: { userId: session.user.id, status: "PENDING" },
+        where: { userId: session.user.id, status: "PENDING", courseId: { not: null } },
         select: { courseId: true },
       }),
       prisma.category.findMany({
@@ -94,7 +96,9 @@ export default async function DashboardCoursesPage() {
     ]);
 
   const enrolledCourseIds = userEnrollments.map((e) => e.courseId);
-  const pendingOrderCourseIds = userPendingOrders.map((o) => o.courseId);
+  const pendingOrderCourseIds = userPendingOrders
+    .map((o) => o.courseId)
+    .filter((id): id is string => typeof id === "string");
 
   // Cast courses to match DashboardCourseItem interface
   const courses: DashboardCourseItem[] = coursesRaw.map((c) => ({

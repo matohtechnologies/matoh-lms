@@ -17,10 +17,15 @@ interface OrderItem {
   amount: number;
   status: "PAID" | "PENDING" | "FAILED" | "REFUNDED";
   createdAt: Date;
-  course: {
+  course?: {
     title: string;
     category: { name: string };
-  };
+  } | null;
+  publication?: {
+    titleId: string;
+    type: string;
+    categoryId: string;
+  } | null;
 }
 
 export default async function OrdersPage() {
@@ -62,6 +67,9 @@ export default async function OrdersPage() {
       include: {
         course: {
           select: { title: true, category: { select: { name: true } } },
+        },
+        publication: {
+          select: { titleId: true, type: true, categoryId: true },
         },
       },
       orderBy: { createdAt: "desc" },
@@ -169,15 +177,18 @@ export default async function OrdersPage() {
             {orders.map((order) => {
               const status = statusConfig[order.status];
               const StatusIcon = status.icon;
+              const itemTitle = order.course?.title || order.publication?.titleId || "Item Pembelian";
+              const itemCategory = order.course?.category.name || (order.publication?.type === "RESEARCH" ? "Riset Ilmiah" : "Publikasi");
+
               return (
                 <div key={order.id} className="p-4 space-y-2.5">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <p className="text-sm font-bold text-stone-900 truncate">
-                        {order.course.title}
+                        {itemTitle}
                       </p>
                       <p className="text-[11px] text-stone-400 mt-0.5">
-                        {order.course.category.name}
+                        {itemCategory}
                       </p>
                     </div>
                     <span
@@ -223,6 +234,9 @@ export default async function OrdersPage() {
                 {orders.map((order) => {
                   const status = statusConfig[order.status];
                   const StatusIcon = status.icon;
+                  const itemTitle = order.course?.title || order.publication?.titleId || "Item Pembelian";
+                  const itemCategory = order.course?.category.name || (order.publication?.type === "RESEARCH" ? "Riset Ilmiah" : "Publikasi");
+
                   return (
                     <tr
                       key={order.id}
@@ -235,10 +249,10 @@ export default async function OrdersPage() {
                       </td>
                       <td className="px-5 py-4">
                         <p className="font-bold text-stone-900 truncate max-w-[220px]">
-                          {order.course.title}
+                          {itemTitle}
                         </p>
                         <p className="text-[11px] text-stone-400 mt-0.5">
-                          {order.course.category.name}
+                          {itemCategory}
                         </p>
                       </td>
                       <td className="px-5 py-4 text-stone-500 font-medium">

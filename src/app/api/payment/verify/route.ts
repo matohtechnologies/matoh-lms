@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
           OR: [{ midtransOrderId: orderId }, { id: orderId }],
           userId,
         },
-        include: { course: true },
+        include: { course: true, publication: true },
       });
     }
 
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
       order = await prisma.order.findFirst({
         where: { userId },
         orderBy: { createdAt: "desc" },
-        include: { course: true },
+        include: { course: true, publication: true },
       });
     }
 
@@ -42,31 +42,54 @@ export async function POST(req: NextRequest) {
 
     // 1. If order is already finalized as PAID, return immediately (Idempotent)
     if (order.status === "PAID") {
-      const enrollment = await prisma.enrollment.findUnique({
-        where: {
-          userId_courseId: {
-            userId: order.userId,
-            courseId: order.courseId,
+      let isGranted = false;
+      if (order.courseId) {
+        const enrollment = await prisma.enrollment.findUnique({
+          where: {
+            userId_courseId: {
+              userId: order.userId,
+              courseId: order.courseId,
+            },
           },
-        },
-      });
+        });
+        isGranted = !!enrollment;
+      } else if (order.publicationId) {
+        const access = await prisma.publicationAccess.findUnique({
+          where: {
+            userId_publicationId: {
+              userId: order.userId,
+              publicationId: order.publicationId,
+            },
+          },
+        });
+        isGranted = !!access;
+      }
 
       return NextResponse.json({
         success: true,
-        enrolled: !!enrollment,
-        enrollmentId: enrollment?.id,
+        enrolled: isGranted,
+        accessGranted: isGranted,
         order: {
           id: order.id,
           orderId: order.midtransOrderId,
           amount: order.amount,
           status: "PAID",
         },
-        course: {
-          id: order.course.id,
-          title: order.course.title,
-          slug: order.course.slug,
-          thumbnail: order.course.thumbnail,
-        },
+        course: order.course
+          ? {
+              id: order.course.id,
+              title: order.course.title,
+              slug: order.course.slug,
+              thumbnail: order.course.thumbnail,
+            }
+          : null,
+        publication: order.publication
+          ? {
+              id: order.publication.id,
+              title: order.publication.titleId,
+              slug: order.publication.slug,
+            }
+          : null,
       });
     }
 
@@ -100,16 +123,25 @@ export async function POST(req: NextRequest) {
           orderId: order.midtransOrderId,
           status: order.status,
         },
-        course: {
-          id: order.course.id,
-          title: order.course.title,
-          slug: order.course.slug,
-        },
+        course: order.course
+          ? {
+              id: order.course.id,
+              title: order.course.title,
+              slug: order.course.slug,
+            }
+          : null,
+        publication: order.publication
+          ? {
+              id: order.publication.id,
+              title: order.publication.titleId,
+              slug: order.publication.slug,
+            }
+          : null,
       });
     }
 
     // 3. Mark as PAID idempotently in database
-    const [updatedOrder, enrollment] = await prisma.$transaction([
+    const txOps: any[] = [
       prisma.order.update({
         where: { id: order.id },
         data: {
@@ -118,32 +150,57 @@ export async function POST(req: NextRequest) {
           paymentMethod,
         },
       }),
-      prisma.enrollment.upsert({
-        where: {
-          userId_courseId: {
+    ];
+
+    if (order.courseId) {
+      txOps.push(
+        prisma.enrollment.upsert({
+          where: {
+            userId_courseId: {
+              userId: order.userId,
+              courseId: order.courseId,
+            },
+          },
+          create: {
             userId: order.userId,
             courseId: order.courseId,
           },
-        },
-        create: {
-          userId: order.userId,
-          courseId: order.courseId,
-        },
-        update: {},
-      }),
-      prisma.course.update({
-        where: { id: order.courseId },
-        data: { enrollCount: { increment: 1 } },
-      }),
-    ]);
+          update: {},
+        }),
+        prisma.course.update({
+          where: { id: order.courseId },
+          data: { enrollCount: { increment: 1 } },
+        })
+      );
+    } else if (order.publicationId) {
+      txOps.push(
+        prisma.publicationAccess.upsert({
+          where: {
+            userId_publicationId: {
+              userId: order.userId,
+              publicationId: order.publicationId,
+            },
+          },
+          create: {
+            userId: order.userId,
+            publicationId: order.publicationId,
+            orderId: order.id,
+          },
+          update: {},
+        })
+      );
+    }
+
+    const [updatedOrder] = await prisma.$transaction(txOps);
 
     // Send receipt email asynchronously
-    if (session.user.email && order.course.title) {
+    const itemTitle = order.course?.title || order.publication?.titleId;
+    if (session.user.email && itemTitle) {
       sendOrderReceiptEmail({
         to: session.user.email,
         name: session.user.name,
         orderId: order.midtransOrderId || order.id,
-        courseTitle: order.course.title,
+        courseTitle: itemTitle,
         amount: order.amount,
       }).catch((err) => console.error("[Receipt Email Error]:", err));
     }
@@ -151,19 +208,28 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       success: true,
       enrolled: true,
-      enrollmentId: enrollment.id,
+      accessGranted: true,
       order: {
         id: updatedOrder.id,
         orderId: updatedOrder.midtransOrderId,
         amount: updatedOrder.amount,
         status: "PAID",
       },
-      course: {
-        id: order.course.id,
-        title: order.course.title,
-        slug: order.course.slug,
-        thumbnail: order.course.thumbnail,
-      },
+      course: order.course
+        ? {
+            id: order.course.id,
+            title: order.course.title,
+            slug: order.course.slug,
+            thumbnail: order.course.thumbnail,
+          }
+        : null,
+      publication: order.publication
+        ? {
+            id: order.publication.id,
+            title: order.publication.titleId,
+            slug: order.publication.slug,
+          }
+        : null,
     });
   } catch (error) {
     console.error("Payment verify error:", error);
