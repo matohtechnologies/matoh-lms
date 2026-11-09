@@ -60,14 +60,6 @@ export default async function RisetPage() {
                 <MessageSquare size={16} />
                 <span>{isEn ? "Research Consultation" : "Konsultasi Bimbingan Riset"}</span>
               </a>
-
-              <Link
-                href="/publikasi"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-slate-300 hover:border-slate-400 bg-white text-slate-700 font-semibold text-sm transition-colors"
-              >
-                <span>{isEn ? "View Publications" : "Lihat Karya Publikasi"}</span>
-                <ArrowRight size={14} />
-              </Link>
             </div>
           </div>
         </div>
