@@ -280,7 +280,7 @@ export default async function HomePage() {
                 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-slate-900 leading-[1.08] tracking-tight text-balance"
                 style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
               >
-                Make Home <br />
+                Make You <br />
                 <span className="text-gradient">Ready on Digital</span>
               </h1>
 
