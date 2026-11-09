@@ -155,7 +155,7 @@ export default async function KonsultanPage() {
             {/* Pillar 2 */}
             <div className="border border-slate-200 rounded-xl p-6 bg-white hover:border-slate-400 transition-colors flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
+                <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
                   <Network size={20} />
                 </div>
                 <h3 className="font-bold text-slate-900 text-base">
@@ -167,7 +167,7 @@ export default async function KonsultanPage() {
                     : "Bimbingan metodologi AHP dan ISM untuk penulisan tesis, disertasi, serta perumusan kebijakan publik yang kredibel dan objektif."}
                 </p>
               </div>
-              <p className="pt-4 mt-5 border-t border-slate-100 text-xs font-semibold text-indigo-600">
+              <p className="pt-4 mt-5 border-t border-slate-100 text-xs font-semibold text-blue-600">
                 Riset &amp; Kebijakan Publik
               </p>
             </div>
@@ -175,7 +175,7 @@ export default async function KonsultanPage() {
             {/* Pillar 3 */}
             <div className="border border-slate-200 rounded-xl p-6 bg-white hover:border-slate-400 transition-colors flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+                <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
                   <Building2 size={20} />
                 </div>
                 <h3 className="font-bold text-slate-900 text-base">
@@ -187,7 +187,7 @@ export default async function KonsultanPage() {
                     : "Pelatihan khusus dengan kurikulum tailor-made untuk instansi kampus, dinas pemerintahan, dan korporasi."}
                 </p>
               </div>
-              <p className="pt-4 mt-5 border-t border-slate-100 text-xs font-semibold text-emerald-600">
+              <p className="pt-4 mt-5 border-t border-slate-100 text-xs font-semibold text-blue-600">
                 Kurikulum Kustom Institusi
               </p>
             </div>
@@ -195,7 +195,7 @@ export default async function KonsultanPage() {
             {/* Pillar 4 */}
             <div className="border border-slate-200 rounded-xl p-6 bg-white hover:border-slate-400 transition-colors flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="w-10 h-10 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center font-bold">
+                <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
                   <FileText size={20} />
                 </div>
                 <h3 className="font-bold text-slate-900 text-base">
@@ -207,7 +207,7 @@ export default async function KonsultanPage() {
                     : "Analisis kelayakan investasi digital, pemodelan finansial, dan audit valuasi bisnis bersama pakar keuangan berpengalaman."}
                 </p>
               </div>
-              <p className="pt-4 mt-5 border-t border-slate-100 text-xs font-semibold text-amber-700">
+              <p className="pt-4 mt-5 border-t border-slate-100 text-xs font-semibold text-blue-600">
                 Audit Investasi Finansial
               </p>
             </div>

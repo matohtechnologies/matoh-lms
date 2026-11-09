@@ -345,7 +345,7 @@ export default async function AboutPage() {
                     </div>
 
                     <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 text-xs font-semibold text-slate-700">
-                      <CheckCircle2 size={13} className="text-emerald-600 shrink-0" />
+                      <CheckCircle2 size={13} className="text-blue-600 shrink-0" />
                       <span className="truncate">{person.expertise}</span>
                     </div>
 
@@ -358,7 +358,7 @@ export default async function AboutPage() {
                 <div className="px-6 pb-6 pt-1">
                   <div className="flex items-center justify-between text-xs font-medium text-slate-400 border-t border-slate-100 pt-3">
                     <span>Dewan Kehormatan</span>
-                    <span className="text-emerald-600 font-semibold flex items-center gap-1">
+                    <span className="text-blue-600 font-semibold flex items-center gap-1">
                       <ShieldCheck size={13} />
                       <span>Resmi Terdaftar</span>
                     </span>

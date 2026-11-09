@@ -129,10 +129,10 @@ export default async function RisetPage() {
             <div className="border border-slate-200 rounded-xl p-8 bg-white hover:border-slate-400 transition-colors flex flex-col justify-between space-y-6">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-3 py-1 rounded">
+                  <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded">
                     Structural Modeling
                   </span>
-                  <Layers size={22} className="text-indigo-600" />
+                  <Layers size={22} className="text-blue-600" />
                 </div>
 
                 <h3 className="text-2xl font-extrabold text-slate-900">
@@ -147,15 +147,15 @@ export default async function RisetPage() {
 
                 <div className="space-y-2 pt-2 text-xs sm:text-sm text-slate-700">
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 size={16} className="text-indigo-600 shrink-0" />
+                    <CheckCircle2 size={16} className="text-blue-600 shrink-0" />
                     <span>{isEn ? "Structural Self-Interaction Matrix (SSIM)" : "Penyusunan Matriks SSIM Berbasis Pakar"}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 size={16} className="text-indigo-600 shrink-0" />
+                    <CheckCircle2 size={16} className="text-blue-600 shrink-0" />
                     <span>{isEn ? "Reachability & Level Partitioning Digraph" : "Matriks Keterjangkauan & Partisi Level Hierarkis"}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 size={16} className="text-indigo-600 shrink-0" />
+                    <CheckCircle2 size={16} className="text-blue-600 shrink-0" />
                     <span>{isEn ? "MICMAC Classification (Autonomous, Dependent, Linkage, Driver)" : "Analisis Kuadran MICMAC (Driving Power vs Dependency)"}</span>
                   </div>
                 </div>
@@ -163,7 +163,7 @@ export default async function RisetPage() {
 
               <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-medium">
                 <span>Penerapan: Desain Strategi Institusi</span>
-                <span className="text-indigo-600 font-semibold">Model Digraf Kontekstual</span>
+                <span className="text-blue-600 font-semibold">Model Digraf Kontekstual</span>
               </div>
             </div>
           </div>
@@ -246,7 +246,7 @@ export default async function RisetPage() {
             </div>
 
             <div className="border border-slate-200 rounded-xl p-6 bg-white space-y-3">
-              <div className="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
+              <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
                 <Building2 size={18} />
               </div>
               <h3 className="font-bold text-slate-900 text-base">Riset Kebijakan Publik (Pemda/BUMN)</h3>
@@ -256,7 +256,7 @@ export default async function RisetPage() {
             </div>
 
             <div className="border border-slate-200 rounded-xl p-6 bg-white space-y-3">
-              <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+              <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
                 <Users size={18} />
               </div>
               <h3 className="font-bold text-slate-900 text-base">Workshop &amp; In-House Training</h3>

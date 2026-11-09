@@ -346,7 +346,7 @@ export default async function HomePage() {
                 <div className="h-4 w-px bg-slate-200 hidden sm:block" />
 
                 <div className="flex items-center gap-1.5 font-medium text-slate-700">
-                  <ShieldCheck size={16} className="text-emerald-600" />
+                  <ShieldCheck size={16} className="text-blue-600" />
                   <span>{isEn ? "30-Day Money-Back Guarantee" : "Garansi 30 Hari Uang Kembali"}</span>
                 </div>
               </div>
@@ -357,7 +357,7 @@ export default async function HomePage() {
               {/* Animated Luminous Blue Background (Drift Blobs & Rotating Rings) */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 overflow-visible">
                 {/* Primary moving blue glow blob */}
-                <div className="absolute w-72 h-72 sm:w-[430px] sm:h-[430px] rounded-full bg-gradient-to-tr from-blue-500/30 via-sky-400/25 to-indigo-500/25 blur-3xl animate-blob-drift" />
+                <div className="absolute w-72 h-72 sm:w-[430px] sm:h-[430px] rounded-full bg-gradient-to-tr from-blue-500/30 via-sky-400/25 to-blue-600/20 blur-3xl animate-blob-drift" />
 
                 {/* Secondary counter-drifting cyan/sky blob */}
                 <div className="absolute w-60 h-60 sm:w-[360px] sm:h-[360px] rounded-full bg-gradient-to-bl from-sky-400/30 via-teal-300/20 to-blue-600/25 blur-3xl animate-blob-drift-reverse" />
@@ -403,7 +403,7 @@ export default async function HomePage() {
                     <p className="text-[11px] font-bold text-slate-900 leading-tight">
                       {isEn ? "Official Certification" : "Sertifikat Kelulusan Resmi"}
                     </p>
-                    <p className="text-[10px] text-emerald-700 font-semibold leading-tight">
+                    <p className="text-[10px] text-blue-600 font-semibold leading-tight">
                       {isEn ? "Verifiable & LinkedIn Integrated" : "Tervalidasi Digital & LinkedIn"}
                     </p>
                   </div>
@@ -541,7 +541,7 @@ export default async function HomePage() {
             <div className="border border-slate-200 rounded-xl p-7 sm:p-9 bg-white hover:border-slate-400 transition-colors flex flex-col justify-between">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-3 py-1 rounded">
+                  <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded">
                     Structural Modeling
                   </span>
                   <Layers size={22} className="text-slate-400" />
@@ -558,7 +558,7 @@ export default async function HomePage() {
 
               <div className="pt-5 mt-6 border-t border-slate-100 flex items-center justify-between text-xs sm:text-sm text-slate-500 font-medium">
                 <span>{isEn ? "Institutional Policy" : "Perumusan Kebijakan Publik"}</span>
-                <span className="text-indigo-600 font-semibold">Model Digraf Kontekstual</span>
+                <span className="text-blue-600 font-semibold">Model Digraf Kontekstual</span>
               </div>
             </div>
           </div>
@@ -701,14 +701,14 @@ export default async function HomePage() {
             {/* Service 2: Aplikasi Web & Sistem Informasi Kustom */}
             <div className="border border-slate-200 rounded-xl p-7 bg-white hover:border-slate-400 transition-colors flex flex-col justify-between">
               <div className="space-y-4">
-                <div className="w-11 h-11 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
+                <div className="w-11 h-11 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
                   <Code2 size={22} />
                 </div>
                 <div>
                   <h3 className="font-extrabold text-slate-900 text-lg sm:text-xl">
                     {isEn ? "Custom Web App & Information Systems" : "Aplikasi Web & Sistem Kustom"}
                   </h3>
-                  <p className="text-xs sm:text-sm text-indigo-600 font-semibold mt-0.5">
+                  <p className="text-xs sm:text-sm text-blue-600 font-semibold mt-0.5">
                     {isEn ? "Tailored Internal Workflow Automation" : "Sesuai Alur Proses Klien"}
                   </p>
                 </div>
@@ -729,14 +729,14 @@ export default async function HomePage() {
             {/* Service 3: Platform E-Commerce & Integrasi Transaksi */}
             <div className="border border-slate-200 rounded-xl p-7 bg-white hover:border-slate-400 transition-colors flex flex-col justify-between">
               <div className="space-y-4">
-                <div className="w-11 h-11 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+                <div className="w-11 h-11 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
                   <Database size={22} />
                 </div>
                 <div>
                   <h3 className="font-extrabold text-slate-900 text-lg sm:text-xl">
                     {isEn ? "E-Commerce & Digital Platforms" : "E-Commerce & Integrasi Sistem"}
                   </h3>
-                  <p className="text-xs sm:text-sm text-emerald-600 font-semibold mt-0.5">
+                  <p className="text-xs sm:text-sm text-blue-600 font-semibold mt-0.5">
                     {isEn ? "Payment Gateways & Realtime APIs" : "Payment Gateway & Otomasi API"}
                   </p>
                 </div>

@@ -267,8 +267,8 @@ export function HeroInteractiveShowcase({ isEn, studentCount = 0 }: HeroInteract
               </div>
             </div>
 
-            <div className="flex items-center gap-2 p-3 rounded-xl bg-emerald-50 text-emerald-800 text-xs">
-              <CheckCircle2 size={16} className="text-emerald-600 shrink-0" />
+            <div className="flex items-center gap-2 p-3 rounded-xl bg-blue-50 text-blue-900 text-xs">
+              <CheckCircle2 size={16} className="text-blue-600 shrink-0" />
               <span>
                 {isEn
                   ? "Curriculums include code reviews, guided milestones, and hands-on exercises."
@@ -298,7 +298,7 @@ export function HeroInteractiveShowcase({ isEn, studentCount = 0 }: HeroInteract
                 </p>
               </div>
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white text-[11px] font-mono text-slate-700 font-semibold shadow-2xs">
-                <ShieldCheck size={13} className="text-emerald-600" />
+                <ShieldCheck size={13} className="text-blue-600" />
                 <span>{isEn ? "VERIFIED DIGITAL CREDENTIAL" : "KREDENSIAL DIGITAL RESMI"}</span>
               </div>
             </div>
