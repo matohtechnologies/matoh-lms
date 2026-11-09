@@ -202,13 +202,6 @@ export default async function HomePage() {
   const publicationHighlights = isEn
     ? [
       {
-        slug: "penerapan-ahp-ism-prioritas-digitalisasi-umkm",
-        title: "Applying AHP and ISM to Prioritize Indonesian MSME Digitalization",
-        category: "Decision Science",
-        author: "Dr. G. Prabantoro, SE., MM., CBec.",
-        readTime: "7 min read",
-      },
-      {
         slug: "strategi-transformasi-digital-umkm-2026",
         title: "MSME Digital Transformation Roadmap: AI Marketing to Inventory Automation",
         category: "Digital Transformation",
@@ -229,15 +222,15 @@ export default async function HomePage() {
         author: "Dr. Retno Wulandari, M.Si.",
         readTime: "4 min read",
       },
+      {
+        slug: "audit-keamanan-api-dan-autentikasi",
+        title: "Modern API Security Audits & Next-Gen Authentication Frameworks",
+        category: "Cybersecurity",
+        author: "Bambang Sudarsono, S.Kom., M.T.",
+        readTime: "6 min read",
+      },
     ]
     : [
-      {
-        slug: "penerapan-ahp-ism-prioritas-digitalisasi-umkm",
-        title: "Penerapan Metodologi AHP dan ISM dalam Prioritas Digitalisasi UMKM",
-        category: "Decision Science",
-        author: "Dr. G. Prabantoro, SE., MM., CBec.",
-        readTime: "7 menit baca",
-      },
       {
         slug: "strategi-transformasi-digital-umkm-2026",
         title: "Roadmap Transformasi Digital UMKM: Dari Pemasaran AI hingga Inventori",
@@ -258,6 +251,13 @@ export default async function HomePage() {
         category: "Sertifikasi",
         author: "Dr. Retno Wulandari, M.Si.",
         readTime: "4 menit baca",
+      },
+      {
+        slug: "audit-keamanan-api-dan-autentikasi",
+        title: "Audit Keamanan API dan Autentikasi Modern pada Arsitektur Web",
+        category: "Keamanan Sistem",
+        author: "Bambang Sudarsono, S.Kom., M.T.",
+        readTime: "6 menit baca",
       },
     ];
 

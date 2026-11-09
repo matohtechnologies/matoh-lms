@@ -47,6 +47,7 @@ const ALLOWED_FOLDERS = new Set([
   "courses",
   "assignments",
   "general",
+  "publications",
 ]);
 
 const MAX_IMAGE_SIZE = 15 * 1024 * 1024; // 15MB for images
