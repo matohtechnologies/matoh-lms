@@ -549,3 +549,49 @@ model ContactInquiry {
   @@index([createdAt])
   @@map("contact_inquiries")
 }
+
+
+enum PublicationType {
+  PUBLICATION
+  RESEARCH
+}
+
+model Publication {
+  id          String          @id @default(cuid())
+  slug        String          @unique
+  type        PublicationType @default(PUBLICATION)
+  titleId     String
+  titleEn     String?
+  excerptId   String          @db.Text
+  excerptEn   String?         @db.Text
+  contentId   String          @db.Text
+  contentEn   String?         @db.Text
+  abstractId  String?         @db.Text
+  abstractEn  String?         @db.Text
+  categoryId  String
+  categoryEn  String?
+  author      String
+  authorRole  String?
+  authorBioId String?         @db.Text
+  authorBioEn String?         @db.Text
+  authors     Json?
+  coverImage  String?
+  publishedAt DateTime        @default(now())
+  dateId      String?
+  dateEn      String?
+  readTimeId  String?
+  readTimeEn  String?
+  tags        String[]        @default([])
+  references  Json?
+  published   Boolean         @default(true)
+  featured    Boolean         @default(false)
+  views       Int             @default(0)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([type])
+  @@index([published, featured])
+  @@index([categoryId])
+  @@index([createdAt])
+  @@map("publications")
+}

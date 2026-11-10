@@ -5,7 +5,11 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 // Recreate client if cached instance lacks recently added models
-if (globalForPrisma.prisma && !("contactInquiry" in (globalForPrisma.prisma as unknown as Record<string, unknown>))) {
+if (
+  globalForPrisma.prisma &&
+  (!("contactInquiry" in (globalForPrisma.prisma as unknown as Record<string, unknown>)) ||
+   !("publication" in (globalForPrisma.prisma as unknown as Record<string, unknown>)))
+) {
   globalForPrisma.prisma = undefined;
 }
 

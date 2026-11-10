@@ -11,8 +11,10 @@ import {
   FileText,
   Building2,
   Users,
+  Clock,
 } from "lucide-react";
 import { getLocale } from "next-intl/server";
+import { getDbPublications } from "@/lib/publications";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -30,6 +32,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RisetPage() {
   const locale = await getLocale();
   const isEn = locale === "en";
+  const researchPapers = await getDbPublications({ type: "RESEARCH", publishedOnly: true, limit: 3 });
 
   return (
     <div className="pt-20 bg-white text-slate-900 selection:bg-blue-100 selection:text-blue-900 min-h-screen">
@@ -216,6 +219,88 @@ export default async function RisetPage() {
           </div>
         </div>
       </section>
+
+      {/* Publications / Research Papers Grid */}
+      {researchPapers.length > 0 && (
+        <section className="py-16 sm:py-24 border-b border-slate-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-4">
+              <div>
+                <h2
+                  className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
+                  style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+                >
+                  {isEn ? "Applied Research Publications" : "Publikasi Riset Terapan"}
+                </h2>
+                <p className="text-base text-slate-500 mt-2">
+                  {isEn
+                    ? "Scholarly papers and methodological case studies by our research team."
+                    : "Karya ilmiah dan studi kasus metodologi sains keputusan dari tim peneliti Matoh."}
+                </p>
+              </div>
+
+              <Link
+                href="/publikasi"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-blue-600 hover:text-blue-700 hover:underline"
+              >
+                <span>{isEn ? "View All Publications" : "Lihat Semua Publikasi"}</span>
+                <ArrowRight size={14} />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {researchPapers.map((paper) => {
+                const title = isEn ? paper.titleEn : paper.titleId;
+                const excerpt = isEn ? paper.excerptEn : paper.excerptId;
+                const category = isEn ? paper.categoryEn : paper.categoryId;
+                const readTime = isEn ? paper.readTimeEn : paper.readTimeId;
+
+                return (
+                  <article
+                    key={paper.slug}
+                    className="border border-slate-200 rounded-2xl p-6 hover:border-slate-400 transition-colors flex flex-col justify-between h-full bg-white group shadow-2xs"
+                  >
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between text-xs text-slate-400">
+                        <span className="font-semibold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-lg">
+                          {category}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Clock size={12} />
+                          {readTime}
+                        </span>
+                      </div>
+
+                      <h3 className="text-lg font-bold text-slate-900 leading-snug group-hover:text-blue-600 transition-colors">
+                        <Link href={`/publikasi/${paper.slug}`}>
+                          {title}
+                        </Link>
+                      </h3>
+
+                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed line-clamp-3">
+                        {excerpt}
+                      </p>
+                    </div>
+
+                    <div className="pt-4 mt-6 border-t border-slate-100 flex items-center justify-between text-xs">
+                      <span className="font-medium text-slate-700 truncate max-w-[160px]">
+                        {paper.author}
+                      </span>
+                      <Link
+                        href={`/publikasi/${paper.slug}`}
+                        className="text-blue-600 font-semibold inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform"
+                      >
+                        <span>{isEn ? "Read Paper" : "Baca Riset"}</span>
+                        <ArrowRight size={12} />
+                      </Link>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Research Services & Consultation Offerings */}
       <section className="py-16 sm:py-24">

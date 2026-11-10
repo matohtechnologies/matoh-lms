@@ -4,8 +4,18 @@ export interface PublicationReference {
   link?: string;
 }
 
+export interface AuthorItem {
+  id?: string;
+  name: string;
+  role?: string;
+  bio?: string;
+  avatar?: string;
+}
+
 export interface PublicationItem {
+  id?: string;
   slug: string;
+  type?: "PUBLICATION" | "RESEARCH";
   titleId: string;
   titleEn: string;
   excerptId: string;
@@ -16,6 +26,8 @@ export interface PublicationItem {
   authorRole: string;
   authorBioId: string;
   authorBioEn: string;
+  authors?: AuthorItem[];
+  coverImage?: string | null;
   dateId: string;
   dateEn: string;
   publishedAt: string; // ISO format: YYYY-MM-DD
@@ -27,6 +39,11 @@ export interface PublicationItem {
   contentId: string;
   contentEn: string;
   references: PublicationReference[];
+  published?: boolean;
+  featured?: boolean;
+  views?: number;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
 }
 
 export const PUBLICATIONS: PublicationItem[] = [
@@ -1001,4 +1018,137 @@ export function getRelatedPublications(currentSlug: string, limit = 3): Publicat
     })
     .slice(0, limit);
 }
+
+// =========================================================================
+// ASYNC DATABASE ACCESS (with fallback to static PUBLICATIONS)
+// =========================================================================
+
+function mapDbToItem(row: any): PublicationItem {
+  return {
+    id: row.id,
+    slug: row.slug,
+    type: row.type,
+    titleId: row.titleId,
+    titleEn: row.titleEn || row.titleId,
+    excerptId: row.excerptId,
+    excerptEn: row.excerptEn || row.excerptId,
+    categoryId: row.categoryId,
+    categoryEn: row.categoryEn || row.categoryId,
+    author: row.author,
+    authorRole: row.authorRole || "",
+    authorBioId: row.authorBioId || "",
+    authorBioEn: row.authorBioEn || row.authorBioId || "",
+    authors: Array.isArray(row.authors) ? row.authors : [],
+    coverImage: row.coverImage || null,
+    dateId: row.dateId || (row.publishedAt ? new Date(row.publishedAt).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" }) : ""),
+    dateEn: row.dateEn || (row.publishedAt ? new Date(row.publishedAt).toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" }) : ""),
+    publishedAt: row.publishedAt ? new Date(row.publishedAt).toISOString().split("T")[0] : "",
+    readTimeId: row.readTimeId || "5 menit baca",
+    readTimeEn: row.readTimeEn || "5 min read",
+    tags: Array.isArray(row.tags) ? row.tags : [],
+    abstractId: row.abstractId || "",
+    abstractEn: row.abstractEn || row.abstractId || "",
+    contentId: row.contentId,
+    contentEn: row.contentEn || row.contentId,
+    references: Array.isArray(row.references) ? row.references : [],
+    published: row.published ?? true,
+    featured: row.featured ?? false,
+    views: row.views ?? 0,
+    createdAt: row.createdAt,
+    updatedAt: row.updatedAt,
+  };
+}
+
+export async function getDbPublications(options?: {
+  type?: "PUBLICATION" | "RESEARCH";
+  publishedOnly?: boolean;
+  limit?: number;
+}): Promise<PublicationItem[]> {
+  try {
+    const prisma = (await import("@/lib/prisma")).default;
+    const where: any = {};
+    if (options?.publishedOnly) {
+      where.published = true;
+    }
+    if (options?.type) {
+      where.type = options.type;
+    }
+
+    const rows = await prisma.publication.findMany({
+      where,
+      orderBy: [{ featured: "desc" }, { publishedAt: "desc" }, { createdAt: "desc" }],
+      take: options?.limit,
+    });
+
+    if (rows && rows.length > 0) {
+      return rows.map(mapDbToItem);
+    }
+  } catch (err) {
+    console.warn("Could not query publications from DB, falling back to static list:", err);
+  }
+
+  // Fallback to static
+  let filtered = [...PUBLICATIONS];
+  if (options?.type === "RESEARCH") {
+    filtered = filtered.filter(
+      (p) =>
+        p.categoryId.toLowerCase().includes("decision") ||
+        p.tags.includes("AHP") ||
+        p.tags.includes("ISM") ||
+        p.slug.includes("riset")
+    );
+  } else if (options?.type === "PUBLICATION") {
+    filtered = filtered.filter(
+      (p) =>
+        !p.categoryId.toLowerCase().includes("decision") &&
+        !p.tags.includes("AHP") &&
+        !p.tags.includes("ISM") &&
+        !p.slug.includes("riset")
+    );
+  }
+  if (options?.limit) {
+    filtered = filtered.slice(0, options.limit);
+  }
+  return filtered;
+}
+
+export async function getDbPublicationBySlug(slug: string): Promise<PublicationItem | null> {
+  try {
+    const prisma = (await import("@/lib/prisma")).default;
+    const row = await prisma.publication.findUnique({
+      where: { slug },
+    });
+    if (row) {
+      return mapDbToItem(row);
+    }
+  } catch (err) {
+    console.warn(`Could not query publication ${slug} from DB:`, err);
+  }
+
+  return getPublicationBySlug(slug) || null;
+}
+
+export async function getDbRelatedPublications(currentSlug: string, limit = 3): Promise<PublicationItem[]> {
+  const current = await getDbPublicationBySlug(currentSlug);
+  const all = await getDbPublications({
+    type: current?.type,
+    publishedOnly: true,
+  });
+
+  if (!current) return all.slice(0, limit);
+
+  return all
+    .filter((p) => p.slug !== currentSlug)
+    .sort((a, b) => {
+      const aSameCategory = a.categoryId === current.categoryId ? 1 : 0;
+      const bSameCategory = b.categoryId === current.categoryId ? 1 : 0;
+      if (aSameCategory !== bSameCategory) return bSameCategory - aSameCategory;
+
+      const aTagOverlap = a.tags.filter((t) => current.tags.includes(t)).length;
+      const bTagOverlap = b.tags.filter((t) => current.tags.includes(t)).length;
+      return bTagOverlap - aTagOverlap;
+    })
+    .slice(0, limit);
+}
+
 

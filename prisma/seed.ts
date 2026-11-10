@@ -74,11 +74,13 @@ async function main() {
     update: {
       name: "Dr. G. Prabantoro, SE., MM., CBec.",
       role: "INSTRUCTOR",
+      image: "/images/avatars/founder-prabantoro.svg",
       bio: "RnD Director PT. Matoh Technologies Indonesia. Peneliti, akademisi, dan konsultan strategi transformasi digital UMKM.",
     },
     create: {
       name: "Dr. G. Prabantoro, SE., MM., CBec.",
       email: "gatot@matohtechnologies.com",
+      image: "/images/avatars/founder-prabantoro.svg",
       password: instructorPassword,
       role: "INSTRUCTOR",
       bio: "RnD Director PT. Matoh Technologies Indonesia. Peneliti, akademisi, dan konsultan strategi transformasi digital UMKM.",
@@ -90,11 +92,13 @@ async function main() {
     update: {
       name: "Dr. T. Aminoto, S.Fis, M.Si.",
       role: "INSTRUCTOR",
+      image: "/images/avatars/founder-aminoto.svg",
       bio: "Pakar Biostatistika, Pengambilan Keputusan Multikriteria (MCDM), dan Analisis Sistem Komputasi.",
     },
     create: {
       name: "Dr. T. Aminoto, S.Fis, M.Si.",
       email: "aminoto@matohtechnologies.com",
+      image: "/images/avatars/founder-aminoto.svg",
       password: instructorPassword,
       role: "INSTRUCTOR",
       bio: "Pakar Biostatistika, Pengambilan Keputusan Multikriteria (MCDM), dan Analisis Sistem Komputasi.",
@@ -106,11 +110,13 @@ async function main() {
     update: {
       name: "Dr. E. Lovita, SE., Ak., M.Si., CA., CSRS., CSRA., CBec.",
       role: "INSTRUCTOR",
+      image: "/images/avatars/founder-lovita.svg",
       bio: "Dosen dan konsultan akuntansi, peramalan keuangan bisnis, dan tata kelola korporasi.",
     },
     create: {
       name: "Dr. E. Lovita, SE., Ak., M.Si., CA., CSRS., CSRA., CBec.",
       email: "lovita@matohtechnologies.com",
+      image: "/images/avatars/founder-lovita.svg",
       password: instructorPassword,
       role: "INSTRUCTOR",
       bio: "Dosen dan konsultan akuntansi, peramalan keuangan bisnis, dan tata kelola korporasi.",
@@ -122,11 +128,13 @@ async function main() {
     update: {
       name: "E. Hermawan, ST., M.Kom.",
       role: "INSTRUCTOR",
+      image: "/images/avatars/founder-hermawan.svg",
       bio: "Pakar Arsitektur Teknologi Digital, Cloud System, dan Innovation Management.",
     },
     create: {
       name: "E. Hermawan, ST., M.Kom.",
       email: "hermawan@matohtechnologies.com",
+      image: "/images/avatars/founder-hermawan.svg",
       password: instructorPassword,
       role: "INSTRUCTOR",
       bio: "Pakar Arsitektur Teknologi Digital, Cloud System, dan Innovation Management.",

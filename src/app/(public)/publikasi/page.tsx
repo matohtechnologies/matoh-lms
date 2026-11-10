@@ -2,24 +2,25 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Clock, ArrowRight } from "lucide-react";
 import { getLocale } from "next-intl/server";
-import { PUBLICATIONS } from "@/lib/publications";
+import { getDbPublications } from "@/lib/publications";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
   const isEn = locale === "en";
   return {
     title: isEn
-      ? "Research Publications & Technology Insights | PT. Matoh Technologies Indonesia"
-      : "Publikasi Riset & Wawasan Teknologi | PT. Matoh Technologies Indonesia",
+      ? "Technology Publications & Insights | PT. Matoh Technologies Indonesia"
+      : "Publikasi Teknologi & Wawasan Industri | PT. Matoh Technologies Indonesia",
     description: isEn
-      ? "Collection of applied research papers, decision science methodologies (AHP & ISM), and software engineering articles by PT. Matoh Technologies Indonesia."
-      : "Kumpulan artikel publikasi riset terapan, sains keputusan ilmiah (AHP & ISM), dan arsitektur rekayasa teknologi PT. Matoh Technologies Indonesia.",
+      ? "Collection of engineering articles, business digital transformation case studies, and modern technology whitepapers by PT. Matoh Technologies Indonesia."
+      : "Kumpulan artikel publikasi rekayasa perangkat lunak, studi kasus transformasi digital, dan wawasan teknologi PT. Matoh Technologies Indonesia.",
   };
 }
 
 export default async function PublikasiPage() {
   const locale = await getLocale();
   const isEn = locale === "en";
+  const publications = await getDbPublications({ type: "PUBLICATION", publishedOnly: true });
 
   return (
     <div className="pt-20 bg-white text-slate-900 selection:bg-blue-100 selection:text-blue-900 min-h-screen">
@@ -31,13 +32,13 @@ export default async function PublikasiPage() {
               className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
-              {isEn ? "Research Papers & Tech Insights" : "Publikasi Riset & Wawasan Teknologi"}
+              {isEn ? "Publications & Tech Insights" : "Publikasi & Wawasan Teknologi"}
             </h1>
 
             <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
               {isEn
-                ? "Peer-reviewed applied research papers, decision science frameworks, and enterprise software engineering whitepapers."
-                : "Kumpulan artikel ilmiah, studi kasus sains keputusan, dan panduan teknis rekayasa perangkat lunak dari tim peneliti dan arsitek PT. Matoh Technologies Indonesia."}
+                ? "Applied technology articles, software engineering best practices, and enterprise digital transformation insights."
+                : "Kumpulan artikel publikasi rekayasa teknologi, transformasi digital bisnis, dan studi kasus terapan dari PT. Matoh Technologies Indonesia."}
             </p>
           </div>
         </div>
@@ -47,7 +48,7 @@ export default async function PublikasiPage() {
       <section className="py-16 sm:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {PUBLICATIONS.map((post) => {
+            {publications.map((post) => {
               const title = isEn ? post.titleEn : post.titleId;
               const excerpt = isEn ? post.excerptEn : post.excerptId;
               const category = isEn ? post.categoryEn : post.categoryId;

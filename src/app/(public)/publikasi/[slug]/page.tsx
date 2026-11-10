@@ -9,15 +9,16 @@ import {
   BookOpen,
   FileText,
   User,
+  Users,
   Quote,
   Sparkles,
   Award,
 } from "lucide-react";
 import { getLocale } from "next-intl/server";
 import {
-  getAllPublications,
-  getPublicationBySlug,
-  getRelatedPublications,
+  getDbPublications,
+  getDbPublicationBySlug,
+  getDbRelatedPublications,
 } from "@/lib/publications";
 import { MarkdownRenderer } from "@/components/ui/markdown-renderer";
 import { ArticleActions, CopyCitationButton } from "@/components/public/article-actions";
@@ -29,7 +30,7 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  const publications = getAllPublications();
+  const publications = await getDbPublications();
   return publications.map((post) => ({
     slug: post.slug,
   }));
@@ -37,7 +38,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPublicationBySlug(slug);
+  const post = await getDbPublicationBySlug(slug);
   const locale = await getLocale();
   const isEn = locale === "en";
 
@@ -76,7 +77,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function PublicationDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const post = getPublicationBySlug(slug);
+  const post = await getDbPublicationBySlug(slug);
 
   if (!post) {
     notFound();
@@ -94,7 +95,7 @@ export default async function PublicationDetailPage({ params }: PageProps) {
   const content = isEn ? post.contentEn : post.contentId;
   const authorBio = isEn ? post.authorBioEn : post.authorBioId;
 
-  const related = getRelatedPublications(post.slug, 3);
+  const related = await getDbRelatedPublications(post.slug, 3);
 
   // Suggested APA citation text
   const apaCitation = `${post.author} (${post.publishedAt.slice(0, 4)}). ${title}. PT. Matoh Technologies Indonesia Research & Engineering Publications. https://matoh.id/publikasi/${post.slug}`;
@@ -108,15 +109,26 @@ export default async function PublicationDetailPage({ params }: PageProps) {
     datePublished: post.publishedAt,
     dateModified: post.publishedAt,
     inLanguage: isEn ? "en" : "id",
-    author: {
-      "@type": "Person",
-      name: post.author,
-      jobTitle: post.authorRole,
-      worksFor: {
-        "@type": "Organization",
-        name: "PT. Matoh Technologies Indonesia",
-      },
-    },
+    author:
+      post.authors && post.authors.length > 0
+        ? post.authors.map((a) => ({
+            "@type": "Person",
+            name: a.name,
+            jobTitle: a.role || undefined,
+            worksFor: {
+              "@type": "Organization",
+              name: "PT. Matoh Technologies Indonesia",
+            },
+          }))
+        : {
+            "@type": "Person",
+            name: post.author,
+            jobTitle: post.authorRole,
+            worksFor: {
+              "@type": "Organization",
+              name: "PT. Matoh Technologies Indonesia",
+            },
+          },
     publisher: {
       "@type": "Organization",
       name: "PT. Matoh Technologies Indonesia",
@@ -210,22 +222,34 @@ export default async function PublicationDetailPage({ params }: PageProps) {
 
             {/* Author Bar & Action Buttons */}
             <div className="pt-6 border-t border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              {/* Author Info */}
+              {/* Author Info (Single or Multi-Author) */}
               <div className="flex items-center gap-3.5">
                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-center font-bold text-base shadow-sm shrink-0">
-                  {post.author
-                    .split(" ")
-                    .filter((n) => !n.includes("."))
-                    .slice(0, 2)
-                    .map((n) => n[0])
-                    .join("") || "MT"}
+                  {post.authors && post.authors.length > 1 ? (
+                    <Users size={20} />
+                  ) : (
+                    post.author
+                      .split(" ")
+                      .filter((n) => !n.includes("."))
+                      .slice(0, 2)
+                      .map((n) => n[0])
+                      .join("") || "MT"
+                  )}
                 </div>
                 <div>
-                  <div className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-1.5">
+                  <div className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-1.5 flex-wrap">
                     <span>{post.author}</span>
                   </div>
                   <div className="text-xs text-slate-500 font-medium">
-                    {post.authorRole}
+                    {post.authors && post.authors.length > 1 ? (
+                      <span className="text-blue-700 font-semibold">
+                        {isEn
+                          ? `Collaborative Research Team (${post.authors.length} Authors)`
+                          : `Tim Riset Kolaborasi (${post.authors.length} Penulis)`}
+                      </span>
+                    ) : (
+                      post.authorRole
+                    )}
                   </div>
                 </div>
               </div>
@@ -318,33 +342,89 @@ export default async function PublicationDetailPage({ params }: PageProps) {
           </section>
         )}
 
-        {/* Author Bio Card */}
+        {/* Author Bio Card (Single or Multi-Author) */}
         <section
           aria-labelledby="author-heading"
-          className="p-6 sm:p-8 rounded-2xl bg-slate-900 text-white space-y-4 shadow-sm"
+          className="p-6 sm:p-8 rounded-2xl bg-slate-900 text-white space-y-5 shadow-sm"
         >
-          <div className="flex items-center gap-2 text-xs font-semibold text-blue-300 uppercase tracking-wider">
-            <User size={14} />
-            <span id="author-heading">{isEn ? "About the Author" : "Tentang Penulis"}</span>
+          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div className="flex items-center gap-2 text-xs font-semibold text-blue-300 uppercase tracking-wider">
+              {post.authors && post.authors.length > 1 ? <Users size={15} /> : <User size={14} />}
+              <span id="author-heading">
+                {post.authors && post.authors.length > 1
+                  ? isEn
+                    ? `About the Authors (${post.authors.length} Contributors)`
+                    : `Tentang Tim Penulis & Peneliti (${post.authors.length} Orang)`
+                  : isEn
+                  ? "About the Author"
+                  : "Tentang Penulis"}
+              </span>
+            </div>
+
+            {post.authors && post.authors.length > 1 && (
+              <span className="text-[11px] text-slate-400 hidden sm:inline">
+                {isEn ? "Research Collaboration" : "Kolaborasi Akademik & Industri"}
+              </span>
+            )}
           </div>
 
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg shadow-md shrink-0">
-              {post.author
-                .split(" ")
-                .filter((n) => !n.includes("."))
-                .slice(0, 2)
-                .map((n) => n[0])
-                .join("") || "MT"}
+          {post.authors && post.authors.length > 1 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {post.authors.map((auth, idx) => (
+                <div
+                  key={idx}
+                  className="p-4 rounded-xl bg-slate-800/80 border border-slate-700/80 space-y-2 flex flex-col justify-between"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center font-bold text-xs shadow-xs shrink-0 mt-0.5">
+                      {auth.name
+                        .split(" ")
+                        .filter((n) => !n.includes("."))
+                        .slice(0, 2)
+                        .map((n) => n[0])
+                        .join("") || `${idx + 1}`}
+                    </div>
+                    <div className="space-y-0.5 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h5 className="font-bold text-white text-sm">{auth.name}</h5>
+                        {idx === 0 && (
+                          <span className="text-[10px] font-bold uppercase tracking-wider bg-blue-500/20 text-blue-300 px-1.5 py-0.2 rounded border border-blue-400/30">
+                            Lead
+                          </span>
+                        )}
+                      </div>
+                      {auth.role && (
+                        <p className="text-xs text-blue-200 line-clamp-1">{auth.role}</p>
+                      )}
+                      {auth.bio && (
+                        <p className="text-xs text-slate-300 pt-1 leading-relaxed line-clamp-2">
+                          {auth.bio}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="space-y-1">
-              <h4 className="text-lg font-bold text-white">{post.author}</h4>
-              <p className="text-xs text-blue-200 font-medium">{post.authorRole}</p>
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed pt-1">
-                {authorBio}
-              </p>
+          ) : (
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg shadow-md shrink-0">
+                {post.author
+                  .split(" ")
+                  .filter((n) => !n.includes("."))
+                  .slice(0, 2)
+                  .map((n) => n[0])
+                  .join("") || "MT"}
+              </div>
+              <div className="space-y-1">
+                <h4 className="text-lg font-bold text-white">{post.author}</h4>
+                <p className="text-xs text-blue-200 font-medium">{post.authorRole}</p>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed pt-1">
+                  {authorBio}
+                </p>
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="pt-4 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
             <span className="text-slate-400">
