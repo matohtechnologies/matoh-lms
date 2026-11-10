@@ -122,7 +122,7 @@ export default async function KonsultanPage() {
               className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
-              {isEn ? "Our Advisory Domains" : "4 Pilar Layanan Konsultasi"}
+              {isEn ? "Our Advisory Domains" : "Layanan Konsultasi Kami"}
             </h2>
             <p className="text-base text-slate-500 mt-2">
               {isEn
