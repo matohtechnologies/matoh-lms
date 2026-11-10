@@ -177,17 +177,17 @@ export function VerifyClient({
       </div>
 
       {/* 1. Official Verified Hero Banner (Web Hero - Hidden in print) */}
-      <div className="no-print relative rounded-3xl overflow-hidden bg-gradient-to-br from-emerald-950 via-stone-900 to-slate-950 border border-emerald-500/30 shadow-2xl p-6 sm:p-10 text-white">
+      <div className="no-print relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#06272e] via-slate-900 to-[#0e4d58] border border-blue-500/30 shadow-2xl p-6 sm:p-10 text-white">
         {/* Glow ambient background elements */}
-        <div className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-emerald-500/15 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-teal-500/10 blur-3xl pointer-events-none" />
+        <div className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-blue-500/20 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-teal-400/15 blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-3 flex-1">
             {/* Verification Status Pill & Language Switcher on Hero */}
             <div className="flex flex-wrap items-center gap-2.5">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-xs sm:text-sm font-bold tracking-wide shadow-sm">
-                <ShieldCheck size={18} className="text-emerald-400 shrink-0" />
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/40 text-blue-200 text-xs sm:text-sm font-bold tracking-wide shadow-sm">
+                <ShieldCheck size={18} className="text-blue-300 shrink-0" />
                 <span>{t("badge_status")}</span>
               </div>
             </div>
@@ -208,7 +208,7 @@ export function VerifyClient({
           <div className="flex flex-wrap sm:flex-nowrap items-center gap-4 shrink-0">
             <OfficialEmbossedSeal size="md" className="hidden sm:flex" />
 
-            <div className="bg-stone-900/90 border border-emerald-500/30 rounded-2xl p-4 flex items-center gap-4 shadow-xl">
+            <div className="bg-stone-900/90 border border-blue-500/30 rounded-2xl p-4 flex items-center gap-4 shadow-xl">
               {qrCodeUrl ? (
                 <div className="w-20 h-20 rounded-xl bg-white p-1 border border-stone-700 shadow-sm shrink-0 flex items-center justify-center">
                   <img
@@ -226,15 +226,15 @@ export function VerifyClient({
                 </div>
               )}
               <div className="space-y-1">
-                <span className="text-[10px] uppercase font-bold text-emerald-400 tracking-wider">
+                <span className="text-[10px] uppercase font-bold text-blue-300 tracking-wider">
                   {t("unique_credential_id")}
                 </span>
                 <p className="font-mono text-sm sm:text-base font-bold text-white tracking-wide">
                   {certificateCode}
                 </p>
                 <div className="flex items-center gap-1.5 pt-1">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-[11px] font-medium text-emerald-300">
+                  <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+                  <span className="text-[11px] font-medium text-blue-200">
                     {t("active_registered")}
                   </span>
                 </div>
@@ -267,7 +267,7 @@ export function VerifyClient({
             </div>
             <div className="flex justify-between">
               <span className="text-stone-400">{t("validation_status")}</span>
-              <span className="text-emerald-700 font-bold flex items-center gap-1">
+              <span className="text-blue-700 font-bold flex items-center gap-1">
                 <CheckCircle2 size={13} /> {t("valid_authenticated")}
               </span>
             </div>
@@ -281,14 +281,14 @@ export function VerifyClient({
         {/* Card 2: Program Kursus */}
         <div className="bg-white rounded-3xl p-6 border border-stone-200/90 shadow-warm space-y-4">
           <div className="flex items-center gap-3 pb-3 border-b border-stone-100">
-            <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center">
               <BookOpen size={20} />
             </div>
             <div className="min-w-0">
               <p className="text-[10px] uppercase font-bold text-stone-400 tracking-wider">
                 {t("training_program")}
               </p>
-              <span className="inline-block text-[10px] font-bold text-amber-800 bg-amber-100/70 px-2 py-0.5 rounded-full mt-0.5">
+              <span className="inline-block text-[10px] font-bold text-blue-800 bg-blue-100/70 px-2 py-0.5 rounded-full mt-0.5">
                 {categoryName}
               </span>
             </div>
@@ -421,7 +421,7 @@ export function VerifyClient({
                   <td className="py-3 px-3.5 font-semibold text-stone-800">
                     <div className="flex items-center gap-2">
                       {item.type === "quiz" ? (
-                        <HelpCircle size={15} className="text-amber-500 shrink-0" />
+                        <HelpCircle size={15} className="text-blue-500 shrink-0" />
                       ) : item.type === "assignment" ? (
                         <FileCode2 size={15} className="text-sky-500 shrink-0" />
                       ) : (
@@ -441,11 +441,11 @@ export function VerifyClient({
                   <td className="py-3 px-3.5 text-center font-mono font-bold text-stone-900">
                     {item.score !== null ? `${item.score}/${item.maxScore}` : "—"}
                   </td>
-                  <td className="py-3 px-3.5 text-center font-bold text-amber-700">
+                  <td className="py-3 px-3.5 text-center font-bold text-blue-700">
                     {item.grade}
                   </td>
                   <td className="py-3 px-3.5 text-center">
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200">
                       {getLocalizedItemStatus(item.status)}
                     </span>
                   </td>

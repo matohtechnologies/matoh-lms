@@ -188,7 +188,7 @@ export function CertificateView({
     return (
       <div className="min-h-screen bg-[#faf8f5] pt-24 sm:pt-28 pb-12 flex items-center justify-center px-4">
         <div className="max-w-md w-full bg-white rounded-3xl border border-stone-200/80 p-8 sm:p-10 text-center shadow-warm-lg">
-          <div className="w-16 h-16 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center mx-auto mb-6 text-amber-600">
+          <div className="w-16 h-16 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center mx-auto mb-6 text-blue-600">
             <Lock size={28} />
           </div>
           <h1

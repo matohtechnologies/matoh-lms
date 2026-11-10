@@ -71,7 +71,7 @@ export default async function CertificatesPage() {
 
       {certificates.length === 0 ? (
         <div className="bg-white rounded-3xl border border-stone-200/80 p-16 text-center shadow-xs">
-          <div className="w-16 h-16 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto mb-4 border border-amber-200/60 shadow-2xs">
+          <div className="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-4 border border-blue-200/60 shadow-2xs">
             <Award size={30} />
           </div>
           <h3

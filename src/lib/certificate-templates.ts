@@ -258,7 +258,7 @@ export const DEFAULT_DESIGN_PRESETS: { id: string; name: string; description: st
           fontSize: 12,
           fontWeight: "bold",
           fontFamily: "arial",
-          color: "#dc2626",
+          color: "#0e7485",
           textAlign: "left",
         },
         {
@@ -271,7 +271,7 @@ export const DEFAULT_DESIGN_PRESETS: { id: string; name: string; description: st
           fontSize: 16,
           fontWeight: "bold",
           fontFamily: "arial",
-          color: "#dc2626",
+          color: "#0e7485",
           textAlign: "left",
         },
         {

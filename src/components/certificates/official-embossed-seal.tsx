@@ -28,8 +28,8 @@ export function OfficialEmbossedSeal({ className = "", size = "md" }: OfficialEm
       {/* Serrated/Notched Border Accent */}
       <div className="absolute inset-1 rounded-full border border-dashed border-amber-900/40" />
 
-      {/* Inner Rich Emerald Core with Radial Gradient */}
-      <div className="relative w-full h-full rounded-full bg-gradient-to-b from-emerald-950 via-stone-900 to-emerald-950 border border-amber-300/60 flex flex-col items-center justify-center text-center p-2 shadow-inner overflow-hidden">
+      {/* Inner Rich Teal Blue Core with Radial Gradient */}
+      <div className="relative w-full h-full rounded-full bg-gradient-to-b from-[#06272e] via-slate-900 to-[#0e4d58] border border-amber-300/60 flex flex-col items-center justify-center text-center p-2 shadow-inner overflow-hidden">
         {/* Subtle Radial Shine */}
         <div className="absolute -top-10 -left-10 w-24 h-24 bg-amber-400/15 rounded-full blur-xl pointer-events-none" />
 
@@ -40,7 +40,7 @@ export function OfficialEmbossedSeal({ className = "", size = "md" }: OfficialEm
 
         {/* Center Shield & Star */}
         <div className="relative my-0.5 flex items-center justify-center">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-tr from-amber-500 via-yellow-300 to-amber-600 flex items-center justify-center text-emerald-950 shadow-md">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-tr from-amber-500 via-yellow-300 to-amber-600 flex items-center justify-center text-blue-950 shadow-md">
             <ShieldCheck size={20} className="sm:w-5 sm:h-5 text-stone-950 drop-shadow" />
           </div>
         </div>
