@@ -42,7 +42,7 @@ const FAQ_DATA: FAQItem[] = [
     category: "payment",
     question: "Apakah saya harus mengunggah bukti transfer manual?",
     questionEn: "Do I need to upload a manual transfer receipt?",
-    answer: "Tidak perlu. Sistem pembayaran kami 100% otomatis. Segera setelah Anda menyelesaikan transaksi di aplikasi e-wallet atau m-banking, sistem Midtrans akan mengirimkan webhook instan dan kelas Anda akan langsung terbuka di dashboard 'Kelas Saya'.",
+    answer: "Tidak perlu. Sistem pembayaran kami 100% otomatis. Segera setelah Anda menyelesaikan transaksi di aplikasi e-wallet atau m-banking, sistem Midtrans akan mengirimkan webhook instan dan kursus Anda akan langsung terbuka di dashboard 'Kursus Saya'.",
     answerEn: "No manual receipt upload is required. Our payment system is 100% automated. As soon as you complete the payment via e-wallet or mobile banking, your course is automatically unlocked in your dashboard.",
   },
   {
@@ -50,7 +50,7 @@ const FAQ_DATA: FAQItem[] = [
     category: "payment",
     question: "Bagaimana cara menggunakan kode kupon promo?",
     questionEn: "How do I redeem a discount coupon code?",
-    answer: "Pada halaman Checkout kelas, masukkan kode kupon pada kolom 'Kode Kupon' lalu klik tombol 'Gunakan'. Potongan harga akan langsung diterapkan ke total pembayaran sebelum Anda menekan tombol Bayar.",
+    answer: "Pada halaman Checkout kursus, masukkan kode kupon pada kolom 'Kode Kupon' lalu klik tombol 'Gunakan'. Potongan harga akan langsung diterapkan ke total pembayaran sebelum Anda menekan tombol Bayar.",
     answerEn: "On the course checkout page, enter your code into the 'Coupon Code' field and click 'Apply'. The discount will be instantly deducted from the total price.",
   },
 
@@ -58,15 +58,15 @@ const FAQ_DATA: FAQItem[] = [
   {
     id: "learn-1",
     category: "learning",
-    question: "Berapa lama masa akses kelas setelah saya mendaftar?",
+    question: "Berapa lama masa akses kursus setelah saya mendaftar?",
     questionEn: "How long is my course access valid after enrollment?",
-    answer: "Semua kelas yang dibeli di PT. Matoh Technologies Indonesia memiliki Akses Selamanya (Lifetime Access). Anda dapat mengakses video, modul bacaan, kuis, dan pembaruan kurikulum di masa depan tanpa batas waktu dan tanpa biaya langganan bulanan.",
+    answer: "Semua kursus yang dibeli di PT. Matoh Technologies Indonesia memiliki Akses Selamanya (Lifetime Access). Anda dapat mengakses video, modul bacaan, kuis, dan pembaruan kurikulum di masa depan tanpa batas waktu dan tanpa biaya langganan bulanan.",
     answerEn: "All purchased courses come with Lifetime Access. You can access video lessons, reading materials, quizzes, and future curriculum updates anytime without monthly fees.",
   },
   {
     id: "learn-2",
     category: "learning",
-    question: "Apakah materi kelas dapat diakses melalui smartphone?",
+    question: "Apakah materi kursus dapat diakses melalui smartphone?",
     questionEn: "Can I access courses on mobile devices?",
     answer: "Ya, platform kami telah dioptimasi secara penuh (responsive web) untuk browser mobile, tablet, laptop, dan desktop. Anda dapat belajar kapan saja dengan nyaman.",
     answerEn: "Yes, our platform is fully responsive and optimized for mobile smartphones, tablets, laptops, and desktop computers.",
@@ -76,7 +76,7 @@ const FAQ_DATA: FAQItem[] = [
     category: "learning",
     question: "Bagaimana jika saya memiliki pertanyaan materi yang sulit dipahami?",
     questionEn: "What if I have questions about difficult course topics?",
-    answer: "Setiap kelas dilengkapi dengan tab 'Forum Diskusi'. Anda dapat mengajukan pertanyaan spesifik pada modul yang bersangkutan, dan instruktur ahli atau asisten akademik kami akan menjawab pertanyaan Anda.",
+    answer: "Setiap kursus dilengkapi dengan tab 'Forum Diskusi'. Anda dapat mengajukan pertanyaan spesifik pada modul yang bersangkutan, dan instruktur ahli atau asisten akademik kami akan menjawab pertanyaan Anda.",
     answerEn: "Every course features a dedicated 'Discussion Forum' tab. You can post questions directly on any lesson, and our instructors or academic assistants will provide guidance.",
   },
 
@@ -86,7 +86,7 @@ const FAQ_DATA: FAQItem[] = [
     category: "certificate",
     question: "Kapan saya berhak mendapatkan sertifikat kelulusan?",
     questionEn: "When am I eligible to receive a completion certificate?",
-    answer: "Sertifikat resmi dapat diklaim setelah Anda menyelesaikan 100% seluruh modul pembelajaran dan lulus kuis evaluasi dengan nilai minimal yang ditentukan (umumnya 70-80%). Tombol 'Klaim Sertifikat' akan otomatis aktif pada dashboard kelas.",
+    answer: "Sertifikat resmi dapat diklaim setelah Anda menyelesaikan 100% seluruh modul pembelajaran dan lulus kuis evaluasi dengan nilai minimal yang ditentukan (umumnya 70-80%). Tombol 'Klaim Sertifikat' akan otomatis aktif pada dashboard kursus.",
     answerEn: "Official certificates can be claimed after completing 100% of the lessons and achieving the passing score on the final quiz (usually 70-80%). The 'Claim Certificate' button will automatically unlock.",
   },
   {

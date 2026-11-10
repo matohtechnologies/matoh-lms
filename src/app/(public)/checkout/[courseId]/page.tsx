@@ -215,10 +215,10 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
       <div className="min-h-screen bg-stone-50 pt-20 flex items-center justify-center">
         <div className="text-center p-8 bg-white rounded-2xl border border-stone-200 shadow-sm max-w-sm">
           <p className="text-stone-800 font-bold text-base mb-2">
-            {isEn ? "Course Not Found" : "Kelas Tidak Ditemukan"}
+            {isEn ? "Course Not Found" : "Kursus Tidak Ditemukan"}
           </p>
           <p className="text-stone-500 text-xs mb-4">
-            {isEn ? "The course you are looking for is not listed or has not been published." : "Kelas yang ingin kamu beli tidak terdaftar atau belum dipublikasikan."}
+            {isEn ? "The course you are looking for is not listed or has not been published." : "Kursus yang ingin kamu beli tidak terdaftar atau belum dipublikasikan."}
           </p>
           <Link
             href="/courses"
@@ -248,7 +248,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
             {isEn ? (
               <>You already have full lifetime access to <strong>{course.title}</strong>. You do not need to make another purchase.</>
             ) : (
-              <>Anda sudah terdaftar dan memiliki akses penuh seumur hidup ke kelas <strong>{course.title}</strong>. Anda tidak perlu membayar atau mendaftar ulang.</>
+              <>Anda sudah terdaftar dan memiliki akses penuh seumur hidup ke kursus <strong>{course.title}</strong>. Anda tidak perlu membayar atau mendaftar ulang.</>
             )}
           </p>
           <div className="space-y-3">
@@ -262,7 +262,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
             </Link>
             <Link href="/dashboard/my-courses" className="block w-full">
               <Button variant="outline" className="w-full">
-                {isEn ? "View My Courses" : "Lihat Kelas Saya"}
+                {isEn ? "View My Courses" : "Lihat Kursus Saya"}
               </Button>
             </Link>
           </div>

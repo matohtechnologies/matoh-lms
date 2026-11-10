@@ -46,7 +46,7 @@ export async function GET(
     });
 
     if (!course) {
-      return NextResponse.json({ error: "Kelas tidak ditemukan" }, { status: 404 });
+      return NextResponse.json({ error: "Kursus tidak ditemukan" }, { status: 404 });
     }
 
     // Get recipients list
@@ -144,7 +144,7 @@ export async function PUT(
     });
 
     if (!course) {
-      return NextResponse.json({ error: "Kelas tidak ditemukan" }, { status: 404 });
+      return NextResponse.json({ error: "Kursus tidak ditemukan" }, { status: 404 });
     }
 
     const jsonConfigValue =

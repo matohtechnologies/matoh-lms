@@ -228,7 +228,7 @@ export function CouponManager({
     }
 
     if (courseTargetType === "SPECIFIC" && !targetCourseId) {
-      showNotification("error", "Pilih kelas target untuk kupon khusus kelas ini");
+      showNotification("error", "Pilih kursus target untuk kupon khusus kursus ini");
       return;
     }
 
@@ -462,11 +462,11 @@ export function CouponManager({
           <Filter size={14} className="text-slate-400 shrink-0" />
 
           {/* Target Course Filter */}
-          <select id="coupon-course-filter" name="courseFilter" aria-label="Filter Kupon Kelas" value={courseFilter} onChange={(e) => setCourseFilter(e.target.value)}
+          <select id="coupon-course-filter" name="courseFilter" aria-label="Filter Kupon Kursus" value={courseFilter} onChange={(e) => setCourseFilter(e.target.value)}
             className="text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white font-medium text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20"
           >
             <option value="ALL">{t("filter_all_courses")}</option>
-            <option value="GLOBAL">🌐 Kupon Global (Semua Kelas)</option>
+            <option value="GLOBAL">🌐 Kupon Global (Semua Kursus)</option>
             {courses.map((c) => (
               <option key={c.id} value={c.id}>
                 📘 Khusus: {c.title}
@@ -590,7 +590,7 @@ export function CouponManager({
                         ) : (
                           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-200 text-slate-700 font-medium text-[11px]">
                             <Globe size={12} className="text-slate-500" />
-                            <span>Semua Kelas</span>
+                            <span>Semua Kursus</span>
                           </div>
                         )}
                       </td>
@@ -725,7 +725,7 @@ export function CouponManager({
                   {editingCoupon ? t("modal_edit_coupon_title") : t("modal_create_coupon_title")}
                 </h3>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  Atur kode promo, target kelas tertentu, dan batas pengguna yang berhak mengklaim.
+                  Atur kode promo, target kursus tertentu, dan batas pengguna yang berhak mengklaim.
                 </p>
               </div>
               <button
@@ -819,11 +819,11 @@ export function CouponManager({
                 </div>
               </div>
 
-              {/* TARGET KELAS TERTENTU (SESUAI REQUEST USER) */}
+              {/* TARGET KURSUS TERTENTU (SESUAI REQUEST USER) */}
               <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2.5">
                 <div className="flex items-center gap-2">
                   <BookOpen size={16} className="text-blue-600" />
-                  <span className="text-xs font-bold text-slate-800">Target Kursus / Kelas</span>
+                  <span className="text-xs font-bold text-slate-800">Target Kursus / Kursus</span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 text-xs">
@@ -835,7 +835,7 @@ export function CouponManager({
                       : "bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200/60"
                       }`}
                   >
-                    🌐 Semua Kelas (Global)
+                    🌐 Semua Kursus (Global)
                   </button>
 
                   <button
@@ -846,14 +846,14 @@ export function CouponManager({
                       : "bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200/60"
                       }`}
                   >
-                    📘 Hanya Kelas Tertentu
+                    📘 Hanya Kursus Tertentu
                   </button>
                 </div>
 
                 {courseTargetType === "SPECIFIC" && (
                   <div className="pt-2 animate-in fade-in">
                     <label htmlFor="coupon-target-course" className="block text-[11px] font-semibold text-slate-600 mb-1">
-                      Pilih Kelas yang Berhak Menggunakan Kupon Ini:
+                      Pilih Kursus yang Berhak Menggunakan Kupon Ini:
                     </label>
                     <select id="coupon-target-course" name="targetCourseId" value={targetCourseId} onChange={(e) => setTargetCourseId(e.target.value)}
                       className="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-300 bg-white font-medium text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
@@ -865,7 +865,7 @@ export function CouponManager({
                       ))}
                     </select>
                     <p className="text-[10px] text-slate-400 mt-1">
-                      Kupon ini akan ditolak jika digunakan untuk membeli kelas lain di luar kelas ini.
+                      Kupon ini akan ditolak jika digunakan untuk membeli kursus lain di luar kursus ini.
                     </p>
                   </div>
                 )}

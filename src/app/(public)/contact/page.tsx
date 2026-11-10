@@ -88,7 +88,7 @@ export default async function ContactPage() {
     {
       q: isEn
         ? "Can I get advice on which course fits beginners best?"
-        : "Apakah saya bisa berkonsultasi mengenai kelas mana yang cocok untuk pemula?",
+        : "Apakah saya bisa berkonsultasi mengenai kursus mana yang cocok untuk pemula?",
       a: isEn
         ? "Absolutely! Send a message through our form or reach us directly on WhatsApp. Our admissions team will review your background and recommend the most realistic learning roadmap toward your career goals."
         : "Tentu saja! Anda bisa langsung mengirimkan pesan melalui formulir di samping atau chat WhatsApp kami. Tim admission kami akan memetakan latar belakang Anda dan merekomendasikan roadmap belajar yang paling realistis menuju karir impian Anda.",
@@ -148,7 +148,7 @@ export default async function ContactPage() {
           <p className="text-sm sm:text-base text-stone-600 max-w-2xl mx-auto leading-relaxed">
             {isEn
               ? "From guidance on choosing your first course, inquiries about official graduation credentials, to enterprise training programs for corporate engineering teams."
-              : "Mulai dari bimbingan memilih kelas pertama, pertanyaan seputar sertifikat resmi kelulusan, hingga penawaran kelas upskilling untuk tim perusahaan Anda."}
+              : "Mulai dari bimbingan memilih kursus pertama, pertanyaan seputar sertifikat resmi kelulusan, hingga penawaran kursus upskilling untuk tim perusahaan Anda."}
           </p>
         </div>
       </section>
@@ -309,7 +309,7 @@ export default async function ContactPage() {
                 className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100/70 px-4 py-2 rounded-xl transition-colors"
               >
                 <Compass size={14} />
-                {isEn ? "Explore All Courses" : "Jelajahi Semua Kelas"}
+                {isEn ? "Explore All Courses" : "Jelajahi Semua Kursus"}
               </Link>
               <Link
                 href="/about"

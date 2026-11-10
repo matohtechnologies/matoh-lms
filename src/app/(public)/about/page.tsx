@@ -347,14 +347,14 @@ export default async function AboutPage() {
           <p className="text-blue-100 text-sm sm:text-base leading-relaxed max-w-xl mx-auto">
             {isEn
               ? "Explore all curriculum courses or consult with our academic admissions team today."
-              : "Jelajahi seluruh katalog silabus kelas atau hubungi tim konsultan kami untuk menemukan jalur belajar terbaik."}
+              : "Jelajahi seluruh katalog silabus kursus atau hubungi tim konsultan kami untuk menemukan jalur belajar terbaik."}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
             <Link
               href="/courses"
               className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-white text-blue-600 font-bold hover:bg-blue-50 transition-colors shadow-sm text-sm"
             >
-              <span>{isEn ? "Explore Courses" : "Jelajahi Katalog Kelas"}</span>
+              <span>{isEn ? "Explore Courses" : "Jelajahi Katalog Kursus"}</span>
               <ArrowRight size={16} />
             </Link>
             <Link

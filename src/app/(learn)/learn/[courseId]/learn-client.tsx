@@ -261,7 +261,7 @@ export default function LearnPageClient({
     isFree: true,
     order: 1,
     sectionId: "none",
-    content: "Instruktur sedang mempersiapkan materi pembelajaran untuk kelas ini.",
+    content: "Instruktur sedang mempersiapkan materi pembelajaran untuk kursus ini.",
   };
 
   const initialLesson: LearnLesson =
@@ -2476,7 +2476,7 @@ export default function LearnPageClient({
                         <p className="text-xs text-slate-400 max-w-sm mx-auto">
                           {locale === "en"
                             ? "All course materials are assigned directly to their specific chapters."
-                            : "Semua bahan belajar untuk kelas ini telah dikelompokkan ke dalam bab masing-masing."}
+                            : "Semua bahan belajar untuk kursus ini telah dikelompokkan ke dalam bab masing-masing."}
                         </p>
                       </div>
                     ) : (
@@ -3279,7 +3279,7 @@ export default function LearnPageClient({
                   <div className="p-8 text-center bg-white rounded-2xl border border-slate-200">
                     <Loader2 className="animate-spin text-blue-500 mx-auto mb-2" size={24} />
                     <span className="text-xs text-slate-500">
-                      {locale === "en" ? "Loading discussions..." : "Memuat diskusi kelas..."}
+                      {locale === "en" ? "Loading discussions..." : "Memuat diskusi kursus..."}
                     </span>
                   </div>
                 ) : discussions.length > 0 ? (

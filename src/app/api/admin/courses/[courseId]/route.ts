@@ -122,7 +122,7 @@ export async function DELETE(
     });
 
     if (!existing) {
-      return NextResponse.json({ error: "Kelas tidak ditemukan" }, { status: 404 });
+      return NextResponse.json({ error: "Kursus tidak ditemukan" }, { status: 404 });
     }
 
     await prisma.course.delete({ where: { id: courseId } });
@@ -135,10 +135,10 @@ export async function DELETE(
     }
     revalidatePath("/");
 
-    return NextResponse.json({ success: true, message: "Kelas berhasil dihapus" });
+    return NextResponse.json({ success: true, message: "Kursus berhasil dihapus" });
   } catch (error) {
     console.error("Delete course error:", error);
-    const msg = error instanceof Error ? error.message : "Gagal menghapus kelas";
+    const msg = error instanceof Error ? error.message : "Gagal menghapus kursus";
     return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

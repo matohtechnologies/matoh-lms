@@ -73,7 +73,7 @@ export function Navbar({ user, categories }: NavbarProps) {
 
   const navItems = [
     { href: "/", label: isEn ? "Home" : "Home", exact: true },
-    { href: "/courses", label: isEn ? "Courses" : "Kelas", exact: false },
+    { href: "/courses", label: isEn ? "Courses" : "Kursus", exact: false },
     { href: "/riset", label: isEn ? "Research" : "Riset", exact: false },
     { href: "/publikasi", label: isEn ? "Publications" : "Publikasi", exact: false, prefixes: ["/publikasi", "/blog"] },
     { href: "/developer", label: isEn ? "Developer" : "Developer", exact: false },
@@ -111,15 +111,15 @@ export function Navbar({ user, categories }: NavbarProps) {
     ? categories.map((cat) => ({
       name: isEn ? (cat.nameEn || cat.name) : cat.name,
       desc: cat._count?.courses !== undefined
-        ? (isEn ? `${cat._count.courses} active courses available` : `${cat._count.courses} kelas tersedia`)
-        : (isEn ? "Curated learning track" : "Kurikulum kelas terstruktur"),
+        ? (isEn ? `${cat._count.courses} active courses available` : `${cat._count.courses} kursus tersedia`)
+        : (isEn ? "Curated learning track" : "Kurikulum kursus terstruktur"),
       href: `/courses?category=${encodeURIComponent(cat.name)}`,
-      badge: cat._count?.courses && cat._count.courses > 0 ? (isEn ? `${cat._count.courses} Kelas` : `${cat._count.courses} Kelas`) : undefined,
+      badge: cat._count?.courses && cat._count.courses > 0 ? (isEn ? `${cat._count.courses} Kursus` : `${cat._count.courses} Kursus`) : undefined,
     }))
     : [
       {
-        name: isEn ? "All Courses" : "Semua Kelas",
-        desc: isEn ? "Browse all available courses in database" : "Jelajahi semua kelas di database",
+        name: isEn ? "All Courses" : "Semua Kursus",
+        desc: isEn ? "Browse all available courses in database" : "Jelajahi semua kursus di database",
         href: "/courses",
         badge: undefined,
       },
@@ -282,7 +282,7 @@ export function Navbar({ user, categories }: NavbarProps) {
                           onClick={() => setIsUserMenuOpen(false)}
                         >
                           <BookOpen size={16} className="text-stone-400" />
-                          {isEn ? "Manage Courses" : "Kelola Kelas"}
+                          {isEn ? "Manage Courses" : "Kelola Kursus"}
                         </Link>
                         <Link
                           href="/dashboard?view=student"

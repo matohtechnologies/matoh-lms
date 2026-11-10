@@ -23,8 +23,8 @@ interface CourseMediaPickerProps {
 export function CourseMediaPicker({
   value,
   onChange,
-  label = "Thumbnail Kelas",
-  hint = "Unggah gambar sampul kelas dari komputer atau masukkan link URL gambar (JPG, PNG, WebP).",
+  label = "Thumbnail Kursus",
+  hint = "Unggah gambar sampul kursus dari komputer atau masukkan link URL gambar (JPG, PNG, WebP).",
 }: CourseMediaPickerProps) {
   const [mode, setMode] = useState<"upload" | "link">(
     value?.startsWith("/uploads/") || !value ? "upload" : "link"
@@ -39,7 +39,7 @@ export function CourseMediaPicker({
   const handleFileUpload = async (file: File) => {
     // Only accept images for course thumbnail
     if (!file.type.startsWith("image/")) {
-      setUploadError("Hanya file gambar (JPG, PNG, WebP) yang diperbolehkan untuk thumbnail kelas.");
+      setUploadError("Hanya file gambar (JPG, PNG, WebP) yang diperbolehkan untuk thumbnail kursus.");
       return;
     }
 
@@ -203,7 +203,7 @@ export function CourseMediaPicker({
           <div className="flex items-center justify-between mb-2">
             <p className="text-xs font-semibold text-stone-700 uppercase tracking-wider flex items-center gap-1.5">
               <ImageIcon size={14} className="text-emerald-500" />
-              <span>Pratinjau Thumbnail Kelas</span>
+              <span>Pratinjau Thumbnail Kursus</span>
             </p>
 
             <button

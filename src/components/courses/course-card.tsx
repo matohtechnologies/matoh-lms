@@ -177,7 +177,7 @@ export function CourseCard({
           <div className="flex items-center justify-between gap-2 mt-auto pt-2 border-t border-slate-100">
             {isEnrolled ? (
               <span className="font-bold text-emerald-600 text-xs">
-                {isEn ? "Go to Course →" : "Masuk ke Kelas →"}
+                {isEn ? "Go to Course →" : "Masuk ke Kursus →"}
               </span>
             ) : isFree ? (
               <span className="font-bold text-green-600">{isEn ? "Free" : "Gratis"}</span>

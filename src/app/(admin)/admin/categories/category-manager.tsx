@@ -179,7 +179,7 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
 
     if (deleteTarget._count.courses > 0) {
       setDeleteError(
-        `Kategori "${deleteTarget.name}" tidak dapat dihapus karena masih digunakan oleh ${deleteTarget._count.courses} kelas.`
+        `Kategori "${deleteTarget.name}" tidak dapat dihapus karena masih digunakan oleh ${deleteTarget._count.courses} kursus.`
       );
       return;
     }
@@ -453,7 +453,7 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
                             }`}
                         >
                           <BookOpen size={12} />
-                          <span>{cat._count.courses} Kelas</span>
+                          <span>{cat._count.courses} Kursus</span>
                         </Link>
                       </div>
                     </td>
@@ -494,7 +494,7 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
                             }`}
                           title={
                             cat._count.courses > 0
-                              ? "Kategori ini masih digunakan oleh kelas"
+                              ? "Kategori ini masih digunakan oleh kursus"
                               : "Hapus Kategori"
                           }
                         >
@@ -522,7 +522,7 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-stone-900">
-                    {editingCategory ? "Edit Kategori Kelas" : "Tambah Kategori Baru"}
+                    {editingCategory ? "Edit Kategori Kursus" : "Tambah Kategori Baru"}
                   </h3>
                   <p className="text-[11px] text-stone-500">
                     {editingCategory
@@ -667,7 +667,7 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
                   <span>Tidak Dapat Dihapus Langsung</span>
                 </div>
                 <p>
-                  Kategori ini masih menampung <strong>{deleteTarget._count.courses} kelas aktif</strong>. Silakan buka Manajemen Kelas dan ubah kategori kelas terkait terlebih dahulu sebelum menghapus kategori ini.
+                  Kategori ini masih menampung <strong>{deleteTarget._count.courses} kursus aktif</strong>. Silakan buka Manajemen Kursus dan ubah kategori kursus terkait terlebih dahulu sebelum menghapus kategori ini.
                 </p>
               </div>
             ) : (

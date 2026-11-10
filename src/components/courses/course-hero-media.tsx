@@ -134,7 +134,7 @@ export function CourseHeroMedia({
                   />
                 </div>
                 <span className="px-3.5 py-1 rounded-full bg-black/70 text-white text-xs font-semibold backdrop-blur-md shadow-sm tracking-wide">
-                  Pratinjau Kelas Gratis
+                  Pratinjau Kursus Gratis
                 </span>
               </button>
             </div>

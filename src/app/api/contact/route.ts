@@ -33,7 +33,7 @@ export async function POST(req: Request) {
     const trimmedName = name.trim();
     const trimmedEmail = email.trim().toLowerCase();
     const trimmedPhone = phone ? String(phone).trim() : null;
-    const trimmedCategory = category ? String(category).trim() : "Konsultasi Kelas & Karir";
+    const trimmedCategory = category ? String(category).trim() : "Konsultasi Kursus & Karir";
     const trimmedInstitution = institution ? String(institution).trim() : null;
     const trimmedMessage = message.trim();
 

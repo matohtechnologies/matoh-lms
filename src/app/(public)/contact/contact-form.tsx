@@ -16,10 +16,10 @@ export function ContactForm({ locale: propLocale }: ContactFormProps) {
 
   const categoryOptions = [
     {
-      value: "Konsultasi Kelas & Karir",
+      value: "Konsultasi Kursus & Karir",
       label: isEn
         ? "Course Selection & Career Track Advisory"
-        : "Konsultasi Pemilihan Kelas & Jalur Karir",
+        : "Konsultasi Pemilihan Kursus & Jalur Karir",
     },
     {
       value: "Bantuan Teknis & Akses Belajar",
@@ -55,7 +55,7 @@ export function ContactForm({ locale: propLocale }: ContactFormProps) {
     name: "",
     email: "",
     phone: "",
-    category: "Konsultasi Kelas & Karir",
+    category: "Konsultasi Kursus & Karir",
     institution: "",
     message: "",
   });
@@ -106,7 +106,7 @@ export function ContactForm({ locale: propLocale }: ContactFormProps) {
       name: "",
       email: "",
       phone: "",
-      category: "Konsultasi Kelas & Karir",
+      category: "Konsultasi Kursus & Karir",
       institution: "",
       message: "",
     });
@@ -130,7 +130,7 @@ export function ContactForm({ locale: propLocale }: ContactFormProps) {
         return isEn
           ? "🎓 You can also verify official digital certificates instantly using unique QR credential codes on our Official Verification Portal."
           : "🎓 Anda juga dapat melakukan verifikasi mandiri sertifikat resmi secara instan dengan nomor seri kredensial pada Portal Verifikasi Sertifikat kami.";
-      case "Konsultasi Kelas & Karir":
+      case "Konsultasi Kursus & Karir":
         return isEn
           ? "Our academic advisors will map your background and recommend the most realistic roadmap tailored to your specific career objectives."
           : "Tim penasihat akademik kami akan memetakan latar belakang Anda dan merekomendasikan jalur belajar yang paling realistis menuju tujuan karir Anda.";
@@ -354,7 +354,7 @@ export function ContactForm({ locale: propLocale }: ContactFormProps) {
                 placeholder={
                   isEn
                     ? "Please share your questions in detail, such as syllabus topics, recommended hardware specs, or corporate invoices..."
-                    : "Tuliskan pertanyaan Anda secara detail, misalnya seputar silabus kelas, rekomendasi laptop yang dibutuhkan, atau metode pembayaran..."
+                    : "Tuliskan pertanyaan Anda secara detail, misalnya seputar silabus kursus, rekomendasi laptop yang dibutuhkan, atau metode pembayaran..."
                 }
                 value={formData.message}
                 onChange={(e) =>

@@ -139,13 +139,13 @@ export async function sendOrderReceiptEmail({
             </div>
             <h2 style="margin: 0 0 12px 0; color: #0f172a;">Selamat Datang di Program Pelatihan, ${recipientName}!</h2>
             <p style="font-size: 14px; color: #475569; line-height: 1.6;">
-              Transaksi Anda telah berhasil diverifikasi oleh payment gateway Midtrans. Akses materi kelas Anda telah terbuka dengan status <strong>Akses Selamanya (Lifetime Access)</strong>.
+              Transaksi Anda telah berhasil diverifikasi oleh payment gateway Midtrans. Akses materi kursus Anda telah terbuka dengan status <strong>Akses Selamanya (Lifetime Access)</strong>.
             </p>
             <div class="receipt-box">
               <div style="font-size: 12px; color: #64748b;">ID Transaksi:</div>
               <div style="font-family: monospace; font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 12px;">${orderId}</div>
               
-              <div style="font-size: 12px; color: #64748b;">Program Kelas:</div>
+              <div style="font-size: 12px; color: #64748b;">Program Kursus:</div>
               <div style="font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 12px;">${courseTitle}</div>
               
               <div style="font-size: 12px; color: #64748b;">Total Pembayaran:</div>
@@ -153,7 +153,7 @@ export async function sendOrderReceiptEmail({
             </div>
             <div style="text-align: center;">
               <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://matohtechnologies.com"}/dashboard/my-courses" class="btn" target="_blank">
-                Buka Kelas Saya Sekarang
+                Buka Kursus Saya Sekarang
               </a>
             </div>
             <div class="footer">

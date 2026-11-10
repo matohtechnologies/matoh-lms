@@ -85,7 +85,7 @@ export function MobileStickyBar({
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-900/20 active:scale-95 transition-all"
             >
               <Play size={14} />
-              <span>{isEn ? "Enter Class" : "Masuk Kelas"}</span>
+              <span>{isEn ? "Enter Class" : "Masuk Kursus"}</span>
             </Link>
           ) : (
             <Link

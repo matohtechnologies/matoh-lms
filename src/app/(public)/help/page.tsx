@@ -13,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
       : "Pusat Bantuan & FAQ | PT. Matoh Technologies Indonesia",
     description: isEn
       ? "Find quick answers regarding Midtrans payments, course access, certificates, verification, and accounts at PT. Matoh Technologies Indonesia."
-      : "Temukan jawaban cepat seputar pembayaran otomatis Midtrans, masa akses materi kelas, klaim dan verifikasi sertifikat, serta panduan akun di PT. Matoh Technologies Indonesia.",
+      : "Temukan jawaban cepat seputar pembayaran otomatis Midtrans, masa akses materi kursus, klaim dan verifikasi sertifikat, serta panduan akun di PT. Matoh Technologies Indonesia.",
   };
 }
 

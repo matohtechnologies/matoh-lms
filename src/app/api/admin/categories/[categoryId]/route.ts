@@ -166,7 +166,7 @@ export async function DELETE(
     if (category._count.courses > 0) {
       return NextResponse.json(
         {
-          error: `Kategori "${category.name}" masih terhubung dengan ${category._count.courses} kelas aktif. Pindahkan kelas ke kategori lain terlebih dahulu sebelum menghapus.`,
+          error: `Kategori "${category.name}" masih terhubung dengan ${category._count.courses} kursus aktif. Pindahkan kursus ke kategori lain terlebih dahulu sebelum menghapus.`,
         },
         { status: 400 }
       );

@@ -121,7 +121,7 @@ export default function EditCoursePage() {
       ]);
 
       if (!courseRes.ok) {
-        setError("Kelas tidak ditemukan");
+        setError("Kursus tidak ditemukan");
         setLoading(false);
         return;
       }
@@ -166,7 +166,7 @@ export default function EditCoursePage() {
         setWhatYouLearnItems([]);
       }
     } catch {
-      setError("Gagal memuat data kelas");
+      setError("Gagal memuat data kursus");
     } finally {
       setLoading(false);
     }
@@ -221,9 +221,9 @@ export default function EditCoursePage() {
 
   const handleDelete = async () => {
     const confirmed = await dynamicConfirm({
-      title: "Hapus Kelas Permanen?",
-      message: `Apakah Anda yakin ingin menghapus kelas "${title}"?\n\nTindakan ini tidak dapat dibatalkan dan akan menghapus seluruh modul kurikulum, bahan ajar, dan pengaturan kelas ini.`,
-      confirmText: "Ya, Hapus Kelas",
+      title: "Hapus Kursus Permanen?",
+      message: `Apakah Anda yakin ingin menghapus kursus "${title}"?\n\nTindakan ini tidak dapat dibatalkan dan akan menghapus seluruh modul kurikulum, bahan ajar, dan pengaturan kursus ini.`,
+      confirmText: "Ya, Hapus Kursus",
       cancelText: "Batal",
       variant: "danger",
       icon: "trash",
@@ -239,11 +239,11 @@ export default function EditCoursePage() {
       } else {
         const d = await res.json();
         await dynamicAlert({
-          title: "Gagal Menghapus Kelas",
-          message: d.error ?? "Terjadi kesalahan saat menghapus kelas.",
+          title: "Gagal Menghapus Kursus",
+          message: d.error ?? "Terjadi kesalahan saat menghapus kursus.",
           variant: "danger",
         });
-        setError(d.error ?? "Gagal menghapus kelas");
+        setError(d.error ?? "Gagal menghapus kursus");
       }
     } catch {
       await dynamicAlert({
@@ -477,11 +477,11 @@ export default function EditCoursePage() {
           {/* Main Info */}
           <div className="bg-white rounded-2xl border border-stone-200 p-6 shadow-warm space-y-5">
             <h2 className="font-semibold text-stone-900 text-base border-b border-stone-100 pb-3">
-              Informasi Utama Kelas
+              Informasi Utama Kursus
             </h2>
 
             <Input
-              label="Judul Kelas"
+              label="Judul Kursus"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
@@ -524,7 +524,7 @@ export default function EditCoursePage() {
             </div>
 
             <Textarea
-              label="Deskripsi Kelas"
+              label="Deskripsi Kursus"
               rows={5}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -595,7 +595,7 @@ export default function EditCoursePage() {
           <CourseMediaPicker
             value={thumbnail}
             onChange={setThumbnail}
-            label="Thumbnail & Media Banner Kelas"
+            label="Thumbnail & Media Banner Kursus"
           />
 
           {/* Visibility */}
@@ -609,8 +609,8 @@ export default function EditCoursePage() {
                   className="w-4 h-4 rounded border-stone-300 text-blue-600 focus:ring-blue-500 accent-blue-600"
                 />
                 <div>
-                  <span className="text-sm font-medium text-stone-700">Publikasikan Kelas</span>
-                  <p className="text-xs text-stone-400">Kelas akan tampil di katalog publik</p>
+                  <span className="text-sm font-medium text-stone-700">Publikasikan Kursus</span>
+                  <p className="text-xs text-stone-400">Kursus akan tampil di katalog publik</p>
                 </div>
               </label>
               <label className="flex items-center gap-3 cursor-pointer">
@@ -622,7 +622,7 @@ export default function EditCoursePage() {
                     Tampilkan di Halaman Utama
                   </span>
                   <p className="text-xs text-stone-400">
-                    Kelas muncul di seksi Rekomendasi/Featured di beranda
+                    Kursus muncul di seksi Rekomendasi/Featured di beranda
                   </p>
                 </div>
               </label>
@@ -631,7 +631,7 @@ export default function EditCoursePage() {
 
           <div className="flex justify-end pt-2">
             <Button type="submit" loading={saving} leftIcon={<Save size={16} />}>
-              Simpan Informasi Kelas
+              Simpan Informasi Kursus
             </Button>
           </div>
         </form>

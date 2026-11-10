@@ -360,7 +360,7 @@ export function ResourceManager({ courseId, sections = [] }: ResourceManagerProp
     return (
       <div className="flex items-center justify-center p-12 bg-white rounded-2xl border border-stone-200">
         <Loader2 className="animate-spin text-blue-600 mr-2" size={20} />
-        <span className="text-sm text-stone-500 font-medium">Memuat bahan ajar kelas...</span>
+        <span className="text-sm text-stone-500 font-medium">Memuat bahan ajar kursus...</span>
       </div>
     );
   }
@@ -375,7 +375,7 @@ export function ResourceManager({ courseId, sections = [] }: ResourceManagerProp
             Manajemen Bahan Belajar & Sumber Daya
           </h2>
           <p className="text-xs text-stone-500 mt-1">
-            Unggah file materi, source code, slide, atau template per-chapter maupun untuk keseluruhan kelas.
+            Unggah file materi, source code, slide, atau template per-chapter maupun untuk keseluruhan kursus.
           </p>
         </div>
 
@@ -583,7 +583,7 @@ export function ResourceManager({ courseId, sections = [] }: ResourceManagerProp
                   {editingResource ? "Edit Bahan Belajar" : "Tambah Bahan Belajar Baru"}
                 </h3>
                 <p className="text-xs text-stone-500 mt-0.5">
-                  Hubungkan materi pendukung ke chapter tertentu atau sediakan untuk seluruh kelas.
+                  Hubungkan materi pendukung ke chapter tertentu atau sediakan untuk seluruh kursus.
                 </p>
               </div>
               <span className="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-100">
@@ -612,7 +612,7 @@ export function ResourceManager({ courseId, sections = [] }: ResourceManagerProp
                 <select id="resource-modal-section" name="sectionId" value={sectionId} onChange={(e) => setSectionId(e.target.value)}
                   className="w-full text-xs px-3 py-2.5 rounded-xl border border-stone-300 bg-white font-medium text-stone-800 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="">🌐 Semua Chapter (Bahan Belajar Umum / Keseluruhan Kelas)</option>
+                  <option value="">🌐 Semua Chapter (Bahan Belajar Umum / Keseluruhan Kursus)</option>
                   {sections.map((s, idx) => (
                     <option key={s.id} value={s.id}>
                       📁 Bab {idx + 1}: {s.title}
@@ -620,7 +620,7 @@ export function ResourceManager({ courseId, sections = [] }: ResourceManagerProp
                   ))}
                 </select>
                 <p className="text-[11px] text-stone-400 mt-1">
-                  Pilih &ldquo;Semua Chapter&rdquo; jika file ini berlaku umum untuk seluruh kelas (misal: template Figma atau software requirements).
+                  Pilih &ldquo;Semua Chapter&rdquo; jika file ini berlaku umum untuk seluruh kursus (misal: template Figma atau software requirements).
                 </p>
               </div>
 

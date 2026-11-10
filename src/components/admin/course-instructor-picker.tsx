@@ -114,7 +114,7 @@ export function CourseInstructorPicker({
           Instruktur &amp; Narasi &ldquo;Tentang Instruktur&rdquo;
         </h2>
         <p className="text-xs text-stone-500 mt-0.5">
-          Tentukan instruktur pengampu kelas ini serta sesuaikan gelar/jabatan dan biografi yang tampil di halaman publik kelas
+          Tentukan instruktur pengampu kursus ini serta sesuaikan gelar/jabatan dan biografi yang tampil di halaman publik kursus
         </p>
       </div>
 
@@ -196,13 +196,13 @@ export function CourseInstructorPicker({
       {/* 4. Bio / About Textarea */}
       <div className="space-y-1.5">
         <div className="flex items-center justify-between">
-          <label htmlFor="course-instructor-bio" className="text-sm font-medium text-stone-700">Biografi / Tentang Instruktur (Khusus Kelas Ini)</label>
+          <label htmlFor="course-instructor-bio" className="text-sm font-medium text-stone-700">Biografi / Tentang Instruktur (Khusus Kursus Ini)</label>
           <span className="text-[11px] text-stone-400">
             Mendukung teks multi-baris
           </span>
         </div>
         <textarea id="course-instructor-bio" name="instructorBio" rows={4} value={instructorBio} onChange={(e) => onBioChange(e.target.value)}
-          placeholder="Tuliskan pengalaman industri, sertifikasi internasional, atau capaian instruktur yang relevan dengan topik kelas ini..."
+          placeholder="Tuliskan pengalaman industri, sertifikasi internasional, atau capaian instruktur yang relevan dengan topik kursus ini..."
           className="w-full p-3.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 leading-relaxed font-sans"
         />
       </div>
@@ -213,7 +213,7 @@ export function CourseInstructorPicker({
           <p className="text-stone-500 flex items-center gap-1.5">
             <HelpCircle size={13} className="text-stone-400" />
             <span>
-              Ingin headline dan biografi di atas berlaku permanen untuk semua kelas instruktur ini?
+              Ingin headline dan biografi di atas berlaku permanen untuk semua kursus instruktur ini?
             </span>
           </p>
 

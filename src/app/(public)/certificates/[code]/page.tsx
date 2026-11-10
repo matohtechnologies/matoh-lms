@@ -75,7 +75,7 @@ export async function generateMetadata({ params }: CertificatePageProps): Promis
   if (!cert) return { title: "Sertifikat Tidak Ditemukan" };
   return {
     title: `Sertifikat: ${cert.course.title} — ${cert.user.name}`,
-    description: `Sertifikat kelulusan resmi dari PT. Matoh Technologies Indonesia untuk kelas ${cert.course.title}`,
+    description: `Sertifikat kelulusan resmi dari PT. Matoh Technologies Indonesia untuk kursus ${cert.course.title}`,
   };
 }
 
@@ -352,7 +352,7 @@ export default async function CertificateViewPage({ params, searchParams }: Cert
             code={code}
             isLocked={true}
             courseTitle={course.title}
-            lockReason="Anda belum memenuhi seluruh kriteria kelulusan (progres materi, kelulusan kuis, atau persetujuan tugas) pada kelas ini."
+            lockReason="Anda belum memenuhi seluruh kriteria kelulusan (progres materi, kelulusan kuis, atau persetujuan tugas) pada kursus ini."
           />
         );
       }

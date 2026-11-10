@@ -82,8 +82,8 @@ export default function NewCoursePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim()) { setError("Judul kelas wajib diisi"); return; }
-    if (!description.trim()) { setError("Deskripsi kelas wajib diisi"); return; }
+    if (!title.trim()) { setError("Judul kursus wajib diisi"); return; }
+    if (!description.trim()) { setError("Deskripsi kursus wajib diisi"); return; }
 
     setIsSubmitting(true);
     setError("");
@@ -115,7 +115,7 @@ export default function NewCoursePage() {
         setSuccess(true);
         setTimeout(() => router.push("/admin/courses"), 1500);
       } else {
-        setError(data.error ?? "Gagal membuat kelas");
+        setError(data.error ?? "Gagal membuat kursus");
       }
     } catch {
       setError("Terjadi kesalahan koneksi. Coba lagi.");
@@ -140,10 +140,10 @@ export default function NewCoursePage() {
               className="text-2xl font-bold text-stone-900"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
-              Tambah Kelas Baru
+              Tambah Kursus Baru
             </h1>
             <p className="text-stone-500 text-xs mt-0.5">
-              Isi data detail kurikulum, harga, dan materi kelas
+              Isi data detail kurikulum, harga, dan materi kursus
             </p>
           </div>
         </div>
@@ -161,7 +161,7 @@ export default function NewCoursePage() {
             loading={isSubmitting}
             leftIcon={<Save size={16} />}
           >
-            Publikasikan Kelas
+            Publikasikan Kursus
           </Button>
         </div>
       </div>
@@ -170,7 +170,7 @@ export default function NewCoursePage() {
         <div className="p-4 rounded-2xl bg-green-50 border border-green-200 text-green-800 flex items-center gap-3">
           <CheckCircle2 size={18} className="text-green-600 shrink-0" />
           <p className="text-sm font-medium">
-            Kelas baru berhasil dibuat! Mengalihkan ke daftar kelas...
+            Kursus baru berhasil dibuat! Mengalihkan ke daftar kursus...
           </p>
         </div>
       )}
@@ -185,12 +185,12 @@ export default function NewCoursePage() {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="bg-white rounded-2xl border border-stone-200 p-6 shadow-warm space-y-5">
           <h2 className="font-semibold text-stone-900 text-base border-b border-stone-100 pb-3">
-            Informasi Utama Kelas
+            Informasi Utama Kursus
           </h2>
 
           <div className="space-y-4">
             <Input
-              label="Judul Kelas"
+              label="Judul Kursus"
               placeholder="Contoh: Fullstack Web Developer Modern: Next.js 16 & TypeScript"
               value={title}
               onChange={(e) => handleTitleChange(e.target.value)}
@@ -203,7 +203,7 @@ export default function NewCoursePage() {
                 <span className="text-stone-400 select-none mr-1">/courses/</span>
                 <input id="new-course-slug" name="slug" type="text" value={slug} onChange={(e) => setSlug(e.target.value)}
                   className="bg-transparent flex-1 focus:outline-none text-stone-800 font-mono text-xs"
-                  placeholder="judul-kelas-otomatis"
+                  placeholder="judul-kursus-otomatis"
                 />
               </div>
             </div>
@@ -244,7 +244,7 @@ export default function NewCoursePage() {
 
             <Textarea
               label="Ringkasan & Deskripsi Lengkap"
-              placeholder="Jelaskan secara komprehensif apa yang dipelajari dan keunggulan dari kelas ini..."
+              placeholder="Jelaskan secara komprehensif apa yang dipelajari dan keunggulan dari kursus ini..."
               rows={4}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -278,7 +278,7 @@ export default function NewCoursePage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label htmlFor="new-course-price" className="text-sm font-medium text-stone-700">Harga Kelas (IDR)</label>
+              <label htmlFor="new-course-price" className="text-sm font-medium text-stone-700">Harga Kursus (IDR)</label>
               <div className="relative">
                 <span className="absolute left-3 top-2.5 text-sm font-medium text-stone-400">Rp</span>
                 <input id="new-course-price" name="price" type="number" disabled={isFree} value={isFree ? 0 : price}
@@ -292,7 +292,7 @@ export default function NewCoursePage() {
                   onChange={(e) => setIsFree(e.target.checked)}
                   className="rounded border-stone-300 text-blue-600 focus:ring-blue-500"
                 />
-                <span className="text-xs text-stone-600">Jadikan kelas ini Gratis untuk semua siswa</span>
+                <span className="text-xs text-stone-600">Jadikan kursus ini Gratis untuk semua siswa</span>
               </label>
             </div>
 
@@ -330,7 +330,7 @@ export default function NewCoursePage() {
             loading={isSubmitting}
             leftIcon={<Save size={16} />}
           >
-            Simpan Kelas
+            Simpan Kursus
           </Button>
         </div>
       </form>

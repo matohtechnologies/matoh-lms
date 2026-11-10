@@ -362,7 +362,7 @@ export default async function DashboardPage({
                 >
                   {t("my_courses_section")}
                 </h2>
-                <p className="text-xs text-stone-500 mt-0.5">Daftar kelas yang sedang Anda pelajari</p>
+                <p className="text-xs text-stone-500 mt-0.5">Daftar kursus yang sedang Anda pelajari</p>
               </div>
               <Link
                 href="/dashboard/my-courses"

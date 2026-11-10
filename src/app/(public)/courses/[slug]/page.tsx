@@ -52,7 +52,7 @@ const getCourse = cache(async (slug: string) => {
 export async function generateMetadata({ params }: CourseDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
   const course = await getCourse(slug);
-  if (!course) return { title: "Kelas tidak ditemukan" };
+  if (!course) return { title: "Kursus tidak ditemukan" };
   return {
     title: course.title,
     description: course.description.slice(0, 160),
@@ -307,7 +307,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                 />
               ) : (
                 <div className="p-4 rounded-xl bg-slate-50 text-slate-500 text-sm shadow-2xs">
-                  {isEn ? "Course curriculum is being prepared by the instructor." : "Kurikulum kelas sedang dipersiapkan oleh instruktur."}
+                  {isEn ? "Course curriculum is being prepared by the instructor." : "Kurikulum kursus sedang dipersiapkan oleh instruktur."}
                 </div>
               )}
             </div>
@@ -438,12 +438,12 @@ function PriceCard({
         {isEnrolled ? (
           <div className="p-3.5 bg-emerald-50 rounded-xl space-y-1">
             <div className="text-emerald-800 font-bold text-sm">
-              {isEn ? "You Already Own This Course" : "Kelas Sudah Anda Miliki"}
+              {isEn ? "You Already Own This Course" : "Kursus Sudah Anda Miliki"}
             </div>
             <p className="text-xs text-emerald-700 leading-relaxed">
               {isEn
                 ? "You are already enrolled and have full lifetime access to this course."
-                : "Anda sudah terdaftar dan memiliki akses penuh seumur hidup ke materi kelas ini."}
+                : "Anda sudah terdaftar dan memiliki akses penuh seumur hidup ke materi kursus ini."}
             </p>
           </div>
         ) : isFree ? (
@@ -475,7 +475,7 @@ function PriceCard({
             size="lg"
           >
             <Play size={16} />
-            {isEn ? "Continue Learning (Enter Course)" : "Lanjutkan Belajar (Masuk Kelas)"}
+            {isEn ? "Continue Learning (Enter Course)" : "Lanjutkan Belajar (Masuk Kursus)"}
           </Button>
         </Link>
       ) : (

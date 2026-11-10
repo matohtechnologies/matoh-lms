@@ -144,7 +144,7 @@ export default async function TermsPage() {
               <p className="mt-3">
                 {isEn
                   ? "Upon confirmed transaction callback from the payment gateway, course enrollment is activated automatically for the authenticated user account with Lifetime Access privilege."
-                  : "Setelah sistem menerima notifikasi pembayaran sukses dari gateway, hak akses kelas akan diaktifkan secara instan ke akun pengguna terdaftar dengan status Akses Seumur Hidup (Lifetime Access), kecuali dinyatakan lain secara tertulis pada halaman detail program."}
+                  : "Setelah sistem menerima notifikasi pembayaran sukses dari gateway, hak akses kursus akan diaktifkan secara instan ke akun pengguna terdaftar dengan status Akses Seumur Hidup (Lifetime Access), kecuali dinyatakan lain secara tertulis pada halaman detail program."}
               </p>
             </div>
 

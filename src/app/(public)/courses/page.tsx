@@ -8,8 +8,8 @@ import { getTranslations, getLocale } from "next-intl/server";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Semua Kelas",
-  description: "Jelajahi ratusan kelas online berkualitas tinggi dari instruktur berpengalaman",
+  title: "Semua Kursus",
+  description: "Jelajahi ratusan kursus online berkualitas tinggi dari instruktur berpengalaman",
 };
 
 export const revalidate = 60;
@@ -87,14 +87,14 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
           <p className="text-slate-500 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
             {isEn
               ? `Explore ${total} curated, industry-aligned courses crafted by leading tech practitioners.`
-              : `${total} kelas terstruktur dan kurikulum industri siap membantumu menguasai skill masa depan.`}
+              : `${total} kursus terstruktur dan kurikulum industri siap membantumu menguasai skill masa depan.`}
           </p>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
         {/* Course Catalog Section: Clean Minimal View */}
-        <section id="daftar-kelas">
+        <section id="daftar-kursus">
           {/* Header Bar: Total Courses Count */}
           <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-200/80">
             <p className="text-sm sm:text-base text-slate-600 font-medium">
@@ -104,7 +104,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                 </>
               ) : (
                 <>
-                  Menampilkan <span className="font-bold text-slate-900">{courses.length}</span> dari <span className="font-bold text-slate-900">{total}</span> kelas
+                  Menampilkan <span className="font-bold text-slate-900">{courses.length}</span> dari <span className="font-bold text-slate-900">{total}</span> kursus
                 </>
               )}
             </p>
@@ -151,7 +151,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-slate-900 mb-1.5">
-                    {isEn ? "No courses available" : "Belum ada kelas yang tersedia"}
+                    {isEn ? "No courses available" : "Belum ada kursus yang tersedia"}
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-500 leading-relaxed max-w-md mx-auto">
                     {t("not_found_desc")}

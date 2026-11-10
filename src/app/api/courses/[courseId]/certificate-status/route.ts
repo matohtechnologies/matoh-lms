@@ -24,7 +24,7 @@ export async function GET(
     });
 
     if (!course) {
-      return NextResponse.json({ error: "Kelas tidak ditemukan" }, { status: 404 });
+      return NextResponse.json({ error: "Kursus tidak ditemukan" }, { status: 404 });
     }
 
     const setting = course.certificateSetting || {
@@ -45,7 +45,7 @@ export async function GET(
     if (!setting.isEnabled) {
       return NextResponse.json({
         isEnabled: false,
-        message: "Kelas ini tidak menerbitkan sertifikat kelulusan.",
+        message: "Kursus ini tidak menerbitkan sertifikat kelulusan.",
       });
     }
 
@@ -64,7 +64,7 @@ export async function GET(
 
     if (!enrollment) {
       return NextResponse.json(
-        { error: "Anda belum terdaftar pada kelas ini", enrolled: false },
+        { error: "Anda belum terdaftar pada kursus ini", enrolled: false },
         { status: 403 }
       );
     }

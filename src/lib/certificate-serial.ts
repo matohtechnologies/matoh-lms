@@ -6,7 +6,7 @@
 export const DEFAULT_SERIAL_PATTERN = "MT/{COURSE_CODE}/{YEAR}/{COUNTER}";
 
 export const SERIAL_TAG_DESCRIPTIONS = [
-  { tag: "{COURSE_CODE}", desc: "Kode singkatan unik kelas", example: "FSW" },
+  { tag: "{COURSE_CODE}", desc: "Kode singkatan unik kursus", example: "FSW" },
   { tag: "{YEAR}", desc: "Tahun penerbitan (4 digit)", example: "2026" },
   { tag: "{YY}", desc: "Tahun penerbitan (2 digit)", example: "26" },
   { tag: "{MONTH}", desc: "Bulan penerbitan (2 digit)", example: "10" },

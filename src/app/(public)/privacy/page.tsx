@@ -120,7 +120,7 @@ export default async function PrivacyPage() {
                   <strong>{isEn ? "Transaction & Payment Data:" : "Data Transaksi & Pembayaran:"}</strong>{" "}
                   {isEn
                     ? "Order ID, course package purchased, payment timestamp, and transaction status returned by the official payment gateway (Midtrans). Note: We never store your full credit card numbers or banking PINs."
-                    : "Nomor pesanan (Order ID), nama paket kelas yang dibeli, waktu pembayaran, dan status transaksi yang diteruskan oleh payment gateway resmi (Midtrans). Catatan: Kami tidak pernah menyimpan nomor kartu kredit atau PIN perbankan Anda."}
+                    : "Nomor pesanan (Order ID), nama paket kursus yang dibeli, waktu pembayaran, dan status transaksi yang diteruskan oleh payment gateway resmi (Midtrans). Catatan: Kami tidak pernah menyimpan nomor kartu kredit atau PIN perbankan Anda."}
                 </li>
                 <li>
                   <strong>{isEn ? "Learning Activity Data:" : "Data Aktivitas Pembelajaran:"}</strong>{" "}

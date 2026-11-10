@@ -9,9 +9,9 @@ export function DeleteCourseButton({ courseId, courseTitle }: { courseId: string
 
   const handleDelete = async () => {
     const confirmed = await dynamicConfirm({
-      title: "Hapus Kelas Permanen?",
-      message: `Apakah Anda yakin ingin menghapus kelas "${courseTitle}"?\n\nSemua materi kurikulum, tugas, dan pengaturan terkait kelas ini akan dihapus permanen dari sistem.`,
-      confirmText: "Ya, Hapus Kelas",
+      title: "Hapus Kursus Permanen?",
+      message: `Apakah Anda yakin ingin menghapus kursus "${courseTitle}"?\n\nSemua materi kurikulum, tugas, dan pengaturan terkait kursus ini akan dihapus permanen dari sistem.`,
+      confirmText: "Ya, Hapus Kursus",
       cancelText: "Batal",
       variant: "danger",
       icon: "trash",
@@ -27,8 +27,8 @@ export function DeleteCourseButton({ courseId, courseTitle }: { courseId: string
       } else {
         const data = await res.json();
         await dynamicAlert({
-          title: "Gagal Menghapus Kelas",
-          message: data.error ?? "Terjadi kesalahan saat menghapus kelas.",
+          title: "Gagal Menghapus Kursus",
+          message: data.error ?? "Terjadi kesalahan saat menghapus kursus.",
           variant: "danger",
         });
       }
@@ -48,7 +48,7 @@ export function DeleteCourseButton({ courseId, courseTitle }: { courseId: string
       onClick={handleDelete}
       disabled={isDeleting}
       className="p-1.5 rounded-lg hover:bg-red-50 text-stone-400 hover:text-red-600 transition-colors disabled:opacity-50"
-      title="Hapus Kelas"
+      title="Hapus Kursus"
     >
       {isDeleting ? (
         <Loader2 size={15} className="animate-spin text-red-600" />

@@ -143,7 +143,7 @@ export function GraduationCelebrationModal({
               Dianugerahkan Kepada
             </p>
             <h3 className="text-lg font-bold text-stone-900">{studentName}</h3>
-            <p className="text-xs text-stone-500">atas penyelesaian kelas:</p>
+            <p className="text-xs text-stone-500">atas penyelesaian kursus:</p>
             <p className="text-sm font-semibold text-blue-600 line-clamp-2">
               {courseTitle}
             </p>

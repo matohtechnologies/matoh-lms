@@ -474,7 +474,7 @@ export function EditInstructorModal({
               >
                 Gelar / Bidang Keahlian / Headline
               </label>
-              <span className="text-[10px] text-stone-400">Tampil di halaman publik kelas</span>
+              <span className="text-[10px] text-stone-400">Tampil di halaman publik kursus</span>
             </div>
             <div className="relative">
               <Briefcase

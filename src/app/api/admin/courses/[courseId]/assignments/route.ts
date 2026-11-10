@@ -30,7 +30,7 @@ export async function POST(
     });
 
     if (!course) {
-      return NextResponse.json({ error: "Kelas tidak ditemukan" }, { status: 404 });
+      return NextResponse.json({ error: "Kursus tidak ditemukan" }, { status: 404 });
     }
 
     const assignment = await prisma.assignment.create({

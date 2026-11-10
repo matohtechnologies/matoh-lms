@@ -191,7 +191,7 @@ export interface CertificateDataValues {
 
 export const PLACEHOLDER_OPTIONS = [
   { key: "student_name", label: "Nama Siswa", tag: "{{student_name}}", defaultText: "Budi Pratama" },
-  { key: "course_title", label: "Nama Kursus / Kelas", tag: "{{course_title}}", defaultText: "Fullstack Web & AI Masterclass" },
+  { key: "course_title", label: "Nama Kursus / Kursus", tag: "{{course_title}}", defaultText: "Fullstack Web & AI Masterclass" },
   { key: "certificate_title", label: "Judul Sertifikat", tag: "{{certificate_title}}", defaultText: "Certificate of Completion" },
   { key: "certificate_subtitle", label: "Narasi / Keterangan", tag: "{{certificate_subtitle}}", defaultText: "Atas kelulusan seluruh modul kurikulum, evaluasi kuis, dan pemenuhan seluruh kriteria akademik." },
   { key: "issue_date", label: "Tanggal Terbit", tag: "{{issue_date}}", defaultText: "30 September 2026" },

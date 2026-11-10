@@ -44,7 +44,7 @@ export async function POST(
     });
 
     if (!course) {
-      return NextResponse.json({ error: "Kelas tidak ditemukan" }, { status: 404 });
+      return NextResponse.json({ error: "Kursus tidak ditemukan" }, { status: 404 });
     }
 
     const setting = course.certificateSetting || {
@@ -66,7 +66,7 @@ export async function POST(
 
     if (!setting.isEnabled) {
       return NextResponse.json(
-        { error: "Penerbitan sertifikat dinonaktifkan untuk kelas ini" },
+        { error: "Penerbitan sertifikat dinonaktifkan untuk kursus ini" },
         { status: 400 }
       );
     }
@@ -86,7 +86,7 @@ export async function POST(
 
     if (!enrollment) {
       return NextResponse.json(
-        { error: "Anda belum terdaftar pada kelas ini" },
+        { error: "Anda belum terdaftar pada kursus ini" },
         { status: 403 }
       );
     }

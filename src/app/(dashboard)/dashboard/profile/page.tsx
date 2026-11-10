@@ -403,7 +403,7 @@ export default function ProfilePage() {
             <p className="text-stone-500 leading-relaxed">
               {isEn
                 ? "Your full name is used on your certificates of completion. Make sure it matches your official identification."
-                : "Nama lengkap Anda digunakan pada sertifikat kelulusan kelas. Pastikan nama sesuai dengan identitas resmi Anda."}
+                : "Nama lengkap Anda digunakan pada sertifikat kelulusan kursus. Pastikan nama sesuai dengan identitas resmi Anda."}
             </p>
           </div>
         </div>
@@ -486,7 +486,7 @@ export default function ProfilePage() {
                     {...register("headline")}
                   />
                   <p className="text-[11px] text-stone-400 mt-1">
-                    {isEn ? "Displayed under your name on course landing pages" : "Tampil di bawah nama Anda pada halaman kelas dan kartu instruktur"}
+                    {isEn ? "Displayed under your name on course landing pages" : "Tampil di bawah nama Anda pada halaman kursus dan kartu instruktur"}
                   </p>
                 </div>
               )}

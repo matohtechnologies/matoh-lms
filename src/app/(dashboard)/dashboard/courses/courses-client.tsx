@@ -185,7 +185,7 @@ export function DashboardCoursesClient({
           <p className="text-stone-500 text-xs sm:text-sm mt-1">
             {isEn
               ? "Browse all certifications and digital courses available in your learning portal."
-              : "Daftar kelas sertifikasi dan pelatihan digital yang tersedia untuk Anda ikuti."}
+              : "Daftar kursus sertifikasi dan pelatihan digital yang tersedia untuk Anda ikuti."}
           </p>
         </div>
 
@@ -516,7 +516,7 @@ export function DashboardCoursesClient({
                                 : "Daftar Gratis"
                               : isEn
                               ? "Enroll Now"
-                              : "Beli Kelas"}
+                              : "Beli Kursus"}
                           </span>
                         </Link>
                       )}
@@ -691,7 +691,7 @@ export function DashboardCoursesClient({
                           : "Daftar Gratis"
                         : isEn
                         ? "Enroll Now"
-                        : "Beli Kelas"}
+                        : "Beli Kursus"}
                     </span>
                   </Link>
                 )}

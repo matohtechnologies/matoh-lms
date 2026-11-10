@@ -37,7 +37,7 @@ export default function NotFound() {
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-sm font-semibold hover:border-blue-400 hover:text-blue-700 transition-colors bg-white"
           >
             <BookOpen size={16} />
-            Jelajahi Kelas
+            Jelajahi Kursus
           </Link>
         </div>
       </div>

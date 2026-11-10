@@ -104,7 +104,7 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
         where: { id: data.courseId },
       });
       if (!course) {
-        return NextResponse.json({ error: "Kelas yang dipilih tidak valid" }, { status: 400 });
+        return NextResponse.json({ error: "Kursus yang dipilih tidak valid" }, { status: 400 });
       }
     }
 

@@ -299,7 +299,7 @@ export default async function HomePage() {
                     className="rounded-2xl h-14 px-8 text-sm font-bold shadow-warm-lg hover:shadow-xl bg-blue-600 hover:bg-blue-700 transition-all hover:-translate-y-0.5 cursor-pointer"
                     rightIcon={<ArrowRight size={17} />}
                   >
-                    {isEn ? "Browse Courses" : "Jelajahi Kelas"}
+                    {isEn ? "Browse Courses" : "Jelajahi Kursus"}
                   </Button>
                 </Link>
 
@@ -333,7 +333,7 @@ export default async function HomePage() {
                   <>
                     <div className="flex items-center gap-2 font-medium">
                       <span className="font-bold text-slate-900 text-sm">{stats.courses}</span>
-                      <span className="text-slate-500">{isEn ? "Curated Courses" : "Kelas Aktif"}</span>
+                      <span className="text-slate-500">{isEn ? "Curated Courses" : "Kursus Aktif"}</span>
                     </div>
                     <div className="h-4 w-px bg-slate-200 hidden sm:block" />
                     <div className="flex items-center gap-2 font-medium">
@@ -415,7 +415,7 @@ export default async function HomePage() {
       </section>
 
       {/* =========================================================================
-          SECTION 2: ONLINE COURSE (4 KELAS)
+          SECTION 2: ONLINE COURSE (4 KURSUS)
           Judul besar di tengah, subtitle singkat, 4 card sejajar, tombol Lihat Semua di tengah
          ========================================================================= */}
       <section id="course" className="py-20 sm:py-28 border-b border-slate-200 scroll-mt-16">
@@ -462,7 +462,7 @@ export default async function HomePage() {
             </div>
           ) : (
             <div className="text-center py-12 text-sm text-slate-500">
-              {isEn ? "No courses available yet." : "Belum ada kelas yang ditampilkan."}
+              {isEn ? "No courses available yet." : "Belum ada kursus yang ditampilkan."}
             </div>
           )}
 

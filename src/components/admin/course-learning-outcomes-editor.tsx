@@ -44,7 +44,7 @@ export function CourseLearningOutcomesEditor({
             </span>
           </div>
           <p className="text-xs text-stone-500 mt-0.5">
-            Poin-poin kompetensi dan hasil belajar yang akan ditampilkan di card biru detail kelas
+            Poin-poin kompetensi dan hasil belajar yang akan ditampilkan di card biru detail kursus
           </p>
         </div>
       </div>
@@ -60,7 +60,7 @@ export function CourseLearningOutcomesEditor({
                 Belum ada poin &ldquo;Yang Akan Kamu Pelajari&rdquo;
               </p>
               <p className="text-xs text-stone-500 max-w-md mx-auto mt-1">
-                Tambahkan poin capaian pembelajaran agar calon peserta kelas memahami keahlian yang akan mereka peroleh.
+                Tambahkan poin capaian pembelajaran agar calon peserta kursus memahami keahlian yang akan mereka peroleh.
               </p>
             </div>
             <div className="flex items-center justify-center gap-2 pt-2">

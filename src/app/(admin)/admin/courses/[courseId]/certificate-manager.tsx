@@ -678,7 +678,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                 <div>
                   <p className="text-xs font-semibold text-stone-800">Wajib Lulus Semua Kuis</p>
                   <p className="text-[11px] text-stone-500 leading-relaxed mt-0.5">
-                    Jika diaktifkan dan kelas memiliki kuis evaluasi, siswa wajib mencapai nilai
+                    Jika diaktifkan dan kursus memiliki kuis evaluasi, siswa wajib mencapai nilai
                     kelulusan (passing score) pada setiap kuis.
                   </p>
                 </div>
@@ -699,7 +699,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                     Wajib Semua Tugas Disetujui (Approved)
                   </p>
                   <p className="text-[11px] text-stone-500 leading-relaxed mt-0.5">
-                    Jika diaktifkan dan kelas memiliki penugasan/submission, instruktur atau admin
+                    Jika diaktifkan dan kursus memiliki penugasan/submission, instruktur atau admin
                     harus memberikan status APPROVED sebelum sertifikat dapat diklaim.
                   </p>
                 </div>
@@ -723,12 +723,12 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
                 </h3>
               </div>
               <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200/80">
-                Kustom Per Kelas
+                Kustom Per Kursus
               </span>
             </div>
 
             <p className="text-xs text-stone-500 leading-relaxed">
-              Tentukan pola penomoran sertifikat resmi khusus untuk kelas ini. Sistem akan otomatis mengisi variabel dinamis seperti tahun, kode kelas, dan nomor urut saat sertifikat diterbitkan.
+              Tentukan pola penomoran sertifikat resmi khusus untuk kursus ini. Sistem akan otomatis mengisi variabel dinamis seperti tahun, kode kursus, dan nomor urut saat sertifikat diterbitkan.
             </p>
 
             {/* Live Preview Display Box */}
@@ -764,7 +764,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
 
               <div className="sm:col-span-4 space-y-1.5">
                 <label htmlFor="cert-course-code" className="text-xs font-semibold text-stone-700 flex items-center justify-between">
-                  <span>Kode Singkatan Kelas</span>
+                  <span>Kode Singkatan Kursus</span>
                 </label>
                 <input id="cert-course-code" name="courseCode" type="text" value={form.courseCode || ""} onChange={(e) => setForm({ ...form, courseCode: e.target.value.toUpperCase() })}
                   placeholder={
@@ -891,7 +891,7 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
 
             <p className="text-xs text-stone-500 leading-relaxed">
               Unggah file desain template sertifikat Anda sendiri (Canva, Photoshop, Figma). Data
-              siswa (nama, nama kelas, tanggal terbit, nomor kredensial, dan tanda tangan) akan
+              siswa (nama, nama kursus, tanggal terbit, nomor kredensial, dan tanda tangan) akan
               otomatis dicetak tepat di atas template tersebut.
             </p>
 

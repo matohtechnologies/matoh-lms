@@ -294,7 +294,7 @@ export function CourseCurriculumList({
                   <span>
                     {isFreeCourse
                       ? (isEn ? "Enroll for Free" : "Daftar Gratis Sekarang")
-                      : (isEn ? "Enroll in Full Course" : "Daftar Kelas Lengkap")}
+                      : (isEn ? "Enroll in Full Course" : "Daftar Kursus Lengkap")}
                   </span>
                 </Link>
               )}

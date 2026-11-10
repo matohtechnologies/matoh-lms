@@ -44,14 +44,14 @@ export async function POST(req: NextRequest) {
     });
 
     if (!course) {
-      return NextResponse.json({ error: "Kelas tidak ditemukan" }, { status: 404 });
+      return NextResponse.json({ error: "Kursus tidak ditemukan" }, { status: 404 });
     }
 
     // 1. Restriction: Specific Course Only
     if (coupon.courseId && coupon.courseId !== course.id) {
       return NextResponse.json(
         {
-          error: `Kupon ini hanya berlaku khusus untuk kelas: "${coupon.course?.title || "Kelas Tertentu"}"`,
+          error: `Kupon ini hanya berlaku khusus untuk kursus: "${coupon.course?.title || "Kursus Tertentu"}"`,
         },
         { status: 400 }
       );

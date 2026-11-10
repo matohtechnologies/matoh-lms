@@ -172,7 +172,7 @@ export function AddInstructorModal() {
 
       await dynamicAlert({
         title: "Instruktur Berhasil Ditambahkan",
-        message: `Akun instruktur untuk ${name} (${email}) berhasil dibuat dan dapat langsung ditugaskan mengajar kelas.`,
+        message: `Akun instruktur untuk ${name} (${email}) berhasil dibuat dan dapat langsung ditugaskan mengajar kursus.`,
         variant: "success",
       });
     } catch {

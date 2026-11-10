@@ -14,7 +14,7 @@ const createPaymentSchema = z
     couponCode: z.string().optional().nullable(),
   })
   .refine((data) => data.courseId || data.publicationId, {
-    message: "Harap pilih kelas atau publikasi yang ingin dibeli",
+    message: "Harap pilih kursus atau publikasi yang ingin dibeli",
   });
 
 export async function POST(req: NextRequest) {
@@ -178,7 +178,7 @@ export async function POST(req: NextRequest) {
     // ==========================================
     if (!courseId) {
       return NextResponse.json(
-        { error: "Kelas tidak ditentukan" },
+        { error: "Kursus tidak ditentukan" },
         { status: 400 }
       );
     }
@@ -192,7 +192,7 @@ export async function POST(req: NextRequest) {
     }).catch(() => null);
 
     if (!course) {
-      return NextResponse.json({ error: "Kelas tidak ditemukan" }, { status: 404 });
+      return NextResponse.json({ error: "Kursus tidak ditemukan" }, { status: 404 });
     }
 
     // Check if already enrolled
@@ -203,7 +203,7 @@ export async function POST(req: NextRequest) {
     }).catch(() => null);
 
     if (existingEnrollment) {
-      return NextResponse.json({ error: "Kamu sudah terdaftar di kelas ini" }, { status: 409 });
+      return NextResponse.json({ error: "Kamu sudah terdaftar di kursus ini" }, { status: 409 });
     }
 
     const baseAmount = course.discountPrice ?? course.price;

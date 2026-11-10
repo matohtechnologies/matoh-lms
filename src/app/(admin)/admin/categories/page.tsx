@@ -5,7 +5,7 @@ import { CategoryManager, type CategoryItem } from "./category-manager";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Manajemen Kategori Kelas — Admin Matoh Technologies",
+  title: "Manajemen Kategori Kursus — Admin Matoh Technologies",
 };
 
 export const dynamic = "force-dynamic";

@@ -9,7 +9,7 @@ import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import { DeleteCourseButton } from "./delete-course-button";
 
-export const metadata: Metadata = { title: "Manajemen Kelas — Admin" };
+export const metadata: Metadata = { title: "Manajemen Kursus — Admin" };
 export const dynamic = "force-dynamic";
 
 export default async function AdminCoursesPage() {
@@ -84,7 +84,7 @@ export default async function AdminCoursesPage() {
               <BookOpen size={22} />
             </div>
             <p className="text-stone-700 font-bold text-sm mb-1">{t("no_courses")}</p>
-            <p className="text-stone-400 text-xs">Klik tombol di atas untuk membuat kelas pertama Anda.</p>
+            <p className="text-stone-400 text-xs">Klik tombol di atas untuk membuat kursus pertama Anda.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -152,7 +152,7 @@ export default async function AdminCoursesPage() {
                         <Link
                           href={`/admin/courses/${course.id}?tab=settings`}
                           className="p-1.5 rounded-lg text-stone-500 hover:text-stone-900 hover:bg-stone-100 transition-colors border border-stone-200/60"
-                          title="Edit Pengaturan Kelas"
+                          title="Edit Pengaturan Kursus"
                         >
                           <Edit size={14} />
                         </Link>

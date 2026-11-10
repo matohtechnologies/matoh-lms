@@ -50,7 +50,7 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
         where: { id: data.sectionId, courseId: course.id },
       });
       if (!sectionExists) {
-        return NextResponse.json({ error: "Chapter / Seksi tidak valid untuk kelas ini" }, { status: 400 });
+        return NextResponse.json({ error: "Chapter / Seksi tidak valid untuk kursus ini" }, { status: 400 });
       }
     }
 

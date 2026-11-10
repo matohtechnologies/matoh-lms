@@ -182,7 +182,7 @@ export function DiscussionManager({ courseId }: { courseId: string }) {
     return (
       <div className="flex items-center justify-center p-12 bg-white rounded-2xl border border-stone-200">
         <Loader2 className="animate-spin text-blue-600 mr-2" size={20} />
-        <span className="text-sm text-stone-500 font-medium">Memuat diskusi kelas...</span>
+        <span className="text-sm text-stone-500 font-medium">Memuat diskusi kursus...</span>
       </div>
     );
   }
@@ -194,7 +194,7 @@ export function DiscussionManager({ courseId }: { courseId: string }) {
         <div>
           <h2 className="text-base font-bold text-stone-900 flex items-center gap-2">
             <MessageSquare size={18} className="text-blue-600" />
-            Forum Diskusi & Tanya Jawab Kelas
+            Forum Diskusi & Tanya Jawab Kursus
           </h2>
           <p className="text-xs text-stone-500 mt-1">
             Bantu jawab pertanyaan siswa mengenai materi pembelajaran atau buat pengumuman interaktif.
@@ -225,7 +225,7 @@ export function DiscussionManager({ courseId }: { courseId: string }) {
             Kirim Topik / Pengumuman Baru
           </h3>
           <form onSubmit={handlePostTopic} className="space-y-3">
-            <textarea id="admin-new-topic-content" name="content" rows={3} required placeholder="Tuliskan pertanyaan pengantar atau topik diskusi untuk siswa kelas ini..." value={newTopicContent}
+            <textarea id="admin-new-topic-content" name="content" rows={3} required placeholder="Tuliskan pertanyaan pengantar atau topik diskusi untuk siswa kursus ini..." value={newTopicContent}
               onChange={(e) => setNewTopicContent(e.target.value)}
               className="w-full text-xs px-3 py-2 rounded-xl border border-stone-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
             />

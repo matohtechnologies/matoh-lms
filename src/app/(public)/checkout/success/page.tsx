@@ -60,7 +60,7 @@ export default function CheckoutSuccessPage() {
         </h1>
 
         <p className="text-stone-500 text-sm sm:text-base mb-6 max-w-sm mx-auto">
-          Selamat! Akses kelas sudah berhasil diaktifkan ke akun kamu.
+          Selamat! Akses kursus sudah berhasil diaktifkan ke akun kamu.
         </p>
 
         {/* Course Card Preview */}
@@ -113,7 +113,7 @@ export default function CheckoutSuccessPage() {
               className="w-full flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition-all shadow-md shadow-blue-600/20"
             >
               <PlayCircle size={18} />
-              Buka Kelas Saya
+              Buka Kursus Saya
             </Link>
           )}
 
@@ -123,13 +123,13 @@ export default function CheckoutSuccessPage() {
               className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-stone-200 bg-white hover:bg-stone-50 text-stone-700 text-xs font-semibold transition-colors"
             >
               <BookOpen size={14} className="text-stone-400" />
-              Kelas Saya
+              Kursus Saya
             </Link>
             <Link
               href="/courses"
               className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-stone-200 bg-white hover:bg-stone-50 text-stone-700 text-xs font-semibold transition-colors"
             >
-              Cari Kelas Lain
+              Cari Kursus Lain
               <ArrowRight size={14} className="text-stone-400" />
             </Link>
           </div>

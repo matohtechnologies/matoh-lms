@@ -11,7 +11,7 @@ import {
 export const metadata: Metadata = {
   title: "Pilih & Beli Pelatihan — PT. Matoh Technologies Indonesia",
   description:
-    "Katalog resmi dan pembelian kelas pelatihan sertifikasi PT. Matoh Technologies Indonesia langsung dari dasbor pengguna.",
+    "Katalog resmi dan pembelian kursus pelatihan sertifikasi PT. Matoh Technologies Indonesia langsung dari dasbor pengguna.",
 };
 
 export const dynamic = "force-dynamic";
