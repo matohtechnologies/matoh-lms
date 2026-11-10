@@ -2,7 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { CheckCircle2, ShieldCheck, ArrowRight } from "lucide-react";
 import { getLocale } from "next-intl/server";
-import { prisma } from "@/lib/prisma";
 import { LegalTrustCard } from "@/components/about/legal-trust-card";
 import type { Metadata } from "next";
 
@@ -15,20 +14,6 @@ export const metadata: Metadata = {
 export default async function AboutPage() {
   const locale = await getLocale();
   const isEn = locale === "en";
-
-  const [studentsCount, coursesCount, lessonsCount, certsCount] = await Promise.all([
-    prisma.user.count({ where: { role: "USER" } }).catch(() => 0),
-    prisma.course.count({ where: { published: true } }).catch(() => 0),
-    prisma.lesson.count().catch(() => 0),
-    prisma.certificate.count().catch(() => 0),
-  ]);
-
-  const statsList = [
-    { value: studentsCount.toLocaleString(), label: isEn ? "Registered Learners" : "Siswa & Peserta Didik" },
-    { value: coursesCount.toLocaleString(), label: isEn ? "Published Courses" : "Kelas Tersedia" },
-    { value: lessonsCount.toLocaleString(), label: isEn ? "Learning Modules" : "Modul Pembelajaran" },
-    { value: certsCount.toLocaleString(), label: isEn ? "Verified Certificates" : "Sertifikat Kelulusan" },
-  ];
 
   const pillars = [
     {
@@ -126,7 +111,7 @@ export default async function AboutPage() {
             className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 mb-6 tracking-tight"
             style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
-            Make Home <br />
+            Make You <br />
             <span className="text-gradient">Ready on Digital</span>
           </h1>
           <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
@@ -223,26 +208,6 @@ export default async function AboutPage() {
 
           {/* Interactive Legal Card */}
           <LegalTrustCard locale={locale} />
-        </div>
-      </section>
-
-      {/* Concrete Stats (Midnight Studio Contrast) */}
-      <section className="py-16 bg-[#0B1120] text-white border-b border-slate-800 relative overflow-hidden">
-        <div className="absolute inset-0 bg-dot-matrix opacity-15 pointer-events-none" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 divide-y sm:divide-y-0 sm:divide-x divide-slate-800/80">
-            {statsList.map(({ value, label }) => (
-              <div key={label} className="text-center px-4 pt-4 sm:pt-0">
-                <p
-                  className="text-3xl sm:text-4xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-300 tracking-tight"
-                  style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
-                >
-                  {value}
-                </p>
-                <p className="text-slate-400 text-xs sm:text-sm mt-2 font-medium">{label}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
