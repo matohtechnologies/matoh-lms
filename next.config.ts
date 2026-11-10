@@ -21,6 +21,14 @@ const cspHeader = `
 const nextConfig: NextConfig = {
   output: "standalone",
 
+  // Upload body limits for video and course materials (allows up to 250MB+)
+  experimental: {
+    proxyClientMaxBodySize: "300mb",
+    serverActions: {
+      bodySizeLimit: "300mb",
+    },
+  },
+
   // 1. Security: Hide server technology signature
   poweredByHeader: false,
 

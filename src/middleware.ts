@@ -26,6 +26,13 @@ function sanitizeCallbackUrl(url: string | null | undefined, defaultUrl = "/dash
 export async function middleware(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
 
+  // 0. Bypass middleware for large multipart file upload endpoints
+  // Next.js middleware by default buffers and truncates bodies > 10MB to protect memory.
+  // /api/upload has its own internal authentication, rate-limiting, and validation.
+  if (pathname.startsWith("/api/upload")) {
+    return NextResponse.next();
+  }
+
   // 1. Defend against Cross-Site Tracing (XST) and disallowed HTTP methods
   const method = request.method.toUpperCase();
   if (method === "TRACE" || method === "TRACK") {
@@ -279,9 +286,10 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - uploads (user uploads)
+     * - api/upload (multipart file uploads - avoids 10MB middleware buffer truncation)
      * - images (static public images)
      * - static file extensions (svg, png, jpg, webp, css, js, fonts, etc.)
      */
-    "/((?!_next/static|_next/image|favicon.ico|uploads|images|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|map|txt|xml|woff2?|eot|ttf|otf)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|uploads|api/upload|images|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|map|txt|xml|woff2?|eot|ttf|otf)$).*)",
   ],
 };
