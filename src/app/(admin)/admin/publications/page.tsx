@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import type { Metadata } from "next";
 import { PublicationManager, type PublicationItemAdmin } from "./publication-manager";
+import { PUBLICATIONS } from "@/lib/publications";
 
 export const metadata: Metadata = {
   title: "Manajemen Riset & Publikasi — Admin Matoh Technologies",
@@ -20,15 +21,74 @@ export default async function AdminPublicationsPage() {
   let categories: Array<{ id: string; name: string; nameEn?: string }> = [];
 
   try {
-    const [dbItems, distinctCats] = await Promise.all([
-      prisma.publication.findMany({
-        orderBy: [{ featured: "desc" }, { publishedAt: "desc" }, { createdAt: "desc" }],
-      }),
-      prisma.publication.findMany({
-        select: { categoryId: true, categoryEn: true },
-        distinct: ["categoryId"],
-      }),
-    ]);
+    let dbItems = await prisma.publication.findMany({
+      orderBy: [{ featured: "desc" }, { publishedAt: "desc" }, { createdAt: "desc" }],
+    });
+
+    let distinctCats = await prisma.publication.findMany({
+      select: { categoryId: true, categoryEn: true },
+      distinct: ["categoryId"],
+    });
+
+    // Auto-seed data publikasi bawaan jika tabel di database masih kosong
+    if (dbItems.length === 0) {
+      try {
+        for (const item of PUBLICATIONS) {
+          const isResearch =
+            item.type === "RESEARCH" ||
+            item.categoryId.toLowerCase().includes("decision") ||
+            item.tags.includes("AHP") ||
+            item.tags.includes("ISM") ||
+            item.slug.includes("riset");
+
+          await prisma.publication.upsert({
+            where: { slug: item.slug },
+            update: {},
+            create: {
+              slug: item.slug,
+              type: isResearch ? "RESEARCH" : "PUBLICATION",
+              titleId: item.titleId,
+              titleEn: item.titleEn,
+              excerptId: item.excerptId,
+              excerptEn: item.excerptEn,
+              contentId: item.contentId,
+              contentEn: item.contentEn,
+              abstractId: item.abstractId,
+              abstractEn: item.abstractEn,
+              categoryId: item.categoryId,
+              categoryEn: item.categoryEn,
+              author: item.author,
+              authorRole: item.authorRole,
+              authorBioId: item.authorBioId,
+              authorBioEn: item.authorBioEn,
+              authors: (item.authors as any) || [],
+              publishedAt: new Date(item.publishedAt),
+              dateId: item.dateId,
+              dateEn: item.dateEn,
+              readTimeId: item.readTimeId,
+              readTimeEn: item.readTimeEn,
+              tags: item.tags,
+              references: (item.references as any) || [],
+              published: true,
+              featured: false,
+              isPaid: false,
+              price: 0,
+            },
+          });
+        }
+
+        dbItems = await prisma.publication.findMany({
+          orderBy: [{ featured: "desc" }, { publishedAt: "desc" }, { createdAt: "desc" }],
+        });
+
+        distinctCats = await prisma.publication.findMany({
+          select: { categoryId: true, categoryEn: true },
+          distinct: ["categoryId"],
+        });
+      } catch (seedErr) {
+        console.warn("Auto-seeding default publications skipped:", seedErr);
+      }
+    }
 
     publications = dbItems.map((item) => ({
       id: item.id,

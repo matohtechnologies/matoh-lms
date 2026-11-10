@@ -181,6 +181,14 @@ jobs:
             ln -sfn "$BASE/shared/.env" "$RELEASE/.env"
           fi
 
+          # Sinkronisasi skema database Prisma di VPS
+          if [ -f "$RELEASE/prisma/schema.prisma" ]; then
+            echo "Menyinkronkan skema database Prisma di VPS..."
+            (cd "$RELEASE" && npx --yes prisma db push --schema=prisma/schema.prisma --skip-generate --accept-data-loss) || {
+              echo "Peringatan: prisma db push gagal disinkronkan otomatis. Pastikan DATABASE_URL valid di .env."
+            }
+          fi
+
           # Pastikan folder shared uploads persisten ada di VPS
           mkdir -p "$BASE/shared/uploads"
           mkdir -p "$RELEASE/public"
