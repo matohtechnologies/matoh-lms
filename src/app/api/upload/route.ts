@@ -148,7 +148,14 @@ export async function POST(req: NextRequest) {
     }
 
     const uploadDir = path.join(baseUploadDir, folder);
-    await fs.mkdir(uploadDir, { recursive: true });
+    try {
+      await fs.mkdir(uploadDir, { recursive: true });
+    } catch (mkdirErr: any) {
+      console.warn(`Gagal membuat folder di ${uploadDir}, mencoba fallback ke local public/uploads:`, mkdirErr);
+      const fallbackDir = path.join(process.cwd(), "public", "uploads", folder);
+      await fs.mkdir(fallbackDir, { recursive: true });
+      baseUploadDir = path.join(process.cwd(), "public", "uploads");
+    }
 
     // 7. Sanitize filename and create secure random prefix
     const rawBuffer = Buffer.from(await file.arrayBuffer());
@@ -183,13 +190,14 @@ export async function POST(req: NextRequest) {
     }
 
     const uniqueName = `${Date.now()}_${randomHex}_${sanitizedBase}${finalExt}`;
-    const filePath = path.join(uploadDir, uniqueName);
+    const targetDir = path.join(baseUploadDir, folder);
+    const filePath = path.join(targetDir, uniqueName);
     await fs.writeFile(filePath, finalBuffer);
 
     // Also mirror to current release public/uploads if different, to ensure immediate availability
     try {
       const releasePublicDir = path.join(process.cwd(), "public", "uploads", folder);
-      if (releasePublicDir !== uploadDir) {
+      if (releasePublicDir !== targetDir) {
         await fs.mkdir(releasePublicDir, { recursive: true });
         await fs.writeFile(path.join(releasePublicDir, uniqueName), finalBuffer);
       }
@@ -205,8 +213,14 @@ export async function POST(req: NextRequest) {
       fileName: file.name,
       fileSize: finalBuffer.length,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error uploading file:", error);
-    return NextResponse.json({ error: "Gagal mengunggah file" }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: "Gagal mengunggah file",
+        detail: error?.message || String(error),
+      },
+      { status: 500 }
+    );
   }
 }

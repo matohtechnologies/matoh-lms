@@ -189,8 +189,11 @@ jobs:
             }
           fi
 
-          # Pastikan folder shared uploads persisten ada di VPS
+          # Pastikan folder shared uploads persisten ada di VPS berserta subfolder lengkap
           mkdir -p "$BASE/shared/uploads"
+          for sub in courses publications avatars certificates assignments general; do
+            mkdir -p "$BASE/shared/uploads/$sub"
+          done
           mkdir -p "$RELEASE/public"
 
           # Migrasikan / selamatkan file upload dari release sebelumnya ke shared
@@ -204,6 +207,7 @@ jobs:
           ln -sfn "$BASE/shared/uploads" "$RELEASE/public/uploads"
 
           chown -R lmsapp:lmsapp "$BASE/shared/uploads" "$RELEASE"
+          chmod -R 775 "$BASE/shared/uploads"
 
           ln -sfn "$RELEASE" "$CURRENT"
 
