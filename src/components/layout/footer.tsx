@@ -118,12 +118,6 @@ export function Footer() {
               {tFooter("navigation")}
             </h4>
             <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
-              <Link href="/about" className="text-slate-400 hover:text-white transition-colors py-0.5">
-                {tNav("about")}
-              </Link>
-              <Link href="/contact" className="text-slate-400 hover:text-white transition-colors py-0.5">
-                {tNav("contact")}
-              </Link>
               <Link href="/courses" className="text-slate-400 hover:text-white transition-colors py-0.5">
                 {tNav("courses")}
               </Link>
@@ -138,6 +132,12 @@ export function Footer() {
               </Link>
               <Link href="/konsultan" className="text-slate-400 hover:text-white transition-colors py-0.5">
                 {tNav("consultant")}
+              </Link>
+              <Link href="/about" className="text-slate-400 hover:text-white transition-colors py-0.5">
+                {tNav("about")}
+              </Link>
+              <Link href="/contact" className="text-slate-400 hover:text-white transition-colors py-0.5">
+                {tNav("contact")}
               </Link>
               <Link href="/terms" className="text-slate-400 hover:text-white transition-colors py-0.5">
                 {tFooter("terms_privacy")}
