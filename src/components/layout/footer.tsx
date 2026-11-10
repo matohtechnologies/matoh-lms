@@ -37,10 +37,10 @@ export function Footer() {
   return (
     <footer className="bg-slate-950 text-slate-400 border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 lg:py-16">
-        {/* 3-Column Minimalist Wireframe Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-start">
+        {/* 4-Column Layout: Brand, Media Sosial, Tautan Navigasi, Metode Pembayaran */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
           {/* Column 1: Brand & Copyright (Kiri) */}
-          <div className="md:col-span-5 space-y-3">
+          <div className="lg:col-span-3 space-y-3">
             <Link href="/" className="inline-flex items-center gap-2.5 group">
               <div className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center p-1.5 transition-colors group-hover:border-teal-500">
                 <Image
@@ -66,13 +66,13 @@ export function Footer() {
                 PT. Matoh Technologies Indonesia · {currentYear}.
               </p>
               <p className="text-slate-500 font-mono text-[11px]">
-                Make Home Ready on Digital
+                Make You Ready on Digital
               </p>
             </div>
           </div>
 
-          {/* Column 2: Social Media - Cukup Logo / Icon Saja (Tengah) */}
-          <div className="md:col-span-3 space-y-3">
+          {/* Column 2: Social Media (Tengah-Kiri) */}
+          <div className="lg:col-span-2 space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300">
               {tFooter("social_media")}
             </h4>
@@ -112,8 +112,8 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Column 3: Quick Navigation Links - About, Kontak, etc. (Kanan) */}
-          <div className="md:col-span-4 space-y-3">
+          {/* Column 3: Quick Navigation Links (Tengah-Kanan) */}
+          <div className="lg:col-span-3 space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300">
               {tFooter("navigation")}
             </h4>
@@ -144,23 +144,23 @@ export function Footer() {
               </Link>
             </div>
           </div>
-        </div>
 
-        {/* Payment Methods Section */}
-        <div className="mt-12 pt-8 border-t border-slate-900 space-y-3.5">
-          <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-            {tFooter("payment_methods_title")}
-          </p>
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-1">
-            {PAYMENT_METHODS.map(({ name, component: Component, opticalHeight }) => (
-              <div
-                key={name}
-                className="group flex items-center justify-center shrink-0 cursor-pointer select-none transition-transform duration-200 hover:scale-105 opacity-80 hover:opacity-100"
-                title={name}
-              >
-                <Component className={`${opticalHeight} w-auto`} />
-              </div>
-            ))}
+          {/* Column 4: Metode Pembayaran Resmi (Kanan) */}
+          <div className="lg:col-span-4 space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300">
+              {tFooter("payment_methods_title")}
+            </h4>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2.5 pt-1">
+              {PAYMENT_METHODS.map(({ name, component: Component, opticalHeight }) => (
+                <div
+                  key={name}
+                  className="group flex items-center justify-center shrink-0 cursor-pointer select-none transition-transform duration-200 hover:scale-105 opacity-80 hover:opacity-100"
+                  title={name}
+                >
+                  <Component className={`${opticalHeight} w-auto`} />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
