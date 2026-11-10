@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { PAYMENT_METHODS } from "@/components/layout/payment-logos";
 
@@ -40,35 +39,13 @@ export function Footer() {
         {/* 4-Column Layout: Brand, Media Sosial, Tautan Navigasi, Metode Pembayaran */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
           {/* Column 1: Brand & Copyright (Kiri) */}
-          <div className="lg:col-span-3 space-y-3">
-            <Link href="/" className="inline-flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center p-1.5 transition-colors group-hover:border-teal-500">
-                <Image
-                  src="/images/matoh-logo-white-v2.png"
-                  alt="PT. Matoh Technologies Indonesia"
-                  width={20}
-                  height={20}
-                  priority
-                  style={{ aspectRatio: "1 / 1" }}
-                  className="object-contain aspect-square"
-                />
-              </div>
-              <span
-                className="font-bold text-white text-base tracking-tight"
-                style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
-              >
-                MATOH TECHNOLOGIES
-              </span>
-            </Link>
-
-            <div className="space-y-1 text-xs text-slate-400">
-              <p className="font-medium text-slate-300">
-                PT. Matoh Technologies Indonesia · {currentYear}.
-              </p>
-              <p className="text-slate-500 font-mono text-[11px]">
-                Make You Ready on Digital
-              </p>
-            </div>
+          <div className="lg:col-span-3 space-y-1.5 text-xs text-slate-400">
+            <p className="font-semibold text-slate-200">
+              PT. Matoh Technologies Indonesia
+            </p>
+            <p className="text-slate-500 font-mono text-[11px]">
+              Make You Ready on Digital
+            </p>
           </div>
 
           {/* Column 2: Social Media (Tengah-Kiri) */}
