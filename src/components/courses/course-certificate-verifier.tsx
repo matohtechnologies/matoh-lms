@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { ShieldCheck, Search, CheckCircle2, Award, ArrowRight } from "lucide-react";
+import { Search, ArrowRight } from "lucide-react";
 
 interface CourseCertificateVerifierProps {
   isEn?: boolean;
@@ -20,10 +20,6 @@ export function CourseCertificateVerifier({ isEn = false }: CourseCertificateVer
     <section id="verifikasi" className="scroll-mt-24 mb-10">
       <div className="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 shadow-xs">
         <div className="max-w-3xl mx-auto text-center space-y-3 mb-6">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-800 text-xs font-bold border border-blue-200">
-            <ShieldCheck size={14} className="text-blue-600" />
-            <span>{isEn ? "Official Verification Registry" : "Layanan Verifikasi Sertifikat Resmi"}</span>
-          </div>
           <h2
             className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight"
             style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
@@ -70,21 +66,6 @@ export function CourseCertificateVerifier({ isEn = false }: CourseCertificateVer
               : "Kredensial digital anti-pemalsuan terdaftar permanen di bawah SK Kemenkumham AHU-064920.AH.01.30.Tahun 2024"}
           </p>
         </form>
-
-        <div className="pt-6 mt-6 border-t border-slate-100 max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs text-slate-600">
-          <div className="flex items-center gap-2">
-            <CheckCircle2 size={15} className="text-blue-600 shrink-0" />
-            <span>{isEn ? "Cryptographic QR Validation" : "Validasi Kode QR Kriptografis"}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <CheckCircle2 size={15} className="text-blue-600 shrink-0" />
-            <span>{isEn ? "Permanent Institutional Registry" : "Registri Resmi Seumur Hidup"}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <CheckCircle2 size={15} className="text-blue-600 shrink-0" />
-            <span>{isEn ? "Industry & Corporate Recognized" : "Diakui Industri & Rekruter"}</span>
-          </div>
-        </div>
       </div>
     </section>
   );
