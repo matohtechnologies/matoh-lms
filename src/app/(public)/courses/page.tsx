@@ -45,9 +45,9 @@ async function getCourses(page = 1) {
       prisma.course.count({ where }),
     ]);
 
-    return { courses, total, pages: Math.ceil(total / pageSize) };
+    return { courses, pages: Math.ceil(total / pageSize) };
   } catch {
-    return { courses: [], total: 0, pages: 1 };
+    return { courses: [], pages: 1 };
   }
 }
 
@@ -58,7 +58,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
   const t = await getTranslations("courses");
   const currentPage = params.page ? parseInt(params.page) : 1;
 
-  const [session, { courses, total, pages }] = await Promise.all([
+  const [session, { courses, pages }] = await Promise.all([
     auth(),
     getCourses(currentPage),
   ]);
@@ -89,8 +89,8 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
           </h1>
           <p className="text-slate-500 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
             {isEn
-              ? `Explore ${total} curated, industry-aligned courses crafted by leading tech practitioners.`
-              : `${total} kursus terstruktur dan kurikulum industri siap membantumu menguasai skill masa depan.`}
+              ? "Explore curated, industry-aligned courses crafted by leading tech practitioners."
+              : "Jelajahi kursus terstruktur dan kurikulum industri siap membantumu menguasai skill masa depan."}
           </p>
         </div>
       </div>
@@ -98,20 +98,8 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
         {/* Course Catalog Section: Clean Minimal View */}
         <section id="daftar-kursus">
-          {/* Header Bar: Total Courses Count & Quick Action */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-8 pb-4 border-b border-slate-200/80">
-            <p className="text-sm sm:text-base text-slate-600 font-medium">
-              {isEn ? (
-                <>
-                  Showing <span className="font-bold text-slate-900">{courses.length}</span> of <span className="font-bold text-slate-900">{total}</span> courses
-                </>
-              ) : (
-                <>
-                  Menampilkan <span className="font-bold text-slate-900">{courses.length}</span> dari <span className="font-bold text-slate-900">{total}</span> kursus
-                </>
-              )}
-            </p>
-
+          {/* Header Bar: Quick Action */}
+          <div className="flex items-center justify-end mb-8 pb-4 border-b border-slate-200/80">
             <CoursesRequestQuickAction
               isEn={isEn}
               userEmail={session?.user?.email}
