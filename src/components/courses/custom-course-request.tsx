@@ -6,17 +6,14 @@ import {
   Sparkles,
   Building2,
   User,
-  Users,
   CheckCircle2,
   X,
   Send,
   Loader2,
-  Clock,
   Laptop,
   GraduationCap,
   ArrowRight,
   MessageSquare,
-  HelpCircle,
   FileCheck2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -267,11 +264,10 @@ export function CustomCourseRequestModal({
                 <button
                   type="button"
                   onClick={() => setRequestType("CORPORATE")}
-                  className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
-                    requestType === "CORPORATE"
+                  className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold transition-all ${requestType === "CORPORATE"
                       ? "bg-white text-slate-900 shadow-xs"
                       : "text-slate-600 hover:text-slate-900"
-                  }`}
+                    }`}
                 >
                   <Building2 size={16} className={requestType === "CORPORATE" ? "text-slate-900" : "text-slate-400"} />
                   <span>{isEn ? "Corporate & Team (B2B)" : "Perusahaan & Instansi (B2B)"}</span>
@@ -279,11 +275,10 @@ export function CustomCourseRequestModal({
                 <button
                   type="button"
                   onClick={() => setRequestType("INDIVIDUAL")}
-                  className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
-                    requestType === "INDIVIDUAL"
+                  className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold transition-all ${requestType === "INDIVIDUAL"
                       ? "bg-white text-slate-900 shadow-xs"
                       : "text-slate-600 hover:text-slate-900"
-                  }`}
+                    }`}
                 >
                   <User size={16} className={requestType === "INDIVIDUAL" ? "text-slate-900" : "text-slate-400"} />
                   <span>{isEn ? "Individual & Private (B2C)" : "Individu & Privat (B2C)"}</span>
