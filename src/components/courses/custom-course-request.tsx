@@ -180,10 +180,10 @@ export function CustomCourseRequestModal({
         aria-labelledby="custom-course-title"
       >
         {/* Header */}
-        <div className="px-6 sm:px-8 pt-6 pb-4 border-b border-slate-100 flex items-start justify-between gap-4 bg-gradient-to-r from-blue-50/60 via-white to-slate-50/50">
+        <div className="px-6 sm:px-8 pt-6 pb-4 border-b border-slate-100 flex items-start justify-between gap-4 bg-white">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-100/70 text-blue-800 mb-2">
-              <Sparkles size={13} className="text-blue-600" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-800 mb-2 border border-slate-200/80">
+              <Sparkles size={13} className="text-slate-700" />
               <span>{isEn ? "Tailored Learning Program" : "Program Kursus Disesuaikan"}</span>
             </div>
             <h2 id="custom-course-title" className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
@@ -269,11 +269,11 @@ export function CustomCourseRequestModal({
                   onClick={() => setRequestType("CORPORATE")}
                   className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
                     requestType === "CORPORATE"
-                      ? "bg-white text-blue-700 shadow-xs"
+                      ? "bg-white text-slate-900 shadow-xs"
                       : "text-slate-600 hover:text-slate-900"
                   }`}
                 >
-                  <Building2 size={16} className={requestType === "CORPORATE" ? "text-blue-600" : "text-slate-400"} />
+                  <Building2 size={16} className={requestType === "CORPORATE" ? "text-slate-900" : "text-slate-400"} />
                   <span>{isEn ? "Corporate & Team (B2B)" : "Perusahaan & Instansi (B2B)"}</span>
                 </button>
                 <button
@@ -281,18 +281,18 @@ export function CustomCourseRequestModal({
                   onClick={() => setRequestType("INDIVIDUAL")}
                   className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
                     requestType === "INDIVIDUAL"
-                      ? "bg-white text-blue-700 shadow-xs"
+                      ? "bg-white text-slate-900 shadow-xs"
                       : "text-slate-600 hover:text-slate-900"
                   }`}
                 >
-                  <User size={16} className={requestType === "INDIVIDUAL" ? "text-blue-600" : "text-slate-400"} />
+                  <User size={16} className={requestType === "INDIVIDUAL" ? "text-slate-900" : "text-slate-400"} />
                   <span>{isEn ? "Individual & Private (B2C)" : "Individu & Privat (B2C)"}</span>
                 </button>
               </div>
 
               {/* Informative Micro-Banner */}
-              <div className="p-3.5 rounded-2xl bg-blue-50/60 border border-blue-100 text-xs text-blue-900 flex items-start gap-2.5">
-                <GraduationCap size={18} className="text-blue-600 shrink-0 mt-0.5" />
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs text-slate-700 flex items-start gap-2.5">
+                <GraduationCap size={18} className="text-slate-800 shrink-0 mt-0.5" />
                 <p className="leading-relaxed">
                   {requestType === "CORPORATE"
                     ? isEn
@@ -491,9 +491,9 @@ export function CoursesRequestQuickAction({
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100/80 active:bg-blue-200/60 border border-blue-200/80 transition-all shadow-2xs hover:shadow-xs group cursor-pointer"
+        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-800 bg-white hover:bg-slate-50 active:bg-slate-100 border border-slate-200/90 transition-all shadow-2xs hover:shadow-xs group cursor-pointer"
       >
-        <Sparkles size={14} className="text-blue-600 group-hover:scale-110 transition-transform" />
+        <Sparkles size={14} className="text-slate-700 group-hover:scale-110 transition-transform" />
         <span>{isEn ? "Request Custom Course / B2B" : "Request Kursus Custom"}</span>
       </button>
 
@@ -588,10 +588,10 @@ export function CustomCourseSectionBanner({
           </div>
         </div>
 
-        {/* 3 Kotak-kotak (Icon di Kiri, Kalimat di Kanan) */}
+        {/* 3 Kotak-kotak (Icon di Kiri, Kalimat di Kanan) - Hitam Putih / Monokrom */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="flex items-start gap-3.5 p-4 rounded-xl border border-slate-200/90 bg-white shadow-2xs hover:border-slate-300 transition-colors">
-            <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mt-0.5">
+            <div className="w-10 h-10 rounded-lg bg-slate-100 text-slate-800 flex items-center justify-center shrink-0 mt-0.5 border border-slate-200/80">
               <Laptop size={18} />
             </div>
             <div className="min-w-0 flex-1">
@@ -607,7 +607,7 @@ export function CustomCourseSectionBanner({
           </div>
 
           <div className="flex items-start gap-3.5 p-4 rounded-xl border border-slate-200/90 bg-white shadow-2xs hover:border-slate-300 transition-colors">
-            <div className="w-10 h-10 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center shrink-0 mt-0.5">
+            <div className="w-10 h-10 rounded-lg bg-slate-100 text-slate-800 flex items-center justify-center shrink-0 mt-0.5 border border-slate-200/80">
               <GraduationCap size={18} />
             </div>
             <div className="min-w-0 flex-1">
@@ -623,7 +623,7 @@ export function CustomCourseSectionBanner({
           </div>
 
           <div className="flex items-start gap-3.5 p-4 rounded-xl border border-slate-200/90 bg-white shadow-2xs hover:border-slate-300 transition-colors">
-            <div className="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0 mt-0.5">
+            <div className="w-10 h-10 rounded-lg bg-slate-100 text-slate-800 flex items-center justify-center shrink-0 mt-0.5 border border-slate-200/80">
               <FileCheck2 size={18} />
             </div>
             <div className="min-w-0 flex-1">
