@@ -2,6 +2,10 @@ import { Suspense } from "react";
 import { BookOpen } from "lucide-react";
 import { CourseCard, CourseCardSkeleton } from "@/components/courses/course-card";
 import { CourseCertificateVerifier } from "@/components/courses/course-certificate-verifier";
+import {
+  CustomCourseSectionBanner,
+  CoursesRequestQuickAction,
+} from "@/components/courses/custom-course-request";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { getTranslations, getLocale } from "next-intl/server";
@@ -75,9 +79,8 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
   return (
     <div className="pt-20 bg-[#f8fafc] min-h-screen">
       {/* Header */}
-      <div className="bg-gradient-to-b from-blue-50/70 via-[#f8fafc] to-[#f8fafc] border-b border-slate-200/70 py-12 sm:py-16 bg-dot-matrix relative overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[280px] bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.12)_0%,transparent_70%)] pointer-events-none" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 text-center">
+      <div className="border-b border-slate-200/80 py-12 sm:py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
           <h1
             className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 mb-3 tracking-tight"
             style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
@@ -95,8 +98,8 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
         {/* Course Catalog Section: Clean Minimal View */}
         <section id="daftar-kursus">
-          {/* Header Bar: Total Courses Count */}
-          <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-200/80">
+          {/* Header Bar: Total Courses Count & Quick Action */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-8 pb-4 border-b border-slate-200/80">
             <p className="text-sm sm:text-base text-slate-600 font-medium">
               {isEn ? (
                 <>
@@ -108,6 +111,12 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                 </>
               )}
             </p>
+
+            <CoursesRequestQuickAction
+              isEn={isEn}
+              userEmail={session?.user?.email}
+              userName={session?.user?.name}
+            />
           </div>
 
           {/* Course grid: 4 columns on large screens for optimal visual space */}
@@ -179,6 +188,13 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
             </div>
           )}
         </section>
+
+        {/* Custom Course & Corporate In-House Training Request Section */}
+        <CustomCourseSectionBanner
+          isEn={isEn}
+          userEmail={session?.user?.email}
+          userName={session?.user?.name}
+        />
 
         {/* Certificate Verification Section: Diletakkan SETELAH tampilan course */}
         <div className="mt-20 pt-16 border-t border-slate-200">
