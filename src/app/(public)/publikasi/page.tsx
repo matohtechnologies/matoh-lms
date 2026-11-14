@@ -32,13 +32,20 @@ export default async function PublikasiPage() {
               className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
-              {isEn ? "Publications & Tech Insights" : "Publikasi & Wawasan Teknologi"}
+              {isEn ? "Publications" : "Publikasi"}
             </h1>
+
+            <p
+              className="text-lg sm:text-xl font-bold text-slate-800 tracking-tight"
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+            >
+              Sharing Knowledge, Inspiring Innovation.
+            </p>
 
             <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
               {isEn
-                ? "Applied technology articles, software engineering best practices, and enterprise digital transformation insights."
-                : "Kumpulan artikel publikasi rekayasa teknologi, transformasi digital bisnis, dan studi kasus terapan dari PT. Matoh Technologies Indonesia."}
+                ? "Serving as a platform for the dissemination of knowledge, research findings, and innovative ideas through scientific publications and intellectual works. We encourage knowledge exchange and academic contributions to broaden insights and strengthen the innovation ecosystem."
+                : "Menjadi wadah diseminasi pengetahuan, hasil penelitian, dan gagasan inovatif melalui publikasi ilmiah maupun karya intelektual. Kami mendorong pertukaran pengetahuan dan kontribusi akademik untuk memperluas wawasan serta memperkuat ekosistem inovasi."}
             </p>
           </div>
         </div>
