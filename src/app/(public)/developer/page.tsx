@@ -133,15 +133,20 @@ export default async function DeveloperPage() {
               className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
-              {isEn
-                ? "Build Tailored Websites & Systems Designed for Your Business"
-                : "Solusi Pembuatan Website & Sistem Kustom Sesuai Kebutuhan Bisnis Anda"}
+              {isEn ? "Developer" : "Developer"}
             </h1>
+
+            <p
+              className="text-lg sm:text-xl font-bold text-slate-800 tracking-tight"
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+            >
+              Turning Ideas into Digital Solutions.
+            </p>
 
             <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
               {isEn
-                ? "PT. Matoh Technologies Indonesia provides end-to-end software development: company profiles, custom web applications, e-commerce, and enterprise ERP/CRM systems engineered to match your exact business processes."
-                : "Kami melayani pembuatan website profesional, aplikasi web operasional, portal bisnis, dan sistem informasi manajemen terintegrasi yang dirancang dari nol sesuai spesifikasi dan alur kerja spesifik institusi Anda."}
+                ? "We help businesses and organizations turn ideas into digital solutions through the development of professional websites, web-based applications, information systems, and innovative digital platforms. Every solution is custom-built, responsive, secure, and scalable to meet your business needs and goals."
+                : "Kami membantu bisnis dan organisasi mewujudkan ide menjadi solusi digital melalui pengembangan website profesional, aplikasi berbasis web, sistem informasi, dan platform digital yang inovatif. Setiap solusi dirancang secara custom, responsif, aman, dan scalable sesuai kebutuhan serta tujuan bisnis Anda."}
             </p>
 
             {/* Action Buttons */}
