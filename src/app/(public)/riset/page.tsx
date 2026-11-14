@@ -44,13 +44,20 @@ export default async function RisetPage() {
               className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
-              {isEn ? "Applied Research & Scientific Methodologies" : "Metodologi Ilmiah & Riset Terapan"}
+              {isEn ? "Research & Innovation" : "Riset & Inovasi"}
             </h1>
+
+            <p
+              className="text-lg sm:text-xl font-bold text-slate-800 tracking-tight"
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+            >
+              Research Today, Innovate Tomorrow.
+            </p>
 
             <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
               {isEn
-                ? "Bridging rigorous academic decision modeling with real-world industry adoption, public policy priorities, and MSME digital transformation."
-                : "Menjembatani metodologi pengambilan keputusan ilmiah (AHP & ISM) dengan implementasi riil industri, kebijakan publik, dan akselerasi UMKM."}
+                ? "We develop data-driven applied research and multidisciplinary innovation to generate knowledge, address real challenges, and create value-added solutions for industry, academia, and society."
+                : "Kami mengembangkan riset terapan dan inovasi berbasis data serta pendekatan multidisiplin untuk menghasilkan pengetahuan, menjawab tantangan nyata, dan menciptakan solusi yang memberikan nilai tambah bagi dunia industri, akademik, dan masyarakat."}
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-3 pt-4">
