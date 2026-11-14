@@ -85,12 +85,18 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
             className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 mb-3 tracking-tight"
             style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
-            {t("catalog_title")}
+            {isEn ? "Courses" : "Kursus"}
           </h1>
+          <p
+            className="text-lg sm:text-xl font-bold text-slate-800 tracking-tight mb-3"
+            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+          >
+            Learn Today, Lead Tomorrow
+          </p>
           <p className="text-slate-500 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
             {isEn
-              ? "Explore curated, industry-aligned courses crafted by leading tech practitioners."
-              : "Jelajahi kursus terstruktur dan kurikulum industri siap membantumu menguasai skill masa depan."}
+              ? "Enhance your competence and competitiveness through technology, AI, and industry-driven learning programs. We provide practical courses and training designed to equip individuals and professionals with relevant knowledge and skills to face future challenges."
+              : "Tingkatkan kompetensi dan daya saing melalui program pembelajaran berbasis teknologi, AI, dan kebutuhan industri. Kami menghadirkan kursus dan pelatihan praktis yang dirancang untuk membekali individu dan profesional dengan pengetahuan serta keterampilan yang relevan menghadapi tantangan masa depan."}
           </p>
         </div>
       </div>
