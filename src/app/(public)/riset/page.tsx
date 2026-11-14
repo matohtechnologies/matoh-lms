@@ -62,7 +62,11 @@ export default async function RisetPage() {
 
             <div className="flex flex-wrap items-center justify-center gap-3 pt-4">
               <a
-                href="https://wa.me/6281210106680?text=Halo%20Matoh%20Technologies,%20saya%20ingin%20konsultasi%20bimbingan%20riset%20dan%20metodologi%20AHP/ISM."
+                href={
+                  isEn
+                    ? "https://wa.me/6281210106680?text=Hello%20Matoh%20Technologies,%20I%20would%20like%20to%20consult%20regarding%20research%20guidance%20and%20AHP/ISM%20methodology."
+                    : "https://wa.me/6281210106680?text=Halo%20Matoh%20Technologies,%20saya%20ingin%20konsultasi%20bimbingan%20riset%20dan%20metodologi%20AHP/ISM."
+                }
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition-colors shadow-xs"
@@ -214,13 +218,17 @@ export default async function RisetPage() {
               </div>
 
               <a
-                href="https://wa.me/6281210106680?text=Halo%20Dr.%20G.%20Prabantoro,%20saya%20ingin%20konsultasi%20riset%20dan%20metodologi%20AHP/ISM."
+                href={
+                  isEn
+                    ? "https://wa.me/6281210106680?text=Hello%20Dr.%20G.%20Prabantoro,%20I%20would%20like%20to%20consult%20regarding%20research%20and%20AHP/ISM%20methodology."
+                    : "https://wa.me/6281210106680?text=Halo%20Dr.%20G.%20Prabantoro,%20saya%20ingin%20konsultasi%20riset%20dan%20metodologi%20AHP/ISM."
+                }
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition-colors shrink-0 shadow-xs"
               >
                 <MessageSquare size={14} />
-                <span>Konsultasi Langsung via WhatsApp</span>
+                <span>{isEn ? "Ask Research via WhatsApp" : "Tanya Riset via WhatsApp"}</span>
               </a>
             </div>
           </div>
