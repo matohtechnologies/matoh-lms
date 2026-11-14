@@ -108,16 +108,22 @@ export default async function AboutPage() {
             {isEn ? "PT. Matoh Technologies Indonesia" : "Profil PT. Matoh Technologies Indonesia"}
           </div>
           <h1
-            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 mb-6 tracking-tight"
+            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 mb-4 tracking-tight"
             style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             Make You <br />
             <span className="text-gradient">Ready on Digital</span>
           </h1>
-          <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
+          <p
+            className="text-base sm:text-lg font-bold text-slate-800 tracking-tight mb-4"
+            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+          >
+            Empowering Innovation, Transforming the Future
+          </p>
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl mx-auto">
             {isEn
-              ? "Center of excellence for digital technology adoption, empowering entrepreneurs, MSMEs, educators, and researchers through structured learning and applied consultation."
-              : "Menjadi pusat pembelajaran penerapan teknologi digital terbaik bagi pelaku usaha (UMKM), akademisi, dan peserta didik di seluruh Indonesia."}
+              ? "Matoh Technologies stands as a partner in digital transformation and innovation development through education, research, publication, technology development, and professional consultation to create impactful solutions for business, academia, and society."
+              : "Matoh Technologies hadir sebagai mitra transformasi digital dan pengembangan inovasi melalui pendidikan, riset, publikasi, pengembangan teknologi, serta konsultasi profesional untuk menciptakan solusi yang berdampak bagi dunia bisnis, akademik, dan masyarakat."}
           </p>
         </div>
       </section>

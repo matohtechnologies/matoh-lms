@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "id_ID",
     url: "https://www.matohtechnologies.com",
-    title: "PT. Matoh Technologies Indonesia — Make Home Ready on Digital",
+    title: "PT. Matoh Technologies Indonesia — Make You Ready on Digital",
     description:
       "Pusat pembelajaran penerapan teknologi digital terbaik bagi pelaku usaha (UMKM), akademisi, dan peserta didik.",
     siteName: "Matoh Technologies",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "PT. Matoh Technologies Indonesia",
-    description: "Make Home Ready on Digital — Platform Pelatihan Digital Modern",
+    description: "Make You Ready on Digital — Empowering Innovation, Transforming the Future",
   },
   robots: {
     index: true,

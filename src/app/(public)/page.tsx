@@ -275,20 +275,28 @@ export default async function HomePage() {
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             {/* Left Column: Big Headline & Interactive Controls */}
             <div className="lg:col-span-6 space-y-6 text-left">
-              {/* Main Headline */}
-              <h1
-                className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-slate-900 leading-[1.08] tracking-tight text-balance"
-                style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
-              >
-                Make You <br />
-                <span className="text-gradient">Ready on Digital</span>
-              </h1>
+              {/* Main Headline & Tagline */}
+              <div className="space-y-3">
+                <h1
+                  className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-slate-900 leading-[1.08] tracking-tight text-balance"
+                  style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+                >
+                  Make You <br />
+                  <span className="text-gradient">Ready on Digital</span>
+                </h1>
+                <p
+                  className="text-lg sm:text-xl font-bold text-slate-800 tracking-tight"
+                  style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+                >
+                  Empowering Innovation, Transforming the Future
+                </p>
+              </div>
 
               {/* Subheadline with high legibility */}
-              <p className="text-lg sm:text-xl text-slate-600 leading-relaxed max-w-xl text-pretty">
+              <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl text-pretty">
                 {isEn
-                  ? "Center of excellence for digital technology adoption. Empowering MSMEs, educators, and researchers through project-driven curriculums, MCDM decision analysis, and instant verified certifications."
-                  : "Pusat pembelajaran penerapan teknologi digital terbaik bagi pelaku usaha (UMKM), akademisi, dan peserta didik. Kuasai Digital Marketing, Peramalan Bisnis, dan Analisis Keputusan Ilmiah (AHP & ISM) dengan sertifikasi otomatis."}
+                  ? "Matoh Technologies stands as a partner in digital transformation and innovation development through education, research, publication, technology development, and professional consultation to create impactful solutions for business, academia, and society."
+                  : "Matoh Technologies hadir sebagai mitra transformasi digital dan pengembangan inovasi melalui pendidikan, riset, publikasi, pengembangan teknologi, serta konsultasi profesional untuk menciptakan solusi yang berdampak bagi dunia bisnis, akademik, dan masyarakat."}
               </p>
 
               {/* Action Buttons with clear primary hierarchy */}
