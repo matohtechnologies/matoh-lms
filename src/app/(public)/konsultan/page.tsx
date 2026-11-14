@@ -82,13 +82,20 @@ export default async function KonsultanPage() {
               className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
-              {isEn ? "Transformative Business & Research Advisory" : "Konsultasi Transformasi Digital, Riset & Bisnis"}
+              {isEn ? "Consulting" : "Konsultasi"}
             </h1>
+
+            <p
+              className="text-lg sm:text-xl font-bold text-slate-800 tracking-tight"
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+            >
+              Smart Insights, Better Decisions, Greater Results
+            </p>
 
             <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
               {isEn
-                ? "Holistic advisory programs delivered by seasoned scholars and technology practitioners for MSME growth, academic theses, and corporate excellence."
-                : "Solusi pendampingan langsung dari akademisi dan praktisi teknologi berpengalaman untuk akselerasi UMKM, bimbingan metodologi keputusan ilmiah, dan pelatihan in-house."}
+                ? "We deliver professional consulting services integrating academic expertise and practical experience to assist individuals, businesses, and institutions in overcoming challenges and achieving strategic goals. Ranging from MSME digital transformation, business strategy development, research mentoring, to feasibility studies and investment analysis."
+                : "Kami menghadirkan layanan konsultasi profesional yang mengintegrasikan keahlian akademis dan pengalaman praktis untuk membantu individu, bisnis, dan institusi mengatasi tantangan serta mencapai tujuan strategis. Mulai dari transformasi digital UMKM, pengembangan strategi bisnis, pendampingan riset, hingga studi kelayakan dan analisis investasi."}
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-3 pt-4">
