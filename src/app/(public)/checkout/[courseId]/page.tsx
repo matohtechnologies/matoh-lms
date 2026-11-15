@@ -283,7 +283,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
           {t("back_to_course")}
         </Link>
 
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 mb-6 tracking-tight" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
+        <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 mb-6 tracking-tight" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
           {t("title")}
         </h1>
 
@@ -488,7 +488,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
 
                     <div className="flex justify-between items-center py-4">
                       <span className="font-bold text-stone-900">Total</span>
-                      <span className="text-2xl font-extrabold text-blue-600">
+                      <span className="text-2xl font-bold text-blue-600">
                         {finalPrice === 0 ? (
                           <span className="text-emerald-600 uppercase font-black tracking-wide text-xl">
                             {isEn ? "FREE" : "GRATIS"}

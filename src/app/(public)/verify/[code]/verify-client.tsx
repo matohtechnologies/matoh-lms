@@ -193,7 +193,7 @@ export function VerifyClient({
             </div>
 
             <h1
-              className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white"
+              className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               {t("panel_title")}

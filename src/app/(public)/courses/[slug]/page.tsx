@@ -450,7 +450,7 @@ function PriceCard({
           <p className="text-3xl font-bold text-green-600">{isEn ? "Free" : "Gratis"}</p>
         ) : (
           <div>
-            <p className="text-3xl font-extrabold text-slate-900">
+            <p className="text-3xl font-bold text-slate-900">
               {formatCurrency(finalPrice, locale)}
             </p>
             {hasDiscount && (

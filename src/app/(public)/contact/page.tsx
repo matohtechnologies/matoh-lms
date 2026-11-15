@@ -175,7 +175,7 @@ export default async function ContactPage() {
                           </div>
                           <div>
                             <h4 className="text-xs font-bold text-stone-900">{c.title}</h4>
-                            <p className="text-sm font-extrabold text-stone-900 font-mono tracking-tight mt-0.5">
+                            <p className="text-sm font-bold text-stone-900 font-mono tracking-tight mt-0.5">
                               {c.detail}
                             </p>
                           </div>
