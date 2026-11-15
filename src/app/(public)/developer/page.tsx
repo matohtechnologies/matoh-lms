@@ -158,7 +158,7 @@ export default async function DeveloperPage() {
                 className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm sm:text-base transition-colors shadow-warm hover:shadow-lg cursor-pointer"
               >
                 <MessageSquare size={17} />
-                <span>{isEn ? "Free Project Consultation on WhatsApp" : "Konsultasi Gratis via WhatsApp"}</span>
+                <span>{isEn ? "Consultation on WhatsApp" : "Konsultasi via WhatsApp"}</span>
               </a>
 
               <Link
@@ -248,10 +248,6 @@ export default async function DeveloperPage() {
       <section className="py-20 sm:py-28 border-b border-slate-200 bg-slate-50/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-200/80 text-slate-800 text-xs font-bold mb-3">
-              <Workflow size={13} className="text-slate-600" />
-              <span>{isEn ? "Development Methodology" : "Alur Kerja Pengerjaan"}</span>
-            </div>
             <h2
               className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
@@ -368,10 +364,6 @@ export default async function DeveloperPage() {
       {/* CTA Box Section */}
       <section className="py-20 sm:py-24 bg-slate-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-6">
-          <div className="w-14 h-14 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center mx-auto shadow-2xs">
-            <Sparkles size={28} />
-          </div>
-
           <h2
             className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight"
             style={{ fontFamily: "var(--font-poppins, sans-serif)" }}

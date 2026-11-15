@@ -226,10 +226,6 @@ export default async function KonsultanPage() {
       <section className="py-16 sm:py-24">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-700 uppercase tracking-wider bg-blue-50 px-3.5 py-1.5 rounded-full mb-3">
-              <HelpCircle size={13} className="text-blue-600" />
-              <span>FAQ Konsultasi</span>
-            </span>
             <h2
               className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
