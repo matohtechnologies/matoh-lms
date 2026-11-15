@@ -116,7 +116,7 @@ export function Footer() {
               <Link href="/contact" className="text-slate-400 hover:text-white transition-colors py-0.5">
                 {tNav("contact")}
               </Link>
-              <Link href="/terms" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              <Link href="#" className="text-slate-400 hover:text-white transition-colors py-0.5">
                 {tFooter("terms_privacy")}
               </Link>
             </div>
@@ -145,11 +145,11 @@ export function Footer() {
         <div className="mt-8 pt-6 border-t border-slate-900/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-500">
           <p>© {currentYear} PT. Matoh Technologies Indonesia. {tFooter("all_rights_reserved")}</p>
           <div className="flex items-center gap-3">
-            <Link href="/terms" className="hover:text-slate-400 transition-colors">
+            <Link href="#" className="hover:text-slate-400 transition-colors">
               {tFooter("terms_of_service")}
             </Link>
             <span>•</span>
-            <Link href="/privacy" className="hover:text-slate-400 transition-colors">
+            <Link href="#" className="hover:text-slate-400 transition-colors">
               {tFooter("privacy_policy")}
             </Link>
           </div>

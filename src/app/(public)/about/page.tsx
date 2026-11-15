@@ -95,18 +95,6 @@ export default async function AboutPage() {
       <section className="py-20 sm:py-24 border-b border-slate-200/70 bg-gradient-to-b from-blue-50/70 via-[#f8fafc] to-[#f8fafc] bg-dot-matrix relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.12)_0%,transparent_70%)] pointer-events-none" />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-slate-800 text-xs font-bold mb-6 shadow-2xs">
-            <Image
-              src="/images/matoh-logo-v2.png"
-              alt="Matoh Technologies"
-              width={16}
-              height={16}
-              priority
-              style={{ aspectRatio: "1 / 1" }}
-              className="object-contain aspect-square"
-            />
-            {isEn ? "PT. Matoh Technologies Indonesia" : "Profil PT. Matoh Technologies Indonesia"}
-          </div>
           <h1
             className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 mb-4 tracking-tight"
             style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
@@ -133,9 +121,6 @@ export default async function AboutPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-14 relative z-10">
           {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded-full inline-block mb-3">
-              {isEn ? "Heritage & Legal Standing" : "Sejarah & Transformasi Legalitas"}
-            </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
               {isEn ? "Over Two Decades of Digital Literacy Evolution" : "Perjalanan Lebih dari Dua Dekade Literasi Digital Terapan"}
             </h2>
@@ -221,9 +206,6 @@ export default async function AboutPage() {
       <section className="py-20 bg-white border-b border-slate-200/60 bg-dot-matrix-slate relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded-full inline-block mb-3">
-              {isEn ? "Core Pillars" : "Keyakinan & Pilar Kami"}
-            </span>
             <h2
               className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
@@ -265,14 +247,11 @@ export default async function AboutPage() {
       <section className="py-20 sm:py-28 bg-white border-t border-slate-200/70">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded-full inline-block mb-3">
-              {isEn ? "Founders & Academic Board" : "Dewan Pendiri & Tokoh Akademik"}
-            </span>
             <h2
               className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
-              {isEn ? "Founders of Matoh Technologies" : "Tokoh Pendiri PT. Matoh Technologies Indonesia"}
+              {isEn ? "Founders of Matoh Technologies" : "Pendiri PT. Matoh Technologies Indonesia"}
             </h2>
             <p className="text-slate-500 text-sm sm:text-base mt-3 leading-relaxed">
               {isEn

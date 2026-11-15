@@ -87,7 +87,7 @@ export default async function RisetPage() {
               className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
-              {isEn ? "Core Methodological Frameworks" : "Kerangka Metodologi Utama"}
+              {isEn ? "Core Frameworks" : "Kerangka Utama"}
             </h2>
             <p className="text-base text-slate-500 mt-2">
               {isEn

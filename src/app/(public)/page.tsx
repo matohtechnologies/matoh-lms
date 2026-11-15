@@ -360,35 +360,20 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Right Column: Hero Visual Illustration with animated background & floating badges */}
+            {/* Right Column: Hero Visual Illustration (Clean Minimalist) */}
             <div className="lg:col-span-6 relative flex items-center justify-center">
-              {/* Animated Luminous Blue Background (Drift Blobs & Rotating Rings) */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 overflow-visible">
-                {/* Primary moving blue glow blob */}
-                <div className="absolute w-72 h-72 sm:w-[430px] sm:h-[430px] rounded-full bg-gradient-to-tr from-blue-500/30 via-sky-400/25 to-blue-600/20 blur-3xl animate-blob-drift" />
-
-                {/* Secondary counter-drifting cyan/sky blob */}
-                <div className="absolute w-60 h-60 sm:w-[360px] sm:h-[360px] rounded-full bg-gradient-to-bl from-sky-400/30 via-teal-300/20 to-blue-600/25 blur-3xl animate-blob-drift-reverse" />
-
-                {/* Concentric rotating ambient decorative rings */}
-                <div className="absolute w-[340px] h-[340px] sm:w-[460px] sm:h-[460px] rounded-full border border-blue-400/25 border-dashed animate-spin-ultra-slow" />
-                <div className="absolute w-[280px] h-[280px] sm:w-[380px] sm:h-[380px] rounded-full border border-sky-300/20 pointer-events-none" />
-              </div>
-
               <div className="relative w-full max-w-lg lg:max-w-xl mx-auto flex items-center justify-center">
                 <Image
-                  src="/gambar-heading.svg"
-                  alt="Ilustrasi Pembelajaran Digital Matoh Technologies"
-                  width={620}
-                  height={620}
+                  src="/images/hero-learning-illustration.png"
+                  alt={isEn ? "Applied Digital Learning - Matoh Technologies" : "Ilustrasi Pembelajaran Digital Matoh Technologies"}
+                  width={1024}
+                  height={764}
                   priority
-                  unoptimized
-                  style={{ aspectRatio: "1 / 1" }}
-                  className="w-full h-auto max-h-[500px] object-contain transition-transform duration-500 hover:scale-[1.02] aspect-square"
+                  className="w-full h-auto max-h-[500px] object-contain transition-transform duration-500 hover:scale-[1.02]"
                 />
 
                 {/* Floating Badge 1: Top Right */}
-                <div className="absolute -top-1 -right-1 sm:top-2 sm:right-2 bg-white/95 backdrop-blur-md shadow-warm rounded-2xl p-3 flex items-center gap-2.5 transition-all hover:scale-105 pointer-events-auto animate-float-gentle">
+                <div className="absolute -top-1 -right-1 sm:top-2 sm:right-2 bg-white/95 backdrop-blur-md shadow-warm rounded-2xl p-3 flex items-center gap-2.5 transition-all hover:scale-105 pointer-events-auto">
                   <div className="w-8 h-8 flex items-center justify-center shrink-0">
                     <ColorfulLightbulbIcon className="w-8 h-8 drop-shadow-xs" />
                   </div>
@@ -403,7 +388,7 @@ export default async function HomePage() {
                 </div>
 
                 {/* Floating Badge 2: Bottom Left */}
-                <div className="absolute -bottom-2 -left-1 sm:bottom-4 sm:left-2 bg-white/95 backdrop-blur-md shadow-warm rounded-2xl p-3 flex items-center gap-2.5 transition-all hover:scale-105 pointer-events-auto animate-float-gentle-reverse">
+                <div className="absolute -bottom-2 -left-1 sm:bottom-4 sm:left-2 bg-white/95 backdrop-blur-md shadow-warm rounded-2xl p-3 flex items-center gap-2.5 transition-all hover:scale-105 pointer-events-auto">
                   <div className="w-8 h-8 flex items-center justify-center shrink-0">
                     <ColorfulGraduationIcon className="w-8 h-8 drop-shadow-xs" />
                   </div>
