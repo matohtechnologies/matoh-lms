@@ -178,7 +178,7 @@ export default async function DeveloperPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2
-              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               {isEn ? "What We Build for Clients" : "Layanan Pengembangan yang Kami Sediakan"}
@@ -208,7 +208,7 @@ export default async function DeveloperPage() {
                       </span>
                     </div>
 
-                    <h3 className="text-2xl font-extrabold text-slate-900">
+                    <h3 className="text-2xl font-bold text-slate-900">
                       {svc.title}
                     </h3>
 
@@ -253,7 +253,7 @@ export default async function DeveloperPage() {
               <span>{isEn ? "Development Methodology" : "Alur Kerja Pengerjaan"}</span>
             </div>
             <h2
-              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               {isEn ? "How We Deliver Your Project" : "Tahapan Pengerjaan Proyek yang Terstruktur"}
@@ -272,10 +272,10 @@ export default async function DeveloperPage() {
                 className="border border-slate-200 rounded-xl p-6 bg-white space-y-3 relative flex flex-col justify-between"
               >
                 <div>
-                  <span className="text-3xl font-extrabold text-blue-600/40 font-mono">
+                  <span className="text-3xl font-bold text-blue-600/40 font-mono">
                     {step.num}
                   </span>
-                  <h3 className="font-extrabold text-slate-900 text-base mt-2 leading-snug">
+                  <h3 className="font-bold text-slate-900 text-base mt-2 leading-snug">
                     {step.title}
                   </h3>
                   <p className="text-xs text-slate-600 mt-2 leading-relaxed">
@@ -293,7 +293,7 @@ export default async function DeveloperPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2
-              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               {isEn ? "Why Build with Matoh Technologies?" : "Mengapa Memilih Layanan Developer Kami?"}
@@ -373,7 +373,7 @@ export default async function DeveloperPage() {
           </div>
 
           <h2
-            className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
+            className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight"
             style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {isEn

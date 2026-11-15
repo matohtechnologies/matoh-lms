@@ -130,7 +130,7 @@ export default async function ContactPage() {
             {isEn ? "Student Advisory & Academic Support" : "Layanan Siswa & Konsultasi Akademik"}
           </div>
           <h1
-            className="text-3xl sm:text-5xl font-extrabold text-stone-900 tracking-tight mb-4"
+            className="text-3xl sm:text-5xl font-bold text-stone-900 tracking-tight mb-4"
             style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {isEn ? (
@@ -273,7 +273,7 @@ export default async function ContactPage() {
               {isEn ? "Frequently Asked Questions" : "Pertanyaan Populer"}
             </span>
             <h2
-              className="text-2xl sm:text-3xl font-extrabold text-stone-900 mt-2 tracking-tight"
+              className="text-2xl sm:text-3xl font-bold text-stone-900 mt-2 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               {isEn ? "Quick Answers Before Reaching Out" : "Jawaban Cepat Sebelum Menghubungi Kami"}

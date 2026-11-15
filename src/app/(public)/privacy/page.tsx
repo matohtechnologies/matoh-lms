@@ -47,7 +47,7 @@ export default async function PrivacyPage() {
           </div>
 
           <h1
-            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 mb-6 tracking-tight leading-tight"
+            className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 mb-6 tracking-tight leading-tight"
             style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {isEn ? "Personal Data" : "Kebijakan Privasi &"} <br />

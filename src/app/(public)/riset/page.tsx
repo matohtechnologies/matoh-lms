@@ -84,7 +84,7 @@ export default async function RisetPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <h2
-              className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
+              className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               {isEn ? "Core Frameworks" : "Kerangka Utama"}
@@ -107,7 +107,7 @@ export default async function RisetPage() {
                   <Network size={22} className="text-blue-600" />
                 </div>
 
-                <h3 className="text-2xl font-extrabold text-slate-900">
+                <h3 className="text-2xl font-bold text-slate-900">
                   Analytic Hierarchy Process (AHP)
                 </h3>
 
@@ -149,7 +149,7 @@ export default async function RisetPage() {
                   <Layers size={22} className="text-blue-600" />
                 </div>
 
-                <h3 className="text-2xl font-extrabold text-slate-900">
+                <h3 className="text-2xl font-bold text-slate-900">
                   Interpretive Structural Modeling (ISM)
                 </h3>
 
@@ -211,7 +211,7 @@ export default async function RisetPage() {
                   />
                 </div>
                 <div>
-                  <h4 className="text-base font-extrabold text-slate-900">Dr. G. Prabantoro, SE., MM., CBec.</h4>
+                  <h4 className="text-base font-bold text-slate-900">Dr. G. Prabantoro, SE., MM., CBec.</h4>
                   <p className="text-xs text-slate-500 mt-0.5">Founder &amp; RnD Director • PT. Matoh Technologies Indonesia</p>
                   <p className="text-[11px] text-blue-600 font-mono mt-0.5">Slogan: Make You Ready on Digital</p>
                 </div>
@@ -242,7 +242,7 @@ export default async function RisetPage() {
             <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-4">
               <div>
                 <h2
-                  className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
+                  className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight"
                   style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
                 >
                   {isEn ? "Applied Research Publications" : "Publikasi Riset Terapan"}
@@ -322,7 +322,7 @@ export default async function RisetPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <h2
-              className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
+              className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               {isEn ? "Research Services & Academic Advisory" : "Layanan Riset & Bimbingan Akademik"}

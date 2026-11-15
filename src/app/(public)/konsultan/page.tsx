@@ -126,7 +126,7 @@ export default async function KonsultanPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <h2
-              className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
+              className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               {isEn ? "Our Advisory Domains" : "Layanan Konsultasi Kami"}
@@ -231,7 +231,7 @@ export default async function KonsultanPage() {
               <span>FAQ Konsultasi</span>
             </span>
             <h2
-              className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight"
+              className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               Pertanyaan yang Sering Diajukan

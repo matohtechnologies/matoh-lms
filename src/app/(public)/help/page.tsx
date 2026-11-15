@@ -41,7 +41,7 @@ export default async function HelpPage() {
           </div>
 
           <h1
-            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 mb-6 tracking-tight leading-tight"
+            className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 mb-6 tracking-tight leading-tight"
             style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {isEn ? "How Can We Help You" : "Bagaimana Kami Dapat"} <br />

@@ -415,7 +415,7 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <h2
-              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               Online Course
@@ -480,7 +480,7 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <h2
-              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               {isEn ? "Research" : "Riset"}
@@ -503,7 +503,7 @@ export default async function HomePage() {
                   </span>
                   <Network size={22} className="text-slate-400" />
                 </div>
-                <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight">
+                <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">
                   Analytic Hierarchy Process (AHP)
                 </h3>
                 <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
@@ -539,7 +539,7 @@ export default async function HomePage() {
                   </span>
                   <Layers size={22} className="text-slate-400" />
                 </div>
-                <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight">
+                <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">
                   Interpretive Structural Modeling (ISM)
                 </h3>
                 <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
@@ -577,7 +577,7 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <h2
-              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               {isEn ? "Publications" : "Publikasi"}
@@ -649,7 +649,7 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <h2
-              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               Developer
@@ -670,7 +670,7 @@ export default async function HomePage() {
                   <Globe size={22} />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-slate-900 text-lg sm:text-xl">
+                  <h3 className="font-bold text-slate-900 text-lg sm:text-xl">
                     {isEn ? "Company Profile & Web Portals" : "Website Profil & Portal Bisnis"}
                   </h3>
                   <p className="text-xs sm:text-sm text-blue-600 font-semibold mt-0.5">
@@ -698,7 +698,7 @@ export default async function HomePage() {
                   <Code2 size={22} />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-slate-900 text-lg sm:text-xl">
+                  <h3 className="font-bold text-slate-900 text-lg sm:text-xl">
                     {isEn ? "Custom Web App & Information Systems" : "Aplikasi Web & Sistem Kustom"}
                   </h3>
                   <p className="text-xs sm:text-sm text-blue-600 font-semibold mt-0.5">
@@ -726,7 +726,7 @@ export default async function HomePage() {
                   <Database size={22} />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-slate-900 text-lg sm:text-xl">
+                  <h3 className="font-bold text-slate-900 text-lg sm:text-xl">
                     {isEn ? "E-Commerce & Digital Platforms" : "E-Commerce & Integrasi Sistem"}
                   </h3>
                   <p className="text-xs sm:text-sm text-blue-600 font-semibold mt-0.5">
@@ -769,7 +769,7 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <h2
-              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               {isEn ? "Consultant" : "Konsultan"}
@@ -815,7 +815,7 @@ export default async function HomePage() {
 
             {/* Right Column: Clean Action Card Box */}
             <div className="lg:col-span-5 border border-slate-200 rounded-xl p-7 sm:p-8 bg-slate-50/70 text-center space-y-4">
-              <h3 className="font-extrabold text-slate-900 text-lg sm:text-xl">
+              <h3 className="font-bold text-slate-900 text-lg sm:text-xl">
                 {isEn ? "Schedule a Consultation" : "Konsultasikan Kebutuhan Anda"}
               </h3>
               <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">

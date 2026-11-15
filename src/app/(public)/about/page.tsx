@@ -121,7 +121,7 @@ export default async function AboutPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-14 relative z-10">
           {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight leading-tight">
               {isEn ? "Over Two Decades of Digital Literacy Evolution" : "Perjalanan Lebih dari Dua Dekade Literasi Digital Terapan"}
             </h2>
             <p className="text-slate-600 text-sm mt-3 leading-relaxed">
@@ -207,7 +207,7 @@ export default async function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <h2
-              className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
+              className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               {isEn ? "The Foundation Behind Matoh Technologies" : "Fokus Nyata untuk Hasil yang Terukur"}
@@ -248,7 +248,7 @@ export default async function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2
-              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               {isEn ? "Founders of Matoh Technologies" : "Pendiri PT. Matoh Technologies Indonesia"}
@@ -286,7 +286,7 @@ export default async function AboutPage() {
                   {/* Body Content */}
                   <div className="p-6 space-y-3">
                     <div>
-                      <h3 className="font-extrabold text-slate-900 text-lg leading-snug group-hover:text-blue-600 transition-colors">
+                      <h3 className="font-bold text-slate-900 text-lg leading-snug group-hover:text-blue-600 transition-colors">
                         {person.name}
                       </h3>
                       <p className="text-xs font-bold text-blue-700 mt-1">
@@ -324,7 +324,7 @@ export default async function AboutPage() {
       <section className="py-20 bg-gradient-to-br from-blue-600 via-blue-700 to-sky-600 text-white text-center relative overflow-hidden">
         <div className="max-w-3xl mx-auto px-4 relative z-10 space-y-6">
           <h2
-            className="text-3xl sm:text-4xl font-extrabold tracking-tight"
+            className="text-3xl sm:text-4xl font-bold tracking-tight"
             style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {isEn ? "Ready to Build Your Tech Career?" : "Siap Memulai Langkah Karir Teknologimu?"}
