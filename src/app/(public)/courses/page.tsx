@@ -82,7 +82,7 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
       <div className="border-b border-slate-200/80 py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
           <h1
-            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 mb-3 tracking-tight"
+            className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-3 tracking-tight"
             style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {isEn ? "Courses" : "Kursus"}

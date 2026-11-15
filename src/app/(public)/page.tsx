@@ -278,7 +278,7 @@ export default async function HomePage() {
               {/* Main Headline & Tagline */}
               <div className="space-y-3">
                 <h1
-                  className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-slate-900 leading-[1.08] tracking-tight text-balance"
+                  className="text-5xl sm:text-6xl lg:text-7xl font-bold text-slate-900 leading-[1.08] tracking-tight text-balance"
                   style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
                 >
                   Make You <br />
