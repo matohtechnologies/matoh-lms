@@ -10,8 +10,6 @@ import {
   CheckCircle2,
   ArrowRight,
   MessageSquare,
-  Sparkles,
-  Workflow,
   Settings,
   FileCheck,
 } from "lucide-react";
@@ -387,7 +385,7 @@ export default async function DeveloperPage() {
               className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm sm:text-base transition-colors shadow-warm cursor-pointer"
             >
               <MessageSquare size={18} />
-              <span>{isEn ? "Chat via WhatsApp (Fast Response)" : "Hubungi via WhatsApp (Respon Cepat)"}</span>
+              <span>{isEn ? "Chat via WhatsApp" : "Hubungi via WhatsApp"}</span>
             </a>
 
             <Link

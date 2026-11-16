@@ -67,7 +67,7 @@ export default async function AdminLayout({
               className="font-bold text-slate-900 text-sm block leading-none"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
-              Matoh<span className="text-[#2C7E8C]">Technologies</span>
+              MatohTechnologies
             </span>
           </div>
         </Link>
@@ -124,7 +124,7 @@ export default async function AdminLayout({
                 className="font-bold text-slate-900 text-sm block leading-tight"
                 style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
               >
-                Matoh<span className="text-[#2C7E8C]">Technologies</span>
+                MatohTechnologies
               </span>
               <span className="inline-block text-[10px] text-teal-700 font-bold uppercase tracking-wider bg-teal-50 px-1.5 py-0.5 rounded border border-teal-200/60 mt-0.5">
                 Admin Console

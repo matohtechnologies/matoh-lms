@@ -1177,7 +1177,7 @@ export default function LearnPageClient({
                   />
                 </div>
                 <span className="text-sm font-bold text-slate-900 tracking-tight">
-                  Matoh<span className="text-teal-400">Technologies</span>
+                  MatohTechnologies
                 </span>
               </Link>
               {/* Dedicated Mobile Close Button */}
@@ -2061,8 +2061,8 @@ export default function LearnPageClient({
                           Selesaikan Tes / Tugas Bab Ini Terlebih Dahulu
                         </h4>
                         <p className="text-xs text-amber-800/90 mt-1 leading-relaxed">
-                          Anda telah membaca seluruh materi pada bab <strong className="font-semibold text-amber-950">&quot;{currentSection?.title}&quot;</strong>. 
-                          Untuk membuka materi pada bab selanjutnya (<strong className="font-semibold text-amber-950">&quot;{nextSection.title}&quot;</strong>), 
+                          Anda telah membaca seluruh materi pada bab <strong className="font-semibold text-amber-950">&quot;{currentSection?.title}&quot;</strong>.
+                          Untuk membuka materi pada bab selanjutnya (<strong className="font-semibold text-amber-950">&quot;{nextSection.title}&quot;</strong>),
                           silakan selesaikan tes/tugas evaluasi berikut terlebih dahulu:
                         </p>
                       </div>

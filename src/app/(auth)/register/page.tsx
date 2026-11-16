@@ -101,7 +101,7 @@ export default function RegisterPage() {
               />
             </div>
             <span className="font-bold text-stone-900 text-lg" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
-              Matoh<span className="text-[#2C7E8C]">Technologies</span>
+              MatohTechnologies
             </span>
           </Link>
         </div>

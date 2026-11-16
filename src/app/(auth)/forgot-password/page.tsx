@@ -153,7 +153,7 @@ function ForgotPasswordContent() {
                 className="font-bold text-stone-900 text-xl"
                 style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
               >
-                Matoh<span className="text-[#2C7E8C]">Technologies</span>
+                MatohTechnologies
               </span>
             </Link>
             <h1
@@ -332,7 +332,7 @@ function ForgotPasswordContent() {
               className="font-bold text-stone-900 text-xl"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
-              Matoh<span className="text-[#2C7E8C]">Technologies</span>
+              MatohTechnologies
             </span>
           </Link>
           <h1
