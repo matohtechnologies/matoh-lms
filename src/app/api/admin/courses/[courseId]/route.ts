@@ -14,7 +14,6 @@ const courseUpdateSchema = z.object({
   instructorHeadline: z.string().nullable().optional(),
   instructorBio: z.string().nullable().optional(),
   whatYouLearn: z.union([z.string(), z.array(z.string())]).nullable().optional(),
-  level: z.enum(["BEGINNER", "INTERMEDIATE", "ADVANCED"]).optional(),
   price: z.number().min(0).optional(),
   discountPrice: z.number().min(0).nullable().optional(),
   duration: z.number().min(0).optional(),

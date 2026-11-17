@@ -50,7 +50,6 @@ interface CourseData {
   title: string;
   slug: string;
   description: string;
-  level: "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
   price: number;
   discountPrice?: number | null;
   duration?: number | null;
@@ -100,7 +99,6 @@ export default function EditCoursePage() {
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
-  const [level, setLevel] = useState<"BEGINNER" | "INTERMEDIATE" | "ADVANCED">("BEGINNER");
   const [price, setPrice] = useState("0");
   const [discountPrice, setDiscountPrice] = useState("");
   const [duration, setDuration] = useState("0");
@@ -133,7 +131,6 @@ export default function EditCoursePage() {
       setTitle(course.title);
       setSlug(course.slug);
       setDescription(course.description);
-      setLevel(course.level);
       setPrice(String(course.price));
       setDiscountPrice(course.discountPrice ? String(course.discountPrice) : "");
       setDuration(course.duration ? String(course.duration) : "0");
@@ -190,7 +187,6 @@ export default function EditCoursePage() {
           title,
           slug,
           description,
-          level,
           price: Number(price),
           discountPrice: discountPrice ? Number(discountPrice) : null,
           duration: Number(duration),
@@ -497,30 +493,17 @@ export default function EditCoursePage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <label htmlFor="edit-course-category" className="text-sm font-medium text-stone-700">Kategori</label>
-                <select id="edit-course-category" name="categoryId" value={categoryId} onChange={(e) => setCategoryId(e.target.value)}
-                  className="w-full h-11 px-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                >
-                  {categories.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="space-y-1.5">
-                <label htmlFor="edit-course-level" className="text-sm font-medium text-stone-700">Tingkat Kesulitan</label>
-                <select id="edit-course-level" name="level" value={level} onChange={(e) => setLevel(e.target.value as typeof level)}
-                  className="w-full h-11 px-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                >
-                  <option value="BEGINNER">Pemula (Beginner)</option>
-                  <option value="INTERMEDIATE">Menengah (Intermediate)</option>
-                  <option value="ADVANCED">Mahir (Advanced)</option>
-                </select>
-              </div>
+            <div className="space-y-1.5">
+              <label htmlFor="edit-course-category" className="text-sm font-medium text-stone-700">Kategori</label>
+              <select id="edit-course-category" name="categoryId" value={categoryId} onChange={(e) => setCategoryId(e.target.value)}
+                className="w-full h-11 px-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+              >
+                {categories.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <Textarea

@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge, LevelBadge } from "@/components/ui/badge";
+import { Badge } from "@/components/ui/badge";
 import { StarRating } from "@/components/ui/star-rating";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
@@ -191,7 +191,6 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <Badge variant="info">{displayCourse.category.name}</Badge>
-                <LevelBadge level={displayCourse.level} locale={locale} />
                 {isEnrolled && (
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">
                     {tDetail("already_enrolled")}

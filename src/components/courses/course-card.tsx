@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { BookOpen } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { Badge, LevelBadge } from "@/components/ui/badge";
+import { Badge } from "@/components/ui/badge";
 import { StarRating } from "@/components/ui/star-rating";
 import { formatCurrency, formatDuration } from "@/lib/utils";
 import { useAppLocale } from "@/components/providers/locale-provider";
@@ -17,7 +17,6 @@ interface CourseCardProps {
   thumbnail?: string | null;
   price: number;
   discountPrice?: number | null;
-  level: "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
   rating?: number | null;
   reviewCount?: number;
   enrollCount?: number;
@@ -41,7 +40,6 @@ export function CourseCard({
   thumbnail,
   price,
   discountPrice,
-  level,
   rating,
   reviewCount = 0,
   enrollCount = 0,
@@ -121,12 +119,11 @@ export function CourseCard({
 
         {/* Content */}
         <div className="flex flex-col flex-1 p-4 gap-3">
-          {/* Category & Level */}
+          {/* Category */}
           <div className="flex items-center gap-2">
             <Badge variant="info" className="text-[11px]">
               {category.name}
             </Badge>
-            <LevelBadge level={level} locale={locale} className="text-[11px]" />
           </div>
 
           {/* Title */}

@@ -134,7 +134,6 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
                     thumbnail={course.thumbnail}
                     price={course.price}
                     discountPrice={course.discountPrice}
-                    level={course.level}
                     rating={course.rating}
                     reviewCount={course.reviewCount}
                     enrollCount={course.enrollCount}

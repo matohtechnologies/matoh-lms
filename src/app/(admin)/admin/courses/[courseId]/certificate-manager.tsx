@@ -26,6 +26,7 @@ import {
   Hash,
   Maximize2,
   X,
+  ChevronRight,
 } from "lucide-react";
 import { format } from "date-fns";
 import { id as idLocale } from "date-fns/locale";
@@ -45,7 +46,6 @@ import {
 } from "@/lib/certificate-templates";
 import {
   formatCertificateSerialNumber,
-  SERIAL_TAG_DESCRIPTIONS,
 } from "@/lib/certificate-serial";
 
 interface CertificateSetting {
@@ -713,159 +713,108 @@ export function CertificateManager({ courseId }: CertificateManagerProps) {
             </div>
           </div>
 
-          {/* Card: Template Format Nomor Seri (Serial Number) */}
+          {/* Card: Format Nomor Seri Sertifikat (Sederhana & Bersih) */}
           <div className="bg-white rounded-2xl border border-stone-200 p-6 space-y-5">
             <div className="flex items-center justify-between pb-3 border-b border-stone-100">
               <div className="flex items-center gap-2">
                 <Hash size={18} className="text-blue-600" />
                 <h3 className="text-sm font-bold text-stone-900">
-                  Format Nomor Seri Sertifikat (Serial Number)
+                  Nomor Seri Sertifikat
                 </h3>
               </div>
               <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200/80">
-                Kustom Per Kursus
+                Otomatis
               </span>
             </div>
-
-            <p className="text-xs text-stone-500 leading-relaxed">
-              Tentukan pola penomoran sertifikat resmi khusus untuk kursus ini. Sistem akan otomatis mengisi variabel dinamis seperti tahun, kode kursus, dan nomor urut saat sertifikat diterbitkan.
-            </p>
 
             {/* Live Preview Display Box */}
             <div className="p-4 rounded-xl bg-gradient-to-br from-stone-900 via-stone-850 to-stone-900 text-white shadow-sm border border-stone-700 space-y-1.5">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] uppercase tracking-wider font-semibold text-stone-400 flex items-center gap-1.5">
-                  <Sparkles size={12} className="text-amber-400" /> Live Preview Serial Number
+                  <Sparkles size={12} className="text-amber-400" /> Contoh Format Nomor Sertifikat
                 </span>
                 <span className="text-[10px] text-stone-400 font-mono">
-                  Contoh Terbitan #{form.nextCounter || 1}
+                  Terbitan #{form.nextCounter || 1}
                 </span>
               </div>
               <div className="text-base sm:text-lg font-mono font-bold tracking-wide text-amber-300 break-all py-1 select-all">
                 {previewSerial}
               </div>
               <p className="text-[11px] text-stone-400">
-                Nomor ini akan tercetak otomatis pada sertifikat dan menjadi kode kredensial verifikasi keaslian publik.
+                Format standar: <span className="font-mono text-stone-300">MT / [Kode Kursus] / [Tahun] / [Nomor Urut]</span>
               </p>
             </div>
 
-            {/* Inputs: Pattern & Course Code */}
-            <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
-              <div className="sm:col-span-8 space-y-1.5">
-                <label htmlFor="cert-serial-pattern" className="text-xs font-semibold text-stone-700 flex items-center justify-between">
-                  <span>Template Pola Serial</span>
-                  <span className="text-[10px] text-stone-400">Gunakan tag kurung kurawal</span>
+            {/* Sederhana: Hanya 2 Input Utama yang Benar-Benar Dibutuhkan */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <label htmlFor="cert-course-code" className="text-xs font-semibold text-stone-700">
+                  Kode Singkatan Kursus
                 </label>
-                <input id="cert-serial-pattern" name="serialPattern" type="text" value={form.serialPattern || ""} onChange={(e) => setForm({ ...form, serialPattern: e.target.value })}
-                  placeholder="MT/{COURSE_CODE}/{YEAR}/{COUNTER}"
-                  className="w-full px-3 py-2 rounded-xl border border-stone-200 bg-white text-xs font-mono font-semibold text-stone-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                />
-              </div>
-
-              <div className="sm:col-span-4 space-y-1.5">
-                <label htmlFor="cert-course-code" className="text-xs font-semibold text-stone-700 flex items-center justify-between">
-                  <span>Kode Singkatan Kursus</span>
-                </label>
-                <input id="cert-course-code" name="courseCode" type="text" value={form.courseCode || ""} onChange={(e) => setForm({ ...form, courseCode: e.target.value.toUpperCase() })}
+                <input
+                  id="cert-course-code"
+                  name="courseCode"
+                  type="text"
+                  value={form.courseCode || ""}
+                  onChange={(e) => setForm({ ...form, courseCode: e.target.value.toUpperCase() })}
                   placeholder={
                     courseInfo?.slug
                       ?.split("-")
                       .map((w) => w[0]?.toUpperCase())
                       .join("")
-                      .slice(0, 6) || "FSW"
+                      .slice(0, 6) || "EM"
                   }
-                  className="w-full px-3 py-2 rounded-xl border border-stone-200 bg-white text-xs font-mono font-bold uppercase text-stone-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 bg-white text-xs font-mono font-bold uppercase text-stone-900 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 />
-              </div>
-            </div>
-
-            {/* Preset Patterns */}
-            <div className="space-y-2">
-              <span className="text-[11px] font-semibold text-stone-600 block">Pilihan Preset Pola Populer:</span>
-              <div className="flex flex-wrap gap-2">
-                {[
-                  { label: "Standar MT", pattern: "MT/{COURSE_CODE}/{YEAR}/{COUNTER}" },
-                  { label: "Akademik (Bulan Romawi)", pattern: "CERT/{COURSE_CODE}/{YEAR}/{MONTH_ROMAN}/{COUNTER}" },
-                  { label: "Kredensial Acak", pattern: "MT-{COURSE_CODE}-{YEAR}-{COUNTER}-{RANDOM}" },
-                  { label: "Minimalis", pattern: "{COURSE_CODE}-{YEAR}-{COUNTER}" },
-                ].map((preset) => (
-                  <button
-                    key={preset.label}
-                    type="button"
-                    onClick={() => setForm({ ...form, serialPattern: preset.pattern })}
-                    className={cn(
-                      "px-2.5 py-1 rounded-lg text-[11px] font-medium border transition-colors",
-                      form.serialPattern === preset.pattern
-                        ? "bg-blue-50 text-blue-700 border-blue-300 font-semibold"
-                        : "bg-stone-50 text-stone-600 border-stone-200 hover:bg-stone-100"
-                    )}
-                  >
-                    {preset.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Clickable Tags */}
-            <div className="space-y-2 p-3 bg-stone-50 rounded-xl border border-stone-200/80">
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold text-stone-700">Tag Variabel yang Tersedia</span>
-                <span className="text-[10px] text-stone-400">Klik tag untuk menyisipkan ke pola</span>
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {SERIAL_TAG_DESCRIPTIONS.map((item) => (
-                  <button
-                    key={item.tag}
-                    type="button"
-                    onClick={() => {
-                      const current = form.serialPattern || "";
-                      setForm({
-                        ...form,
-                        serialPattern: current ? `${current}/${item.tag}` : item.tag,
-                      });
-                    }}
-                    title={`${item.desc} (contoh: ${item.example})`}
-                    className="group flex items-center gap-1 px-2 py-1 bg-white hover:bg-blue-50 border border-stone-200 hover:border-blue-300 rounded-lg text-[10px] font-mono text-stone-700 hover:text-blue-700 transition-colors"
-                  >
-                    <span className="font-bold">{item.tag}</span>
-                    <span className="text-stone-400 group-hover:text-blue-500 font-sans text-[9px]">
-                      ({item.example})
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Counter & Padding Settings */}
-            <div className="pt-3 border-t border-stone-100 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <label htmlFor="cert-counter-padding" className="text-xs font-semibold text-stone-700">Jumlah Digit Nomor Urut (Padding)</label>
-                <select id="cert-counter-padding" name="counterPadding" value={form.counterPadding ?? 4} onChange={(e) => setForm({ ...form, counterPadding: Number(e.target.value) })}
-                  className="w-full px-3 py-2 rounded-xl border border-stone-200 bg-white text-xs font-medium text-stone-800 focus:outline-none focus:border-blue-500"
-                >
-                  <option value={3}>3 Digit (contoh: 001, 042)</option>
-                  <option value={4}>4 Digit (contoh: 0001, 0042)</option>
-                  <option value={5}>5 Digit (contoh: 00001, 00042)</option>
-                  <option value={6}>6 Digit (contoh: 000001, 000042)</option>
-                </select>
                 <p className="text-[11px] text-stone-400">
-                  Menentukan banyaknya angka nol di depan nomor urut &#123;COUNTER&#125;.
+                  Singkatan resmi kelas (contoh: <span className="font-mono font-semibold text-stone-600">EM</span> untuk Email Marketing, <span className="font-mono font-semibold text-stone-600">FSW</span> untuk Fullstack Web).
                 </p>
               </div>
 
               <div className="space-y-1.5">
-                <label htmlFor="cert-next-counter" className="text-xs font-semibold text-stone-700">Nomor Urut Berikutnya (Next Counter)</label>
-                <input id="cert-next-counter" name="nextCounter" type="number" min="1" value={form.nextCounter ?? 1}
+                <label htmlFor="cert-next-counter" className="text-xs font-semibold text-stone-700">
+                  Nomor Urut Mulai
+                </label>
+                <input
+                  id="cert-next-counter"
+                  name="nextCounter"
+                  type="number"
+                  min="1"
+                  value={form.nextCounter ?? 1}
                   onChange={(e) =>
                     setForm({ ...form, nextCounter: Math.max(1, Number(e.target.value) || 1) })
                   }
-                  className="w-full px-3 py-2 rounded-xl border border-stone-200 bg-white text-xs font-mono font-bold text-stone-800 focus:outline-none focus:border-blue-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 bg-white text-xs font-mono font-bold text-stone-800 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 />
                 <p className="text-[11px] text-stone-400">
-                  Akan bertambah 1 setiap kali ada siswa yang berhasil klaim sertifikat.
+                  Biarkan <span className="font-mono font-semibold text-stone-600">1</span> untuk kursus baru. Angka akan otomatis bertambah (+1) setiap kali ada siswa yang lulus.
                 </p>
               </div>
             </div>
+
+            {/* Opsi Format Khusus (Tersimpan Rapi di Accordion Tersembunyi) */}
+            <details className="group pt-2 border-t border-stone-100">
+              <summary className="text-[11px] font-semibold text-stone-500 hover:text-stone-800 cursor-pointer flex items-center gap-1.5 select-none transition-colors">
+                <ChevronRight size={13} className="group-open:rotate-90 transition-transform text-stone-400" />
+                <span>Sesuaikan Pola Khusus (Opsional / Lanjutan)</span>
+              </summary>
+              <div className="pt-3 space-y-3">
+                <div className="space-y-1.5">
+                  <label htmlFor="cert-serial-pattern" className="text-xs font-semibold text-stone-700 flex items-center justify-between">
+                    <span>Pola Teks</span>
+                    <span className="text-[10px] text-stone-400">Default: MT/&#123;COURSE_CODE&#125;/&#123;YEAR&#125;/&#123;COUNTER&#125;</span>
+                  </label>
+                  <input
+                    id="cert-serial-pattern"
+                    name="serialPattern"
+                    type="text"
+                    value={form.serialPattern || "MT/{COURSE_CODE}/{YEAR}/{COUNTER}"}
+                    onChange={(e) => setForm({ ...form, serialPattern: e.target.value })}
+                    className="w-full px-3 py-2 rounded-xl border border-stone-200 bg-white text-xs font-mono font-semibold text-stone-900 focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+              </div>
+            </details>
           </div>
 
           {/* Card: Template Desain Sertifikat (Background) */}

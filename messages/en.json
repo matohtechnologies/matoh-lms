@@ -89,14 +89,8 @@
     "filter": {
       "all": "All",
       "category": "Category",
-      "level": "Skill Level",
       "price": "Price",
       "sort": "Sort By"
-    },
-    "level": {
-      "BEGINNER": "Beginner",
-      "INTERMEDIATE": "Intermediate",
-      "ADVANCED": "Advanced"
     },
     "free": "Free",
     "free_badge": "FREE",
@@ -386,7 +380,6 @@
     "no_courses": "No courses found. Add your first course!",
     "col_course": "Course",
     "col_category": "Category",
-    "col_level": "Level",
     "col_price": "Price",
     "col_learners": "Learners",
     "col_status": "Status",

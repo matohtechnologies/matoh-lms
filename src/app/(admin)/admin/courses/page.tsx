@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Plus, Edit, Eye, Search, BookOpen } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { Badge, LevelBadge } from "@/components/ui/badge";
+import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/lib/utils";
 import { getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
@@ -93,7 +93,6 @@ export default async function AdminCoursesPage() {
                 <tr className="bg-stone-50/80 border-b border-stone-100 text-[11px] font-bold text-stone-500 uppercase tracking-wider">
                   <th className="px-5 py-3.5">{t("col_course")}</th>
                   <th className="px-5 py-3.5">{t("col_category")}</th>
-                  <th className="px-5 py-3.5">{t("col_level")}</th>
                   <th className="px-5 py-3.5">{t("col_price")}</th>
                   <th className="px-5 py-3.5">{t("col_learners")}</th>
                   <th className="px-5 py-3.5">{t("col_status")}</th>
@@ -126,9 +125,6 @@ export default async function AdminCoursesPage() {
                       <span className="bg-stone-100 px-2 py-0.5 rounded-md text-[11px]">
                         {course.category.name}
                       </span>
-                    </td>
-                    <td className="px-5 py-4">
-                      <LevelBadge level={course.level} />
                     </td>
                     <td className="px-5 py-4 font-bold text-stone-900">
                       {course.price === 0 ? (

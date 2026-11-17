@@ -439,7 +439,6 @@ export default async function HomePage() {
                   thumbnail={course.thumbnail}
                   price={course.price}
                   discountPrice={course.discountPrice}
-                  level={course.level}
                   rating={course.rating}
                   reviewCount={course.reviewCount}
                   enrollCount={course.enrollCount}

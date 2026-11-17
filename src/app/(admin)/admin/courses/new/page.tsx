@@ -42,7 +42,6 @@ export default function NewCoursePage() {
     "Mendapatkan sertifikat kelulusan resmi dengan verifikasi kode kredensial & QR Code",
     "Bergabung dengan komunitas belajar interaktif dan sesi bimbingan bersama instruktur",
   ]);
-  const [level, setLevel] = useState("BEGINNER");
   const [price, setPrice] = useState("499000");
   const [isFree, setIsFree] = useState(false);
   const [duration, setDuration] = useState("12");
@@ -101,7 +100,6 @@ export default function NewCoursePage() {
           instructorHeadline: instructorHeadline || null,
           instructorBio: instructorBio || null,
           whatYouLearn: whatYouLearnItems,
-          level,
           price: isFree ? 0 : Number(price),
           duration: Number(duration),
           thumbnail: thumbnail || undefined,
@@ -208,7 +206,6 @@ export default function NewCoursePage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <label htmlFor="new-course-category" className="text-sm font-medium text-stone-700">Kategori</label>
                 <select id="new-course-category" name="categoryId" value={categoryId} onChange={(e) => setCategoryId(e.target.value)}
@@ -229,18 +226,6 @@ export default function NewCoursePage() {
                   )}
                 </select>
               </div>
-
-              <div className="space-y-1.5">
-                <label htmlFor="new-course-level" className="text-sm font-medium text-stone-700">Tingkat Kesulitan</label>
-                <select id="new-course-level" name="level" value={level} onChange={(e) => setLevel(e.target.value)}
-                  className="w-full h-11 px-3 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                >
-                  <option value="BEGINNER">Pemula (Beginner)</option>
-                  <option value="INTERMEDIATE">Menengah (Intermediate)</option>
-                  <option value="ADVANCED">Mahir (Advanced)</option>
-                </select>
-              </div>
-            </div>
 
             <Textarea
               label="Ringkasan & Deskripsi Lengkap"

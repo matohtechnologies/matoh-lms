@@ -89,14 +89,8 @@
     "filter": {
       "all": "Semua",
       "category": "Kategori",
-      "level": "Tingkat Kesulitan",
       "price": "Harga",
       "sort": "Urutkan"
-    },
-    "level": {
-      "BEGINNER": "Pemula",
-      "INTERMEDIATE": "Menengah",
-      "ADVANCED": "Lanjutan"
     },
     "free": "Gratis",
     "free_badge": "GRATIS",
@@ -386,7 +380,6 @@
     "no_courses": "Belum ada kursus. Tambahkan kursus pertama!",
     "col_course": "Kursus",
     "col_category": "Kategori",
-    "col_level": "Level",
     "col_price": "Harga",
     "col_learners": "Pelajar",
     "col_status": "Status",

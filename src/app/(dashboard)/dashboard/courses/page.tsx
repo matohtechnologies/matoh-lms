@@ -111,7 +111,6 @@ export default async function DashboardCoursesPage() {
     thumbnail: c.thumbnail,
     price: c.price,
     discountPrice: c.discountPrice,
-    level: c.level as "BEGINNER" | "INTERMEDIATE" | "ADVANCED",
     duration: c.duration,
     totalLessons: c.totalLessons,
     rating: c.rating,

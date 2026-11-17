@@ -133,7 +133,7 @@ export function Navbar({ user, categories }: NavbarProps) {
         ? "12-16 week structured curriculum with 1-on-1 mentorship and recruiter-ready production portfolio."
         : "Kurikulum 12-16 minggu dengan bimbingan mentor 1-on-1 dan portofolio produksi siap uji recruiter.",
       tag: isEn ? "Full-Time / Part-Time" : "Penuh Waktu / Paruh Waktu",
-      href: "/courses?level=INTERMEDIATE",
+      href: "/courses",
     },
     {
       icon: Sparkles,

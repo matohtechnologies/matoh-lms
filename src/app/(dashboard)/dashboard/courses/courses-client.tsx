@@ -14,7 +14,6 @@ import {
   ListOrdered,
   RotateCcw,
 } from "lucide-react";
-import { LevelBadge } from "@/components/ui/badge";
 import { StarRating } from "@/components/ui/star-rating";
 import { formatCurrency, formatDuration } from "@/lib/utils";
 import { resolveThumbnailUrl } from "@/lib/youtube";
@@ -29,7 +28,6 @@ export interface DashboardCourseItem {
   thumbnail?: string | null;
   price: number;
   discountPrice?: number | null;
-  level: "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
   duration?: number | null;
   totalLessons?: number | null;
   rating?: number | null;
@@ -76,7 +74,6 @@ export function DashboardCoursesClient({
 }: DashboardCoursesClientProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
-  const [selectedLevel, setSelectedLevel] = useState<string>("ALL");
   const [selectedStatus, setSelectedStatus] = useState<string>("ALL");
   const [sortBy, setSortBy] = useState<string>("popular");
 
@@ -112,11 +109,6 @@ export function DashboardCoursesClient({
           return false;
         }
 
-        // Level filter
-        if (selectedLevel !== "ALL" && course.level !== selectedLevel) {
-          return false;
-        }
-
         // Status filter
         const isEnrolled = enrolledSet.has(course.id);
         const isPending = pendingSet.has(course.id);
@@ -149,7 +141,6 @@ export function DashboardCoursesClient({
     courses,
     searchQuery,
     selectedCategory,
-    selectedLevel,
     selectedStatus,
     sortBy,
     enrolledSet,
@@ -159,7 +150,6 @@ export function DashboardCoursesClient({
   const resetFilters = () => {
     setSearchQuery("");
     setSelectedCategory("ALL");
-    setSelectedLevel("ALL");
     setSelectedStatus("ALL");
     setSortBy("popular");
   };
@@ -167,7 +157,6 @@ export function DashboardCoursesClient({
   const hasActiveFilters =
     searchQuery.trim() !== "" ||
     selectedCategory !== "ALL" ||
-    selectedLevel !== "ALL" ||
     selectedStatus !== "ALL" ||
     sortBy !== "popular";
 
@@ -241,20 +230,8 @@ export function DashboardCoursesClient({
             )}
           </div>
 
-          {/* Dropdown Filters (Grid on mobile, flex on desktop) */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-            {/* Level Filter */}
-            <select
-              value={selectedLevel}
-              onChange={(e) => setSelectedLevel(e.target.value)}
-              className="w-full h-9 px-2.5 sm:px-3 rounded-xl border border-stone-200 bg-white text-xs font-medium text-stone-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            >
-              <option value="ALL">{isEn ? "All Levels" : "Semua Tingkat"}</option>
-              <option value="BEGINNER">{isEn ? "Beginner" : "Pemula"}</option>
-              <option value="INTERMEDIATE">{isEn ? "Intermediate" : "Menengah"}</option>
-              <option value="ADVANCED">{isEn ? "Advanced" : "Lanjutan"}</option>
-            </select>
-
+          {/* Dropdown Filters */}
+          <div className="grid grid-cols-2 gap-2">
             {/* Ownership Filter */}
             <select
               value={selectedStatus}
@@ -423,16 +400,13 @@ export function DashboardCoursesClient({
                 {/* Card Body */}
                 <div className="p-3.5 sm:p-4 flex-1 flex flex-col justify-between space-y-3">
                   <div className="space-y-1.5">
-                    {/* Level & Rating */}
-                    <div className="flex items-center justify-between text-xs">
-                      <LevelBadge level={course.level} locale={isEn ? "en" : "id"} />
-                      {course.rating != null && course.rating > 0 && (
-                        <div className="flex items-center gap-1 text-xs text-amber-500 font-semibold">
-                          <StarRating rating={course.rating} size={12} />
-                          <span className="text-stone-600 text-[11px]">({course.reviewCount})</span>
-                        </div>
-                      )}
-                    </div>
+                    {/* Rating */}
+                    {course.rating != null && course.rating > 0 && (
+                      <div className="flex items-center gap-1 text-xs text-amber-500 font-semibold">
+                        <StarRating rating={course.rating} size={12} />
+                        <span className="text-stone-600 text-[11px]">({course.reviewCount})</span>
+                      </div>
+                    )}
 
                     {/* Title */}
                     <h2
@@ -540,10 +514,6 @@ export function DashboardCoursesClient({
                   <span className="text-[11px] sm:text-xs font-medium text-stone-500">
                     {selectedCourseForModal.category.name}
                   </span>
-                  <LevelBadge
-                    level={selectedCourseForModal.level}
-                    locale={isEn ? "en" : "id"}
-                  />
                 </div>
                 <h3
                   className="text-sm sm:text-base font-bold text-stone-900 leading-snug"

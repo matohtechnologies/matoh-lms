@@ -16,12 +16,6 @@ enum Role {
   ADMIN
 }
 
-enum CourseLevel {
-  BEGINNER
-  INTERMEDIATE
-  ADVANCED
-}
-
 enum OrderStatus {
   PENDING
   PAID
@@ -122,7 +116,6 @@ model Course {
   thumbnail    String?
   price        Float       @default(0)
   discountPrice Float?
-  level        CourseLevel @default(BEGINNER)
   language     String      @default("id")
   duration     Int?        // total minutes
   totalLessons Int?
