@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "path";
 import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
@@ -21,8 +22,10 @@ const cspHeader = `
 const nextConfig: NextConfig = {
   output: "standalone",
 
-  // Upload body limits for video and course materials (allows up to 250MB+)
+  // Upload body limits and thread limits for container deployment
   experimental: {
+    cpus: 1,
+    workerThreads: false,
     proxyClientMaxBodySize: "300mb",
     serverActions: {
       bodySizeLimit: "300mb",
@@ -34,6 +37,15 @@ const nextConfig: NextConfig = {
 
   // 2. Performance: Enable automatic Brotli / Gzip compression
   compress: true,
+
+  // Webpack path alias resolution fallback for container environments
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "@": path.resolve(__dirname, "src"),
+    };
+    return config;
+  },
 
   // 3. Performance: Image optimization pipeline
   images: {
