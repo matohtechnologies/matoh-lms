@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { CheckCircle2, PlayCircle, BookOpen, ArrowRight, Loader2, Award } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface VerifiedCourse {
   id: string;
@@ -13,6 +14,7 @@ interface VerifiedCourse {
 }
 
 export default function CheckoutSuccessPage() {
+  const t = useTranslations("checkout");
   const searchParams = useSearchParams();
   const orderId = searchParams.get("order_id");
 
@@ -56,18 +58,18 @@ export default function CheckoutSuccessPage() {
           className="text-2xl sm:text-3xl font-bold text-stone-900 mb-2"
           style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
         >
-          Pembayaran Berhasil! 🎉
+          {t("success_title")}
         </h1>
 
         <p className="text-stone-500 text-sm sm:text-base mb-6 max-w-sm mx-auto">
-          Selamat! Akses kursus sudah berhasil diaktifkan ke akun kamu.
+          {t("success_subtitle")}
         </p>
 
         {/* Course Card Preview */}
         {loading ? (
           <div className="p-5 rounded-2xl bg-stone-50 border border-stone-100 flex items-center justify-center gap-3 text-stone-400 text-sm mb-6">
             <Loader2 size={18} className="animate-spin text-blue-500" />
-            <span>Menyiapkan ruang belajarmu...</span>
+            <span>{t("preparing_room")}</span>
           </div>
         ) : course ? (
           <div className="mb-8 p-4 rounded-2xl bg-blue-50/70 border border-blue-200/80 text-left flex items-center gap-4">
@@ -88,7 +90,7 @@ export default function CheckoutSuccessPage() {
             </div>
             <div className="min-w-0 flex-1">
               <span className="text-[10px] font-bold text-blue-700 uppercase tracking-wider bg-blue-100 px-2 py-0.5 rounded-full inline-block mb-1">
-                Akses Aktif
+                {t("active_access")}
               </span>
               <h3 className="font-bold text-stone-900 text-sm line-clamp-2 leading-snug">
                 {course.title}
@@ -105,7 +107,7 @@ export default function CheckoutSuccessPage() {
               className="w-full flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition-all shadow-md shadow-blue-600/20"
             >
               <PlayCircle size={18} />
-              Mulai Belajar Sekarang
+              {t("start_learning_now")}
             </Link>
           ) : (
             <Link
@@ -113,7 +115,7 @@ export default function CheckoutSuccessPage() {
               className="w-full flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition-all shadow-md shadow-blue-600/20"
             >
               <PlayCircle size={18} />
-              Buka Kursus Saya
+              {t("open_my_courses")}
             </Link>
           )}
 
@@ -123,13 +125,13 @@ export default function CheckoutSuccessPage() {
               className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-stone-200 bg-white hover:bg-stone-50 text-stone-700 text-xs font-semibold transition-colors"
             >
               <BookOpen size={14} className="text-stone-400" />
-              Kursus Saya
+              {t("my_courses")}
             </Link>
             <Link
               href="/courses"
               className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-stone-200 bg-white hover:bg-stone-50 text-stone-700 text-xs font-semibold transition-colors"
             >
-              Cari Kursus Lain
+              {t("browse_other_courses")}
               <ArrowRight size={14} className="text-stone-400" />
             </Link>
           </div>
@@ -138,12 +140,12 @@ export default function CheckoutSuccessPage() {
         {/* Feature badge */}
         <div className="mt-8 pt-6 border-t border-stone-100 flex items-center justify-center gap-6 text-xs text-stone-400">
           <span className="flex items-center gap-1.5">
-            <Award size={14} className="text-amber-500" /> Sertifikat Resmi
+            <Award size={14} className="text-amber-500" /> {t("official_cert")}
           </span>
           <span>•</span>
-          <span>Akses Seumur Hidup</span>
+          <span>{t("lifetime_access_badge")}</span>
           <span>•</span>
-          <span>Akses Materi 24/7</span>
+          <span>{t("access_247")}</span>
         </div>
       </div>
     </div>

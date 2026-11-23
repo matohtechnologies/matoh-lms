@@ -16,8 +16,10 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useTranslations } from "next-intl";
 
 function ForgotPasswordContent() {
+  const t = useTranslations("auth");
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
   const emailParam = searchParams.get("email") || "";
@@ -40,7 +42,7 @@ function ForgotPasswordContent() {
   const handleRequestSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!requestEmail || !requestEmail.includes("@")) {
-      setRequestError("Masukkan alamat email yang valid");
+      setRequestError(t("email_not_valid"));
       return;
     }
 
@@ -66,12 +68,12 @@ function ForgotPasswordContent() {
     setResetError("");
 
     if (!newPassword || newPassword.length < 8) {
-      setResetError("Kata sandi baru minimal 8 karakter");
+      setResetError(t("password_min_length"));
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setResetError("Konfirmasi kata sandi tidak cocok dengan kata sandi baru");
+      setResetError(t("password_mismatch"));
       return;
     }
 
@@ -110,20 +112,20 @@ function ForgotPasswordContent() {
               <CheckCircle size={32} className="text-green-600" />
             </div>
             <h1
-              className="text-2xl font-bold text-stone-900 mb-2"
+              className="text-2xl font-bold text-slate-900 mb-2"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
-              Kata Sandi Berhasil Diperbarui!
+              {t("password_updated_title")}
             </h1>
             <p className="text-stone-500 text-sm leading-relaxed mb-6">
-              Kata sandi akun kamu telah berhasil diubah. Sekarang kamu dapat masuk dengan kata sandi baru.
+              {t("password_updated_desc")}
             </p>
             <Link
               href="/login"
               className="inline-flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-colors"
             >
               <ArrowLeft size={16} />
-              Masuk ke Akun
+              {t("login_to_account")}
             </Link>
           </div>
         </div>
@@ -150,25 +152,25 @@ function ForgotPasswordContent() {
                 />
               </div>
               <span
-                className="font-bold text-stone-900 text-xl"
+                className="font-bold text-slate-900 text-xl"
                 style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
               >
                 MatohTechnologies
               </span>
             </Link>
             <h1
-              className="text-2xl font-bold text-stone-900"
+              className="text-2xl font-bold text-slate-900"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
-              Atur Ulang Kata Sandi
+              {t("reset_password_title")}
             </h1>
             <p className="text-stone-500 text-sm mt-1">
               {emailParam ? (
                 <>
-                  Buat kata sandi baru untuk <strong className="text-stone-700">{emailParam}</strong>
+                  {t("reset_password_subtitle")} (<strong className="text-stone-700">{emailParam}</strong>)
                 </>
               ) : (
-                "Masukkan kata sandi baru untuk akun Anda"
+                t("reset_password_subtitle")
               )}
             </p>
           </div>
@@ -184,14 +186,6 @@ function ForgotPasswordContent() {
                 <AlertCircle size={18} className="text-red-500 shrink-0 mt-0.5" />
                 <div className="flex-1">
                   <p>{resetError}</p>
-                  {(resetError.includes("kedaluwarsa") || resetError.includes("tidak valid")) && (
-                    <Link
-                      href="/forgot-password"
-                      className="inline-block mt-2 text-xs font-semibold text-red-800 underline hover:text-red-900"
-                    >
-                      Ajukan permintaan reset baru &rarr;
-                    </Link>
-                  )}
                 </div>
               </div>
             )}
@@ -201,7 +195,7 @@ function ForgotPasswordContent() {
                 <Input
                   id="new-password"
                   name="new-password"
-                  label="Kata Sandi Baru"
+                  label={t("new_password")}
                   type={showPassword ? "text" : "password"}
                   autoComplete="new-password"
                   placeholder="Minimal 8 karakter"
@@ -221,14 +215,14 @@ function ForgotPasswordContent() {
                   }
                   required
                 />
-                <p className="mt-1 text-xs text-stone-400">Minimal 8 karakter kombinasi huruf dan angka.</p>
+                <p className="mt-1 text-xs text-stone-400">{t("password_min_length")}</p>
               </div>
 
               <div>
                 <Input
                   id="confirm-password"
                   name="confirm-password"
-                  label="Konfirmasi Kata Sandi Baru"
+                  label={t("confirm_new_password")}
                   type={showConfirmPassword ? "text" : "password"}
                   autoComplete="new-password"
                   placeholder="Ulangi kata sandi baru"
@@ -257,7 +251,7 @@ function ForgotPasswordContent() {
                 loading={isPending}
                 leftIcon={<KeyRound size={16} />}
               >
-                Simpan Kata Sandi Baru
+                {isPending ? t("saving_password") : t("save_new_password")}
               </Button>
             </form>
 
@@ -267,7 +261,7 @@ function ForgotPasswordContent() {
                 className="inline-flex items-center gap-2 text-sm text-stone-500 hover:text-stone-700 transition-colors"
               >
                 <ArrowLeft size={14} />
-                Batal & Kembali ke Login
+                {t("back_to_login")}
               </Link>
             </div>
           </div>
@@ -286,24 +280,20 @@ function ForgotPasswordContent() {
               <CheckCircle size={32} className="text-green-600" />
             </div>
             <h1
-              className="text-2xl font-bold text-stone-900 mb-2"
+              className="text-2xl font-bold text-slate-900 mb-2"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
-              Email Terkirim!
+              {t("reset_link_sent_title")}
             </h1>
             <p className="text-stone-500 text-sm leading-relaxed mb-6">
-              Jika email <strong className="text-stone-700">{requestEmail}</strong> terdaftar di sistem kami,
-              kamu akan menerima tautan untuk mereset kata sandi dalam beberapa menit.
-            </p>
-            <p className="text-xs text-stone-400 mb-6">
-              Cek folder spam jika email tidak masuk ke kotak masuk utama dalam 5 menit.
+              {t("reset_link_sent_desc")}
             </p>
             <Link
               href="/login"
               className="inline-flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-colors"
             >
               <ArrowLeft size={16} />
-              Kembali ke Halaman Login
+              {t("back_to_login")}
             </Link>
           </div>
         </div>
@@ -329,20 +319,20 @@ function ForgotPasswordContent() {
               />
             </div>
             <span
-              className="font-bold text-stone-900 text-xl"
+              className="font-bold text-slate-900 text-xl"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
               MatohTechnologies
             </span>
           </Link>
           <h1
-            className="text-2xl font-bold text-stone-900"
+            className="text-2xl font-bold text-slate-900"
             style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
-            Lupa Password?
+            {t("forgot_password_title")}
           </h1>
           <p className="text-stone-500 text-sm mt-1">
-            Masukkan emailmu dan kami akan kirimkan tautan untuk mengatur ulang kata sandi
+            {t("forgot_password_subtitle")}
           </p>
         </div>
 
@@ -363,7 +353,7 @@ function ForgotPasswordContent() {
             <Input
               id="forgot-email"
               name="email"
-              label="Email Terdaftar"
+              label={t("email")}
               type="email"
               autoComplete="email"
               placeholder="email@kamu.com"
@@ -380,7 +370,7 @@ function ForgotPasswordContent() {
               loading={isPending}
               leftIcon={<Mail size={16} />}
             >
-              Kirim Tautan Reset Password
+              {isPending ? t("sending_reset_link") : t("send_reset_link")}
             </Button>
           </form>
 
@@ -390,7 +380,7 @@ function ForgotPasswordContent() {
               className="inline-flex items-center gap-2 text-sm text-stone-500 hover:text-stone-700 transition-colors"
             >
               <ArrowLeft size={14} />
-              Kembali ke Login
+              {t("back_to_login")}
             </Link>
           </div>
         </div>
