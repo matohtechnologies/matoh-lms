@@ -87,6 +87,11 @@ export async function GET(
     }
 
     if (!targetFilePath) {
+      // In local development, fallback to fetching from live production server if file exists there
+      if (process.env.NODE_ENV !== "production") {
+        const prodUrl = `https://matohtechnologies.com/uploads/${pathSegments.map(encodeURIComponent).join("/")}`;
+        return NextResponse.redirect(prodUrl, 307);
+      }
       return new NextResponse("File Not Found", { status: 404 });
     }
 
