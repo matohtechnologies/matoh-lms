@@ -15,7 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { CourseCard } from "@/components/courses/course-card";
 
 export const revalidate = 60;
@@ -176,7 +176,10 @@ function ColorfulGraduationIcon({ className = "w-7 h-7" }: { className?: string 
 }
 
 export default async function HomePage() {
-  const locale = await getLocale();
+  const [locale, tHome] = await Promise.all([
+    getLocale(),
+    getTranslations("home"),
+  ]);
   const isEn = locale === "en";
 
   const [featuredCourses, stats, session] = await Promise.all([
@@ -418,12 +421,10 @@ export default async function HomePage() {
               className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
-              Online Course
+              {tHome("courses_section_title")}
             </h2>
             <p className="text-base sm:text-lg text-slate-500 mt-3">
-              {isEn
-                ? "Practical real-world curriculums with official verifiable certification."
-                : "Kurikulum praktis berbasis proyek riil dengan sertifikasi kompetensi resmi."}
+              {tHome("courses_section_subtitle")}
             </p>
           </div>
 
@@ -464,7 +465,7 @@ export default async function HomePage() {
               href="/courses"
               className="inline-flex items-center gap-2 px-7 py-3 rounded-lg border border-slate-300 hover:border-blue-600 bg-white text-slate-800 hover:text-blue-600 font-semibold text-sm sm:text-base transition-colors shadow-2xs"
             >
-              <span>{isEn ? "View All Courses" : "Lihat Semua"}</span>
+              <span>{tHome("courses_view_all")}</span>
               <ArrowRight size={16} />
             </Link>
           </div>

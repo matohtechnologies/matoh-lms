@@ -39,6 +39,9 @@
     "floating_badge_count": "+1,240 people"
   },
   "home": {
+    "courses_section_title": "Online Courses",
+    "courses_section_subtitle": "Practical real-world curriculums with official verifiable certification.",
+    "courses_view_all": "View All Courses",
     "categories_title": "Explore Categories",
     "categories_subtitle": "Find courses that match your interests and career goals",
     "courses_unit": "courses",
