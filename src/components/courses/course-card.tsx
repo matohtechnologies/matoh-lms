@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { BookOpen } from "lucide-react";
@@ -59,13 +60,14 @@ export function CourseCard({
   const hasDiscount = discountPrice != null && discountPrice < price;
   const targetHref = isEnrolled ? `/learn/${id || slug}` : `/courses/${slug}`;
   const safeThumbnail = resolveThumbnailUrl(thumbnail);
+  const [imgError, setImgError] = useState(false);
 
   return (
     <Link href={targetHref}>
       <Card hover className="group flex flex-col h-full">
         {/* Thumbnail */}
         <div className="relative aspect-video w-full overflow-hidden bg-slate-100 rounded-t-2xl">
-          {safeThumbnail ? (
+          {safeThumbnail && !imgError ? (
             isVideoUrl(safeThumbnail) ? (
               <video
                 src={safeThumbnail}
@@ -73,12 +75,14 @@ export function CourseCard({
                 muted
                 playsInline
                 preload="metadata"
+                onError={() => setImgError(true)}
               />
             ) : (
               <Image
                 src={safeThumbnail}
                 alt={title}
                 fill
+                onError={() => setImgError(true)}
                 unoptimized={
                   safeThumbnail.includes("youtube.com") ||
                   safeThumbnail.includes("ytimg.com")
@@ -89,8 +93,16 @@ export function CourseCard({
               />
             )
           ) : (
-            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-blue-50 to-sky-100">
-              <BookOpen size={40} className="text-blue-300" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-slate-100 via-blue-50/70 to-slate-200 text-slate-500 p-4 text-center select-none">
+              <div className="w-12 h-12 rounded-2xl bg-white shadow-2xs border border-slate-200/90 flex items-center justify-center mb-2 text-blue-600">
+                <BookOpen size={24} />
+              </div>
+              <span className="text-xs font-bold text-slate-800 tracking-tight line-clamp-1 max-w-[90%]">
+                {title}
+              </span>
+              <span className="text-[10px] text-slate-500 mt-0.5 font-medium">
+                Matoh Technologies
+              </span>
             </div>
           )}
           {/* Enrolled badge */}

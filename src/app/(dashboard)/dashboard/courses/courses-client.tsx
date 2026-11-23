@@ -341,8 +341,9 @@ export function DashboardCoursesClient({
                 className="bg-white rounded-2xl border border-stone-200/80 shadow-xs hover:border-stone-300 transition-all duration-150 flex flex-col overflow-hidden"
               >
                 {/* Thumbnail Area */}
-                <div className="relative aspect-video w-full bg-stone-100 overflow-hidden shrink-0">
+                <div className="relative aspect-video w-full bg-slate-100 overflow-hidden shrink-0">
                   {safeThumbnail ? (
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={safeThumbnail}
                       alt={course.title}
@@ -350,12 +351,26 @@ export function DashboardCoursesClient({
                       height={216}
                       style={{ aspectRatio: "16 / 9" }}
                       className="w-full h-full object-cover aspect-video"
+                      onError={(e) => {
+                        const target = e.currentTarget as HTMLImageElement;
+                        target.style.display = "none";
+                        const fallback = target.nextElementSibling as HTMLElement;
+                        if (fallback) fallback.style.display = "flex";
+                      }}
                     />
-                  ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-stone-50 to-stone-100 flex items-center justify-center text-stone-400">
-                      <BookOpen size={32} />
+                  ) : null}
+
+                  <div
+                    style={{ display: safeThumbnail ? "none" : "flex" }}
+                    className="w-full h-full bg-gradient-to-br from-slate-100 via-blue-50/70 to-slate-200 flex-col items-center justify-center text-slate-500 p-4 text-center select-none"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-white shadow-2xs border border-slate-200 flex items-center justify-center mb-1 text-blue-600">
+                      <BookOpen size={20} />
                     </div>
-                  )}
+                    <span className="text-[10px] font-bold text-slate-700 line-clamp-1 max-w-[85%]">
+                      {course.title}
+                    </span>
+                  </div>
 
                   {/* Category pill */}
                   <div className="absolute top-2.5 left-2.5 z-10">

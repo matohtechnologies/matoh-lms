@@ -27,6 +27,7 @@ export function CourseHeroMedia({
   fallbackLessonVideoUrl,
 }: CourseHeroMediaProps) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [imgError, setImgError] = useState(false);
 
   // Condition: If thumbnail is an image (hardfile in /uploads or external image link),
   // DO NOT show play button. The play button should only be shown if media is explicitly a playable video.
@@ -87,11 +88,12 @@ export function CourseHeroMedia({
       ) : (
         <div className="relative w-full h-full">
           {/* Poster: image or direct video preview */}
-          {posterUrl && !isVideoUrl(posterUrl) ? (
+          {posterUrl && !isVideoUrl(posterUrl) && !imgError ? (
             <Image
               src={posterUrl}
               alt={title}
               fill
+              onError={() => setImgError(true)}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 800px"
               unoptimized={
                 posterUrl.includes("youtube.com") ||
@@ -110,8 +112,16 @@ export function CourseHeroMedia({
               preload="metadata"
             />
           ) : (
-            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-blue-50 to-sky-100">
-              <BookOpen size={60} className="text-blue-300" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-slate-100 via-blue-50/70 to-slate-200 text-slate-500 p-6 text-center select-none">
+              <div className="w-16 h-16 rounded-2xl bg-white shadow-md border border-slate-200/90 flex items-center justify-center mb-3 text-blue-600">
+                <BookOpen size={32} />
+              </div>
+              <span className="text-base font-bold text-slate-800 tracking-tight line-clamp-1 max-w-[85%]">
+                {title}
+              </span>
+              <span className="text-xs text-slate-500 mt-1 font-medium">
+                Matoh Technologies Learning
+              </span>
             </div>
           )}
 
