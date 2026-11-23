@@ -77,41 +77,45 @@ export default async function CoursesPage({ searchParams }: CoursesPageProps) {
   }
 
   return (
-    <div className="pt-20 bg-[#f8fafc] min-h-screen">
-      {/* Header */}
-      <div className="border-b border-slate-200/80 py-12 sm:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
-          <h1
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-3 tracking-tight"
-            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
-          >
-            {isEn ? "Courses" : "Kursus"}
-          </h1>
-          <p
-            className="text-lg sm:text-xl font-bold text-slate-800 tracking-tight mb-3"
-            style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
-          >
-            Learn Today, Lead Tomorrow
-          </p>
-          <p className="text-slate-500 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-            {isEn
-              ? "Enhance your competence and competitiveness through technology, AI, and industry-driven learning programs. We provide practical courses and training designed to equip individuals and professionals with relevant knowledge and skills to face future challenges."
-              : "Tingkatkan kompetensi dan daya saing melalui program pembelajaran berbasis teknologi, AI, dan kebutuhan industri. Kami menghadirkan kursus dan pelatihan praktis yang dirancang untuk membekali individu dan profesional dengan pengetahuan serta keterampilan yang relevan menghadapi tantangan masa depan."}
-          </p>
-        </div>
-      </div>
+    <div className="pt-20 bg-white text-slate-900 selection:bg-blue-100 selection:text-blue-900 min-h-screen">
+      {/* Header / Hero Section */}
+      <section className="bg-gradient-to-b from-blue-50/70 via-white to-white border-b border-slate-200 py-16 sm:py-24 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+          <div className="max-w-3xl mx-auto text-center space-y-4">
+            <h1
+              className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 tracking-tight leading-tight"
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+            >
+              {isEn ? "Courses" : "Kursus"}
+            </h1>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+            <p
+              className="text-lg sm:text-xl font-bold text-slate-800 tracking-tight"
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+            >
+              Learn Today, Lead Tomorrow.
+            </p>
+
+            <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
+              {isEn
+                ? "Enhance your competence and competitiveness through technology, AI, and industry-driven learning programs. We provide practical courses and training designed to equip individuals and professionals with relevant knowledge and skills to face future challenges."
+                : "Tingkatkan kompetensi dan daya saing melalui program pembelajaran berbasis teknologi, AI, dan kebutuhan industri. Kami menghadirkan kursus dan pelatihan praktis yang dirancang untuk membekali individu dan profesional dengan pengetahuan serta keterampilan yang relevan menghadapi tantangan masa depan."}
+            </p>
+
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-4">
+              <CoursesRequestQuickAction
+                isEn={isEn}
+                userEmail={session?.user?.email}
+                userName={session?.user?.name}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
         {/* Course Catalog Section: Clean Minimal View */}
         <section id="daftar-kursus">
-          {/* Header Bar: Quick Action */}
-          <div className="flex items-center justify-end mb-8 pb-4 border-b border-slate-200/80">
-            <CoursesRequestQuickAction
-              isEn={isEn}
-              userEmail={session?.user?.email}
-              userName={session?.user?.name}
-            />
-          </div>
 
           {/* Course grid: 4 columns on large screens for optimal visual space */}
           <Suspense

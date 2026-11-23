@@ -478,7 +478,8 @@ export function CoursesRequestQuickAction({
   isEn = false,
   userEmail = "",
   userName = "",
-}: CustomCourseRequestProps) {
+  className,
+}: CustomCourseRequestProps & { className?: string }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -486,9 +487,12 @@ export function CoursesRequestQuickAction({
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-800 bg-white hover:bg-slate-50 active:bg-slate-100 border border-slate-200/90 transition-all shadow-2xs hover:shadow-xs group cursor-pointer"
+        className={
+          className ||
+          "inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition-colors shadow-xs cursor-pointer"
+        }
       >
-        <Sparkles size={14} className="text-slate-700 group-hover:scale-110 transition-transform" />
+        <Sparkles size={16} />
         <span>{isEn ? "Request Custom Course / B2B" : "Request Kursus Custom"}</span>
       </button>
 
