@@ -34,23 +34,29 @@ export function Footer() {
   const tNav = useTranslations("nav");
 
   return (
-    <footer className="bg-slate-950 text-slate-400 border-t border-slate-800">
+    <footer className="bg-slate-950 text-white border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 lg:py-16">
-        {/* 4-Column Layout: Brand, Media Sosial, Tautan Navigasi, Metode Pembayaran */}
+        {/* 4-Column Layout: Brand & Alamat, Media Sosial, Tautan Navigasi, Metode Pembayaran */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
-          {/* Column 1: Brand & Copyright (Kiri) */}
-          <div className="lg:col-span-3 space-y-1.5 text-xs text-slate-400">
-            <p className="font-semibold text-slate-200">
+          {/* Column 1: Slogan, Brand & Alamat (Kiri) */}
+          <div className="lg:col-span-4 space-y-3 text-xs text-white">
+            <h3
+              className="text-lg sm:text-xl font-bold text-white tracking-tight leading-snug"
+              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+            >
+              Make You Ready on Digital
+            </h3>
+            <p className="font-semibold text-white text-xs">
               PT. Matoh Technologies Indonesia
             </p>
-            <p className="text-slate-500 font-mono text-[11px]">
-              Make You Ready on Digital
+            <p className="text-white/80 text-xs leading-relaxed max-w-sm">
+              Jl. RAMUSEL I/7A (Rawamangun Muka Selatan), Rawamangun, Pulo Gadung, Jakarta Timur, DKI Jakarta 13220
             </p>
           </div>
 
           {/* Column 2: Social Media (Tengah-Kiri) */}
           <div className="lg:col-span-2 space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-white">
               {tFooter("social_media")}
             </h4>
             <div className="flex items-center gap-2.5 pt-1">
@@ -60,7 +66,7 @@ export function Footer() {
                 rel="noopener noreferrer"
                 aria-label="Instagram"
                 title="Instagram"
-                className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 hover:border-pink-500/60 hover:bg-slate-800 hover:text-pink-400 flex items-center justify-center transition-all duration-200 text-slate-300 shadow-2xs hover:scale-105"
+                className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 hover:border-pink-500/60 hover:bg-slate-800 hover:text-pink-400 flex items-center justify-center transition-all duration-200 text-white shadow-2xs hover:scale-105"
               >
                 <InstagramIcon />
               </a>
@@ -71,7 +77,7 @@ export function Footer() {
                 rel="noopener noreferrer"
                 aria-label="YouTube"
                 title="YouTube"
-                className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 hover:border-red-500/60 hover:bg-slate-800 hover:text-red-400 flex items-center justify-center transition-all duration-200 text-slate-300 shadow-2xs hover:scale-105"
+                className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 hover:border-red-500/60 hover:bg-slate-800 hover:text-red-400 flex items-center justify-center transition-all duration-200 text-white shadow-2xs hover:scale-105"
               >
                 <YouTubeIcon />
               </a>
@@ -82,7 +88,7 @@ export function Footer() {
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
                 title="LinkedIn"
-                className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 hover:border-teal-500/60 hover:bg-slate-800 hover:text-teal-400 flex items-center justify-center transition-all duration-200 text-slate-300 shadow-2xs hover:scale-105"
+                className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 hover:border-teal-500/60 hover:bg-slate-800 hover:text-teal-400 flex items-center justify-center transition-all duration-200 text-white shadow-2xs hover:scale-105"
               >
                 <LinkedInIcon />
               </a>
@@ -91,47 +97,47 @@ export function Footer() {
 
           {/* Column 3: Quick Navigation Links (Tengah-Kanan) */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-white">
               {tFooter("navigation")}
             </h4>
             <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
-              <Link href="/courses" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              <Link href="/courses" className="text-white hover:text-teal-400 transition-colors py-0.5">
                 {tNav("courses")}
               </Link>
-              <Link href="/riset" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              <Link href="/riset" className="text-white hover:text-teal-400 transition-colors py-0.5">
                 {tNav("research")}
               </Link>
-              <Link href="/publikasi" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              <Link href="/publikasi" className="text-white hover:text-teal-400 transition-colors py-0.5">
                 {tNav("publications")}
               </Link>
-              <Link href="/developer" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              <Link href="/developer" className="text-white hover:text-teal-400 transition-colors py-0.5">
                 {tNav("developer")}
               </Link>
-              <Link href="/konsultan" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              <Link href="/konsultan" className="text-white hover:text-teal-400 transition-colors py-0.5">
                 {tNav("consultant")}
               </Link>
-              <Link href="/about" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              <Link href="/about" className="text-white hover:text-teal-400 transition-colors py-0.5">
                 {tNav("about")}
               </Link>
-              <Link href="/contact" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              <Link href="/contact" className="text-white hover:text-teal-400 transition-colors py-0.5">
                 {tNav("contact")}
               </Link>
-              <Link href="#" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              <Link href="#" className="text-white hover:text-teal-400 transition-colors py-0.5">
                 {tFooter("terms_privacy")}
               </Link>
             </div>
           </div>
 
           {/* Column 4: Metode Pembayaran Resmi (Kanan) */}
-          <div className="lg:col-span-4 space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300">
+          <div className="lg:col-span-3 space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-white">
               {tFooter("payment_methods_title")}
             </h4>
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2.5 pt-1">
               {PAYMENT_METHODS.map(({ name, component: Component, opticalHeight }) => (
                 <div
                   key={name}
-                  className="group flex items-center justify-center shrink-0 cursor-pointer select-none transition-transform duration-200 hover:scale-105 opacity-80 hover:opacity-100"
+                  className="group flex items-center justify-center shrink-0 cursor-pointer select-none transition-transform duration-200 hover:scale-105 opacity-90 hover:opacity-100"
                   title={name}
                 >
                   <Component className={`${opticalHeight} w-auto`} />
@@ -142,14 +148,14 @@ export function Footer() {
         </div>
 
         {/* Bottom Sub-strip */}
-        <div className="mt-8 pt-6 border-t border-slate-900/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-500">
+        <div className="mt-8 pt-6 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-white">
           <p>© {currentYear} PT. Matoh Technologies Indonesia. {tFooter("all_rights_reserved")}</p>
           <div className="flex items-center gap-3">
-            <Link href="#" className="hover:text-slate-400 transition-colors">
+            <Link href="#" className="hover:text-teal-400 transition-colors text-white">
               {tFooter("terms_of_service")}
             </Link>
-            <span>•</span>
-            <Link href="#" className="hover:text-slate-400 transition-colors">
+            <span className="text-white/40">•</span>
+            <Link href="#" className="hover:text-teal-400 transition-colors text-white">
               {tFooter("privacy_policy")}
             </Link>
           </div>
