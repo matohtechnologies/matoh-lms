@@ -34,6 +34,9 @@ export default function NewCoursePage() {
   const [instructorId, setInstructorId] = useState("");
   const [instructorHeadline, setInstructorHeadline] = useState("");
   const [instructorBio, setInstructorBio] = useState("");
+  const [instructor2Id, setInstructor2Id] = useState("");
+  const [instructor2Headline, setInstructor2Headline] = useState("");
+  const [instructor2Bio, setInstructor2Bio] = useState("");
   const [whatYouLearnItems, setWhatYouLearnItems] = useState<string[]>([
     "Memahami konsep dasar dan fundamental materi secara komprehensif",
     "Mengimplementasikan project nyata dari tahap inisiasi hingga deployment/production",
@@ -99,6 +102,9 @@ export default function NewCoursePage() {
           instructorId: instructorId || undefined,
           instructorHeadline: instructorHeadline || null,
           instructorBio: instructorBio || null,
+          instructor2Id: instructor2Id || null,
+          instructor2Headline: instructor2Headline || null,
+          instructor2Bio: instructor2Bio || null,
           whatYouLearn: whatYouLearnItems,
           price: isFree ? 0 : Number(price),
           duration: Number(duration),
@@ -238,7 +244,7 @@ export default function NewCoursePage() {
           </div>
         </div>
 
-        {/* Instructor Selection & About Instructor Customization */}
+        {/* Instructor Selection & About Instructor Customization (Supports 2 Instructors) */}
         <CourseInstructorPicker
           instructors={instructors}
           selectedInstructorId={instructorId}
@@ -247,6 +253,12 @@ export default function NewCoursePage() {
           onHeadlineChange={setInstructorHeadline}
           instructorBio={instructorBio}
           onBioChange={setInstructorBio}
+          selectedInstructor2Id={instructor2Id}
+          onInstructor2Change={setInstructor2Id}
+          instructor2Headline={instructor2Headline}
+          onHeadline2Change={setInstructor2Headline}
+          instructor2Bio={instructor2Bio}
+          onBio2Change={setInstructor2Bio}
         />
 
         {/* What You Will Learn (Learning Outcomes) Editor */}

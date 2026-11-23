@@ -26,6 +26,7 @@ const getCourse = cache(async (slug: string) => {
       where: { slug, published: true },
       include: {
         instructor: { select: { id: true, name: true, image: true, headline: true, bio: true } },
+        instructor2: { select: { id: true, name: true, image: true, headline: true, bio: true } },
         category: true,
         sections: {
           include: {
@@ -231,16 +232,42 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                 )}
               </div>
 
-              {/* Instructor */}
-              <div className="flex items-center gap-3 mt-5">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-sky-500 flex items-center justify-center text-white font-bold text-sm">
-                  {displayCourse.instructor.name?.[0]?.toUpperCase()}
+              {/* Instructor(s) */}
+              {displayCourse.instructor2 ? (
+                <div className="flex flex-wrap items-center gap-4 mt-5">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-sky-500 flex items-center justify-center text-white font-bold text-sm shrink-0">
+                      {displayCourse.instructor.name?.[0]?.toUpperCase()}
+                    </div>
+                    <div>
+                      <p className="text-[11px] text-slate-400 font-medium">{isEn ? "Lead Instructor" : "Instruktur Utama"}</p>
+                      <p className="text-sm font-semibold text-blue-600">{displayCourse.instructor.name}</p>
+                    </div>
+                  </div>
+
+                  <div className="h-6 w-px bg-slate-200 hidden sm:block" />
+
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-500 to-emerald-500 flex items-center justify-center text-white font-bold text-sm shrink-0">
+                      {displayCourse.instructor2.name?.[0]?.toUpperCase()}
+                    </div>
+                    <div>
+                      <p className="text-[11px] text-slate-400 font-medium">{isEn ? "Co-Instructor" : "Instruktur Pendamping"}</p>
+                      <p className="text-sm font-semibold text-slate-800">{displayCourse.instructor2.name}</p>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xs text-slate-500">{tDetail("instructor")}</p>
-                  <p className="text-sm font-semibold text-blue-600">{displayCourse.instructor.name}</p>
+              ) : (
+                <div className="flex items-center gap-3 mt-5">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-sky-500 flex items-center justify-center text-white font-bold text-sm">
+                    {displayCourse.instructor.name?.[0]?.toUpperCase()}
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-500">{tDetail("instructor")}</p>
+                    <p className="text-sm font-semibold text-blue-600">{displayCourse.instructor.name}</p>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
             {/* Mobile price card */}
@@ -311,34 +338,47 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
               )}
             </div>
 
-            {/* Instructor */}
-            <div className="bg-white rounded-2xl shadow-sm p-6">
-              <h2 className="text-lg font-bold text-slate-900 mb-4" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
-                {isEn ? "About the Instructor" : "Tentang Instruktur"}
+            {/* Instructor(s) */}
+            <div className="bg-white rounded-2xl shadow-sm p-6 space-y-6">
+              <h2 className="text-lg font-bold text-slate-900" style={{ fontFamily: "var(--font-poppins, sans-serif)" }}>
+                {displayCourse.instructor2
+                  ? (isEn ? "About the Instructors" : "Tentang Instruktur Pengampu")
+                  : (isEn ? "About the Instructor" : "Tentang Instruktur")}
               </h2>
-              <div className="flex items-start gap-4">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-sky-500 flex items-center justify-center text-white text-2xl font-bold shrink-0 overflow-hidden ring-1 ring-slate-200/80">
-                  {displayCourse.instructor.image ? (
-                    <img
-                      src={displayCourse.instructor.image}
-                      alt={displayCourse.instructor.name || "Instructor"}
-                      width={64}
-                      height={64}
-                      style={{ aspectRatio: "1 / 1" }}
-                      className="w-full h-full object-cover aspect-square"
-                    />
-                  ) : (
-                    <span>{displayCourse.instructor.name?.[0]?.toUpperCase()}</span>
-                  )}
-                </div>
-                <div>
-                  <h3 className="font-bold text-slate-900">{displayCourse.instructor.name}</h3>
-                  <p className="text-sm font-semibold text-blue-600 mb-2">
-                    {displayCourse.instructorHeadline ||
-                      displayCourse.instructor.headline ||
-                      (isEn ? "Lead Instructor" : "Dewan Instruktur")}
-                  </p>
-                  <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line">
+
+              <div className={displayCourse.instructor2 ? "grid grid-cols-1 md:grid-cols-2 gap-6" : "space-y-4"}>
+                {/* Lead Instructor */}
+                <div className={displayCourse.instructor2 ? "p-4 rounded-xl border border-slate-200/80 bg-slate-50/40 flex flex-col justify-between space-y-4" : "flex items-start gap-4"}>
+                  <div className="flex items-start gap-4">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-sky-500 flex items-center justify-center text-white text-2xl font-bold shrink-0 overflow-hidden ring-1 ring-slate-200/80">
+                      {displayCourse.instructor.image ? (
+                        <img
+                          src={displayCourse.instructor.image}
+                          alt={displayCourse.instructor.name || "Instructor"}
+                          width={64}
+                          height={64}
+                          style={{ aspectRatio: "1 / 1" }}
+                          className="w-full h-full object-cover aspect-square"
+                        />
+                      ) : (
+                        <span>{displayCourse.instructor.name?.[0]?.toUpperCase()}</span>
+                      )}
+                    </div>
+                    <div>
+                      {displayCourse.instructor2 && (
+                        <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2 py-0.5 rounded mb-1">
+                          {isEn ? "Lead Instructor" : "Instruktur Utama"}
+                        </span>
+                      )}
+                      <h3 className="font-bold text-slate-900">{displayCourse.instructor.name}</h3>
+                      <p className="text-xs sm:text-sm font-semibold text-blue-600 mb-1">
+                        {displayCourse.instructorHeadline ||
+                          displayCourse.instructor.headline ||
+                          (isEn ? "Lead Instructor" : "Dewan Instruktur")}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed whitespace-pre-line">
                     {displayCourse.instructorBio ||
                       displayCourse.instructor.bio ||
                       (isEn
@@ -346,6 +386,46 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
                         : "Praktisi dan akademisi berpengalaman dengan rekam jejak riset, konsultasi industri, dan pembimbingan intensif.")}
                   </p>
                 </div>
+
+                {/* Co-Instructor if present */}
+                {displayCourse.instructor2 && (
+                  <div className="p-4 rounded-xl border border-slate-200/80 bg-slate-50/40 flex flex-col justify-between space-y-4">
+                    <div className="flex items-start gap-4">
+                      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-500 flex items-center justify-center text-white text-2xl font-bold shrink-0 overflow-hidden ring-1 ring-slate-200/80">
+                        {displayCourse.instructor2.image ? (
+                          <img
+                            src={displayCourse.instructor2.image}
+                            alt={displayCourse.instructor2.name || "Co-Instructor"}
+                            width={64}
+                            height={64}
+                            style={{ aspectRatio: "1 / 1" }}
+                            className="w-full h-full object-cover aspect-square"
+                          />
+                        ) : (
+                          <span>{displayCourse.instructor2.name?.[0]?.toUpperCase()}</span>
+                        )}
+                      </div>
+                      <div>
+                        <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-teal-800 bg-teal-50 px-2 py-0.5 rounded mb-1">
+                          {isEn ? "Co-Instructor" : "Instruktur Pendamping"}
+                        </span>
+                        <h3 className="font-bold text-slate-900">{displayCourse.instructor2.name}</h3>
+                        <p className="text-xs sm:text-sm font-semibold text-teal-700 mb-1">
+                          {displayCourse.instructor2Headline ||
+                            displayCourse.instructor2.headline ||
+                            (isEn ? "Co-Instructor" : "Instruktur Pendamping")}
+                        </p>
+                      </div>
+                    </div>
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed whitespace-pre-line">
+                      {displayCourse.instructor2Bio ||
+                        displayCourse.instructor2.bio ||
+                        (isEn
+                          ? "Academic and technical specialist collaborating to deliver comprehensive applied learning and mentoring."
+                          : "Pakar dan praktisi spesialis yang mendampingi sesi pembelajaran aplikatif serta studi kasus terapan.")}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
 
