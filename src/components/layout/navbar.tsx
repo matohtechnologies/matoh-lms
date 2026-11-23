@@ -181,7 +181,7 @@ export function Navbar({ user, categories }: NavbarProps) {
             className="h-9 w-9 sm:h-10 sm:w-10 object-contain transition-transform duration-200 group-hover:scale-105 aspect-square"
           />
           <span
-            className="font-extrabold text-base sm:text-lg tracking-tight text-teal-600 transition-colors group-hover:text-teal-700"
+            className="font-extrabold text-base sm:text-lg tracking-tight text-slate-900 transition-colors group-hover:text-slate-700"
             style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             MatohTechnologies
