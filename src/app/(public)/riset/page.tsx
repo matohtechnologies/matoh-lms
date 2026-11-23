@@ -44,7 +44,7 @@ export default async function RisetPage() {
               className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 tracking-tight leading-tight"
               style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
             >
-              {isEn ? "Research & Innovation" : "Riset & Inovasi"}
+              {isEn ? "Research" : "Riset"}
             </h1>
 
             <p
