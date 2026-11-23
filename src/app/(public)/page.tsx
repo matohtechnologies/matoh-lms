@@ -223,6 +223,7 @@ export default async function HomePage() {
         category: "Digital Transformation",
         author: "Tim Konsultan Matoh Tech",
         readTime: "5 min read",
+        isPaid: false,
       },
       {
         slug: "arsitektur-web-modern-nextjs-app-router",
@@ -230,6 +231,7 @@ export default async function HomePage() {
         category: "Web Engineering",
         author: "Ir. Agung Prasetyo, M.Cs.",
         readTime: "6 min read",
+        isPaid: false,
       },
       {
         slug: "pentingnya-sertifikasi-kompetensi-terverifikasi",
@@ -237,6 +239,7 @@ export default async function HomePage() {
         category: "Certification",
         author: "Dr. Retno Wulandari, M.Si.",
         readTime: "4 min read",
+        isPaid: false,
       },
       {
         slug: "audit-keamanan-api-dan-autentikasi",
@@ -244,6 +247,7 @@ export default async function HomePage() {
         category: "Cybersecurity",
         author: "Bambang Sudarsono, S.Kom., M.T.",
         readTime: "6 min read",
+        isPaid: false,
       },
     ]
     : [
@@ -253,6 +257,7 @@ export default async function HomePage() {
         category: "Transformasi Digital",
         author: "Tim Konsultan Matoh Tech",
         readTime: "5 menit baca",
+        isPaid: false,
       },
       {
         slug: "arsitektur-web-modern-nextjs-app-router",
@@ -260,6 +265,7 @@ export default async function HomePage() {
         category: "Rekayasa Web",
         author: "Ir. Agung Prasetyo, M.Cs.",
         readTime: "6 menit baca",
+        isPaid: false,
       },
       {
         slug: "pentingnya-sertifikasi-kompetensi-terverifikasi",
@@ -267,6 +273,7 @@ export default async function HomePage() {
         category: "Sertifikasi",
         author: "Dr. Retno Wulandari, M.Si.",
         readTime: "4 menit baca",
+        isPaid: false,
       },
       {
         slug: "audit-keamanan-api-dan-autentikasi",
@@ -274,6 +281,7 @@ export default async function HomePage() {
         category: "Keamanan Sistem",
         author: "Bambang Sudarsono, S.Kom., M.T.",
         readTime: "6 menit baca",
+        isPaid: false,
       },
     ];
 
@@ -530,12 +538,28 @@ export default async function HomePage() {
                     className="border border-slate-200 rounded-2xl p-7 sm:p-8 bg-white hover:border-slate-300 transition-colors flex flex-col justify-between h-full group shadow-2xs"
                   >
                     <div className="space-y-4">
-                      <div className="flex items-center justify-between text-xs text-slate-400">
-                        <span className="font-semibold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-100/80">
-                          {category}
-                        </span>
+                      <div className="flex items-center justify-between text-xs text-slate-400 gap-2">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-semibold text-blue-600 text-xs">
+                            {category}
+                          </span>
+                          <span className="text-slate-300">•</span>
+                          <span
+                            className={`font-semibold text-xs ${
+                              item.isPaid ? "text-amber-600" : "text-emerald-600"
+                            }`}
+                          >
+                            {item.isPaid
+                              ? isEn
+                                ? "Paid"
+                                : "Berbayar"
+                              : isEn
+                              ? "Free"
+                              : "Tidak Berbayar"}
+                          </span>
+                        </div>
                         {readTime && (
-                          <span className="flex items-center gap-1.5 font-medium">
+                          <span className="flex items-center gap-1.5 font-medium shrink-0">
                             <Clock size={13} />
                             {readTime}
                           </span>
@@ -641,11 +665,27 @@ export default async function HomePage() {
                 className="border border-slate-200 rounded-xl p-6 hover:border-slate-400 transition-colors flex flex-col justify-between h-full bg-white group"
               >
                 <div className="space-y-3.5">
-                  <div className="flex items-center justify-between text-xs text-slate-400">
-                    <span className="font-semibold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded">
-                      {post.category}
-                    </span>
-                    <span className="flex items-center gap-1">
+                  <div className="flex items-center justify-between text-xs text-slate-400 gap-2">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="font-semibold text-blue-600 text-xs">
+                        {post.category}
+                      </span>
+                      <span className="text-slate-300">•</span>
+                      <span
+                        className={`font-semibold text-xs ${
+                          post.isPaid ? "text-amber-600" : "text-emerald-600"
+                        }`}
+                      >
+                        {post.isPaid
+                          ? isEn
+                            ? "Paid"
+                            : "Berbayar"
+                          : isEn
+                          ? "Free"
+                          : "Tidak Berbayar"}
+                      </span>
+                    </div>
+                    <span className="flex items-center gap-1 shrink-0">
                       <Clock size={12} />
                       {post.readTime}
                     </span>

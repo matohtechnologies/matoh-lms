@@ -202,9 +202,19 @@ export default async function PublicationDetailPage({ params }: PageProps) {
           <div className="space-y-6">
             {/* Category & Read Time Pills */}
             <div className="flex flex-wrap items-center gap-2.5 text-xs text-slate-500">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-semibold bg-blue-50 text-blue-700 border border-blue-200/60">
+              <span className="inline-flex items-center gap-1.5 font-semibold text-blue-600">
                 <BookOpen size={13} />
                 {category}
+              </span>
+
+              <span className="text-slate-300">•</span>
+
+              <span
+                className={`font-semibold text-xs ${
+                  post.isPaid ? "text-amber-600" : "text-emerald-600"
+                }`}
+              >
+                {post.isPaid ? (isEn ? "Paid" : "Berbayar") : (isEn ? "Free" : "Tidak Berbayar")}
               </span>
 
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-600">
@@ -538,11 +548,27 @@ export default async function PublicationDetailPage({ params }: PageProps) {
                     className="border border-slate-200 rounded-xl p-5 hover:border-slate-400 transition-colors flex flex-col justify-between h-full bg-white group shadow-2xs"
                   >
                     <div className="space-y-3">
-                      <div className="flex items-center justify-between text-xs text-slate-400">
-                        <span className="font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded text-[11px]">
-                          {relCategory}
-                        </span>
-                        <span className="flex items-center gap-1 text-[11px]">
+                      <div className="flex items-center justify-between text-xs text-slate-400 gap-2">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="font-semibold text-blue-600 text-[11px]">
+                            {relCategory}
+                          </span>
+                          <span className="text-slate-300 text-[10px]">•</span>
+                          <span
+                            className={`font-semibold text-[11px] ${
+                              rel.isPaid ? "text-amber-600" : "text-emerald-600"
+                            }`}
+                          >
+                            {rel.isPaid
+                              ? isEn
+                                ? "Paid"
+                                : "Berbayar"
+                              : isEn
+                              ? "Free"
+                              : "Tidak Berbayar"}
+                          </span>
+                        </div>
+                        <span className="flex items-center gap-1 text-[11px] shrink-0">
                           <Clock size={11} />
                           {relReadTime}
                         </span>

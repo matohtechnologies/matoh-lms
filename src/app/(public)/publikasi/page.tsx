@@ -68,11 +68,27 @@ export default async function PublikasiPage() {
                   className="border border-slate-200 rounded-2xl p-6 hover:border-slate-400 transition-colors flex flex-col justify-between h-full bg-white group shadow-2xs"
                 >
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between text-xs text-slate-400">
-                      <span className="font-semibold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-lg">
-                        {category}
-                      </span>
-                      <span className="flex items-center gap-1">
+                    <div className="flex items-center justify-between text-xs text-slate-400 gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-semibold text-blue-600 text-xs">
+                          {category}
+                        </span>
+                        <span className="text-slate-300">•</span>
+                        <span
+                          className={`font-semibold text-xs ${
+                            post.isPaid ? "text-amber-600" : "text-emerald-600"
+                          }`}
+                        >
+                          {post.isPaid
+                            ? isEn
+                              ? "Paid"
+                              : "Berbayar"
+                            : isEn
+                            ? "Free"
+                            : "Tidak Berbayar"}
+                        </span>
+                      </div>
+                      <span className="flex items-center gap-1 shrink-0">
                         <Clock size={12} />
                         {readTime}
                       </span>
