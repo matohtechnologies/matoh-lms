@@ -10,17 +10,9 @@ import {
   ExternalLink,
   Edit2,
   Trash2,
-  CheckCircle2,
-  Clock,
-  Sparkles,
   Star,
-  Eye,
   AlertTriangle,
   Loader2,
-  Filter,
-  Layers,
-  ChevronRight,
-  TrendingUp,
 } from "lucide-react";
 import { PublicationFormModal, type PublicationFormData } from "./publication-form-modal";
 import { dynamicAlert } from "@/components/ui/dynamic-alert-provider";
@@ -102,6 +94,18 @@ export function PublicationManager({
 
     return { total, pubCount, resCount, publishedCount, draftCount, totalViews };
   }, [publications]);
+
+  // Legacy categories tracker (publications with categories outside current course categories)
+  const legacyCategories = useMemo(() => {
+    const courseCatNames = new Set(initialCategories.map((c) => c.name));
+    const legacySet = new Set<string>();
+    publications.forEach((p) => {
+      if (p.categoryId && !courseCatNames.has(p.categoryId)) {
+        legacySet.add(p.categoryId);
+      }
+    });
+    return Array.from(legacySet);
+  }, [initialCategories, publications]);
 
   // Filtered List
   const filteredList = useMemo(() => {
@@ -371,22 +375,20 @@ export function PublicationManager({
             <button
               type="button"
               onClick={() => setSelectedType("ALL")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                selectedType === "ALL"
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${selectedType === "ALL"
                   ? "bg-white text-slate-900 shadow-2xs"
                   : "text-slate-600 hover:text-slate-900"
-              }`}
+                }`}
             >
               Semua ({stats.total})
             </button>
             <button
               type="button"
               onClick={() => setSelectedType("PUBLICATION")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
-                selectedType === "PUBLICATION"
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${selectedType === "PUBLICATION"
                   ? "bg-white text-blue-900 shadow-2xs"
                   : "text-slate-600 hover:text-slate-900"
-              }`}
+                }`}
             >
               <FileText size={13} />
               <span>Publikasi ({stats.pubCount})</span>
@@ -394,11 +396,10 @@ export function PublicationManager({
             <button
               type="button"
               onClick={() => setSelectedType("RESEARCH")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
-                selectedType === "RESEARCH"
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${selectedType === "RESEARCH"
                   ? "bg-white text-blue-900 shadow-2xs"
                   : "text-slate-600 hover:text-slate-900"
-              }`}
+                }`}
             >
               <BookOpen size={13} />
               <span>Riset ({stats.resCount})</span>
@@ -411,33 +412,30 @@ export function PublicationManager({
             <button
               type="button"
               onClick={() => setSelectedStatus("ALL")}
-              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
-                selectedStatus === "ALL"
+              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${selectedStatus === "ALL"
                   ? "bg-slate-800 text-white"
                   : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-              }`}
+                }`}
             >
               Semua
             </button>
             <button
               type="button"
               onClick={() => setSelectedStatus("PUBLISHED")}
-              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
-                selectedStatus === "PUBLISHED"
+              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${selectedStatus === "PUBLISHED"
                   ? "bg-emerald-600 text-white"
                   : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
-              }`}
+                }`}
             >
               Terbit ({stats.publishedCount})
             </button>
             <button
               type="button"
               onClick={() => setSelectedStatus("DRAFT")}
-              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
-                selectedStatus === "DRAFT"
+              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${selectedStatus === "DRAFT"
                   ? "bg-amber-600 text-white"
                   : "bg-amber-50 text-amber-700 hover:bg-amber-100"
-              }`}
+                }`}
             >
               Draf ({stats.draftCount})
             </button>
@@ -476,6 +474,11 @@ export function PublicationManager({
               {initialCategories.map((c) => (
                 <option key={c.id} value={c.name}>
                   {c.name}
+                </option>
+              ))}
+              {legacyCategories.map((catName) => (
+                <option key={catName} value={catName}>
+                  {catName} (Lama)
                 </option>
               ))}
             </select>
@@ -628,16 +631,14 @@ export function PublicationManager({
                           onClick={() => handleTogglePublish(item)}
                           disabled={isToggling}
                           title="Klik untuk mengubah status Terbit / Draf"
-                          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all shadow-2xs hover:opacity-85 ${
-                            item.published
+                          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all shadow-2xs hover:opacity-85 ${item.published
                               ? "bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100"
                               : "bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200"
-                          }`}
+                            }`}
                         >
                           <span
-                            className={`w-2 h-2 rounded-full ${
-                              item.published ? "bg-emerald-500 animate-pulse" : "bg-slate-400"
-                            }`}
+                            className={`w-2 h-2 rounded-full ${item.published ? "bg-emerald-500 animate-pulse" : "bg-slate-400"
+                              }`}
                           />
                           <span>{item.published ? "Terbit" : "Draf"}</span>
                         </button>
@@ -650,11 +651,10 @@ export function PublicationManager({
                           onClick={() => handleToggleFeatured(item)}
                           disabled={isToggling}
                           title={item.featured ? "Klik untuk membatalkan unggulan" : "Klik untuk menandai unggulan di beranda"}
-                          className={`p-1.5 rounded-lg transition-colors inline-flex items-center justify-center ${
-                            item.featured
+                          className={`p-1.5 rounded-lg transition-colors inline-flex items-center justify-center ${item.featured
                               ? "bg-amber-50 text-amber-600 hover:bg-amber-100"
                               : "text-slate-300 hover:text-amber-500 hover:bg-slate-50"
-                          }`}
+                            }`}
                         >
                           <Star
                             size={16}

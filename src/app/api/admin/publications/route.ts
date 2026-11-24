@@ -75,10 +75,10 @@ export async function GET(req: NextRequest) {
       prisma.publication.count({ where: { published: false } }),
     ]);
 
-    // Distinct categories for filter dropdown
-    const distinctCategories = await prisma.publication.findMany({
-      select: { categoryId: true, categoryEn: true },
-      distinct: ["categoryId"],
+    // Synchronize categories with official course categories
+    const courseCategories = await prisma.category.findMany({
+      select: { id: true, name: true, nameEn: true, slug: true },
+      orderBy: { name: "asc" },
     });
 
     return NextResponse.json({
@@ -90,10 +90,11 @@ export async function GET(req: NextRequest) {
         published: publishedCount,
         draft: draftCount,
       },
-      categories: distinctCategories.map((c: any) => ({
-        id: c.categoryId,
-        name: c.categoryId,
-        nameEn: c.categoryEn || c.categoryId,
+      categories: courseCategories.map((c) => ({
+        id: c.id,
+        name: c.name,
+        nameEn: c.nameEn || c.name,
+        slug: c.slug,
       })),
     });
   } catch (error) {
@@ -193,6 +194,19 @@ export async function POST(req: NextRequest) {
     const humanDates = formatPublishDate(pubDate);
     const readTimes = estimateReadingTime(contentId);
 
+    // Synchronize category with course category if matched
+    const courseCat = await prisma.category.findFirst({
+      where: {
+        OR: [
+          { name: categoryId.trim() },
+          { id: categoryId.trim() },
+          { slug: categoryId.trim() },
+        ],
+      },
+    });
+    const finalCategoryId = courseCat ? courseCat.name : categoryId.trim();
+    const finalCategoryEn = categoryEn?.trim() || courseCat?.nameEn || finalCategoryId;
+
     const publication = await prisma.publication.create({
       data: {
         slug,
@@ -205,8 +219,8 @@ export async function POST(req: NextRequest) {
         contentEn: contentEn?.trim() || null,
         abstractId: abstractId?.trim() || null,
         abstractEn: abstractEn?.trim() || null,
-        categoryId: categoryId.trim(),
-        categoryEn: categoryEn?.trim() || categoryId.trim(),
+        categoryId: finalCategoryId,
+        categoryEn: finalCategoryEn,
         author: resolvedAuthor,
         authorRole: authorRole?.trim() || (Array.isArray(authors) && authors[0]?.role?.trim()) || null,
         authorBioId: authorBioId?.trim() || (Array.isArray(authors) && authors[0]?.bio?.trim()) || null,

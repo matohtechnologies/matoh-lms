@@ -184,9 +184,20 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
 
     if (categoryId !== undefined) {
       if (!categoryId.trim()) return NextResponse.json({ error: "Kategori wajib diisi" }, { status: 400 });
-      dataToUpdate.categoryId = categoryId.trim();
+      const courseCat = await prisma.category.findFirst({
+        where: {
+          OR: [
+            { name: categoryId.trim() },
+            { id: categoryId.trim() },
+            { slug: categoryId.trim() },
+          ],
+        },
+      });
+      dataToUpdate.categoryId = courseCat ? courseCat.name : categoryId.trim();
+      dataToUpdate.categoryEn = categoryEn?.trim() || courseCat?.nameEn || dataToUpdate.categoryId;
+    } else if (categoryEn !== undefined) {
+      dataToUpdate.categoryEn = categoryEn?.trim() || existing.categoryEn;
     }
-    if (categoryEn !== undefined) dataToUpdate.categoryEn = categoryEn?.trim() || dataToUpdate.categoryId || existing.categoryId;
 
     if (author !== undefined) {
       if (!author.trim()) return NextResponse.json({ error: "Nama penulis wajib diisi" }, { status: 400 });

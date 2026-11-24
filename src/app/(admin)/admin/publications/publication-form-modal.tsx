@@ -1,18 +1,16 @@
 "use client";
 
 import { useState, useEffect, useRef, useMemo } from "react";
+import Link from "next/link";
 import {
   X,
   Upload,
   Trash2,
-  Sparkles,
-  Link as LinkIcon,
   BookOpen,
   FileText,
   Clock,
   Eye,
   Edit3,
-  Plus,
   AlertCircle,
   Check,
   Loader2,
@@ -57,24 +55,20 @@ export interface PublicationFormData {
   externalUrl?: string | null;
 }
 
+export interface CourseCategoryOption {
+  id: string;
+  name: string;
+  nameEn?: string | null;
+  slug?: string;
+}
+
 interface PublicationFormModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSaved: (item: any) => void;
   initialData?: PublicationFormData | null;
-  availableCategories: Array<{ id: string; name: string; nameEn?: string }>;
+  availableCategories: CourseCategoryOption[];
 }
-
-const DEFAULT_CATEGORIES = [
-  "Decision Science",
-  "Digital Transformation",
-  "Web Engineering",
-  "Certification",
-  "Manajemen Strategis",
-  "Inovasi & Design Thinking",
-  "Keamanan Siber & API",
-  "Ekonomi & UMKM",
-];
 
 export function PublicationFormModal({
   isOpen,
@@ -89,6 +83,32 @@ export function PublicationFormModal({
   // Active form tab: "id" (Indonesian) or "en" (English)
   const [activeTab, setActiveTab] = useState<"id" | "en">("id");
   const [showPreview, setShowPreview] = useState(false);
+
+  // Synchronized course categories list
+  const [categoriesList, setCategoriesList] = useState<CourseCategoryOption[]>(availableCategories || []);
+
+  useEffect(() => {
+    if (availableCategories && availableCategories.length > 0) {
+      setCategoriesList(availableCategories);
+    } else if (isOpen) {
+      // Fallback: fetch course categories from admin API if availableCategories is empty
+      fetch("/api/admin/categories")
+        .then((res) => res.json())
+        .then((data) => {
+          if (Array.isArray(data.categories)) {
+            setCategoriesList(
+              data.categories.map((c: any) => ({
+                id: c.id,
+                name: c.name,
+                nameEn: c.nameEn || c.name,
+                slug: c.slug,
+              }))
+            );
+          }
+        })
+        .catch(() => { });
+    }
+  }, [availableCategories, isOpen]);
 
   // Form Fields
   const [type, setType] = useState<"PUBLICATION" | "RESEARCH">("PUBLICATION");
@@ -105,7 +125,6 @@ export function PublicationFormModal({
   const [contentEn, setContentEn] = useState("");
 
   const [categoryId, setCategoryId] = useState("");
-  const [customCategory, setCustomCategory] = useState("");
   const [author, setAuthor] = useState("Dr. G. Prabantoro, SE., MM., CBec.");
   const [authorRole, setAuthorRole] = useState("RnD Director PT. Matoh Technologies Indonesia");
   const [authorBioId, setAuthorBioId] = useState("");
@@ -188,13 +207,7 @@ export function PublicationFormModal({
         setContentEn(initialData.contentEn || "");
 
         const cat = initialData.categoryId || "";
-        if (DEFAULT_CATEGORIES.includes(cat) || availableCategories.some((c) => c.name === cat)) {
-          setCategoryId(cat);
-          setCustomCategory("");
-        } else {
-          setCategoryId("__CUSTOM__");
-          setCustomCategory(cat);
-        }
+        setCategoryId(cat || (categoriesList[0]?.name || availableCategories[0]?.name || ""));
 
         if (initialData.authors && Array.isArray(initialData.authors) && initialData.authors.length > 0) {
           const [first, ...rest] = initialData.authors;
@@ -243,8 +256,7 @@ export function PublicationFormModal({
         setAbstractEn("");
         setContentId("");
         setContentEn("");
-        setCategoryId(DEFAULT_CATEGORIES[0]);
-        setCustomCategory("");
+        setCategoryId(categoriesList[0]?.name || availableCategories[0]?.name || "");
         setAuthor("Dr. G. Prabantoro, SE., MM., CBec.");
         setAuthorRole("RnD Director PT. Matoh Technologies Indonesia");
         setAuthorBioId("");
@@ -268,6 +280,13 @@ export function PublicationFormModal({
       setErrorMessage("");
     }
   }, [isOpen, initialData, availableCategories]);
+
+  // Fallback to select first course category once categories load if empty
+  useEffect(() => {
+    if (!categoryId && categoriesList.length > 0 && !initialData) {
+      setCategoryId(categoriesList[0].name);
+    }
+  }, [categoriesList, categoryId, initialData]);
 
   // Auto generate slug from titleId if not customized
   useEffect(() => {
@@ -424,7 +443,7 @@ export function PublicationFormModal({
     e.preventDefault();
     setErrorMessage("");
 
-    const resolvedCategory = categoryId === "__CUSTOM__" ? customCategory.trim() : categoryId.trim();
+    const resolvedCategory = categoryId.trim();
 
     if (!titleId.trim()) {
       setErrorMessage("Judul artikel (Bahasa Indonesia) wajib diisi.");
@@ -446,7 +465,7 @@ export function PublicationFormModal({
       return;
     }
     if (!resolvedCategory) {
-      setErrorMessage("Kategori artikel wajib dipilih atau diisi.");
+      setErrorMessage("Kategori artikel wajib dipilih.");
       return;
     }
     if (!author.trim()) {
@@ -456,6 +475,9 @@ export function PublicationFormModal({
 
     try {
       setSubmitting(true);
+
+      const matchingCat = categoriesList.find((c) => c.name === resolvedCategory);
+      const resolvedCategoryEn = matchingCat?.nameEn || initialData?.categoryEn || resolvedCategory;
 
       const allAuthors = [
         { name: author.trim(), role: authorRole.trim(), bio: authorBioId.trim() },
@@ -488,7 +510,7 @@ export function PublicationFormModal({
         contentId: contentId.trim(),
         contentEn: contentEn.trim() || null,
         categoryId: resolvedCategory,
-        categoryEn: resolvedCategory,
+        categoryEn: resolvedCategoryEn,
         author: compositeAuthor,
         authorRole: authorRole.trim() || null,
         authorBioId: authorBioId.trim() || null,
@@ -595,11 +617,10 @@ export function PublicationFormModal({
                 <button
                   type="button"
                   onClick={() => setType("PUBLICATION")}
-                  className={`flex items-center justify-center gap-2.5 py-2.5 px-4 rounded-xl border text-xs sm:text-sm font-semibold transition-all ${
-                    type === "PUBLICATION"
+                  className={`flex items-center justify-center gap-2.5 py-2.5 px-4 rounded-xl border text-xs sm:text-sm font-semibold transition-all ${type === "PUBLICATION"
                       ? "border-blue-600 bg-blue-50 text-blue-900 ring-2 ring-blue-500/20"
                       : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
-                  }`}
+                    }`}
                 >
                   <FileText size={16} className={type === "PUBLICATION" ? "text-blue-600" : "text-slate-400"} />
                   <span>Publikasi Artikel</span>
@@ -608,11 +629,10 @@ export function PublicationFormModal({
                 <button
                   type="button"
                   onClick={() => setType("RESEARCH")}
-                  className={`flex items-center justify-center gap-2.5 py-2.5 px-4 rounded-xl border text-xs sm:text-sm font-semibold transition-all ${
-                    type === "RESEARCH"
+                  className={`flex items-center justify-center gap-2.5 py-2.5 px-4 rounded-xl border text-xs sm:text-sm font-semibold transition-all ${type === "RESEARCH"
                       ? "border-blue-600 bg-blue-50 text-blue-900 ring-2 ring-blue-500/20"
                       : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
-                  }`}
+                    }`}
                 >
                   <BookOpen size={16} className={type === "RESEARCH" ? "text-blue-600" : "text-slate-400"} />
                   <span>Riset &amp; Metodologi</span>
@@ -677,11 +697,10 @@ export function PublicationFormModal({
                 <button
                   type="button"
                   onClick={() => setActiveTab("id")}
-                  className={`px-4 py-2 text-xs font-bold rounded-t-lg transition-all border-b-2 flex items-center gap-2 ${
-                    activeTab === "id"
+                  className={`px-4 py-2 text-xs font-bold rounded-t-lg transition-all border-b-2 flex items-center gap-2 ${activeTab === "id"
                       ? "border-blue-600 bg-white text-blue-900 shadow-2xs"
                       : "border-transparent text-slate-500 hover:text-slate-800"
-                  }`}
+                    }`}
                 >
                   <span>🇮🇩 Bahasa Indonesia (Wajib)</span>
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
@@ -690,11 +709,10 @@ export function PublicationFormModal({
                 <button
                   type="button"
                   onClick={() => setActiveTab("en")}
-                  className={`px-4 py-2 text-xs font-bold rounded-t-lg transition-all border-b-2 flex items-center gap-2 ${
-                    activeTab === "en"
+                  className={`px-4 py-2 text-xs font-bold rounded-t-lg transition-all border-b-2 flex items-center gap-2 ${activeTab === "en"
                       ? "border-blue-600 bg-white text-blue-900 shadow-2xs"
                       : "border-transparent text-slate-500 hover:text-slate-800"
-                  }`}
+                    }`}
                 >
                   <span>🇬🇧 English Version (Opsional)</span>
                 </button>
@@ -704,11 +722,10 @@ export function PublicationFormModal({
               <button
                 type="button"
                 onClick={() => setShowPreview(!showPreview)}
-                className={`text-xs px-2.5 py-1 rounded-md font-medium flex items-center gap-1.5 transition-colors ${
-                  showPreview
+                className={`text-xs px-2.5 py-1 rounded-md font-medium flex items-center gap-1.5 transition-colors ${showPreview
                     ? "bg-blue-600 text-white"
                     : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
-                }`}
+                  }`}
               >
                 <Eye size={13} />
                 <span>{showPreview ? "Kembali Edit" : "Pratinjau Markdown"}</span>
@@ -845,40 +862,48 @@ export function PublicationFormModal({
 
           {/* Section 3: Metadata, Author, Categories, Cover */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Category */}
+            {/* Category synchronized with Course Categories */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                Kategori <span className="text-red-500">*</span>
-              </label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="text-xs font-bold text-slate-700">
+                  Kategori <span className="text-red-500">*</span>
+                </label>
+                <Link
+                  href="/admin/categories"
+                  target="_blank"
+                  className="text-[11px] text-blue-600 hover:text-blue-700 hover:underline flex items-center gap-1 font-medium transition-colors"
+                >
+                  <span>Kelola Kategori Kursus</span>
+                  <ExternalLink size={10} />
+                </Link>
+              </div>
               <select
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
+                required
                 className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-hidden transition-all text-slate-900 bg-white"
               >
-                {DEFAULT_CATEGORIES.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
+                {categoriesList.length === 0 ? (
+                  <option value="" disabled>
+                    Memuat kategori kursus...
                   </option>
-                ))}
-                {availableCategories
-                  .filter((c) => !DEFAULT_CATEGORIES.includes(c.name))
-                  .map((c) => (
-                    <option key={c.id} value={c.name}>
-                      {c.name}
+                ) : (
+                  categoriesList.map((cat) => (
+                    <option key={cat.id || cat.name} value={cat.name}>
+                      {cat.name} {cat.nameEn && cat.nameEn !== cat.name ? `(${cat.nameEn})` : ""}
                     </option>
-                  ))}
-                <option value="__CUSTOM__">+ Kategori Kustom...</option>
+                  ))
+                )}
+                {initialData?.categoryId &&
+                  !categoriesList.some((c) => c.name === initialData.categoryId) && (
+                    <option value={initialData.categoryId}>
+                      {initialData.categoryId} (Kategori Sebelumnya)
+                    </option>
+                  )}
               </select>
-
-              {categoryId === "__CUSTOM__" && (
-                <input
-                  type="text"
-                  value={customCategory}
-                  onChange={(e) => setCustomCategory(e.target.value)}
-                  placeholder="Ketik kategori baru..."
-                  className="mt-2 w-full px-3.5 py-2 rounded-xl border border-slate-200 text-sm focus:border-blue-600 outline-hidden text-slate-900"
-                />
-              )}
+              <p className="mt-1 text-[11px] text-slate-500">
+                Pilihan kategori disinkronkan otomatis dengan kategori kursus LMS.
+              </p>
             </div>
 
             {/* Published At Date */}
@@ -1125,22 +1150,20 @@ export function PublicationFormModal({
                 <button
                   type="button"
                   onClick={() => setIsPaid(false)}
-                  className={`px-3 py-1.5 rounded-lg text-xs transition-all cursor-pointer ${
-                    !isPaid
+                  className={`px-3 py-1.5 rounded-lg text-xs transition-all cursor-pointer ${!isPaid
                       ? "bg-white text-emerald-700 shadow-2xs font-bold"
                       : "text-slate-600 hover:text-slate-900"
-                  }`}
+                    }`}
                 >
                   🔓 Gratis (Terbuka)
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsPaid(true)}
-                  className={`px-3 py-1.5 rounded-lg text-xs transition-all cursor-pointer ${
-                    isPaid
+                  className={`px-3 py-1.5 rounded-lg text-xs transition-all cursor-pointer ${isPaid
                       ? "bg-blue-600 text-white shadow-2xs font-bold"
                       : "text-slate-600 hover:text-slate-900"
-                  }`}
+                    }`}
                 >
                   🔒 Berbayar (Paywall)
                 </button>

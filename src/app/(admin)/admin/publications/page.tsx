@@ -25,9 +25,9 @@ export default async function AdminPublicationsPage() {
       orderBy: [{ featured: "desc" }, { publishedAt: "desc" }, { createdAt: "desc" }],
     });
 
-    let distinctCats = await prisma.publication.findMany({
-      select: { categoryId: true, categoryEn: true },
-      distinct: ["categoryId"],
+    const courseCategories = await prisma.category.findMany({
+      select: { id: true, name: true, nameEn: true, slug: true },
+      orderBy: { name: "asc" },
     });
 
     // Auto-seed data publikasi bawaan jika tabel di database masih kosong
@@ -80,11 +80,6 @@ export default async function AdminPublicationsPage() {
         dbItems = await prisma.publication.findMany({
           orderBy: [{ featured: "desc" }, { publishedAt: "desc" }, { createdAt: "desc" }],
         });
-
-        distinctCats = await prisma.publication.findMany({
-          select: { categoryId: true, categoryEn: true },
-          distinct: ["categoryId"],
-        });
       } catch (seedErr) {
         console.warn("Auto-seeding default publications skipped:", seedErr);
       }
@@ -124,10 +119,10 @@ export default async function AdminPublicationsPage() {
       updatedAt: item.updatedAt.toISOString(),
     }));
 
-    categories = distinctCats.map((c) => ({
-      id: c.categoryId,
-      name: c.categoryId,
-      nameEn: c.categoryEn || c.categoryId,
+    categories = courseCategories.map((c) => ({
+      id: c.id,
+      name: c.name,
+      nameEn: c.nameEn || c.name,
     }));
   } catch (error) {
     console.error("Error loading admin publications page:", error);
