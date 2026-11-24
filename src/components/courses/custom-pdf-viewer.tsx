@@ -147,7 +147,8 @@ export function CustomPdfViewer({
       try {
         const pdfjsLib = await import("pdfjs-dist/build/pdf.min.mjs");
         if (typeof window !== "undefined") {
-          pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+          // Use .js worker extension and API route fallback to prevent strict MIME type text/plain errors on shared hosting
+          pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
         }
 
         const loadingTask = pdfjsLib.getDocument({
