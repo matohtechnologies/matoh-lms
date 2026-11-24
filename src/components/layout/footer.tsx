@@ -95,28 +95,28 @@ export function Footer() {
               {tFooter("navigation")}
             </h4>
             <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
-              <Link href="/courses" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              <Link href="/courses" className="text-white hover:text-slate-400 transition-colors py-0.5">
                 {tNav("courses")}
               </Link>
-              <Link href="/riset" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              <Link href="/riset" className="text-white hover:text-slate-400 transition-colors py-0.5">
                 {tNav("research")}
               </Link>
-              <Link href="/publikasi" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              <Link href="/publikasi" className="text-white hover:text-slate-400 transition-colors py-0.5">
                 {tNav("publications")}
               </Link>
-              <Link href="/developer" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              <Link href="/developer" className="text-white hover:text-slate-400 transition-colors py-0.5">
                 {tNav("developer")}
               </Link>
-              <Link href="/konsultan" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              <Link href="/konsultan" className="text-white hover:text-slate-400 transition-colors py-0.5">
                 {tNav("consultant")}
               </Link>
-              <Link href="/about" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              <Link href="/about" className="text-white hover:text-slate-400 transition-colors py-0.5">
                 {tNav("about")}
               </Link>
-              <Link href="/contact" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              <Link href="/contact" className="text-white hover:text-slate-400 transition-colors py-0.5">
                 {tNav("contact")}
               </Link>
-              <Link href="#" className="text-slate-400 hover:text-white transition-colors py-0.5">
+              <Link href="#" className="text-white hover:text-slate-400 transition-colors py-0.5">
                 {tFooter("terms_privacy")}
               </Link>
             </div>
