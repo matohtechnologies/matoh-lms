@@ -47,8 +47,9 @@ const nextConfig: NextConfig = {
     return config;
   },
 
-  // 3. Performance: Image optimization pipeline
+  // 3. Performance: Image optimization pipeline (unoptimized: true for shared hosting resilience)
   images: {
+    unoptimized: true,
     dangerouslyAllowLocalIP: true,
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days

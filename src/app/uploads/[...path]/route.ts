@@ -29,14 +29,18 @@ function getCandidatePaths(relativePath: string): string[] {
     candidates.push(path.join(process.env.UPLOADS_DIR, relativePath));
   }
 
-  // 2. VPS Shared uploads directory (persistent across deployments)
-  candidates.push(path.join("/var/www/lms-platform/shared/uploads", relativePath));
-
-  // 3. Local/Current public/uploads
+  // 2. Shared hosting & local current public/uploads
   candidates.push(path.join(process.cwd(), "public", "uploads", relativePath));
 
-  // 4. Standalone release root uploads fallback
+  // 3. Shared hosting root uploads fallback
   candidates.push(path.join(process.cwd(), "uploads", relativePath));
+
+  // 4. Shared hosting parent / public_html uploads fallback
+  candidates.push(path.join(process.cwd(), "..", "public", "uploads", relativePath));
+  candidates.push(path.join(process.cwd(), "..", "uploads", relativePath));
+
+  // 5. VPS Shared uploads directory (persistent across deployments)
+  candidates.push(path.join("/var/www/lms-platform/shared/uploads", relativePath));
 
   return candidates;
 }
