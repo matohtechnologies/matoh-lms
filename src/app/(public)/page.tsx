@@ -17,6 +17,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { getLocale, getTranslations } from "next-intl/server";
 import { CourseCard } from "@/components/courses/course-card";
+import { getDbPublications } from "@/lib/publications";
 
 export const revalidate = 60;
 
@@ -68,6 +69,20 @@ async function getStats() {
   } catch {
     return { students: 0, courses: 0, instructors: 0, reviewAvg: 0, reviewCount: 0 };
   }
+}
+
+async function getResearchHighlights() {
+  try {
+    const research = await getDbPublications({
+      type: "RESEARCH",
+      publishedOnly: true,
+      limit: 4,
+    });
+    if (research && research.length > 0) return research;
+  } catch (err) {
+    console.error("Error fetching research highlights:", err);
+  }
+  return [];
 }
 
 function ColorfulLightbulbIcon({ className = "w-7 h-7" }: { className?: string }) {
@@ -182,10 +197,11 @@ export default async function HomePage() {
   ]);
   const isEn = locale === "en";
 
-  const [featuredCourses, stats, session] = await Promise.all([
+  const [featuredCourses, stats, session, researchHighlights] = await Promise.all([
     getFeaturedCourses(),
     getStats(),
     auth(),
+    getResearchHighlights(),
   ]);
 
   const enrolledCourseIds: string[] = [];
@@ -210,6 +226,7 @@ export default async function HomePage() {
         category: "Digital Transformation",
         author: "Tim Konsultan Matoh Tech",
         readTime: "5 min read",
+        isPaid: false,
       },
       {
         slug: "arsitektur-web-modern-nextjs-app-router",
@@ -217,6 +234,7 @@ export default async function HomePage() {
         category: "Web Engineering",
         author: "Ir. Agung Prasetyo, M.Cs.",
         readTime: "6 min read",
+        isPaid: false,
       },
       {
         slug: "pentingnya-sertifikasi-kompetensi-terverifikasi",
@@ -224,6 +242,7 @@ export default async function HomePage() {
         category: "Certification",
         author: "Dr. Retno Wulandari, M.Si.",
         readTime: "4 min read",
+        isPaid: false,
       },
       {
         slug: "audit-keamanan-api-dan-autentikasi",
@@ -231,6 +250,7 @@ export default async function HomePage() {
         category: "Cybersecurity",
         author: "Bambang Sudarsono, S.Kom., M.T.",
         readTime: "6 min read",
+        isPaid: false,
       },
     ]
     : [
@@ -240,6 +260,7 @@ export default async function HomePage() {
         category: "Transformasi Digital",
         author: "Tim Konsultan Matoh Tech",
         readTime: "5 menit baca",
+        isPaid: false,
       },
       {
         slug: "arsitektur-web-modern-nextjs-app-router",
@@ -247,6 +268,7 @@ export default async function HomePage() {
         category: "Rekayasa Web",
         author: "Ir. Agung Prasetyo, M.Cs.",
         readTime: "6 menit baca",
+        isPaid: false,
       },
       {
         slug: "pentingnya-sertifikasi-kompetensi-terverifikasi",
@@ -254,6 +276,7 @@ export default async function HomePage() {
         category: "Sertifikasi",
         author: "Dr. Retno Wulandari, M.Si.",
         readTime: "4 menit baca",
+        isPaid: false,
       },
       {
         slug: "audit-keamanan-api-dan-autentikasi",
@@ -261,6 +284,7 @@ export default async function HomePage() {
         category: "Keamanan Sistem",
         author: "Bambang Sudarsono, S.Kom., M.T.",
         readTime: "6 menit baca",
+        isPaid: false,
       },
     ];
 
@@ -474,7 +498,7 @@ export default async function HomePage() {
 
       {/* =========================================================================
           SECTION 3: RISET
-          Judul besar di tengah, subtitle singkat, 2 card lebar sejajar, tombol Lihat Semua di tengah
+          Menampilkan karya riset terapan resmi yang ada (bukan layanannya)
          ========================================================================= */}
       <section id="riset" className="py-20 sm:py-28 border-b border-slate-200 scroll-mt-16 bg-slate-50/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -487,74 +511,119 @@ export default async function HomePage() {
             </h2>
             <p className="text-base sm:text-lg text-slate-500 mt-3">
               {isEn
-                ? "Scientific decision methodologies for public policy, academic studies, and business."
-                : "Metodologi ilmiah dan sains keputusan untuk perumusan kebijakan publik dan bisnis."}
+                ? "Applied research papers, decision science models, and data-driven studies."
+                : "Publikasi riset terapan, studi sains keputusan, dan inovasi berbasis data."}
             </p>
           </div>
 
-          {/* 2 Wide Horizontal Cards Side by Side */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-            {/* Card 1: AHP */}
-            <div className="border border-slate-200 rounded-xl p-7 sm:p-9 bg-white hover:border-slate-400 transition-colors flex flex-col justify-between">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded">
-                    MCDM Analysis
-                  </span>
-                  <Network size={22} className="text-slate-400" />
-                </div>
-                <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">
-                  Analytic Hierarchy Process (AHP)
-                </h3>
-                <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-                  {isEn
-                    ? "Decomposes complex multi-criteria decisions into pairwise comparisons with verified mathematical consistency (CR < 0.10) for objective prioritization."
-                    : "Menentukan prioritas keputusan multi-kriteria berbasis matriks perbandingan berpasangan dengan verifikasi rasio konsistensi matematis yang teruji."}
-                </p>
-              </div>
+          {/* Research Cards */}
+          {researchHighlights.length > 0 ? (
+            <div
+              className={
+                researchHighlights.length === 1
+                  ? "max-w-2xl mx-auto"
+                  : researchHighlights.length === 2
+                  ? "grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto"
+                  : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto"
+              }
+            >
+              {researchHighlights.map((item) => {
+                const title = isEn ? item.titleEn || item.titleId : item.titleId;
+                const excerpt = isEn ? item.excerptEn || item.excerptId : item.excerptId;
+                const category = isEn ? item.categoryEn || item.categoryId : item.categoryId;
+                const readTime = isEn ? item.readTimeEn || item.readTimeId : item.readTimeId;
 
-              <div className="pt-5 mt-6 border-t border-slate-100 flex items-center justify-between text-xs sm:text-sm text-slate-500 font-medium">
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full overflow-hidden bg-slate-900 shrink-0 border border-slate-200">
-                    <Image
-                      src="/images/avatars/founder-prabantoro.svg"
-                      alt="Dr. G. Prabantoro"
-                      width={24}
-                      height={24}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <span>{isEn ? "Dr. G. Prabantoro, SE., MM." : "Dipimpin: Dr. G. Prabantoro"}</span>
-                </div>
-                <span className="text-blue-600 font-semibold">Konsistensi Rasio &lt; 0.10</span>
-              </div>
+                return (
+                  <article
+                    key={item.slug}
+                    className="border border-slate-200 rounded-2xl p-7 sm:p-8 bg-white hover:border-slate-300 transition-colors flex flex-col justify-between h-full group shadow-2xs"
+                  >
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between text-xs text-slate-400 gap-2">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-semibold text-blue-600 text-xs">
+                            {category}
+                          </span>
+                          <span className="text-slate-300">•</span>
+                          <span
+                            className={`font-semibold text-xs ${
+                              item.isPaid ? "text-amber-600" : "text-emerald-600"
+                            }`}
+                          >
+                            {item.isPaid
+                              ? isEn
+                                ? "Paid"
+                                : "Berbayar"
+                              : isEn
+                              ? "Free"
+                              : "Tidak Berbayar"}
+                          </span>
+                        </div>
+                        {readTime && (
+                          <span className="flex items-center gap-1.5 font-medium shrink-0">
+                            <Clock size={13} />
+                            {readTime}
+                          </span>
+                        )}
+                      </div>
+
+                      <h3 className="text-xl sm:text-2xl font-bold text-slate-900 leading-snug group-hover:text-blue-600 transition-colors">
+                        <Link href={`/publikasi/${item.slug}`}>
+                          {title}
+                        </Link>
+                      </h3>
+
+                      <p className="text-sm text-slate-600 leading-relaxed line-clamp-3">
+                        {excerpt}
+                      </p>
+
+                      {item.tags && item.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 pt-1">
+                          {item.tags.slice(0, 3).map((tag) => (
+                            <span
+                              key={tag}
+                              className="text-[11px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded"
+                            >
+                              #{tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="pt-5 mt-6 border-t border-slate-100 flex items-center justify-between text-xs sm:text-sm">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <div className="w-6 h-6 rounded-full overflow-hidden bg-slate-900 shrink-0 border border-slate-200">
+                          <Image
+                            src="/images/avatars/founder-prabantoro.svg"
+                            alt={item.author}
+                            width={24}
+                            height={24}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <span className="font-medium text-slate-700 truncate max-w-[160px] sm:max-w-[200px]">
+                          {item.author}
+                        </span>
+                      </div>
+
+                      <Link
+                        href={`/publikasi/${item.slug}`}
+                        className="text-blue-600 hover:text-blue-700 font-semibold inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform shrink-0"
+                      >
+                        <span>{isEn ? "Read Research" : "Baca Riset"}</span>
+                        <ArrowRight size={14} />
+                      </Link>
+                    </div>
+                  </article>
+                );
+              })}
             </div>
-
-            {/* Card 2: ISM */}
-            <div className="border border-slate-200 rounded-xl p-7 sm:p-9 bg-white hover:border-slate-400 transition-colors flex flex-col justify-between">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded">
-                    Structural Modeling
-                  </span>
-                  <Layers size={22} className="text-slate-400" />
-                </div>
-                <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">
-                  Interpretive Structural Modeling (ISM)
-                </h3>
-                <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-                  {isEn
-                    ? "Maps contextual dependencies among complex variables, establishes hierarchical structures, and formulates strategic institutional policy roadmaps."
-                    : "Memetakan hubungan kausal antarelemen variabel kompleks, menentukan hierarki struktural, dan merumuskan roadmap implementasi kebijakan institusi."}
-                </p>
-              </div>
-
-              <div className="pt-5 mt-6 border-t border-slate-100 flex items-center justify-between text-xs sm:text-sm text-slate-500 font-medium">
-                <span>{isEn ? "Institutional Policy" : "Perumusan Kebijakan Publik"}</span>
-                <span className="text-blue-600 font-semibold">Model Digraf Kontekstual</span>
-              </div>
+          ) : (
+            <div className="text-center py-12 text-sm text-slate-500">
+              {isEn ? "No research publications available yet." : "Belum ada publikasi riset yang ditampilkan."}
             </div>
-          </div>
+          )}
 
           {/* Centered Button "Lihat Semua" */}
           <div className="text-center mt-12">
@@ -562,7 +631,7 @@ export default async function HomePage() {
               href="/riset"
               className="inline-flex items-center gap-2 px-7 py-3 rounded-lg border border-slate-300 hover:border-blue-600 bg-white text-slate-800 hover:text-blue-600 font-semibold text-sm sm:text-base transition-colors shadow-2xs"
             >
-              <span>{isEn ? "View Research Details" : "Lihat Semua"}</span>
+              <span>{isEn ? "View All Research" : "Lihat Semua"}</span>
               <ArrowRight size={16} />
             </Link>
           </div>
@@ -597,11 +666,27 @@ export default async function HomePage() {
                 className="border border-slate-200 rounded-xl p-6 hover:border-slate-400 transition-colors flex flex-col justify-between h-full bg-white group"
               >
                 <div className="space-y-3.5">
-                  <div className="flex items-center justify-between text-xs text-slate-400">
-                    <span className="font-semibold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded">
-                      {post.category}
-                    </span>
-                    <span className="flex items-center gap-1">
+                  <div className="flex items-center justify-between text-xs text-slate-400 gap-2">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="font-semibold text-blue-600 text-xs">
+                        {post.category}
+                      </span>
+                      <span className="text-slate-300">•</span>
+                      <span
+                        className={`font-semibold text-xs ${
+                          post.isPaid ? "text-amber-600" : "text-emerald-600"
+                        }`}
+                      >
+                        {post.isPaid
+                          ? isEn
+                            ? "Paid"
+                            : "Berbayar"
+                          : isEn
+                          ? "Free"
+                          : "Tidak Berbayar"}
+                      </span>
+                    </div>
+                    <span className="flex items-center gap-1 shrink-0">
                       <Clock size={12} />
                       {post.readTime}
                     </span>

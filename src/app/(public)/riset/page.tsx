@@ -79,7 +79,7 @@ export default async function RisetPage() {
         </div>
       </section>
 
-      {/* Main Core Pillars: AHP, ISM & Forecasting */}
+      {/* Main Core Pillars: AHP, ISM & Forecasting
       <section className="py-16 sm:py-24 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto mb-14">
@@ -97,7 +97,7 @@ export default async function RisetPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {/* Framework 1: AHP */}
+            {/* Framework 1: AHP 
             <div className="border border-slate-200 rounded-xl p-8 bg-white hover:border-slate-400 transition-colors flex flex-col justify-between space-y-6">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -139,7 +139,7 @@ export default async function RisetPage() {
               </div>
             </div>
 
-            {/* Framework 2: ISM */}
+            {/* Framework 2: ISM 
             <div className="border border-slate-200 rounded-xl p-8 bg-white hover:border-slate-400 transition-colors flex flex-col justify-between space-y-6">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -182,9 +182,9 @@ export default async function RisetPage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
-      {/* Leadership & Research Philosophy */}
+      {/* Leadership & Research Philosophy
       <section className="py-16 sm:py-24 border-b border-slate-200 bg-slate-50/60">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="bg-white border border-slate-200 rounded-xl p-8 sm:p-12 shadow-xs space-y-6">
@@ -233,34 +233,24 @@ export default async function RisetPage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Publications / Research Papers Grid */}
       {researchPapers.length > 0 && (
         <section className="py-16 sm:py-24 border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-4">
-              <div>
-                <h2
-                  className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight"
-                  style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
-                >
-                  {isEn ? "Applied Research Publications" : "Publikasi Riset Terapan"}
-                </h2>
-                <p className="text-base text-slate-500 mt-2">
-                  {isEn
-                    ? "Scholarly papers and methodological case studies by our research team."
-                    : "Karya ilmiah dan studi kasus metodologi sains keputusan dari tim peneliti Matoh."}
-                </p>
-              </div>
-
-              <Link
-                href="/publikasi"
-                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-blue-600 hover:text-blue-700 hover:underline"
+            <div className="text-center max-w-2xl mx-auto mb-14">
+              <h2
+                className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight"
+                style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
               >
-                <span>{isEn ? "View All Publications" : "Lihat Semua Publikasi"}</span>
-                <ArrowRight size={14} />
-              </Link>
+                {isEn ? "Applied Research Publications" : "Publikasi Riset Terapan"}
+              </h2>
+              <p className="text-base text-slate-500 mt-2">
+                {isEn
+                  ? "Scholarly papers and methodological case studies by our research team."
+                  : "Karya ilmiah dan studi kasus metodologi sains keputusan dari tim peneliti Matoh."}
+              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -276,11 +266,27 @@ export default async function RisetPage() {
                     className="border border-slate-200 rounded-2xl p-6 hover:border-slate-400 transition-colors flex flex-col justify-between h-full bg-white group shadow-2xs"
                   >
                     <div className="space-y-4">
-                      <div className="flex items-center justify-between text-xs text-slate-400">
-                        <span className="font-semibold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-lg">
-                          {category}
-                        </span>
-                        <span className="flex items-center gap-1">
+                      <div className="flex items-center justify-between text-xs text-slate-400 gap-2">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-semibold text-blue-600 text-xs">
+                            {category}
+                          </span>
+                          <span className="text-slate-300">•</span>
+                          <span
+                            className={`font-semibold text-xs ${
+                              paper.isPaid ? "text-amber-600" : "text-emerald-600"
+                            }`}
+                          >
+                            {paper.isPaid
+                              ? isEn
+                                ? "Paid"
+                                : "Berbayar"
+                              : isEn
+                              ? "Free"
+                              : "Tidak Berbayar"}
+                          </span>
+                        </div>
+                        <span className="flex items-center gap-1 shrink-0">
                           <Clock size={12} />
                           {readTime}
                         </span>
@@ -312,6 +318,16 @@ export default async function RisetPage() {
                   </article>
                 );
               })}
+            </div>
+
+            <div className="text-center mt-12">
+              <Link
+                href="/publikasi"
+                className="inline-flex items-center gap-2 px-7 py-3 rounded-lg border border-slate-300 hover:border-blue-600 bg-white text-slate-800 hover:text-blue-600 font-semibold text-sm sm:text-base transition-colors shadow-2xs"
+              >
+                <span>{isEn ? "View All Publications" : "Lihat Semua Publikasi"}</span>
+                <ArrowRight size={16} />
+              </Link>
             </div>
           </div>
         </section>

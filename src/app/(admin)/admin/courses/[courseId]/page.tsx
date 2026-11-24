@@ -60,6 +60,9 @@ interface CourseData {
   instructorId?: string;
   instructorHeadline?: string | null;
   instructorBio?: string | null;
+  instructor2Id?: string | null;
+  instructor2Headline?: string | null;
+  instructor2Bio?: string | null;
   whatYouLearn?: string | null;
   instructor: {
     id?: string;
@@ -70,6 +73,15 @@ interface CourseData {
     bio?: string | null;
     role?: string;
   };
+  instructor2?: {
+    id?: string;
+    name: string;
+    email?: string;
+    image?: string | null;
+    headline?: string | null;
+    bio?: string | null;
+    role?: string;
+  } | null;
   sections: SectionData[];
 }
 
@@ -109,6 +121,9 @@ export default function EditCoursePage() {
   const [instructorId, setInstructorId] = useState("");
   const [instructorHeadline, setInstructorHeadline] = useState("");
   const [instructorBio, setInstructorBio] = useState("");
+  const [instructor2Id, setInstructor2Id] = useState("");
+  const [instructor2Headline, setInstructor2Headline] = useState("");
+  const [instructor2Bio, setInstructor2Bio] = useState("");
   const [whatYouLearnItems, setWhatYouLearnItems] = useState<string[]>([]);
 
   const loadData = useCallback(async () => {
@@ -146,6 +161,9 @@ export default function EditCoursePage() {
       setInstructorId(course.instructorId || course.instructor?.id || (insList?.[0]?.id ?? ""));
       setInstructorHeadline(course.instructorHeadline || course.instructor?.headline || "");
       setInstructorBio(course.instructorBio || course.instructor?.bio || "");
+      setInstructor2Id(course.instructor2Id || course.instructor2?.id || "");
+      setInstructor2Headline(course.instructor2Headline || course.instructor2?.headline || "");
+      setInstructor2Bio(course.instructor2Bio || course.instructor2?.bio || "");
 
       // What You Learn states
       if (course.whatYouLearn) {
@@ -197,6 +215,9 @@ export default function EditCoursePage() {
           instructorId: instructorId || undefined,
           instructorHeadline: instructorHeadline || null,
           instructorBio: instructorBio || null,
+          instructor2Id: instructor2Id || null,
+          instructor2Headline: instructor2Headline || null,
+          instructor2Bio: instructor2Bio || null,
           whatYouLearn: whatYouLearnItems,
         }),
       });
@@ -514,7 +535,7 @@ export default function EditCoursePage() {
             />
           </div>
 
-          {/* Instructor Selection & About Instructor Customization */}
+          {/* Instructor Selection & About Instructor Customization (Supports 2 Instructors) */}
           <CourseInstructorPicker
             instructors={instructors}
             selectedInstructorId={instructorId}
@@ -523,6 +544,12 @@ export default function EditCoursePage() {
             onHeadlineChange={setInstructorHeadline}
             instructorBio={instructorBio}
             onBioChange={setInstructorBio}
+            selectedInstructor2Id={instructor2Id}
+            onInstructor2Change={setInstructor2Id}
+            instructor2Headline={instructor2Headline}
+            onHeadline2Change={setInstructor2Headline}
+            instructor2Bio={instructor2Bio}
+            onBio2Change={setInstructor2Bio}
           />
 
           {/* What You Will Learn (Learning Outcomes) Editor */}

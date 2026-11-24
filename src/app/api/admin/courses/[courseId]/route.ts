@@ -13,6 +13,9 @@ const courseUpdateSchema = z.object({
   instructorId: z.string().optional(),
   instructorHeadline: z.string().nullable().optional(),
   instructorBio: z.string().nullable().optional(),
+  instructor2Id: z.string().nullable().optional(),
+  instructor2Headline: z.string().nullable().optional(),
+  instructor2Bio: z.string().nullable().optional(),
   whatYouLearn: z.union([z.string(), z.array(z.string())]).nullable().optional(),
   price: z.number().min(0).optional(),
   discountPrice: z.number().min(0).nullable().optional(),
@@ -39,6 +42,7 @@ export async function GET(
       include: {
         category: true,
         instructor: { select: { id: true, name: true, email: true, image: true, headline: true, bio: true } },
+        instructor2: { select: { id: true, name: true, email: true, image: true, headline: true, bio: true } },
         sections: {
           include: { lessons: { orderBy: { order: "asc" } } },
           orderBy: { order: "asc" },

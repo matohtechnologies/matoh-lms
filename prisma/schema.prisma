@@ -44,6 +44,7 @@ model User {
   progress          Progress[]
   certificates      Certificate[]
   courses           Course[]          @relation("InstructorCourses")
+  coCourses         Course[]          @relation("CoInstructorCourses")
   submissions       UserSubmission[]
   discussions       Discussion[]
   discussionReplies DiscussionReply[]
@@ -116,6 +117,7 @@ model Course {
   thumbnail    String?
   price        Float       @default(0)
   discountPrice Float?
+  level        CourseLevel @default(BEGINNER)
   language     String      @default("id")
   duration     Int?        // total minutes
   totalLessons Int?
@@ -127,16 +129,20 @@ model Course {
   
   categoryId   String
   instructorId String
+  instructor2Id String?
   
   whatYouLearn       String?     @db.Text
   instructorHeadline String?
   instructorBio      String?     @db.Text
+  instructor2Headline String?
+  instructor2Bio      String?     @db.Text
   
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
 
   category     Category    @relation(fields: [categoryId], references: [id])
   instructor   User        @relation("InstructorCourses", fields: [instructorId], references: [id])
+  instructor2  User?       @relation("CoInstructorCourses", fields: [instructor2Id], references: [id])
   sections     Section[]
   enrollments  Enrollment[]
   orders       Order[]
@@ -152,6 +158,7 @@ model Course {
 
   @@index([categoryId])
   @@index([instructorId])
+  @@index([instructor2Id])
   @@index([published, featured])
   @@index([createdAt])
   @@map("courses")
@@ -620,4 +627,10 @@ model PublicationAccess {
   @@index([userId])
   @@index([publicationId])
   @@map("publication_access")
+}
+
+enum CourseLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
 }

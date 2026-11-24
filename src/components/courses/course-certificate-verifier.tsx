@@ -21,7 +21,7 @@ export function CourseCertificateVerifier({ isEn = false }: CourseCertificateVer
       <div className="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 shadow-xs">
         <div className="max-w-3xl mx-auto text-center space-y-3 mb-6">
           <h2
-            className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight"
+            className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight"
             style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             {isEn ? "Verify Certificate Authenticity" : "Cek Keaslian Sertifikat Kelulusan"}
@@ -60,11 +60,6 @@ export function CourseCertificateVerifier({ isEn = false }: CourseCertificateVer
               <ArrowRight size={14} />
             </button>
           </div>
-          <p className="text-[11px] text-slate-400 text-center">
-            {isEn
-              ? "Tamper-proof digital credentials verified permanently under SK Kemenkumham AHU-064920.AH.01.30.Tahun 2024"
-              : "Kredensial digital anti-pemalsuan terdaftar permanen di bawah SK Kemenkumham AHU-064920.AH.01.30.Tahun 2024"}
-          </p>
         </form>
       </div>
     </section>

@@ -70,18 +70,6 @@ export default async function ContactPage() {
       badge: isEn ? "Official" : "Resmi",
       badgeColor: "bg-sky-50 text-sky-700",
     },
-    {
-      icon: Building,
-      title: isEn ? "Office Landline" : "Telepon Kantor",
-      detail: "(021) 4786 6642",
-      subtext: isEn
-        ? "Rawamangun Office, Jakarta Timur"
-        : "Kantor operasional Rawamangun, Jakarta Timur",
-      actionLabel: isEn ? "Call Office ➔" : "Hubungi Kantor ➔",
-      actionUrl: "tel:02147866642",
-      badge: isEn ? "Office" : "Kantor",
-      badgeColor: "bg-purple-50 text-purple-700",
-    },
   ];
 
   const faqs = [
@@ -103,14 +91,6 @@ export default async function ContactPage() {
     },
     {
       q: isEn
-        ? "Does Matoh Technologies have a physical office open for visits?"
-        : "Apakah Matoh Technologies memiliki kantor fisik yang dapat dikunjungi?",
-      a: isEn
-        ? "Yes, our headquarters is located at Jl. RAMUSEL I/7A (Rawamangun Muka Selatan), Rawamangun, Pulo Gadung, East Jakarta 13220. For in-person consultations, please schedule an appointment in advance via WhatsApp or phone."
-        : "Ya, kantor pusat kami berlokasi di Jl. RAMUSEL I/7A (Rawamangun Muka Selatan), Rawamangun, Pulo Gadung, Jakarta Timur 13220. Untuk kunjungan konsultasi tatap muka, harap membuat janji temu terlebih dahulu melalui WhatsApp atau telepon kantor (021) 4786 6642.",
-    },
-    {
-      q: isEn
         ? "How can I verify the authenticity of a Matoh Technologies certificate?"
         : "Bagaimana cara memverifikasi keaslian sertifikat yang saya peroleh?",
       a: isEn
@@ -125,10 +105,6 @@ export default async function ContactPage() {
       <section className="py-16 sm:py-20 border-b border-stone-200/70 bg-gradient-to-b from-blue-50/60 via-[#f8fafc] to-[#f8fafc] bg-dot-matrix relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[radial-gradient(ellipse_at_top,rgba(59,130,246,0.12)_0%,transparent_70%)] pointer-events-none" />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-bold mb-4 shadow-2xs">
-            <MessageSquare size={14} className="text-blue-600" />
-            {isEn ? "Student Advisory & Academic Support" : "Layanan Siswa & Konsultasi Akademik"}
-          </div>
           <h1
             className="text-3xl sm:text-5xl font-bold text-stone-900 tracking-tight mb-4"
             style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
