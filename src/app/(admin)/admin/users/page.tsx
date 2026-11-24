@@ -35,6 +35,11 @@ export default async function AdminUsersPage() {
       headline: u.headline ?? null,
       bio: u.bio ?? null,
       image: u.image ?? null,
+      showInAbout: u.showInAbout ?? false,
+      aboutRole: u.aboutRole ?? null,
+      aboutRoleEn: u.aboutRoleEn ?? null,
+      aboutBadge: u.aboutBadge ?? "Founder",
+      aboutOrder: u.aboutOrder ?? 0,
       createdAtFormatted: u.createdAt.toLocaleDateString(
         locale === "en" ? "en-US" : "id-ID",
         {

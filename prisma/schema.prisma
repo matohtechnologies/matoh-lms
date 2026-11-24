@@ -33,6 +33,11 @@ model User {
   role          Role      @default(USER)
   headline      String?
   bio           String?
+  showInAbout   Boolean   @default(false)
+  aboutRole     String?
+  aboutRoleEn   String?
+  aboutBadge    String?   @default("Founder")
+  aboutOrder    Int       @default(0)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 

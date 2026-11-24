@@ -12,6 +12,11 @@ const updateUserSchema = z.object({
   bio: z.string().trim().max(3000, "Bio maksimal 3000 karakter").optional().nullable(),
   password: z.string().min(6, "Password minimal 6 karakter").optional().or(z.literal("")),
   image: z.string().trim().optional().nullable(),
+  showInAbout: z.boolean().optional(),
+  aboutRole: z.string().trim().max(200).optional().nullable(),
+  aboutRoleEn: z.string().trim().max(200).optional().nullable(),
+  aboutBadge: z.string().trim().max(100).optional().nullable(),
+  aboutOrder: z.number().int().optional(),
 });
 
 export async function PATCH(
@@ -80,6 +85,11 @@ export async function PATCH(
       bio?: string | null;
       image?: string | null;
       password?: string;
+      showInAbout?: boolean;
+      aboutRole?: string | null;
+      aboutRoleEn?: string | null;
+      aboutBadge?: string | null;
+      aboutOrder?: number;
     } = {};
 
     if (data.name !== undefined) updatePayload.name = data.name;
@@ -88,6 +98,11 @@ export async function PATCH(
     if (data.headline !== undefined) updatePayload.headline = data.headline || null;
     if (data.bio !== undefined) updatePayload.bio = data.bio || null;
     if (data.image !== undefined) updatePayload.image = data.image || null;
+    if (data.showInAbout !== undefined) updatePayload.showInAbout = data.showInAbout;
+    if (data.aboutRole !== undefined) updatePayload.aboutRole = data.aboutRole || null;
+    if (data.aboutRoleEn !== undefined) updatePayload.aboutRoleEn = data.aboutRoleEn || null;
+    if (data.aboutBadge !== undefined) updatePayload.aboutBadge = data.aboutBadge || null;
+    if (data.aboutOrder !== undefined) updatePayload.aboutOrder = data.aboutOrder;
 
     if (data.password && data.password.trim().length >= 6) {
       updatePayload.password = await bcrypt.hash(data.password, 12);
@@ -104,6 +119,11 @@ export async function PATCH(
         headline: true,
         bio: true,
         image: true,
+        showInAbout: true,
+        aboutRole: true,
+        aboutRoleEn: true,
+        aboutBadge: true,
+        aboutOrder: true,
         updatedAt: true,
       },
     });

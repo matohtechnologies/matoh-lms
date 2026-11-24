@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { Search, Users, X } from "lucide-react";
+import { useState, useMemo, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Search, Users, X, Star, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { UserActions } from "./user-actions";
 import { useTranslations } from "next-intl";
+import { dynamicAlert } from "@/components/ui/dynamic-alert-provider";
 
 export interface UserRowData {
   id: string;
@@ -14,6 +16,11 @@ export interface UserRowData {
   headline?: string | null;
   bio?: string | null;
   image?: string | null;
+  showInAbout?: boolean;
+  aboutRole?: string | null;
+  aboutRoleEn?: string | null;
+  aboutBadge?: string | null;
+  aboutOrder?: number;
   createdAtFormatted: string;
   enrolledCount: number;
   status: string;
@@ -65,30 +72,78 @@ function UserAvatar({
 
 export function UsersTable({ initialUsers, currentUserId }: UsersTableProps) {
   const t = useTranslations("admin");
+  const router = useRouter();
+  const [users, setUsers] = useState<UserRowData[]>(initialUsers);
   const [search, setSearch] = useState("");
-  const [roleFilter, setRoleFilter] = useState<"ALL" | "USER" | "INSTRUCTOR" | "ADMIN">("ALL");
+  const [roleFilter, setRoleFilter] = useState<"ALL" | "USER" | "INSTRUCTOR" | "ADMIN" | "ABOUT">("ALL");
+  const [togglingAboutId, setTogglingAboutId] = useState<string | null>(null);
+
+  useEffect(() => {
+    setUsers(initialUsers);
+  }, [initialUsers]);
+
+  const handleToggleAbout = async (userId: string, currentShow: boolean) => {
+    if (togglingAboutId) return;
+    setTogglingAboutId(userId);
+    try {
+      const res = await fetch(`/api/admin/users/${userId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ showInAbout: !currentShow }),
+      });
+      if (res.ok) {
+        setUsers((prev) =>
+          prev.map((u) => (u.id === userId ? { ...u, showInAbout: !currentShow } : u))
+        );
+        router.refresh();
+      } else {
+        const data = await res.json();
+        await dynamicAlert({
+          title: "Gagal Mengubah Pengaturan",
+          message: data.error || "Gagal mengubah status tampilan Tentang Kami.",
+          variant: "danger",
+        });
+      }
+    } catch {
+      await dynamicAlert({
+        title: "Koneksi Terputus",
+        message: "Terjadi kesalahan jaringan.",
+        variant: "danger",
+      });
+    } finally {
+      setTogglingAboutId(null);
+    }
+  };
 
   const filteredUsers = useMemo(() => {
-    return initialUsers.filter((u) => {
-      const matchRole = roleFilter === "ALL" || u.role === roleFilter;
+    return users.filter((u) => {
+      const matchRole =
+        roleFilter === "ALL"
+          ? true
+          : roleFilter === "ABOUT"
+          ? Boolean(u.showInAbout)
+          : u.role === roleFilter;
+
       const q = search.toLowerCase().trim();
       const matchSearch =
         !q ||
         u.name.toLowerCase().includes(q) ||
         u.email.toLowerCase().includes(q) ||
-        (u.headline && u.headline.toLowerCase().includes(q));
+        (u.headline && u.headline.toLowerCase().includes(q)) ||
+        (u.aboutRole && u.aboutRole.toLowerCase().includes(q));
       return matchRole && matchSearch;
     });
-  }, [initialUsers, search, roleFilter]);
+  }, [users, search, roleFilter]);
 
   const counts = useMemo(() => {
     return {
-      all: initialUsers.length,
-      student: initialUsers.filter((u) => u.role === "USER").length,
-      instructor: initialUsers.filter((u) => u.role === "INSTRUCTOR").length,
-      admin: initialUsers.filter((u) => u.role === "ADMIN").length,
+      all: users.length,
+      student: users.filter((u) => u.role === "USER").length,
+      instructor: users.filter((u) => u.role === "INSTRUCTOR").length,
+      admin: users.filter((u) => u.role === "ADMIN").length,
+      about: users.filter((u) => u.showInAbout).length,
     };
-  }, [initialUsers]);
+  }, [users]);
 
   const roleBadge = (role: string) => {
     switch (role) {
@@ -175,6 +230,19 @@ export function UsersTable({ initialUsers, currentUserId }: UsersTableProps) {
           >
             {t("filter_admin")} <span className="opacity-70 ml-0.5">({counts.admin})</span>
           </button>
+
+          <button
+            onClick={() => setRoleFilter("ABOUT")}
+            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all cursor-pointer shrink-0 flex items-center gap-1.5 ${
+              roleFilter === "ABOUT"
+                ? "bg-amber-600 text-white shadow-2xs"
+                : "text-amber-900 bg-amber-50 hover:bg-amber-100/80 border border-amber-200/60"
+            }`}
+          >
+            <Star size={12} className={roleFilter === "ABOUT" ? "fill-white text-white" : "fill-amber-500 text-amber-500"} />
+            <span>Tentang Kami</span>
+            <span className="opacity-80">({counts.about})</span>
+          </button>
         </div>
       </div>
 
@@ -185,6 +253,7 @@ export function UsersTable({ initialUsers, currentUserId }: UsersTableProps) {
             <tr className="bg-stone-50/80 border-b border-stone-100 text-[11px] font-bold text-stone-500 uppercase tracking-wider">
               <th className="px-5 py-3.5">{t("col_user")}</th>
               <th className="px-5 py-3.5">{t("col_role")}</th>
+              <th className="px-5 py-3.5">Tentang Kami</th>
               <th className="px-5 py-3.5">{t("col_enrolled")}</th>
               <th className="px-5 py-3.5">{t("col_joined")}</th>
               <th className="px-5 py-3.5">{t("col_active")}</th>
@@ -194,7 +263,7 @@ export function UsersTable({ initialUsers, currentUserId }: UsersTableProps) {
           <tbody className="divide-y divide-stone-100">
             {filteredUsers.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-5 py-12 text-center text-stone-400">
+                <td colSpan={7} className="px-5 py-12 text-center text-stone-400">
                   <div className="flex flex-col items-center justify-center gap-2">
                     <Users size={28} className="text-stone-300 stroke-[1.5]" />
                     <p className="text-xs font-medium text-stone-500">
@@ -243,6 +312,37 @@ export function UsersTable({ initialUsers, currentUserId }: UsersTableProps) {
                     </div>
                   </td>
                   <td className="px-5 py-4">{roleBadge(user.role)}</td>
+                  <td className="px-5 py-4">
+                    <button
+                      type="button"
+                      onClick={() => handleToggleAbout(user.id, Boolean(user.showInAbout))}
+                      disabled={togglingAboutId === user.id}
+                      title={
+                        user.showInAbout
+                          ? "Klik untuk sembunyikan dari Halaman Tentang Kami"
+                          : "Klik untuk tampilkan di Halaman Tentang Kami"
+                      }
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer ${
+                        user.showInAbout
+                          ? "bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100 shadow-2xs"
+                          : "bg-stone-50 text-stone-500 border border-stone-200/70 hover:bg-stone-100 hover:text-stone-700"
+                      }`}
+                    >
+                      {togglingAboutId === user.id ? (
+                        <Loader2 size={12} className="animate-spin text-amber-600" />
+                      ) : (
+                        <Star
+                          size={12}
+                          className={user.showInAbout ? "text-amber-500 fill-amber-500" : "text-stone-400"}
+                        />
+                      )}
+                      <span>
+                        {user.showInAbout
+                          ? `${user.aboutBadge || "Founder"} (#${user.aboutOrder || 1})`
+                          : "Sembunyi"}
+                      </span>
+                    </button>
+                  </td>
                   <td className="px-5 py-4 text-stone-600 font-semibold">
                     {user.enrolledCount > 0 ? (
                       <span>{t("enrolled_count", { count: user.enrolledCount })}</span>

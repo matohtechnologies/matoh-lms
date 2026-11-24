@@ -19,6 +19,7 @@ import {
   Trash2,
   Link as LinkIcon,
   CheckCircle2,
+  Star,
 } from "lucide-react";
 import { dynamicAlert } from "@/components/ui/dynamic-alert-provider";
 import type { UserRowData } from "./users-table";
@@ -53,6 +54,11 @@ export function EditInstructorModal({
   const [headline, setHeadline] = useState(user.headline || "");
   const [bio, setBio] = useState(user.bio || "");
   const [image, setImage] = useState(user.image || "");
+  const [showInAbout, setShowInAbout] = useState(Boolean(user.showInAbout));
+  const [aboutRole, setAboutRole] = useState(user.aboutRole || "");
+  const [aboutRoleEn, setAboutRoleEn] = useState(user.aboutRoleEn || "");
+  const [aboutBadge, setAboutBadge] = useState(user.aboutBadge || "Founder");
+  const [aboutOrder, setAboutOrder] = useState<number>(user.aboutOrder ?? 1);
   const [error, setError] = useState("");
 
   // Sync form when user changes or modal opens
@@ -65,6 +71,11 @@ export function EditInstructorModal({
       setHeadline(user.headline || "");
       setBio(user.bio || "");
       setImage(user.image || "");
+      setShowInAbout(Boolean(user.showInAbout));
+      setAboutRole(user.aboutRole || "");
+      setAboutRoleEn(user.aboutRoleEn || "");
+      setAboutBadge(user.aboutBadge || "Founder");
+      setAboutOrder(user.aboutOrder ?? 1);
       setError("");
       setShowPassword(false);
       setUploadingImage(false);
@@ -164,12 +175,22 @@ export function EditInstructorModal({
         bio?: string | null;
         image?: string | null;
         password?: string;
+        showInAbout?: boolean;
+        aboutRole?: string | null;
+        aboutRoleEn?: string | null;
+        aboutBadge?: string | null;
+        aboutOrder?: number;
       } = {
         name: name.trim(),
         email: email.trim(),
         headline: headline.trim() || null,
         bio: bio.trim() || null,
         image: image.trim() || null,
+        showInAbout,
+        aboutRole: aboutRole.trim() || null,
+        aboutRoleEn: aboutRoleEn.trim() || null,
+        aboutBadge: aboutBadge.trim() || "Founder",
+        aboutOrder: Number(aboutOrder) || 0,
       };
 
       // Only update role if not self (prevent admin from accidentally demoting themselves)
@@ -517,6 +538,99 @@ export function EditInstructorModal({
                 className="w-full pl-9 pr-3 py-2 rounded-xl text-xs bg-stone-50/80 border border-stone-200/80 text-stone-900 placeholder:text-stone-400 focus:bg-white focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/15 transition-all resize-y"
               />
             </div>
+          </div>
+
+          {/* Section: Pengaturan Tampilan Halaman "Tentang Kami" */}
+          <div className="p-4 rounded-xl border border-stone-200 bg-stone-50/70 space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Star size={16} className={showInAbout ? "text-amber-500 fill-amber-500" : "text-stone-400"} />
+                <div>
+                  <h4 className="text-xs font-bold text-stone-900">
+                    Tampilkan di Halaman Tentang Kami
+                  </h4>
+                  <p className="text-[11px] text-stone-500">
+                    Tampilkan profil pengguna ini pada jajaran Pendiri &amp; Tim (/about).
+                  </p>
+                </div>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={showInAbout}
+                  onChange={(e) => setShowInAbout(e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-9 h-5 bg-stone-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-stone-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-teal-600"></div>
+              </label>
+            </div>
+
+            {showInAbout && (
+              <div className="space-y-3 pt-3 border-t border-stone-200/80 animate-in fade-in duration-200">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-semibold text-stone-700 mb-1">
+                      Peran / Jabatan (Bahasa Indonesia)
+                    </label>
+                    <input
+                      type="text"
+                      value={aboutRole}
+                      onChange={(e) => setAboutRole(e.target.value)}
+                      placeholder="Contoh: Pendiri & Direktur RnD"
+                      className="w-full px-3 py-1.5 rounded-lg text-xs bg-white border border-stone-200 text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-teal-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-semibold text-stone-700 mb-1">
+                      Peran / Jabatan (English)
+                    </label>
+                    <input
+                      type="text"
+                      value={aboutRoleEn}
+                      onChange={(e) => setAboutRoleEn(e.target.value)}
+                      placeholder="Contoh: Founder & RnD Director"
+                      className="w-full px-3 py-1.5 rounded-lg text-xs bg-white border border-stone-200 text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-teal-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-semibold text-stone-700 mb-1">
+                      Label Badge
+                    </label>
+                    <select
+                      value={aboutBadge}
+                      onChange={(e) => setAboutBadge(e.target.value)}
+                      className="w-full px-3 py-1.5 rounded-lg text-xs bg-white border border-stone-200 text-stone-900 focus:outline-none focus:border-teal-500"
+                    >
+                      <option value="Founder">Founder</option>
+                      <option value="Co-Founder">Co-Founder</option>
+                      <option value="Dewan Direksi">Dewan Direksi</option>
+                      <option value="Dewan Pakar">Dewan Pakar</option>
+                      <option value="Advisor">Advisor</option>
+                      <option value="Tim Inti">Tim Inti</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-semibold text-stone-700 mb-1">
+                      Urutan Tampilan (1, 2, 3...)
+                    </label>
+                    <input
+                      type="number"
+                      min={1}
+                      max={99}
+                      value={aboutOrder}
+                      onChange={(e) => setAboutOrder(Number(e.target.value) || 1)}
+                      className="w-full px-3 py-1.5 rounded-lg text-xs bg-white border border-stone-200 text-stone-900 focus:outline-none focus:border-teal-500"
+                    />
+                  </div>
+                </div>
+                <p className="text-[10px] text-stone-500">
+                  💡 Foto profil pengguna di atas akan digunakan sebagai foto profil resmi di halaman Tentang Kami dengan rasio 1:1.
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Reset Password */}

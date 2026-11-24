@@ -10,6 +10,7 @@ import {
   User,
   Trash2,
   Pencil,
+  Star,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { dynamicConfirm, dynamicAlert } from "@/components/ui/dynamic-alert-provider";
@@ -53,9 +54,53 @@ export function UserActions({
     headline,
     bio,
     image,
+    showInAbout: false,
+    aboutRole: null,
+    aboutRoleEn: null,
+    aboutBadge: "Founder",
+    aboutOrder: 0,
     createdAtFormatted: "",
     enrolledCount: 0,
     status: "ACTIVE",
+  };
+
+  const toggleAbout = async () => {
+    if (loading) return;
+    setOpen(false);
+    setLoading(true);
+    const nextState = !rowUser.showInAbout;
+    try {
+      const res = await fetch(`/api/admin/users/${userId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ showInAbout: nextState }),
+      });
+      if (res.ok) {
+        router.refresh();
+        await dynamicAlert({
+          title: nextState ? "Ditampilkan di Tentang Kami" : "Disembunyikan dari Tentang Kami",
+          message: nextState
+            ? `Pengguna "${userName}" kini ditampilkan pada halaman Tentang Kami.`
+            : `Pengguna "${userName}" telah disembunyikan dari halaman Tentang Kami.`,
+          variant: "success",
+        });
+      } else {
+        const d = await res.json();
+        await dynamicAlert({
+          title: "Gagal Mengubah Pengaturan",
+          message: d.error ?? "Terjadi kesalahan.",
+          variant: "danger",
+        });
+      }
+    } catch {
+      await dynamicAlert({
+        title: "Koneksi Terputus",
+        message: "Terjadi kesalahan koneksi.",
+        variant: "danger",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const changeRole = async (role: string) => {
@@ -155,6 +200,15 @@ export function UserActions({
               >
                 <Pencil size={13} className="text-teal-600" />
                 <span>Edit Data</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={toggleAbout}
+                className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-stone-700 hover:bg-amber-50 hover:text-amber-900 transition-colors cursor-pointer"
+              >
+                <Star size={13} className={rowUser.showInAbout ? "text-amber-500 fill-amber-500" : "text-stone-400"} />
+                <span>{rowUser.showInAbout ? "Sembunyikan dari Tentang Kami" : "Tampilkan di Tentang Kami"}</span>
               </button>
 
               {!isSelf ? (

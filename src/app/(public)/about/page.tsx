@@ -1,8 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
-import { CheckCircle2, ShieldCheck, ArrowRight } from "lucide-react";
+import { CheckCircle2, ShieldCheck, ArrowRight, User as UserIcon } from "lucide-react";
 import { getLocale } from "next-intl/server";
 import { LegalTrustCard } from "@/components/about/legal-trust-card";
+import prisma from "@/lib/prisma";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -46,7 +47,8 @@ export default async function AboutPage() {
     },
   ];
 
-  const founders = [
+  // Default fallback founders if none configured in database
+  const defaultFounders = [
     {
       name: "Dr. G. Prabantoro, SE., MM., CBec.",
       role: isEn ? "Founder & RnD Director" : "Pendiri & Direktur RnD",
@@ -88,6 +90,31 @@ export default async function AboutPage() {
       avatar: "/images/avatars/founder-hermawan.svg",
     },
   ];
+
+  // Fetch dynamic founders configured in User Management
+  let dynamicUsers: any[] = [];
+  try {
+    dynamicUsers = await prisma.user.findMany({
+      where: { showInAbout: true },
+      orderBy: [{ aboutOrder: "asc" }, { createdAt: "asc" }],
+    });
+  } catch (err) {
+    console.error("Error loading dynamic founders for About page:", err);
+  }
+
+  const founders =
+    dynamicUsers.length > 0
+      ? dynamicUsers.map((u: any, idx: number) => ({
+          name: u.name || "Anggota Tim",
+          role: isEn
+            ? u.aboutRoleEn || u.aboutRole || u.headline || "Leadership Team"
+            : u.aboutRole || u.headline || "Pendiri & Tim Inti",
+          badge: u.aboutBadge || (idx === 0 ? "Founder" : "Co-Founder"),
+          expertise: u.headline || (isEn ? "Pakar Teknologi Terapan" : "Pakar Teknologi Terapan"),
+          bio: u.bio || (isEn ? "Scholars, researchers, and technology pioneers at Matoh Technologies." : "Akademisi dan praktisi teknologi di Matoh Technologies Indonesia."),
+          avatar: u.image || "/images/avatars/founder-prabantoro.svg",
+        }))
+      : defaultFounders;
 
   return (
     <div className="pt-20 bg-[#f8fafc] min-h-screen">
@@ -267,17 +294,25 @@ export default async function AboutPage() {
                 className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between group"
               >
                 <div>
-                  {/* Large Profile Photo - Clean & Dominant (Tanpa background banner) */}
-                  <div className="relative w-full aspect-square bg-slate-900 overflow-hidden border-b border-slate-100">
-                    <Image
-                      src={person.avatar}
-                      alt={person.name}
-                      fill
-                      priority
-                      className="object-cover group-hover:scale-103 transition-transform duration-500"
-                    />
-                    <div className="absolute top-3 right-3">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white/95 text-blue-700 shadow-sm backdrop-blur-sm">
+                  {/* Large Profile Photo - Clean, Dominant & Neat 1:1 Ratio */}
+                  <div className="relative w-full aspect-square bg-slate-100 overflow-hidden border-b border-slate-100">
+                    {person.avatar ? (
+                      <img
+                        src={person.avatar}
+                        alt={person.name}
+                        style={{ aspectRatio: "1 / 1" }}
+                        className="w-full h-full object-cover object-center aspect-square group-hover:scale-105 transition-transform duration-500"
+                        loading={idx < 4 ? "eager" : "lazy"}
+                      />
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 text-slate-400">
+                        <div className="w-20 h-20 rounded-full bg-white shadow-2xs flex items-center justify-center text-blue-600 font-bold text-2xl">
+                          {person.name[0]?.toUpperCase() || "M"}
+                        </div>
+                      </div>
+                    )}
+                    <div className="absolute top-3 right-3 z-10">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white/95 text-blue-700 shadow-sm backdrop-blur-sm border border-blue-100/60">
                         {person.badge}
                       </span>
                     </div>

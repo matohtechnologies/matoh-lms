@@ -12,6 +12,11 @@ const createUserSchema = z.object({
   headline: z.string().trim().max(200, "Headline maksimal 200 karakter").optional().nullable(),
   bio: z.string().trim().max(2000, "Bio maksimal 2000 karakter").optional().nullable(),
   image: z.string().trim().optional().nullable(),
+  showInAbout: z.boolean().optional(),
+  aboutRole: z.string().trim().max(200).optional().nullable(),
+  aboutRoleEn: z.string().trim().max(200).optional().nullable(),
+  aboutBadge: z.string().trim().max(100).optional().nullable(),
+  aboutOrder: z.number().int().optional(),
 });
 
 export async function POST(req: NextRequest) {
@@ -29,7 +34,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: firstError }, { status: 400 });
     }
 
-    const { name, email, password, role, headline, bio, image } = parsed.data;
+    const { name, email, password, role, headline, bio, image, showInAbout, aboutRole, aboutRoleEn, aboutBadge, aboutOrder } = parsed.data;
 
     // Check if email already exists
     const existing = await prisma.user.findUnique({
@@ -57,6 +62,11 @@ export async function POST(req: NextRequest) {
         headline: headline || null,
         bio: bio || null,
         image: image || null,
+        showInAbout: showInAbout ?? false,
+        aboutRole: aboutRole || null,
+        aboutRoleEn: aboutRoleEn || null,
+        aboutBadge: aboutBadge || "Founder",
+        aboutOrder: aboutOrder ?? 0,
         emailVerified: new Date(),
       },
       select: {

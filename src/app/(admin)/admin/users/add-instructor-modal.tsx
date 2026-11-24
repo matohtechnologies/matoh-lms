@@ -19,6 +19,7 @@ import {
   Upload,
   Trash2,
   Link as LinkIcon,
+  Star,
 } from "lucide-react";
 import { dynamicAlert } from "@/components/ui/dynamic-alert-provider";
 import { useTranslations } from "next-intl";
@@ -40,6 +41,10 @@ export function AddInstructorModal() {
   const [headline, setHeadline] = useState("");
   const [bio, setBio] = useState("");
   const [image, setImage] = useState("");
+  const [showInAbout, setShowInAbout] = useState(false);
+  const [aboutRole, setAboutRole] = useState("");
+  const [aboutBadge, setAboutBadge] = useState("Founder");
+  const [aboutOrder, setAboutOrder] = useState(1);
   const [error, setError] = useState("");
 
   // Handle escape key
@@ -71,6 +76,10 @@ export function AddInstructorModal() {
     setHeadline("");
     setBio("");
     setImage("");
+    setShowInAbout(false);
+    setAboutRole("");
+    setAboutBadge("Founder");
+    setAboutOrder(1);
     setError("");
     setShowPassword(false);
     setUploadingImage(false);
@@ -156,6 +165,10 @@ export function AddInstructorModal() {
           headline: headline.trim() || null,
           bio: bio.trim() || null,
           image: image.trim() || null,
+          showInAbout,
+          aboutRole: aboutRole.trim() || null,
+          aboutBadge: aboutBadge.trim() || "Founder",
+          aboutOrder: Number(aboutOrder) || 1,
         }),
       });
 
@@ -505,6 +518,80 @@ export function AddInstructorModal() {
                     className="w-full pl-9 pr-3 py-2 rounded-xl text-xs bg-stone-50/80 border border-stone-200/80 text-stone-900 placeholder:text-stone-400 focus:bg-white focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/15 transition-all resize-none"
                   />
                 </div>
+              </div>
+
+              {/* Tampilkan di Tentang Kami */}
+              <div className="p-3.5 rounded-xl border border-stone-200 bg-stone-50/70 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Star size={15} className={showInAbout ? "text-amber-500 fill-amber-500" : "text-stone-400"} />
+                    <div>
+                      <h4 className="text-xs font-bold text-stone-900">
+                        Tampilkan di Halaman Tentang Kami
+                      </h4>
+                      <p className="text-[10px] text-stone-500">
+                        Munculkan pada jajaran Pendiri &amp; Tim Inti (/about)
+                      </p>
+                    </div>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={showInAbout}
+                      onChange={(e) => setShowInAbout(e.target.checked)}
+                      className="sr-only peer"
+                    />
+                    <div className="w-8 h-4.5 bg-stone-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-stone-300 after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-teal-600"></div>
+                  </label>
+                </div>
+
+                {showInAbout && (
+                  <div className="space-y-2.5 pt-2 border-t border-stone-200/70 animate-in fade-in duration-150">
+                    <div>
+                      <label className="block text-[11px] font-semibold text-stone-700 mb-1">
+                        Peran / Posisi di Tentang Kami
+                      </label>
+                      <input
+                        type="text"
+                        value={aboutRole}
+                        onChange={(e) => setAboutRole(e.target.value)}
+                        placeholder="Contoh: Pendiri & Direktur RnD"
+                        className="w-full px-3 py-1.5 rounded-lg text-xs bg-white border border-stone-200 text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-teal-500"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-stone-700 mb-1">
+                          Label Badge
+                        </label>
+                        <select
+                          value={aboutBadge}
+                          onChange={(e) => setAboutBadge(e.target.value)}
+                          className="w-full px-2.5 py-1.5 rounded-lg text-xs bg-white border border-stone-200 text-stone-900 focus:outline-none focus:border-teal-500"
+                        >
+                          <option value="Founder">Founder</option>
+                          <option value="Co-Founder">Co-Founder</option>
+                          <option value="Dewan Direksi">Dewan Direksi</option>
+                          <option value="Dewan Pakar">Dewan Pakar</option>
+                          <option value="Tim Inti">Tim Inti</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-semibold text-stone-700 mb-1">
+                          Urutan (Order)
+                        </label>
+                        <input
+                          type="number"
+                          min={1}
+                          max={99}
+                          value={aboutOrder}
+                          onChange={(e) => setAboutOrder(Number(e.target.value) || 1)}
+                          className="w-full px-2.5 py-1.5 rounded-lg text-xs bg-white border border-stone-200 text-stone-900 focus:outline-none focus:border-teal-500"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Footer Actions */}
