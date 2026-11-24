@@ -76,6 +76,11 @@ async function main() {
       role: "INSTRUCTOR",
       image: "/images/avatars/founder-prabantoro.svg",
       bio: "RnD Director PT. Matoh Technologies Indonesia. Peneliti, akademisi, dan konsultan strategi transformasi digital UMKM.",
+      showInAbout: true,
+      aboutRole: "Founder & RnD Director",
+      aboutRoleEn: "Founder & RnD Director",
+      aboutBadge: "Founder",
+      aboutOrder: 1,
     },
     create: {
       name: "Dr. G. Prabantoro, SE., MM., CBec.",
@@ -84,6 +89,11 @@ async function main() {
       password: instructorPassword,
       role: "INSTRUCTOR",
       bio: "RnD Director PT. Matoh Technologies Indonesia. Peneliti, akademisi, dan konsultan strategi transformasi digital UMKM.",
+      showInAbout: true,
+      aboutRole: "Founder & RnD Director",
+      aboutRoleEn: "Founder & RnD Director",
+      aboutBadge: "Founder",
+      aboutOrder: 1,
     },
   });
 
@@ -94,6 +104,11 @@ async function main() {
       role: "INSTRUCTOR",
       image: "/images/avatars/founder-aminoto.svg",
       bio: "Pakar Biostatistika, Pengambilan Keputusan Multikriteria (MCDM), dan Analisis Sistem Komputasi.",
+      showInAbout: true,
+      aboutRole: "Co-Founder & Dewan Pakar Sains Data",
+      aboutRoleEn: "Co-Founder & Data Science Board",
+      aboutBadge: "Co-Founder",
+      aboutOrder: 3,
     },
     create: {
       name: "Dr. T. Aminoto, S.Fis, M.Si.",
@@ -102,6 +117,11 @@ async function main() {
       password: instructorPassword,
       role: "INSTRUCTOR",
       bio: "Pakar Biostatistika, Pengambilan Keputusan Multikriteria (MCDM), dan Analisis Sistem Komputasi.",
+      showInAbout: true,
+      aboutRole: "Co-Founder & Dewan Pakar Sains Data",
+      aboutRoleEn: "Co-Founder & Data Science Board",
+      aboutBadge: "Co-Founder",
+      aboutOrder: 3,
     },
   });
 
@@ -112,6 +132,11 @@ async function main() {
       role: "INSTRUCTOR",
       image: "/images/avatars/founder-lovita.svg",
       bio: "Dosen dan konsultan akuntansi, peramalan keuangan bisnis, dan tata kelola korporasi.",
+      showInAbout: true,
+      aboutRole: "Co-Founder & Dewan Pakar Akuntansi",
+      aboutRoleEn: "Co-Founder & Accounting Board",
+      aboutBadge: "Co-Founder",
+      aboutOrder: 2,
     },
     create: {
       name: "Dr. E. Lovita, SE., Ak., M.Si., CA., CSRS., CSRA., CBec.",
@@ -120,6 +145,11 @@ async function main() {
       password: instructorPassword,
       role: "INSTRUCTOR",
       bio: "Dosen dan konsultan akuntansi, peramalan keuangan bisnis, dan tata kelola korporasi.",
+      showInAbout: true,
+      aboutRole: "Co-Founder & Dewan Pakar Akuntansi",
+      aboutRoleEn: "Co-Founder & Accounting Board",
+      aboutBadge: "Co-Founder",
+      aboutOrder: 2,
     },
   });
 
@@ -130,6 +160,11 @@ async function main() {
       role: "INSTRUCTOR",
       image: "/images/avatars/founder-hermawan.svg",
       bio: "Pakar Arsitektur Teknologi Digital, Cloud System, dan Innovation Management.",
+      showInAbout: true,
+      aboutRole: "Co-Founder & Dewan Pakar Rekayasa TI",
+      aboutRoleEn: "Co-Founder & IT Engineering Board",
+      aboutBadge: "Co-Founder",
+      aboutOrder: 4,
     },
     create: {
       name: "E. Hermawan, ST., M.Kom.",
@@ -138,6 +173,11 @@ async function main() {
       password: instructorPassword,
       role: "INSTRUCTOR",
       bio: "Pakar Arsitektur Teknologi Digital, Cloud System, dan Innovation Management.",
+      showInAbout: true,
+      aboutRole: "Co-Founder & Dewan Pakar Rekayasa TI",
+      aboutRoleEn: "Co-Founder & IT Engineering Board",
+      aboutBadge: "Co-Founder",
+      aboutOrder: 4,
     },
   });
 

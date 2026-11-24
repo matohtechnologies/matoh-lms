@@ -51,7 +51,8 @@ export default async function AdminUsersPage() {
       enrolledCount: u._count.enrollments,
       status: "ACTIVE",
     }));
-  } catch {
+  } catch (error) {
+    console.error("Gagal mengambil data user di Admin:", error);
     formattedUsers = [];
   }
 

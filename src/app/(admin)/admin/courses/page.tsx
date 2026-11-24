@@ -25,7 +25,10 @@ export default async function AdminCoursesPage() {
       _count: { select: { enrollments: true } },
     },
     orderBy: { createdAt: "desc" },
-  }).catch(() => []);
+  }).catch((error) => {
+    console.error("Gagal mengambil data kursus di Admin:", error);
+    return [];
+  });
 
   return (
     <div className="space-y-6">
