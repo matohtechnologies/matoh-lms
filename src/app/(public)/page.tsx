@@ -19,6 +19,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { CourseCard } from "@/components/courses/course-card";
 import { getDbPublications } from "@/lib/publications";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { AnimatedNumber } from "@/components/ui/animated-number";
 
 export const revalidate = 60;
 
@@ -359,22 +360,28 @@ export default async function HomePage() {
                         ))}
                       </div>
                       <span className="font-bold text-slate-900 text-sm">
-                        {stats.reviewAvg.toFixed(1)}/5
+                        <AnimatedNumber value={stats.reviewAvg} decimals={1} duration={800} />/5
                       </span>
                       <span className="text-slate-400">
-                        ({stats.reviewCount.toLocaleString(locale === "en" ? "en-US" : "id-ID")}{" "}
+                        (
+                        <AnimatedNumber value={stats.reviewCount} locale={locale === "en" ? "en-US" : "id-ID"} duration={850} />
+                        {" "}
                         {isEn ? "reviews" : "ulasan"})
                       </span>
                     </div>
                   ) : (
                     <>
                       <div className="flex items-center gap-2 font-medium">
-                        <span className="font-bold text-slate-900 text-sm">{stats.courses}</span>
+                        <span className="font-bold text-slate-900 text-sm">
+                          <AnimatedNumber value={stats.courses} duration={750} />
+                        </span>
                         <span className="text-slate-500">{isEn ? "Curated Courses" : "Kursus Aktif"}</span>
                       </div>
                       <div className="h-4 w-px bg-slate-200 hidden sm:block" />
                       <div className="flex items-center gap-2 font-medium">
-                        <span className="font-bold text-slate-900 text-sm">{stats.students}</span>
+                        <span className="font-bold text-slate-900 text-sm">
+                          <AnimatedNumber value={stats.students} duration={850} />
+                        </span>
                         <span className="text-slate-500">{isEn ? "Registered Learners" : "Siswa Terdaftar"}</span>
                       </div>
                     </>
