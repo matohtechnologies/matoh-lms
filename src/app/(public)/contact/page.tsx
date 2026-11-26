@@ -145,13 +145,13 @@ export default async function ContactPage() {
                       className="bento-card bg-white rounded-2xl p-5 shadow-sm hover:shadow-md transition-all group"
                     >
                       <div className="flex items-start justify-between gap-3 mb-2">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shadow-2xs">
+                        <div className="flex min-w-0 flex-1 items-center gap-3">
+                          <div className="w-10 h-10 shrink-0 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shadow-2xs">
                             <Icon size={18} />
                           </div>
-                          <div>
+                          <div className="min-w-0">
                             <h4 className="text-xs font-bold text-stone-900">{c.title}</h4>
-                            <p className="text-sm font-bold text-stone-900 font-mono tracking-tight mt-0.5">
+                            <p className="text-sm font-bold text-stone-900 font-mono tracking-tight mt-0.5 [overflow-wrap:anywhere]">
                               {c.detail}
                             </p>
                           </div>

@@ -178,7 +178,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="min-w-0 lg:col-span-2 space-y-8">
             {/* Breadcrumb */}
             <div className="flex items-center gap-2 text-sm text-slate-500">
               <Link href="/courses" className="hover:text-blue-600 transition-colors">

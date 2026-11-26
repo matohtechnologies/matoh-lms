@@ -176,7 +176,7 @@ export function Navbar({ user, categories }: NavbarProps) {
             className="h-9 w-9 sm:h-10 sm:w-10 object-contain transition-transform duration-200 group-hover:scale-105 aspect-square"
           />
           <span
-            className="font-extrabold text-base sm:text-lg tracking-tight text-slate-700 transition-colors group-hover:text-slate-900"
+            className="hidden min-[400px]:block font-extrabold text-base sm:text-lg tracking-tight text-slate-700 transition-colors group-hover:text-slate-900"
             style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             MatohTechnologies
@@ -184,7 +184,7 @@ export function Navbar({ user, categories }: NavbarProps) {
         </Link>
 
         {/* Desktop Nav Links */}
-        <div className="hidden md:flex items-center gap-1 xl:gap-2 shrink-0">
+        <div className="hidden xl:flex items-center gap-1 xl:gap-2 shrink-0">
           {navItems.map((item) => {
             const isActive = item.exact
               ? pathname === item.href
@@ -211,7 +211,9 @@ export function Navbar({ user, categories }: NavbarProps) {
 
         {/* Right side: Language Switcher & Auth */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-          <LanguageSwitcher />
+          <div className="hidden xl:block">
+            <LanguageSwitcher />
+          </div>
 
           {user ? (
             <div className="relative">
@@ -315,7 +317,7 @@ export function Navbar({ user, categories }: NavbarProps) {
               )}
             </div>
           ) : (
-            <div className="hidden sm:flex items-center gap-2">
+            <div className="hidden xl:flex items-center gap-2">
               <Link href="/login">
                 <Button variant="ghost" size="sm" className="font-semibold text-stone-700">
                   {t("login")}
@@ -332,7 +334,7 @@ export function Navbar({ user, categories }: NavbarProps) {
           {/* Mobile menu button */}
           <button
             id="mobile-menu-button"
-            className="md:hidden p-2 rounded-xl hover:bg-stone-100 text-stone-700 transition-colors"
+            className="xl:hidden p-2 rounded-xl hover:bg-stone-100 text-stone-700 transition-colors"
             onClick={() => setIsMobileOpen(!isMobileOpen)}
             aria-label="Buka Menu"
           >
@@ -343,7 +345,7 @@ export function Navbar({ user, categories }: NavbarProps) {
 
       {/* Mobile Drawer Menu */}
       {isMobileOpen && (
-        <div className="md:hidden bg-white border-t border-stone-200 px-4 py-5 space-y-2 shadow-warm-xl max-h-[calc(100vh-4rem)] overflow-y-auto">
+        <div className="xl:hidden bg-white border-t border-stone-200 px-4 py-5 space-y-2 shadow-warm-xl max-h-[calc(100vh-4rem)] overflow-y-auto">
           {/* 1. Nav Links based on Wireframe */}
           {navItems.map((item) => {
             const isActive = item.exact
