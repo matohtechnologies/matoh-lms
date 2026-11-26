@@ -18,6 +18,7 @@ import { auth } from "@/lib/auth";
 import { getLocale, getTranslations } from "next-intl/server";
 import { CourseCard } from "@/components/courses/course-card";
 import { getDbPublications } from "@/lib/publications";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
 
 export const revalidate = 60;
 
@@ -303,132 +304,142 @@ export default async function HomePage() {
             {/* Left Column: Big Headline & Interactive Controls */}
             <div className="lg:col-span-6 space-y-6 text-left">
               {/* Main Headline & Tagline */}
-              <div className="space-y-3">
-                <h1
-                  className="text-5xl sm:text-6xl lg:text-7xl font-bold text-slate-900 leading-[1.08] tracking-tight text-balance"
-                  style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
-                >
-                  Make You <br />
-                  <span className="text-gradient">Ready on Digital</span>
-                </h1>
-                <p
-                  className="text-lg sm:text-xl font-bold text-slate-800 tracking-tight"
-                  style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
-                >
-                  Empowering Innovation, Transforming the Future
-                </p>
-              </div>
+              <ScrollReveal animation="fade-up" delay={50}>
+                <div className="space-y-3">
+                  <h1
+                    className="text-5xl sm:text-6xl lg:text-7xl font-bold text-slate-900 leading-[1.08] tracking-tight text-balance"
+                    style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+                  >
+                    Make You <br />
+                    <span className="text-gradient">Ready on Digital</span>
+                  </h1>
+                  <p
+                    className="text-lg sm:text-xl font-bold text-slate-800 tracking-tight"
+                    style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+                  >
+                    Empowering Innovation, Transforming the Future
+                  </p>
+                </div>
+              </ScrollReveal>
 
               {/* Subheadline with high legibility */}
-              <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl text-pretty">
-                {isEn
-                  ? "Matoh Technologies stands as a partner in digital transformation and innovation development through education, research, publication, technology development, and professional consultation to create impactful solutions for business, academia, and society."
-                  : "Matoh Technologies hadir sebagai mitra transformasi digital dan pengembangan inovasi melalui pendidikan, riset, publikasi, pengembangan teknologi, serta konsultasi profesional untuk menciptakan solusi yang berdampak bagi dunia bisnis, akademik, dan masyarakat."}
-              </p>
+              <ScrollReveal animation="fade-up" delay={150}>
+                <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl text-pretty">
+                  {isEn
+                    ? "Matoh Technologies stands as a partner in digital transformation and innovation development through education, research, publication, technology development, and professional consultation to create impactful solutions for business, academia, and society."
+                    : "Matoh Technologies hadir sebagai mitra transformasi digital dan pengembangan inovasi melalui pendidikan, riset, publikasi, pengembangan teknologi, serta konsultasi profesional untuk menciptakan solusi yang berdampak bagi dunia bisnis, akademik, dan masyarakat."}
+                </p>
+              </ScrollReveal>
 
               {/* Action Buttons with clear primary hierarchy */}
-              <div className="flex flex-wrap items-center gap-3.5 pt-1">
-                <Link href="#course">
-                  <Button
-                    size="lg"
-                    className="rounded-2xl h-14 px-8 text-sm font-bold shadow-warm-lg hover:shadow-xl bg-blue-600 hover:bg-blue-700 transition-all hover:-translate-y-0.5 cursor-pointer"
-                    rightIcon={<ArrowRight size={17} />}
-                  >
-                    {isEn ? "Browse Courses" : "Jelajahi Kursus"}
-                  </Button>
-                </Link>
+              <ScrollReveal animation="fade-up" delay={250}>
+                <div className="flex flex-wrap items-center gap-3.5 pt-1">
+                  <Link href="#course">
+                    <Button
+                      size="lg"
+                      className="btn-shimmer rounded-2xl h-14 px-8 text-sm font-bold shadow-warm-lg hover:shadow-xl bg-blue-600 hover:bg-blue-700 transition-all hover:-translate-y-0.5 cursor-pointer"
+                      rightIcon={<ArrowRight size={17} />}
+                    >
+                      {isEn ? "Browse Courses" : "Jelajahi Kursus"}
+                    </Button>
+                  </Link>
 
-                <Link
-                  href="/about"
-                  className="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-semibold text-slate-700 hover:text-blue-600 hover:bg-slate-100/80 transition-all"
-                >
-                  <span>{isEn ? "About Matoh Technologies" : "Profil & Legalitas Kami"}</span>
-                  <ArrowRight size={14} className="text-slate-400 group-hover:translate-x-0.5 transition-transform" />
-                </Link>
-              </div>
+                  <Link
+                    href="/about"
+                    className="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-semibold text-slate-700 hover:text-blue-600 hover:bg-slate-100/80 transition-all"
+                  >
+                    <span>{isEn ? "About Matoh Technologies" : "Profil & Legalitas Kami"}</span>
+                    <ArrowRight size={14} className="text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+                  </Link>
+                </div>
+              </ScrollReveal>
 
               {/* Live Metric Strip */}
-              <div className="pt-4 border-t border-slate-200/70 flex flex-wrap items-center gap-6 sm:gap-8 text-xs text-slate-600">
-                {stats.reviewCount > 0 ? (
-                  <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-0.5 text-amber-500">
-                      {[1, 2, 3, 4, 5].map((i) => (
-                        <Star key={i} size={14} fill="currentColor" />
-                      ))}
+              <ScrollReveal animation="fade-up" delay={350}>
+                <div className="pt-4 border-t border-slate-200/70 flex flex-wrap items-center gap-6 sm:gap-8 text-xs text-slate-600">
+                  {stats.reviewCount > 0 ? (
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-0.5 text-amber-500">
+                        {[1, 2, 3, 4, 5].map((i) => (
+                          <Star key={i} size={14} fill="currentColor" />
+                        ))}
+                      </div>
+                      <span className="font-bold text-slate-900 text-sm">
+                        {stats.reviewAvg.toFixed(1)}/5
+                      </span>
+                      <span className="text-slate-400">
+                        ({stats.reviewCount.toLocaleString(locale === "en" ? "en-US" : "id-ID")}{" "}
+                        {isEn ? "reviews" : "ulasan"})
+                      </span>
                     </div>
-                    <span className="font-bold text-slate-900 text-sm">
-                      {stats.reviewAvg.toFixed(1)}/5
-                    </span>
-                    <span className="text-slate-400">
-                      ({stats.reviewCount.toLocaleString(locale === "en" ? "en-US" : "id-ID")}{" "}
-                      {isEn ? "reviews" : "ulasan"})
-                    </span>
+                  ) : (
+                    <>
+                      <div className="flex items-center gap-2 font-medium">
+                        <span className="font-bold text-slate-900 text-sm">{stats.courses}</span>
+                        <span className="text-slate-500">{isEn ? "Curated Courses" : "Kursus Aktif"}</span>
+                      </div>
+                      <div className="h-4 w-px bg-slate-200 hidden sm:block" />
+                      <div className="flex items-center gap-2 font-medium">
+                        <span className="font-bold text-slate-900 text-sm">{stats.students}</span>
+                        <span className="text-slate-500">{isEn ? "Registered Learners" : "Siswa Terdaftar"}</span>
+                      </div>
+                    </>
+                  )}
+
+                  <div className="h-4 w-px bg-slate-200 hidden sm:block" />
+
+                  <div className="flex items-center gap-1.5 font-medium text-slate-700">
+                    <ShieldCheck size={16} className="text-blue-600" />
+                    <span>{isEn ? "30-Day Money-Back Guarantee" : "Garansi 30 Hari Uang Kembali"}</span>
                   </div>
-                ) : (
-                  <>
-                    <div className="flex items-center gap-2 font-medium">
-                      <span className="font-bold text-slate-900 text-sm">{stats.courses}</span>
-                      <span className="text-slate-500">{isEn ? "Curated Courses" : "Kursus Aktif"}</span>
-                    </div>
-                    <div className="h-4 w-px bg-slate-200 hidden sm:block" />
-                    <div className="flex items-center gap-2 font-medium">
-                      <span className="font-bold text-slate-900 text-sm">{stats.students}</span>
-                      <span className="text-slate-500">{isEn ? "Registered Learners" : "Siswa Terdaftar"}</span>
-                    </div>
-                  </>
-                )}
-
-                <div className="h-4 w-px bg-slate-200 hidden sm:block" />
-
-                <div className="flex items-center gap-1.5 font-medium text-slate-700">
-                  <ShieldCheck size={16} className="text-blue-600" />
-                  <span>{isEn ? "30-Day Money-Back Guarantee" : "Garansi 30 Hari Uang Kembali"}</span>
                 </div>
-              </div>
+              </ScrollReveal>
             </div>
 
             {/* Right Column: Hero Visual Illustration (Clean Minimalist) */}
             <div className="lg:col-span-6 relative flex items-center justify-center">
-              <div className="relative w-full max-w-lg lg:max-w-xl mx-auto flex items-center justify-center">
-                <Image
-                  src="/images/hero-learning-illustration.png"
-                  alt={isEn ? "Applied Digital Learning - Matoh Technologies" : "Ilustrasi Pembelajaran Digital Matoh Technologies"}
-                  width={1024}
-                  height={764}
-                  priority
-                  className="w-full h-auto max-h-[500px] object-contain transition-transform duration-500 hover:scale-[1.02]"
-                />
+              <ScrollReveal animation="zoom-in" delay={150} duration={650} className="w-full">
+                <div className="relative w-full max-w-lg lg:max-w-xl mx-auto flex items-center justify-center">
+                  <Image
+                    src="/images/hero-learning-illustration.png"
+                    alt={isEn ? "Applied Digital Learning - Matoh Technologies" : "Ilustrasi Pembelajaran Digital Matoh Technologies"}
+                    width={1024}
+                    height={764}
+                    priority
+                    className="w-full h-auto max-h-[500px] object-contain transition-transform duration-500 hover:scale-[1.02]"
+                  />
 
-                {/* Floating Badge 1: Top Right */}
-                <div className="absolute -top-1 -right-1 sm:top-2 sm:right-2 bg-white/95 backdrop-blur-md shadow-warm rounded-2xl p-3 flex items-center gap-2.5 transition-all hover:scale-105 pointer-events-auto">
-                  <div className="w-8 h-8 flex items-center justify-center shrink-0">
-                    <ColorfulLightbulbIcon className="w-8 h-8 drop-shadow-xs" />
+                  {/* Floating Badge 1: Top Right */}
+                  <div className="absolute -top-1 -right-1 sm:top-2 sm:right-2 bg-white/95 backdrop-blur-md shadow-warm rounded-2xl p-3 flex items-center gap-2.5 transition-all hover:scale-105 pointer-events-auto animate-float-slow">
+                    <div className="w-8 h-8 flex items-center justify-center shrink-0">
+                      <ColorfulLightbulbIcon className="w-8 h-8 drop-shadow-xs" />
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-bold text-slate-900 leading-tight">
+                        {isEn ? "Applied Digital Skills" : "Keahlian Digital Terapan"}
+                      </p>
+                      <p className="text-[10px] text-slate-500 leading-tight">
+                        {isEn ? "Marketing & MCDM Analysis" : "Pemasaran & Analisis MCDM"}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-[11px] font-bold text-slate-900 leading-tight">
-                      {isEn ? "Applied Digital Skills" : "Keahlian Digital Terapan"}
-                    </p>
-                    <p className="text-[10px] text-slate-500 leading-tight">
-                      {isEn ? "Marketing & MCDM Analysis" : "Pemasaran & Analisis MCDM"}
-                    </p>
+
+                  {/* Floating Badge 2: Bottom Left */}
+                  <div className="absolute -bottom-2 -left-1 sm:bottom-4 sm:left-2 bg-white/95 backdrop-blur-md shadow-warm rounded-2xl p-3 flex items-center gap-2.5 transition-all hover:scale-105 pointer-events-auto animate-float-delayed">
+                    <div className="w-8 h-8 flex items-center justify-center shrink-0">
+                      <ColorfulGraduationIcon className="w-8 h-8 drop-shadow-xs" />
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-bold text-slate-900 leading-tight">
+                        {isEn ? "Official Certification" : "Sertifikat Kelulusan Resmi"}
+                      </p>
+                      <p className="text-[10px] text-blue-600 font-semibold leading-tight">
+                        {isEn ? "Verifiable & LinkedIn Integrated" : "Tervalidasi Digital & LinkedIn"}
+                      </p>
+                    </div>
                   </div>
                 </div>
-
-                {/* Floating Badge 2: Bottom Left */}
-                <div className="absolute -bottom-2 -left-1 sm:bottom-4 sm:left-2 bg-white/95 backdrop-blur-md shadow-warm rounded-2xl p-3 flex items-center gap-2.5 transition-all hover:scale-105 pointer-events-auto">
-                  <div className="w-8 h-8 flex items-center justify-center shrink-0">
-                    <ColorfulGraduationIcon className="w-8 h-8 drop-shadow-xs" />
-                  </div>
-                  <div>
-                    <p className="text-[11px] font-bold text-slate-900 leading-tight">
-                      {isEn ? "Official Certification" : "Sertifikat Kelulusan Resmi"}
-                    </p>
-                    <p className="text-[10px] text-blue-600 font-semibold leading-tight">
-                      {isEn ? "Verifiable & LinkedIn Integrated" : "Tervalidasi Digital & LinkedIn"}
-                    </p>
-                  </div>
-                </div>
-              </div>
+              </ScrollReveal>
             </div>
           </div>
         </div>
@@ -440,41 +451,43 @@ export default async function HomePage() {
          ========================================================================= */}
       <section id="course" className="py-20 sm:py-28 border-b border-slate-200 scroll-mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <h2
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight"
-              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
-            >
-              {tHome("courses_section_title")}
-            </h2>
-            <p className="text-base sm:text-lg text-slate-500 mt-3">
-              {tHome("courses_section_subtitle")}
-            </p>
-          </div>
+          <ScrollReveal animation="fade-up">
+            <div className="text-center max-w-2xl mx-auto mb-14">
+              <h2
+                className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight"
+                style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+              >
+                {tHome("courses_section_title")}
+              </h2>
+              <p className="text-base sm:text-lg text-slate-500 mt-3">
+                {tHome("courses_section_subtitle")}
+              </p>
+            </div>
+          </ScrollReveal>
 
           {/* 4 Cards in 1 Row */}
           {featuredCourses.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {featuredCourses.map((course) => (
-                <CourseCard
-                  key={course.id}
-                  id={course.id}
-                  slug={course.slug}
-                  title={course.title}
-                  thumbnail={course.thumbnail}
-                  price={course.price}
-                  discountPrice={course.discountPrice}
-                  rating={course.rating}
-                  reviewCount={course.reviewCount}
-                  enrollCount={course.enrollCount}
-                  totalLessons={course.totalLessons}
-                  duration={course.duration}
-                  instructor={course.instructor}
-                  category={course.category}
-                  locale={locale}
-                  isEnrolled={enrolledCourseIds.includes(course.id)}
-                />
-
+              {featuredCourses.map((course, idx) => (
+                <ScrollReveal key={course.id} animation="fade-up" delay={idx * 70}>
+                  <CourseCard
+                    id={course.id}
+                    slug={course.slug}
+                    title={course.title}
+                    thumbnail={course.thumbnail}
+                    price={course.price}
+                    discountPrice={course.discountPrice}
+                    rating={course.rating}
+                    reviewCount={course.reviewCount}
+                    enrollCount={course.enrollCount}
+                    totalLessons={course.totalLessons}
+                    duration={course.duration}
+                    instructor={course.instructor}
+                    category={course.category}
+                    locale={locale}
+                    isEnrolled={enrolledCourseIds.includes(course.id)}
+                  />
+                </ScrollReveal>
               ))}
             </div>
           ) : (
@@ -484,15 +497,17 @@ export default async function HomePage() {
           )}
 
           {/* Centered Button "Lihat Semua" */}
-          <div className="text-center mt-12">
-            <Link
-              href="/courses"
-              className="inline-flex items-center gap-2 px-7 py-3 rounded-lg border border-slate-300 hover:border-blue-600 bg-white text-slate-800 hover:text-blue-600 font-semibold text-sm sm:text-base transition-colors shadow-2xs"
-            >
-              <span>{tHome("courses_view_all")}</span>
-              <ArrowRight size={16} />
-            </Link>
-          </div>
+          <ScrollReveal animation="fade-up" delay={200}>
+            <div className="text-center mt-12">
+              <Link
+                href="/courses"
+                className="inline-flex items-center gap-2 px-7 py-3 rounded-lg border border-slate-300 hover:border-blue-600 bg-white text-slate-800 hover:text-blue-600 font-semibold text-sm sm:text-base transition-colors shadow-2xs hover:shadow-sm"
+              >
+                <span>{tHome("courses_view_all")}</span>
+                <ArrowRight size={16} />
+              </Link>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
@@ -502,19 +517,21 @@ export default async function HomePage() {
          ========================================================================= */}
       <section id="riset" className="py-20 sm:py-28 border-b border-slate-200 scroll-mt-16 bg-slate-50/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <h2
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight"
-              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
-            >
-              {isEn ? "Research" : "Riset"}
-            </h2>
-            <p className="text-base sm:text-lg text-slate-500 mt-3">
-              {isEn
-                ? "Applied research papers, decision science models, and data-driven studies."
-                : "Publikasi riset terapan, studi sains keputusan, dan inovasi berbasis data."}
-            </p>
-          </div>
+          <ScrollReveal animation="fade-up">
+            <div className="text-center max-w-2xl mx-auto mb-14">
+              <h2
+                className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight"
+                style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+              >
+                {isEn ? "Research" : "Riset"}
+              </h2>
+              <p className="text-base sm:text-lg text-slate-500 mt-3">
+                {isEn
+                  ? "Applied research papers, decision science models, and data-driven studies."
+                  : "Publikasi riset terapan, studi sains keputusan, dan inovasi berbasis data."}
+              </p>
+            </div>
+          </ScrollReveal>
 
           {/* Research Cards */}
           {researchHighlights.length > 0 ? (
@@ -527,95 +544,96 @@ export default async function HomePage() {
                   : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto"
               }
             >
-              {researchHighlights.map((item) => {
+              {researchHighlights.map((item, idx) => {
                 const title = isEn ? item.titleEn || item.titleId : item.titleId;
                 const excerpt = isEn ? item.excerptEn || item.excerptId : item.excerptId;
                 const category = isEn ? item.categoryEn || item.categoryId : item.categoryId;
                 const readTime = isEn ? item.readTimeEn || item.readTimeId : item.readTimeId;
 
                 return (
-                  <article
-                    key={item.slug}
-                    className="border border-slate-200 rounded-2xl p-7 sm:p-8 bg-white hover:border-slate-300 transition-colors flex flex-col justify-between h-full group shadow-2xs"
-                  >
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between text-xs text-slate-400 gap-2">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-semibold text-blue-600 text-xs">
-                            {category}
-                          </span>
-                          <span className="text-slate-300">•</span>
-                          <span
-                            className={`font-semibold text-xs ${
-                              item.isPaid ? "text-amber-600" : "text-emerald-600"
-                            }`}
-                          >
-                            {item.isPaid
-                              ? isEn
-                                ? "Paid"
-                                : "Berbayar"
-                              : isEn
-                              ? "Free"
-                              : "Tidak Berbayar"}
-                          </span>
+                  <ScrollReveal key={item.slug} animation="fade-up" delay={idx * 80}>
+                    <article
+                      className="border border-slate-200 rounded-2xl p-7 sm:p-8 bg-white card-hover flex flex-col justify-between h-full group shadow-2xs"
+                    >
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between text-xs text-slate-400 gap-2">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-semibold text-blue-600 text-xs">
+                              {category}
+                            </span>
+                            <span className="text-slate-300">•</span>
+                            <span
+                              className={`font-semibold text-xs ${
+                                item.isPaid ? "text-amber-600" : "text-emerald-600"
+                              }`}
+                            >
+                              {item.isPaid
+                                ? isEn
+                                  ? "Paid"
+                                  : "Berbayar"
+                                : isEn
+                                ? "Free"
+                                : "Tidak Berbayar"}
+                            </span>
+                          </div>
+                          {readTime && (
+                            <span className="flex items-center gap-1.5 font-medium shrink-0">
+                              <Clock size={13} />
+                              {readTime}
+                            </span>
+                          )}
                         </div>
-                        {readTime && (
-                          <span className="flex items-center gap-1.5 font-medium shrink-0">
-                            <Clock size={13} />
-                            {readTime}
-                          </span>
+
+                        <h3 className="text-xl sm:text-2xl font-bold text-slate-900 leading-snug group-hover:text-blue-600 transition-colors">
+                          <Link href={`/publikasi/${item.slug}`}>
+                            {title}
+                          </Link>
+                        </h3>
+
+                        <p className="text-sm text-slate-600 leading-relaxed line-clamp-3">
+                          {excerpt}
+                        </p>
+
+                        {item.tags && item.tags.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5 pt-1">
+                            {item.tags.slice(0, 3).map((tag) => (
+                              <span
+                                key={tag}
+                                className="text-[11px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded"
+                              >
+                                #{tag}
+                              </span>
+                            ))}
+                          </div>
                         )}
                       </div>
 
-                      <h3 className="text-xl sm:text-2xl font-bold text-slate-900 leading-snug group-hover:text-blue-600 transition-colors">
-                        <Link href={`/publikasi/${item.slug}`}>
-                          {title}
+                      <div className="pt-5 mt-6 border-t border-slate-100 flex items-center justify-between text-xs sm:text-sm">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <div className="w-6 h-6 rounded-full overflow-hidden bg-slate-900 shrink-0 border border-slate-200">
+                            <Image
+                              src="/images/avatars/founder-prabantoro.svg"
+                              alt={item.author}
+                              width={24}
+                              height={24}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <span className="font-medium text-slate-700 truncate max-w-[160px] sm:max-w-[200px]">
+                            {item.author}
+                          </span>
+                        </div>
+
+                        <Link
+                          href={`/publikasi/${item.slug}`}
+                          className="text-blue-600 hover:text-blue-700 font-semibold inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform shrink-0"
+                        >
+                          <span>{isEn ? "Read Research" : "Baca Riset"}</span>
+                          <ArrowRight size={14} />
                         </Link>
-                      </h3>
-
-                      <p className="text-sm text-slate-600 leading-relaxed line-clamp-3">
-                        {excerpt}
-                      </p>
-
-                      {item.tags && item.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-1.5 pt-1">
-                          {item.tags.slice(0, 3).map((tag) => (
-                            <span
-                              key={tag}
-                              className="text-[11px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded"
-                            >
-                              #{tag}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="pt-5 mt-6 border-t border-slate-100 flex items-center justify-between text-xs sm:text-sm">
-                      <div className="flex items-center gap-2 min-w-0">
-                        <div className="w-6 h-6 rounded-full overflow-hidden bg-slate-900 shrink-0 border border-slate-200">
-                          <Image
-                            src="/images/avatars/founder-prabantoro.svg"
-                            alt={item.author}
-                            width={24}
-                            height={24}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                        <span className="font-medium text-slate-700 truncate max-w-[160px] sm:max-w-[200px]">
-                          {item.author}
-                        </span>
                       </div>
-
-                      <Link
-                        href={`/publikasi/${item.slug}`}
-                        className="text-blue-600 hover:text-blue-700 font-semibold inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform shrink-0"
-                      >
-                        <span>{isEn ? "Read Research" : "Baca Riset"}</span>
-                        <ArrowRight size={14} />
-                      </Link>
-                    </div>
-                  </article>
+                    </article>
+                  </ScrollReveal>
                 );
               })}
             </div>
@@ -626,15 +644,17 @@ export default async function HomePage() {
           )}
 
           {/* Centered Button "Lihat Semua" */}
-          <div className="text-center mt-12">
-            <Link
-              href="/riset"
-              className="inline-flex items-center gap-2 px-7 py-3 rounded-lg border border-slate-300 hover:border-blue-600 bg-white text-slate-800 hover:text-blue-600 font-semibold text-sm sm:text-base transition-colors shadow-2xs"
-            >
-              <span>{isEn ? "View All Research" : "Lihat Semua"}</span>
-              <ArrowRight size={16} />
-            </Link>
-          </div>
+          <ScrollReveal animation="fade-up" delay={200}>
+            <div className="text-center mt-12">
+              <Link
+                href="/riset"
+                className="inline-flex items-center gap-2 px-7 py-3 rounded-lg border border-slate-300 hover:border-blue-600 bg-white text-slate-800 hover:text-blue-600 font-semibold text-sm sm:text-base transition-colors shadow-2xs hover:shadow-sm"
+              >
+                <span>{isEn ? "View All Research" : "Lihat Semua"}</span>
+                <ArrowRight size={16} />
+              </Link>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
@@ -644,85 +664,90 @@ export default async function HomePage() {
          ========================================================================= */}
       <section id="publikasi" className="py-20 sm:py-28 border-b border-slate-200 scroll-mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <h2
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight"
-              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
-            >
-              {isEn ? "Publications" : "Publikasi"}
-            </h2>
-            <p className="text-base sm:text-lg text-slate-500 mt-3">
-              {isEn
-                ? "Applied research papers, case studies, and engineering articles."
-                : "Karya tulis ilmiah, studi kasus terapan, dan wawasan teknologi."}
-            </p>
-          </div>
+          <ScrollReveal animation="fade-up">
+            <div className="text-center max-w-2xl mx-auto mb-14">
+              <h2
+                className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight"
+                style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+              >
+                {isEn ? "Publications" : "Publikasi"}
+              </h2>
+              <p className="text-base sm:text-lg text-slate-500 mt-3">
+                {isEn
+                  ? "Applied research papers, case studies, and engineering articles."
+                  : "Karya tulis ilmiah, studi kasus terapan, dan wawasan teknologi."}
+              </p>
+            </div>
+          </ScrollReveal>
 
           {/* 4 Cards in 1 Row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {publicationHighlights.map((post) => (
-              <article
-                key={post.slug}
-                className="border border-slate-200 rounded-xl p-6 hover:border-slate-400 transition-colors flex flex-col justify-between h-full bg-white group"
-              >
-                <div className="space-y-3.5">
-                  <div className="flex items-center justify-between text-xs text-slate-400 gap-2">
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="font-semibold text-blue-600 text-xs">
-                        {post.category}
-                      </span>
-                      <span className="text-slate-300">•</span>
-                      <span
-                        className={`font-semibold text-xs ${
-                          post.isPaid ? "text-amber-600" : "text-emerald-600"
-                        }`}
-                      >
-                        {post.isPaid
-                          ? isEn
-                            ? "Paid"
-                            : "Berbayar"
-                          : isEn
-                          ? "Free"
-                          : "Tidak Berbayar"}
+            {publicationHighlights.map((post, idx) => (
+              <ScrollReveal key={post.slug} animation="fade-up" delay={idx * 70}>
+                <article
+                  className="border border-slate-200 rounded-xl p-6 card-hover flex flex-col justify-between h-full bg-white group shadow-2xs"
+                >
+                  <div className="space-y-3.5">
+                    <div className="flex items-center justify-between text-xs text-slate-400 gap-2">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="font-semibold text-blue-600 text-xs">
+                          {post.category}
+                        </span>
+                        <span className="text-slate-300">•</span>
+                        <span
+                          className={`font-semibold text-xs ${
+                            post.isPaid ? "text-amber-600" : "text-emerald-600"
+                          }`}
+                        >
+                          {post.isPaid
+                            ? isEn
+                              ? "Paid"
+                              : "Berbayar"
+                            : isEn
+                            ? "Free"
+                            : "Tidak Berbayar"}
+                        </span>
+                      </div>
+                      <span className="flex items-center gap-1 shrink-0">
+                        <Clock size={12} />
+                        {post.readTime}
                       </span>
                     </div>
-                    <span className="flex items-center gap-1 shrink-0">
-                      <Clock size={12} />
-                      {post.readTime}
-                    </span>
+
+                    <h3 className="font-bold text-slate-900 text-base leading-snug line-clamp-3 group-hover:text-blue-600 transition-colors">
+                      <Link href={`/publikasi/${post.slug}`}>
+                        {post.title}
+                      </Link>
+                    </h3>
                   </div>
 
-                  <h3 className="font-bold text-slate-900 text-base leading-snug line-clamp-3 group-hover:text-blue-600 transition-colors">
-                    <Link href={`/publikasi/${post.slug}`}>
-                      {post.title}
+                  <div className="pt-4 mt-6 border-t border-slate-100 flex items-center justify-between text-xs">
+                    <span className="text-slate-500 truncate max-w-[150px] font-medium">{post.author}</span>
+                    <Link
+                      href={`/publikasi/${post.slug}`}
+                      className="text-blue-600 font-semibold inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform"
+                    >
+                      <span>{isEn ? "Read" : "Baca"}</span>
+                      <ArrowRight size={13} />
                     </Link>
-                  </h3>
-                </div>
-
-                <div className="pt-4 mt-6 border-t border-slate-100 flex items-center justify-between text-xs">
-                  <span className="text-slate-500 truncate max-w-[150px] font-medium">{post.author}</span>
-                  <Link
-                    href={`/publikasi/${post.slug}`}
-                    className="text-blue-600 font-semibold inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform"
-                  >
-                    <span>{isEn ? "Read" : "Baca"}</span>
-                    <ArrowRight size={13} />
-                  </Link>
-                </div>
-              </article>
+                  </div>
+                </article>
+              </ScrollReveal>
             ))}
           </div>
 
           {/* Centered Button "Lihat Semua" */}
-          <div className="text-center mt-12">
-            <Link
-              href="/publikasi"
-              className="inline-flex items-center gap-2 px-7 py-3 rounded-lg border border-slate-300 hover:border-blue-600 bg-white text-slate-800 hover:text-blue-600 font-semibold text-sm sm:text-base transition-colors shadow-2xs"
-            >
-              <span>{isEn ? "View All Publications" : "Lihat Semua"}</span>
-              <ArrowRight size={16} />
-            </Link>
-          </div>
+          <ScrollReveal animation="fade-up" delay={200}>
+            <div className="text-center mt-12">
+              <Link
+                href="/publikasi"
+                className="inline-flex items-center gap-2 px-7 py-3 rounded-lg border border-slate-300 hover:border-blue-600 bg-white text-slate-800 hover:text-blue-600 font-semibold text-sm sm:text-base transition-colors shadow-2xs hover:shadow-sm"
+              >
+                <span>{isEn ? "View All Publications" : "Lihat Semua"}</span>
+                <ArrowRight size={16} />
+              </Link>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
@@ -732,117 +757,127 @@ export default async function HomePage() {
          ========================================================================= */}
       <section id="developer" className="py-20 sm:py-28 border-b border-slate-200 scroll-mt-16 bg-slate-50/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <h2
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight"
-              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
-            >
-              Developer
-            </h2>
-            <p className="text-base sm:text-lg text-slate-500 mt-3">
-              {isEn
-                ? "Custom website and tailored software system development engineered for your specific business requirements."
-                : "Layanan profesional pembuatan website, aplikasi web, dan sistem informasi kustom sesuai alur kebutuhan bisnis Anda."}
-            </p>
-          </div>
+          <ScrollReveal animation="fade-up">
+            <div className="text-center max-w-2xl mx-auto mb-14">
+              <h2
+                className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight"
+                style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+              >
+                Developer
+              </h2>
+              <p className="text-base sm:text-lg text-slate-500 mt-3">
+                {isEn
+                  ? "Custom website and tailored software system development engineered for your specific business requirements."
+                  : "Layanan profesional pembuatan website, aplikasi web, dan sistem informasi kustom sesuai alur kebutuhan bisnis Anda."}
+              </p>
+            </div>
+          </ScrollReveal>
 
           {/* 3 Cards in 1 Row */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {/* Service 1: Website Perusahaan & Portal Bisnis */}
-            <div className="border border-slate-200 rounded-xl p-7 bg-white hover:border-slate-400 transition-colors flex flex-col justify-between">
-              <div className="space-y-4">
-                <div className="w-11 h-11 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
-                  <Globe size={22} />
-                </div>
-                <div>
-                  <h3 className="font-bold text-slate-900 text-lg sm:text-xl">
-                    {isEn ? "Company Profile & Web Portals" : "Website Profil & Portal Bisnis"}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-blue-600 font-semibold mt-0.5">
-                    {isEn ? "Brand Credibility & High Conversion" : "Kredibilitas Tinggi & Siap SEO"}
+            <ScrollReveal animation="fade-up" delay={0}>
+              <div className="border border-slate-200 rounded-xl p-7 bg-white card-hover flex flex-col justify-between h-full shadow-2xs">
+                <div className="space-y-4">
+                  <div className="w-11 h-11 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+                    <Globe size={22} />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-900 text-lg sm:text-xl">
+                      {isEn ? "Company Profile & Web Portals" : "Website Profil & Portal Bisnis"}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-blue-600 font-semibold mt-0.5">
+                      {isEn ? "Brand Credibility & High Conversion" : "Kredibilitas Tinggi & Siap SEO"}
+                    </p>
+                  </div>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    {isEn
+                      ? "Modern, responsive websites engineered with lightning-fast load times, SEO architecture, and bespoke UI design tailored to your corporate identity."
+                      : "Website representatif, elegan, dan mobile-first dengan kecepatan muat tinggi, struktur SEO optimal, dan desain eksklusif yang memperkuat citra bisnis Anda."}
                   </p>
                 </div>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  {isEn
-                    ? "Modern, responsive websites engineered with lightning-fast load times, SEO architecture, and bespoke UI design tailored to your corporate identity."
-                    : "Website representatif, elegan, dan mobile-first dengan kecepatan muat tinggi, struktur SEO optimal, dan desain eksklusif yang memperkuat citra bisnis Anda."}
-                </p>
-              </div>
 
-              <div className="pt-4 mt-6 border-t border-slate-100 flex flex-wrap gap-1.5 text-xs font-mono text-slate-600">
-                <span className="bg-slate-100 px-2.5 py-0.5 rounded">Next.js</span>
-                <span className="bg-slate-100 px-2.5 py-0.5 rounded">SEO Ready</span>
-                <span className="bg-slate-100 px-2.5 py-0.5 rounded">Responsive</span>
+                <div className="pt-4 mt-6 border-t border-slate-100 flex flex-wrap gap-1.5 text-xs font-mono text-slate-600">
+                  <span className="bg-slate-100 px-2.5 py-0.5 rounded">Next.js</span>
+                  <span className="bg-slate-100 px-2.5 py-0.5 rounded">SEO Ready</span>
+                  <span className="bg-slate-100 px-2.5 py-0.5 rounded">Responsive</span>
+                </div>
               </div>
-            </div>
+            </ScrollReveal>
 
             {/* Service 2: Aplikasi Web & Sistem Informasi Kustom */}
-            <div className="border border-slate-200 rounded-xl p-7 bg-white hover:border-slate-400 transition-colors flex flex-col justify-between">
-              <div className="space-y-4">
-                <div className="w-11 h-11 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
-                  <Code2 size={22} />
-                </div>
-                <div>
-                  <h3 className="font-bold text-slate-900 text-lg sm:text-xl">
-                    {isEn ? "Custom Web App & Information Systems" : "Aplikasi Web & Sistem Kustom"}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-blue-600 font-semibold mt-0.5">
-                    {isEn ? "Tailored Internal Workflow Automation" : "Sesuai Alur Proses Klien"}
+            <ScrollReveal animation="fade-up" delay={100}>
+              <div className="border border-slate-200 rounded-xl p-7 bg-white card-hover flex flex-col justify-between h-full shadow-2xs">
+                <div className="space-y-4">
+                  <div className="w-11 h-11 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+                    <Code2 size={22} />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-900 text-lg sm:text-xl">
+                      {isEn ? "Custom Web App & Information Systems" : "Aplikasi Web & Sistem Kustom"}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-blue-600 font-semibold mt-0.5">
+                      {isEn ? "Tailored Internal Workflow Automation" : "Sesuai Alur Proses Klien"}
+                    </p>
+                  </div>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    {isEn
+                      ? "Custom business applications, operations management portals, internal ERP/CRM dashboards, and specialized data tracking software built from scratch."
+                      : "Sistem manajemen operasional, portal administrasi, dashboard monitoring data, dan aplikasi alur kerja internal yang dirancang khusus mengikuti proses organisasi Anda."}
                   </p>
                 </div>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  {isEn
-                    ? "Custom business applications, operations management portals, internal ERP/CRM dashboards, and specialized data tracking software built from scratch."
-                    : "Sistem manajemen operasional, portal administrasi, dashboard monitoring data, dan aplikasi alur kerja internal yang dirancang khusus mengikuti proses organisasi Anda."}
-                </p>
-              </div>
 
-              <div className="pt-4 mt-6 border-t border-slate-100 flex flex-wrap gap-1.5 text-xs font-mono text-slate-600">
-                <span className="bg-slate-100 px-2.5 py-0.5 rounded">Dashboard</span>
-                <span className="bg-slate-100 px-2.5 py-0.5 rounded">Custom Flow</span>
-                <span className="bg-slate-100 px-2.5 py-0.5 rounded">PostgreSQL</span>
+                <div className="pt-4 mt-6 border-t border-slate-100 flex flex-wrap gap-1.5 text-xs font-mono text-slate-600">
+                  <span className="bg-slate-100 px-2.5 py-0.5 rounded">Dashboard</span>
+                  <span className="bg-slate-100 px-2.5 py-0.5 rounded">Custom Flow</span>
+                  <span className="bg-slate-100 px-2.5 py-0.5 rounded">PostgreSQL</span>
+                </div>
               </div>
-            </div>
+            </ScrollReveal>
 
             {/* Service 3: Platform E-Commerce & Integrasi Transaksi */}
-            <div className="border border-slate-200 rounded-xl p-7 bg-white hover:border-slate-400 transition-colors flex flex-col justify-between">
-              <div className="space-y-4">
-                <div className="w-11 h-11 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
-                  <Database size={22} />
-                </div>
-                <div>
-                  <h3 className="font-bold text-slate-900 text-lg sm:text-xl">
-                    {isEn ? "E-Commerce & Digital Platforms" : "E-Commerce & Integrasi Sistem"}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-blue-600 font-semibold mt-0.5">
-                    {isEn ? "Payment Gateways & Realtime APIs" : "Payment Gateway & Otomasi API"}
+            <ScrollReveal animation="fade-up" delay={200}>
+              <div className="border border-slate-200 rounded-xl p-7 bg-white card-hover flex flex-col justify-between h-full shadow-2xs">
+                <div className="space-y-4">
+                  <div className="w-11 h-11 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+                    <Database size={22} />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-900 text-lg sm:text-xl">
+                      {isEn ? "E-Commerce & Digital Platforms" : "E-Commerce & Integrasi Sistem"}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-blue-600 font-semibold mt-0.5">
+                      {isEn ? "Payment Gateways & Realtime APIs" : "Payment Gateway & Otomasi API"}
+                    </p>
+                  </div>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    {isEn
+                      ? "Secure transactional systems featuring bank transfer & e-wallet payment gateways, automated WhatsApp receipts, and third-party API synchronizations."
+                      : "Platform transaksi online terintegrasi payment gateway (QRIS, VA Bank, E-Wallet), notifikasi instan, serta integrasi API pihak ketiga dengan keamanan data teruji."}
                   </p>
                 </div>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  {isEn
-                    ? "Secure transactional systems featuring bank transfer & e-wallet payment gateways, automated WhatsApp receipts, and third-party API synchronizations."
-                    : "Platform transaksi online terintegrasi payment gateway (QRIS, VA Bank, E-Wallet), notifikasi instan, serta integrasi API pihak ketiga dengan keamanan data teruji."}
-                </p>
-              </div>
 
-              <div className="pt-4 mt-6 border-t border-slate-100 flex flex-wrap gap-1.5 text-xs font-mono text-slate-600">
-                <span className="bg-slate-100 px-2.5 py-0.5 rounded">Midtrans/Xendit</span>
-                <span className="bg-slate-100 px-2.5 py-0.5 rounded">Secure API</span>
-                <span className="bg-slate-100 px-2.5 py-0.5 rounded">Cloud</span>
+                <div className="pt-4 mt-6 border-t border-slate-100 flex flex-wrap gap-1.5 text-xs font-mono text-slate-600">
+                  <span className="bg-slate-100 px-2.5 py-0.5 rounded">Midtrans/Xendit</span>
+                  <span className="bg-slate-100 px-2.5 py-0.5 rounded">Secure API</span>
+                  <span className="bg-slate-100 px-2.5 py-0.5 rounded">Cloud</span>
+                </div>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
 
           {/* Centered Button "Lihat Semua" */}
-          <div className="text-center mt-12">
-            <Link
-              href="/developer"
-              className="inline-flex items-center gap-2 px-7 py-3 rounded-lg border border-slate-300 hover:border-blue-600 bg-white text-slate-800 hover:text-blue-600 font-semibold text-sm sm:text-base transition-colors shadow-2xs"
-            >
-              <span>{isEn ? "View All Developer Services" : "Lihat Semua"}</span>
-              <ArrowRight size={16} />
-            </Link>
-          </div>
+          <ScrollReveal animation="fade-up" delay={200}>
+            <div className="text-center mt-12">
+              <Link
+                href="/developer"
+                className="inline-flex items-center gap-2 px-7 py-3 rounded-lg border border-slate-300 hover:border-blue-600 bg-white text-slate-800 hover:text-blue-600 font-semibold text-sm sm:text-base transition-colors shadow-2xs hover:shadow-sm"
+              >
+                <span>{isEn ? "View All Developer Services" : "Lihat Semua"}</span>
+                <ArrowRight size={16} />
+              </Link>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
@@ -852,82 +887,90 @@ export default async function HomePage() {
          ========================================================================= */}
       <section id="konsultan" className="py-20 sm:py-28 border-b border-slate-200 scroll-mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <h2
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight"
-              style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
-            >
-              {isEn ? "Consultant" : "Konsultan"}
-            </h2>
-            <p className="text-base sm:text-lg text-slate-500 mt-3">
-              {isEn
-                ? "Strategic business advisory, research mentorship, and customized corporate workshops."
-                : "Layanan konsultasi strategi bisnis, pendampingan riset, dan pelatihan khusus korporat/kampus."}
-            </p>
-          </div>
+          <ScrollReveal animation="fade-up">
+            <div className="text-center max-w-2xl mx-auto mb-14">
+              <h2
+                className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight"
+                style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
+              >
+                {isEn ? "Consultant" : "Konsultan"}
+              </h2>
+              <p className="text-base sm:text-lg text-slate-500 mt-3">
+                {isEn
+                  ? "Strategic business advisory, research mentorship, and customized corporate workshops."
+                  : "Layanan konsultasi strategi bisnis, pendampingan riset, dan pelatihan khusus korporat/kampus."}
+              </p>
+            </div>
+          </ScrollReveal>
 
           {/* 2-Column Layout as in the wireframe sketch:
               Left: Brief text & services
               Right: Action card box with WhatsApp Hotline & Form button */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center max-w-5xl mx-auto">
             {/* Left Column: Brief description & service items */}
-            <div className="lg:col-span-7 space-y-5">
-              <p className="text-base sm:text-lg text-slate-800 leading-relaxed font-semibold">
-                {isEn
-                  ? "We provide end-to-end advisory for MSME business acceleration, academic scientific decision modeling, and corporate upskilling programs."
-                  : "Kami menyediakan pendampingan profesional untuk akselerasi bisnis UMKM, bimbingan metodologi keputusan ilmiah akademisi, dan pelatihan khusus institusi."}
-              </p>
+            <div className="lg:col-span-7">
+              <ScrollReveal animation="fade-right" delay={100} className="space-y-5">
+                <p className="text-base sm:text-lg text-slate-800 leading-relaxed font-semibold">
+                  {isEn
+                    ? "We provide end-to-end advisory for MSME business acceleration, academic scientific decision modeling, and corporate upskilling programs."
+                    : "Kami menyediakan pendampingan profesional untuk akselerasi bisnis UMKM, bimbingan metodologi keputusan ilmiah akademisi, dan pelatihan khusus institusi."}
+                </p>
 
-              <div className="space-y-3 pt-1 text-sm sm:text-base text-slate-600">
-                <div className="flex items-center gap-3">
-                  <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
-                  <span>{isEn ? "MSME Digital Transformation Advisory (Up to +70% Sales)" : "Pendampingan Digitalisasi UMKM (Peningkatan omzet hingga 70%)"}</span>
+                <div className="space-y-3 pt-1 text-sm sm:text-base text-slate-600">
+                  <div className="flex items-center gap-3">
+                    <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
+                    <span>{isEn ? "MSME Digital Transformation Advisory (Up to +70% Sales)" : "Pendampingan Digitalisasi UMKM (Peningkatan omzet hingga 70%)"}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
+                    <span>{isEn ? "Decision Science Mentorship (AHP & ISM for Theses & Policies)" : "Bimbingan Metodologi Sains Keputusan (AHP & ISM untuk Tesis/Kebijakan)"}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
+                    <span>{isEn ? "Corporate In-House Workshops & Academic Training" : "In-House Training & Workshop Korporasi / Kampus"}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
+                    <span>{isEn ? "Financial Feasibility Studies & Valuation Advisory" : "Studi Kelayakan Finansial & Valuasi Investasi Bisnis"}</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
-                  <span>{isEn ? "Decision Science Mentorship (AHP & ISM for Theses & Policies)" : "Bimbingan Metodologi Sains Keputusan (AHP & ISM untuk Tesis/Kebijakan)"}</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
-                  <span>{isEn ? "Corporate In-House Workshops & Academic Training" : "In-House Training & Workshop Korporasi / Kampus"}</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
-                  <span>{isEn ? "Financial Feasibility Studies & Valuation Advisory" : "Studi Kelayakan Finansial & Valuasi Investasi Bisnis"}</span>
-                </div>
-              </div>
+              </ScrollReveal>
             </div>
 
             {/* Right Column: Clean Action Card Box */}
-            <div className="lg:col-span-5 border border-slate-200 rounded-xl p-7 sm:p-8 bg-slate-50/70 text-center space-y-4">
-              <h3 className="font-bold text-slate-900 text-lg sm:text-xl">
-                {isEn ? "Schedule a Consultation" : "Konsultasikan Kebutuhan Anda"}
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
-                {isEn
-                  ? "Discuss your project directly with our advisory team."
-                  : "Diskusikan rencana riset, pelatihan, atau bisnis Anda bersama tim kami."}
-              </p>
+            <div className="lg:col-span-5">
+              <ScrollReveal animation="fade-left" delay={200}>
+                <div className="border border-slate-200 rounded-xl p-7 sm:p-8 bg-slate-50/70 text-center space-y-4 card-hover shadow-2xs">
+                  <h3 className="font-bold text-slate-900 text-lg sm:text-xl">
+                    {isEn ? "Schedule a Consultation" : "Konsultasikan Kebutuhan Anda"}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                    {isEn
+                      ? "Discuss your project directly with our advisory team."
+                      : "Diskusikan rencana riset, pelatihan, atau bisnis Anda bersama tim kami."}
+                  </p>
 
-              <div className="space-y-2.5 pt-2">
-                <a
-                  href="https://wa.me/6281210106680?text=Halo%20Matoh%20Technologies,%20saya%20ingin%20konsultasi%20layanan%20konsultan%20dan%20riset."
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm transition-colors shadow-2xs"
-                >
-                  <MessageSquare size={16} />
-                  <span>WhatsApp Hotline</span>
-                </a>
+                  <div className="space-y-2.5 pt-2">
+                    <a
+                      href="https://wa.me/6281210106680?text=Halo%20Matoh%20Technologies,%20saya%20ingin%20konsultasi%20layanan%20konsultan%20dan%20riset."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-shimmer animate-pulse-glow-emerald w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm transition-colors shadow-2xs active:scale-[0.98]"
+                    >
+                      <MessageSquare size={16} />
+                      <span>WhatsApp Hotline</span>
+                    </a>
 
-                <Link
-                  href="/konsultan"
-                  className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg border border-slate-300 hover:border-blue-600 hover:text-blue-600 bg-white text-slate-700 font-semibold text-xs sm:text-sm transition-colors"
-                >
-                  <span>{isEn ? "View Consulting Details" : "Pelajari Layanan Konsultan"}</span>
-                  <ArrowRight size={15} />
-                </Link>
-              </div>
+                    <Link
+                      href="/konsultan"
+                      className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg border border-slate-300 hover:border-blue-600 hover:text-blue-600 bg-white text-slate-700 font-semibold text-xs sm:text-sm transition-colors active:scale-[0.98]"
+                    >
+                      <span>{isEn ? "View Consulting Details" : "Pelajari Layanan Konsultan"}</span>
+                      <ArrowRight size={15} />
+                    </Link>
+                  </div>
+                </div>
+              </ScrollReveal>
             </div>
           </div>
         </div>

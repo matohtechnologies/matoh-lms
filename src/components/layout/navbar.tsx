@@ -13,14 +13,9 @@ import {
   LayoutDashboard,
   Shield,
   ChevronDown,
-  ChevronRight,
   GraduationCap,
   Sparkles,
   Building2,
-  Compass,
-  ArrowRight,
-  CheckCircle2,
-  ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -202,7 +197,7 @@ export function Navbar({ user, categories }: NavbarProps) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "px-3 py-2 rounded-lg text-xs xl:text-sm font-semibold transition-colors whitespace-nowrap shrink-0",
+                  "px-3 py-2 rounded-lg text-xs xl:text-sm font-semibold transition-all duration-200 active:scale-95 whitespace-nowrap shrink-0",
                   isActive
                     ? "bg-blue-50 text-blue-700 font-bold"
                     : "text-stone-600 hover:text-stone-900 hover:bg-stone-100/80"
