@@ -302,9 +302,9 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             {/* Left Column: Big Headline & Interactive Controls */}
-            <div className="lg:col-span-6 space-y-6 text-left">
-              {/* Main Headline & Tagline */}
-              <ScrollReveal animation="fade-up" delay={50}>
+            <div className="lg:col-span-6 text-left">
+              <ScrollReveal animation="fade-up" duration={350} className="space-y-6">
+                {/* Main Headline & Tagline */}
                 <div className="space-y-3">
                   <h1
                     className="text-5xl sm:text-6xl lg:text-7xl font-bold text-slate-900 leading-[1.08] tracking-tight text-balance"
@@ -320,19 +320,15 @@ export default async function HomePage() {
                     Empowering Innovation, Transforming the Future
                   </p>
                 </div>
-              </ScrollReveal>
 
-              {/* Subheadline with high legibility */}
-              <ScrollReveal animation="fade-up" delay={150}>
+                {/* Subheadline with high legibility */}
                 <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl text-pretty">
                   {isEn
                     ? "Matoh Technologies stands as a partner in digital transformation and innovation development through education, research, publication, technology development, and professional consultation to create impactful solutions for business, academia, and society."
                     : "Matoh Technologies hadir sebagai mitra transformasi digital dan pengembangan inovasi melalui pendidikan, riset, publikasi, pengembangan teknologi, serta konsultasi profesional untuk menciptakan solusi yang berdampak bagi dunia bisnis, akademik, dan masyarakat."}
                 </p>
-              </ScrollReveal>
 
-              {/* Action Buttons with clear primary hierarchy */}
-              <ScrollReveal animation="fade-up" delay={250}>
+                {/* Action Buttons with clear primary hierarchy */}
                 <div className="flex flex-wrap items-center gap-3.5 pt-1">
                   <Link href="#course">
                     <Button
@@ -352,10 +348,8 @@ export default async function HomePage() {
                     <ArrowRight size={14} className="text-slate-400 group-hover:translate-x-0.5 transition-transform" />
                   </Link>
                 </div>
-              </ScrollReveal>
 
-              {/* Live Metric Strip */}
-              <ScrollReveal animation="fade-up" delay={350}>
+                {/* Live Metric Strip */}
                 <div className="pt-4 border-t border-slate-200/70 flex flex-wrap items-center gap-6 sm:gap-8 text-xs text-slate-600">
                   {stats.reviewCount > 0 ? (
                     <div className="flex items-center gap-2">
@@ -398,7 +392,7 @@ export default async function HomePage() {
 
             {/* Right Column: Hero Visual Illustration (Clean Minimalist) */}
             <div className="lg:col-span-6 relative flex items-center justify-center">
-              <ScrollReveal animation="zoom-in" delay={150} duration={650} className="w-full">
+              <ScrollReveal animation="fade-up" duration={350} className="w-full">
                 <div className="relative w-full max-w-lg lg:max-w-xl mx-auto flex items-center justify-center">
                   <Image
                     src="/images/hero-learning-illustration.png"
@@ -406,11 +400,11 @@ export default async function HomePage() {
                     width={1024}
                     height={764}
                     priority
-                    className="w-full h-auto max-h-[500px] object-contain transition-transform duration-500 hover:scale-[1.02]"
+                    className="w-full h-auto max-h-[500px] object-contain"
                   />
 
                   {/* Floating Badge 1: Top Right */}
-                  <div className="absolute -top-1 -right-1 sm:top-2 sm:right-2 bg-white/95 backdrop-blur-md shadow-warm rounded-2xl p-3 flex items-center gap-2.5 transition-all hover:scale-105 pointer-events-auto animate-float-slow">
+                  <div className="absolute -top-1 -right-1 sm:top-2 sm:right-2 bg-white/95 backdrop-blur-md shadow-warm rounded-2xl p-3 flex items-center gap-2.5 transition-transform duration-200 hover:scale-105 pointer-events-auto">
                     <div className="w-8 h-8 flex items-center justify-center shrink-0">
                       <ColorfulLightbulbIcon className="w-8 h-8 drop-shadow-xs" />
                     </div>
@@ -425,7 +419,7 @@ export default async function HomePage() {
                   </div>
 
                   {/* Floating Badge 2: Bottom Left */}
-                  <div className="absolute -bottom-2 -left-1 sm:bottom-4 sm:left-2 bg-white/95 backdrop-blur-md shadow-warm rounded-2xl p-3 flex items-center gap-2.5 transition-all hover:scale-105 pointer-events-auto animate-float-delayed">
+                  <div className="absolute -bottom-2 -left-1 sm:bottom-4 sm:left-2 bg-white/95 backdrop-blur-md shadow-warm rounded-2xl p-3 flex items-center gap-2.5 transition-transform duration-200 hover:scale-105 pointer-events-auto">
                     <div className="w-8 h-8 flex items-center justify-center shrink-0">
                       <ColorfulGraduationIcon className="w-8 h-8 drop-shadow-xs" />
                     </div>
@@ -467,10 +461,11 @@ export default async function HomePage() {
 
           {/* 4 Cards in 1 Row */}
           {featuredCourses.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {featuredCourses.map((course, idx) => (
-                <ScrollReveal key={course.id} animation="fade-up" delay={idx * 70}>
+            <ScrollReveal animation="fade-up">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                {featuredCourses.map((course) => (
                   <CourseCard
+                    key={course.id}
                     id={course.id}
                     slug={course.slug}
                     title={course.title}
@@ -487,9 +482,9 @@ export default async function HomePage() {
                     locale={locale}
                     isEnrolled={enrolledCourseIds.includes(course.id)}
                   />
-                </ScrollReveal>
-              ))}
-            </div>
+                ))}
+              </div>
+            </ScrollReveal>
           ) : (
             <div className="text-center py-12 text-sm text-slate-500">
               {isEn ? "No courses available yet." : "Belum ada kursus yang ditampilkan."}
@@ -497,7 +492,7 @@ export default async function HomePage() {
           )}
 
           {/* Centered Button "Lihat Semua" */}
-          <ScrollReveal animation="fade-up" delay={200}>
+          <ScrollReveal animation="fade-up">
             <div className="text-center mt-12">
               <Link
                 href="/courses"
@@ -535,24 +530,25 @@ export default async function HomePage() {
 
           {/* Research Cards */}
           {researchHighlights.length > 0 ? (
-            <div
-              className={
-                researchHighlights.length === 1
-                  ? "max-w-2xl mx-auto"
-                  : researchHighlights.length === 2
-                  ? "grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto"
-                  : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto"
-              }
-            >
-              {researchHighlights.map((item, idx) => {
-                const title = isEn ? item.titleEn || item.titleId : item.titleId;
-                const excerpt = isEn ? item.excerptEn || item.excerptId : item.excerptId;
-                const category = isEn ? item.categoryEn || item.categoryId : item.categoryId;
-                const readTime = isEn ? item.readTimeEn || item.readTimeId : item.readTimeId;
+            <ScrollReveal animation="fade-up">
+              <div
+                className={
+                  researchHighlights.length === 1
+                    ? "max-w-2xl mx-auto"
+                    : researchHighlights.length === 2
+                    ? "grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto"
+                    : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto"
+                }
+              >
+                {researchHighlights.map((item) => {
+                  const title = isEn ? item.titleEn || item.titleId : item.titleId;
+                  const excerpt = isEn ? item.excerptEn || item.excerptId : item.excerptId;
+                  const category = isEn ? item.categoryEn || item.categoryId : item.categoryId;
+                  const readTime = isEn ? item.readTimeEn || item.readTimeId : item.readTimeId;
 
-                return (
-                  <ScrollReveal key={item.slug} animation="fade-up" delay={idx * 80}>
+                  return (
                     <article
+                      key={item.slug}
                       className="border border-slate-200 rounded-2xl p-7 sm:p-8 bg-white card-hover flex flex-col justify-between h-full group shadow-2xs"
                     >
                       <div className="space-y-4">
@@ -633,10 +629,10 @@ export default async function HomePage() {
                         </Link>
                       </div>
                     </article>
-                  </ScrollReveal>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            </ScrollReveal>
           ) : (
             <div className="text-center py-12 text-sm text-slate-500">
               {isEn ? "No research publications available yet." : "Belum ada publikasi riset yang ditampilkan."}
@@ -644,7 +640,7 @@ export default async function HomePage() {
           )}
 
           {/* Centered Button "Lihat Semua" */}
-          <ScrollReveal animation="fade-up" delay={200}>
+          <ScrollReveal animation="fade-up">
             <div className="text-center mt-12">
               <Link
                 href="/riset"
@@ -681,10 +677,11 @@ export default async function HomePage() {
           </ScrollReveal>
 
           {/* 4 Cards in 1 Row */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {publicationHighlights.map((post, idx) => (
-              <ScrollReveal key={post.slug} animation="fade-up" delay={idx * 70}>
+          <ScrollReveal animation="fade-up">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {publicationHighlights.map((post) => (
                 <article
+                  key={post.slug}
                   className="border border-slate-200 rounded-xl p-6 card-hover flex flex-col justify-between h-full bg-white group shadow-2xs"
                 >
                   <div className="space-y-3.5">
@@ -732,12 +729,12 @@ export default async function HomePage() {
                     </Link>
                   </div>
                 </article>
-              </ScrollReveal>
-            ))}
-          </div>
+              ))}
+            </div>
+          </ScrollReveal>
 
           {/* Centered Button "Lihat Semua" */}
-          <ScrollReveal animation="fade-up" delay={200}>
+          <ScrollReveal animation="fade-up">
             <div className="text-center mt-12">
               <Link
                 href="/publikasi"
@@ -774,9 +771,9 @@ export default async function HomePage() {
           </ScrollReveal>
 
           {/* 3 Cards in 1 Row */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {/* Service 1: Website Perusahaan & Portal Bisnis */}
-            <ScrollReveal animation="fade-up" delay={0}>
+          <ScrollReveal animation="fade-up">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+              {/* Service 1: Website Perusahaan & Portal Bisnis */}
               <div className="border border-slate-200 rounded-xl p-7 bg-white card-hover flex flex-col justify-between h-full shadow-2xs">
                 <div className="space-y-4">
                   <div className="w-11 h-11 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
@@ -803,10 +800,8 @@ export default async function HomePage() {
                   <span className="bg-slate-100 px-2.5 py-0.5 rounded">Responsive</span>
                 </div>
               </div>
-            </ScrollReveal>
 
-            {/* Service 2: Aplikasi Web & Sistem Informasi Kustom */}
-            <ScrollReveal animation="fade-up" delay={100}>
+              {/* Service 2: Aplikasi Web & Sistem Informasi Kustom */}
               <div className="border border-slate-200 rounded-xl p-7 bg-white card-hover flex flex-col justify-between h-full shadow-2xs">
                 <div className="space-y-4">
                   <div className="w-11 h-11 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
@@ -833,10 +828,8 @@ export default async function HomePage() {
                   <span className="bg-slate-100 px-2.5 py-0.5 rounded">PostgreSQL</span>
                 </div>
               </div>
-            </ScrollReveal>
 
-            {/* Service 3: Platform E-Commerce & Integrasi Transaksi */}
-            <ScrollReveal animation="fade-up" delay={200}>
+              {/* Service 3: Platform E-Commerce & Integrasi Transaksi */}
               <div className="border border-slate-200 rounded-xl p-7 bg-white card-hover flex flex-col justify-between h-full shadow-2xs">
                 <div className="space-y-4">
                   <div className="w-11 h-11 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
@@ -863,11 +856,11 @@ export default async function HomePage() {
                   <span className="bg-slate-100 px-2.5 py-0.5 rounded">Cloud</span>
                 </div>
               </div>
-            </ScrollReveal>
-          </div>
+            </div>
+          </ScrollReveal>
 
           {/* Centered Button "Lihat Semua" */}
-          <ScrollReveal animation="fade-up" delay={200}>
+          <ScrollReveal animation="fade-up">
             <div className="text-center mt-12">
               <Link
                 href="/developer"
@@ -909,7 +902,7 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center max-w-5xl mx-auto">
             {/* Left Column: Brief description & service items */}
             <div className="lg:col-span-7">
-              <ScrollReveal animation="fade-right" delay={100} className="space-y-5">
+              <ScrollReveal animation="fade-up" className="space-y-5">
                 <p className="text-base sm:text-lg text-slate-800 leading-relaxed font-semibold">
                   {isEn
                     ? "We provide end-to-end advisory for MSME business acceleration, academic scientific decision modeling, and corporate upskilling programs."
@@ -939,7 +932,7 @@ export default async function HomePage() {
 
             {/* Right Column: Clean Action Card Box */}
             <div className="lg:col-span-5">
-              <ScrollReveal animation="fade-left" delay={200}>
+              <ScrollReveal animation="fade-up">
                 <div className="border border-slate-200 rounded-xl p-7 sm:p-8 bg-slate-50/70 text-center space-y-4 card-hover shadow-2xs">
                   <h3 className="font-bold text-slate-900 text-lg sm:text-xl">
                     {isEn ? "Schedule a Consultation" : "Konsultasikan Kebutuhan Anda"}
@@ -955,7 +948,7 @@ export default async function HomePage() {
                       href="https://wa.me/6281210106680?text=Halo%20Matoh%20Technologies,%20saya%20ingin%20konsultasi%20layanan%20konsultan%20dan%20riset."
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="btn-shimmer animate-pulse-glow-emerald w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm transition-colors shadow-2xs active:scale-[0.98]"
+                      className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs sm:text-sm transition-all shadow-2xs active:scale-[0.98]"
                     >
                       <MessageSquare size={16} />
                       <span>WhatsApp Hotline</span>
@@ -963,7 +956,7 @@ export default async function HomePage() {
 
                     <Link
                       href="/konsultan"
-                      className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg border border-slate-300 hover:border-blue-600 hover:text-blue-600 bg-white text-slate-700 font-semibold text-xs sm:text-sm transition-colors active:scale-[0.98]"
+                      className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg border border-slate-300 hover:border-blue-600 hover:text-blue-600 bg-white text-slate-700 font-semibold text-xs sm:text-sm transition-all active:scale-[0.98]"
                     >
                       <span>{isEn ? "View Consulting Details" : "Pelajari Layanan Konsultan"}</span>
                       <ArrowRight size={15} />

@@ -71,7 +71,7 @@ export function CourseCard({
             isVideoUrl(safeThumbnail) ? (
               <video
                 src={safeThumbnail}
-                className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
                 muted
                 playsInline
                 preload="metadata"
@@ -88,7 +88,7 @@ export function CourseCard({
                   safeThumbnail.includes("ytimg.com")
                 }
                 style={{ aspectRatio: "16 / 9" }}
-                className="object-cover aspect-video transition-transform duration-500 ease-out group-hover:scale-105"
+                className="object-cover aspect-video transition-transform duration-500 ease-out group-hover:scale-[1.03]"
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
             )

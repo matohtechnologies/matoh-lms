@@ -22,9 +22,9 @@ export function ScrollReveal({
   children,
   animation = "fade-up",
   delay = 0,
-  duration = 600,
+  duration = 400,
   className,
-  threshold = 0.1,
+  threshold = 0.05,
   once = true,
   ...props
 }: ScrollRevealProps) {
@@ -54,7 +54,7 @@ export function ScrollReveal({
       },
       {
         threshold,
-        rootMargin: "0px 0px -30px 0px",
+        rootMargin: "0px 0px 60px 0px", // triggers slightly before entering viewport for silky seamless entry
       }
     );
 
@@ -66,7 +66,8 @@ export function ScrollReveal({
   }, [threshold, once]);
 
   const getStyle = (): React.CSSProperties => {
-    const transition = `opacity ${duration}ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform ${duration}ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, filter ${duration}ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`;
+    const easeCurve = "cubic-bezier(0.22, 1, 0.36, 1)";
+    const transition = `opacity ${duration}ms ${easeCurve} ${delay}ms, transform ${duration}ms ${easeCurve} ${delay}ms, filter ${duration}ms ${easeCurve} ${delay}ms`;
 
     if (isVisible) {
       return {
@@ -82,36 +83,36 @@ export function ScrollReveal({
       case "fade-down":
         return {
           opacity: 0,
-          transform: "translate3d(0, -24px, 0)",
+          transform: "translate3d(0, -10px, 0)",
           transition,
           willChange: "opacity, transform",
         };
       case "fade-left":
         return {
           opacity: 0,
-          transform: "translate3d(-28px, 0, 0)",
+          transform: "translate3d(-10px, 0, 0)",
           transition,
           willChange: "opacity, transform",
         };
       case "fade-right":
         return {
           opacity: 0,
-          transform: "translate3d(28px, 0, 0)",
+          transform: "translate3d(10px, 0, 0)",
           transition,
           willChange: "opacity, transform",
         };
       case "zoom-in":
         return {
           opacity: 0,
-          transform: "translate3d(0, 16px, 0) scale(0.95)",
+          transform: "scale(0.98)",
           transition,
           willChange: "opacity, transform",
         };
       case "blur-in":
         return {
           opacity: 0,
-          transform: "translate3d(0, 20px, 0)",
-          filter: "blur(6px)",
+          transform: "translate3d(0, 8px, 0)",
+          filter: "blur(3px)",
           transition,
           willChange: "opacity, transform, filter",
         };
@@ -125,7 +126,7 @@ export function ScrollReveal({
       default:
         return {
           opacity: 0,
-          transform: "translate3d(0, 24px, 0)",
+          transform: "translate3d(0, 10px, 0)",
           transition,
           willChange: "opacity, transform",
         };

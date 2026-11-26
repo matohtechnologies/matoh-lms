@@ -176,7 +176,7 @@ export function Navbar({ user, categories }: NavbarProps) {
             className="h-9 w-9 sm:h-10 sm:w-10 object-contain transition-transform duration-200 group-hover:scale-105 aspect-square"
           />
           <span
-            className="font-extrabold text-base sm:text-lg tracking-tight text-slate-900 transition-colors group-hover:text-slate-700"
+            className="font-extrabold text-base sm:text-lg tracking-tight text-slate-700 transition-colors group-hover:text-slate-900"
             style={{ fontFamily: "var(--font-poppins, sans-serif)" }}
           >
             MatohTechnologies
@@ -197,7 +197,7 @@ export function Navbar({ user, categories }: NavbarProps) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "px-3 py-2 rounded-lg text-xs xl:text-sm font-semibold transition-all duration-200 active:scale-95 whitespace-nowrap shrink-0",
+                  "px-3 py-2 rounded-lg text-xs xl:text-sm font-semibold transition-colors duration-150 active:bg-stone-200/60 whitespace-nowrap shrink-0",
                   isActive
                     ? "bg-blue-50 text-blue-700 font-bold"
                     : "text-stone-600 hover:text-stone-900 hover:bg-stone-100/80"
