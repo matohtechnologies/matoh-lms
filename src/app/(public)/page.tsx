@@ -343,10 +343,10 @@ export default async function HomePage() {
 
                   <Link
                     href="/about"
-                    className="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-semibold text-slate-700 hover:text-blue-600 hover:bg-slate-100/80 transition-all"
+                    className="group inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-semibold text-slate-700 hover:text-blue-600 hover:bg-slate-100/80 transition-all"
                   >
                     <span>{isEn ? "About Matoh Technologies" : "Profil & Legalitas Kami"}</span>
-                    <ArrowRight size={14} className="text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+                    <ArrowRight size={14} className="text-slate-400 motion-safe:transition-transform motion-safe:duration-300 motion-safe:group-hover:translate-x-1 motion-safe:group-focus-visible:translate-x-1" />
                   </Link>
                 </div>
 
